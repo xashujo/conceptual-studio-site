@@ -1,0 +1,42 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/brand/logo-black.png';
+import Availability from './Availability.astro';
+import Icon from './Icon.astro';
+const path = Astro.url.pathname;
+const links = [
+  { href: '/work/', label: 'Work', icon: 'work' },
+  { href: '/services/', label: 'Services', icon: 'services' },
+  { href: '/about/', label: 'About', icon: 'about' },
+  { href: '/contact/', label: 'Contact', icon: 'contact' },
+] as const;
+const current = (href: string) => (path === href || (href !== '/' && path.startsWith(href)) ? 'page' : undefined);
+---
+<header class="site-header wrap" data-header>
+  <div class="site-header__bar glass">
+    <a class="brand" href="/" aria-label="Conceptual Studio, home">
+      <Image src={logo} alt="" widths={[200, 400]} sizes="184px" loading="eager" />
+    </a>
+    <nav aria-label="Main">
+      <ul class="nav-links">
+        {links.map((l) => <li><a href={l.href} aria-current={current(l.href)}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+    <div class="site-header__end">
+      <Availability />
+      <a class="button button--small" href="/contact/">Start a project</a>
+    </div>
+  </div>
+</header>
+
+<!-- Phones: a glass tab bar along the bottom, always in reach. -->
+<div class="dock" data-dock>
+  <nav class="dock__inner glass" aria-label="Main">
+    <a class="dock__link" href="/" aria-current={path === '/' ? 'page' : undefined}><Icon name="home" /><span>Home</span></a>
+    {links.map((l) => (
+      <a class:list={['dock__link', l.icon === 'contact' && 'dock__link--primary']} href={l.href} aria-current={current(l.href)}>
+        <Icon name={l.icon} /><span>{l.label}</span>
+      </a>
+    ))}
+  </nav>
+</div>

@@ -1,0 +1,31 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import Availability from '../components/Availability.astro';
+import CopyEmail from '../components/CopyEmail.astro';
+import { settings, bookingHref } from '../lib/site.js';
+import art from '../assets/art/lemoyne-apotheosis-of-hercules.jpg';
+const s = settings.social;
+---
+<Base title="Start a project" description="Tell Josh about your project. Brand identity and data visualisation for colleges and public institutions, from London. Replies within one working day.">
+  <section class="art-field is-dark" aria-labelledby="contact-title" data-liquid-field>
+    <div class="art-field__art"><Image src={art} alt="" widths={[900, 1600, 2600]} sizes="100vw" loading="eager" style="object-position: 60% 30%; filter: brightness(0.7)" /></div>
+    <div class="wrap grid art-field__body">
+      <div class="art-panel glass" data-tone="dark" data-liquid="dark">
+        <h1 id="contact-title">Start a project</h1>
+        <p>Tell me what you need and when you need it. {settings.responseTime}</p>
+        <div class="actions"><Availability tone="dark" /></div>
+      </div>
+    </div>
+  </section>
+  <section class="section wrap grid contact-grid" aria-label="Get in touch">
+    <div class="enquiry-wrap"><EnquiryForm /></div>
+    <aside>
+      <div><h2>Email</h2><CopyEmail /></div>
+      <div><h2>Prefer to talk?</h2><a class="button button--quiet" href={bookingHref()}>Book a 20-minute call</a></div>
+      <div><h2>Studio</h2><p>London, United Kingdom. It’s <span data-clock>London time</span> here.</p><p class="muted">Weekdays, 9:00 to 17:00.</p></div>
+      <div><h2>Elsewhere</h2><p><a class="link" href={s.linkedin}>LinkedIn</a>, <a class="link" href={s.instagram}>Instagram</a>, <a class="link" href={s.tiktok}>TikTok</a></p></div>
+    </aside>
+  </section>
+</Base>

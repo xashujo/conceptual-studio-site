@@ -1,0 +1,12 @@
+---
+import { availabilityText } from '../lib/site.js';
+interface Props { tone?: 'light' | 'dark'; href?: string }
+const { tone = 'light', href = '/contact/' } = Astro.props;
+const text = availabilityText();
+---
+{text && (
+  <a class="availability glass" data-tone={tone} href={href}>
+    <span class="availability__dot" aria-hidden="true"></span>
+    <span>{text}</span>
+  </a>
+)}

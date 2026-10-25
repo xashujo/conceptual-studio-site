@@ -1,0 +1,11 @@
+[
+  { "id": "new-city-college", "name": "New City College London", "kind": "Education" },
+  { "id": "tower-hamlets-college", "name": "Tower Hamlets College", "kind": "Education" },
+  { "id": "southbank-college-group", "name": "Southbank College Group", "kind": "Education" },
+  { "id": "acl-essex", "name": "ACL Essex", "kind": "Education" },
+  { "id": "oxford-school-of-english", "name": "Oxford School of English", "kind": "Education" },
+  { "id": "fou-answer", "name": "Fou Answer, Tokyo", "kind": "Companies" },
+  { "id": "new-york-general-group", "name": "New York General Group", "kind": "Companies" },
+  { "id": "plus-pursuits", "name": "Plus Pursuits", "kind": "Companies" },
+  { "id": "sherman-poon", "name": "Sherman Poon, Hong Kong", "kind": "Music" }
+]

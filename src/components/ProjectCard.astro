@@ -1,0 +1,15 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+interface Props { project: CollectionEntry<'projects'>; sizes?: string; widths?: number[]; eager?: boolean; reveal?: boolean }
+const { project, sizes = '(max-width: 900px) 100vw, 50vw', widths = [480, 800, 1200, 1600], eager = false, reveal = false } = Astro.props;
+const p = project.data;
+---
+<a href={`/work/${project.id}/`} data-reveal={reveal ? '' : undefined}>
+  <span class="card__client">{p.client}{p.archive && p.context ? ` · ${p.context}` : ''}</span>
+  <span class="card__frame">
+    <Image src={p.cover} alt={p.coverAlt} widths={widths} sizes={sizes} loading={eager ? 'eager' : 'lazy'} style={`view-transition-name: cover-${project.id}; view-transition-class: picture`} />
+  </span>
+  <span class="card__title">{p.title}</span>
+  <span class="card__summary">{p.summary}</span>
+</a>

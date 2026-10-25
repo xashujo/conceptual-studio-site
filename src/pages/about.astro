@@ -1,0 +1,50 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import img from '../assets/work/fou-answer/03.webp';
+import img2 from '../assets/work/exploring-mental-health-through-3d-storytelling/01.webp';
+const testimonials = await getCollection('testimonials');
+const clients = await getCollection('clients');
+---
+<Base title="About" description="Josh McDonald runs Conceptual Studio, a one-person design studio in London for brand identity and data visualisation, mostly for colleges and public institutions.">
+  <section class="page-head wrap grid">
+    <h1>About</h1>
+    <p class="lead">I’m Joshua McDonald, and Conceptual Studio is my design practice in London. It’s just me, so you work with the person doing the work, from the first call to the final file.</p>
+  </section>
+  <section class="wrap grid case-section" aria-labelledby="story">
+    <h2 id="story" class="visually-hidden">My story</h2>
+    <figure class="service-entry__pic"><div class="frame"><Image src={img2} alt="A chrome figure in a field of daisies, from my final major project at Kingston" widths={[500, 900]} sizes="(max-width: 900px) 100vw, 40vw" loading="eager" /></div></figure>
+    <div class="prose" style="align-self: end">
+      <p>I trained at Kingston School of Art, where I learned identity systems, layout and how to think in concepts. My final major project was a 3D film about mental health.</p>
+      <p>After that I was design lead at Fou Answer, a tech startup in Tokyo, looking after its brand, product interface, website and 3D.</p>
+      <p>Since January 2026 the studio has been my full-time job. Most of my clients are colleges and public institutions: identities that end up on buses and tube platforms, and data that ends up in front of governors and the public.</p>
+      <p>The work I want more of is identities and data design for colleges, schools, universities, trusts, charities and public bodies. If that’s you, I’d like to hear from you.</p>
+      <p><a class="button" href="/contact/">Start a project</a></p>
+    </div>
+  </section>
+  <section class="section wrap grid" aria-labelledby="clients-title">
+    <div class="proof__head"><h2 id="clients-title" class="head">Clients</h2></div>
+    <ul class="proof__names">
+      {['Education', 'Companies', 'Music'].map((k) => <><li class="kind">{k}</li>{clients.filter((c) => c.data.kind === k).map((c) => <li>{c.data.name}</li>)}</>)}
+    </ul>
+  </section>
+  <section class="section wrap" aria-labelledby="words-title">
+    <h2 id="words-title" class="head" style="margin-bottom: 3rem">In their words</h2>
+    <div class="grid" style="row-gap: 4rem">
+      {testimonials.map((t) => (
+        <figure class="case-quote grid" style="grid-column: 1 / -1">
+          <blockquote><p>“{t.data.quote}”</p></blockquote>
+          <figcaption>{t.data.name}, <span>{t.data.role}, {t.data.organisation}</span></figcaption>
+        </figure>
+      ))}
+    </div>
+  </section>
+  <section class="section wrap grid case-section" aria-labelledby="tokyo">
+    <h2 id="tokyo">Before the studio</h2>
+    <div class="prose">
+      <p>Tokyo taught me to work fast in a small team and to care about every part of a product, not just the logo. That habit stayed: the same person who draws your identity sets your report and checks your data.</p>
+      <p><a class="text-action" href="/work/fou-answer/"><span>See the Fou Answer work</span></a></p>
+    </div>
+  </section>
+</Base>

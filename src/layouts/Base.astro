@@ -1,0 +1,65 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { settings } from '../lib/site.js';
+import ogDefault from '../assets/work/new-city-college-strategic-intent/02.webp';
+import { getImage } from 'astro:assets';
+
+interface Props { title?: string; description?: string; image?: ImageMetadata; noFooterArt?: boolean }
+const { title, description = 'Brand identity and data visualisation for colleges, schools and public institutions. Conceptual Studio is Josh McDonald’s design studio in London.', image } = Astro.props;
+const fullTitle = title ? `${title} | Conceptual Studio` : 'Conceptual Studio | Brand and data design for education';
+const og = await getImage({ src: image ?? ogDefault, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: 'Conceptual Studio',
+  legalName: settings.company.name,
+  url: Astro.site?.toString(),
+  email: settings.email,
+  founder: { '@type': 'Person', name: 'Joshua McDonald' },
+  areaServed: 'United Kingdom',
+  address: { '@type': 'PostalAddress', addressLocality: 'London', addressCountry: 'GB' },
+  knowsAbout: ['Brand identity', 'Data visualisation', 'Infographics', 'Information design'],
+  sameAs: Object.values(settings.social),
+};
+---
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#F1DFC8" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Conceptual Studio" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(og.src, Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preload" href="/fonts/agatho-medium.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <script is:inline>document.documentElement.classList.add('js')</script>
+    <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+    {settings.analyticsToken && <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: settings.analyticsToken })}></script>}
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      import '../scripts/site.js';
+    </script>
+  </body>
+</html>

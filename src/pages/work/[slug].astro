@@ -1,0 +1,113 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import Icon from '../../components/Icon.astro';
+import { paras, ROMAN, categoryName } from '../../lib/site.js';
+
+export async function getStaticPaths() {
+  const all = (await getCollection('projects')).sort((a, b) => Number(a.data.archive) - Number(b.data.archive) || a.data.order - b.data.order);
+  const testimonials = await getCollection('testimonials');
+  return all.map((project, i) => {
+    const t = project.data.testimonial ? project.data.testimonial.split('/').pop()!.replace(/\.json$/, '') : null;
+    return { params: { slug: project.id }, props: { project, next: all[(i + 1) % all.length], testimonial: testimonials.find((x) => x.id === t) ?? null } };
+  });
+}
+const { project, next, testimonial } = Astro.props;
+const p = project.data;
+let plate = 0;
+const cap = (c?: string) => (c ? { no: `Plate ${ROMAN[plate++] ?? plate}`, text: c } : null);
+const sections = [
+  { id: 'problem', title: 'The problem', body: p.problem },
+  { id: 'approach', title: p.archive ? 'About the work' : 'What I did', body: p.approach },
+];
+---
+<Base title={p.title} description={p.summary} image={p.cover}>
+  <article>
+    <header class="case-head wrap grid">
+      <h1>{p.title}</h1>
+      <p class="lead">{p.summary}</p>
+      <dl class="facts">
+        <dt>Client</dt><dd>{p.client}</dd>
+        <dt>Year</dt><dd>{p.year}</dd>
+        <dt>Work</dt><dd>{p.disciplines.join(', ')}</dd>
+        {p.context && <><dt>Context</dt><dd>{p.context}</dd></>}
+      </dl>
+    </header>
+    <figure class="case-cover">
+      <div class="cover__frame"><Image src={p.cover} alt={p.coverAlt} widths={[800, 1400, 2000, 2600]} sizes="100vw" loading="eager" fetchpriority="high" style={`view-transition-name: cover-${project.id}; view-transition-class: picture`} /></div>
+    </figure>
+
+    {sections.filter((s) => s.body).map((s) => (
+      <section class="section wrap grid case-section" aria-labelledby={s.id} data-reveal-group>
+        <h2 id={s.id} data-reveal>{s.title}</h2>
+        <div class="prose" data-reveal>{paras(s.body).map((t) => <p>{t}</p>)}</div>
+      </section>
+    ))}
+
+    {p.blocks.length > 0 && (
+      <section class="wrap case-blocks" aria-label="The work">
+        {p.blocks.map((b) => {
+          if (b.type === 'image') { const c = cap(b.caption); return (
+            <figure class={`block--${b.size} ${b.size === 'full' ? '' : 'grid'}`}>
+              <div class="block__frame"><Image src={b.src} alt={b.alt} widths={[700, 1200, 1800, 2400]} sizes={b.size === 'narrow' ? '(max-width: 900px) 100vw, 60vw' : '100vw'} /></div>
+              {c && <figcaption class="plate"><span class="plate__no">{c.no}</span> {c.text}</figcaption>}
+            </figure>
+          ); }
+          if (b.type === 'pair') { const l = cap(b.left.caption); const r = cap(b.right.caption); return (
+            <div class="block--pair">
+              <figure><div class="block__frame"><Image src={b.left.src} alt={b.left.alt} widths={[600, 1000, 1500]} sizes="(max-width: 900px) 100vw, 58vw" /></div>{l && <figcaption class="plate"><span class="plate__no">{l.no}</span> {l.text}</figcaption>}</figure>
+              <figure><div class="block__frame"><Image src={b.right.src} alt={b.right.alt} widths={[500, 800, 1200]} sizes="(max-width: 900px) 72vw, 40vw" /></div>{r && <figcaption class="plate"><span class="plate__no">{r.no}</span> {r.text}</figcaption>}</figure>
+            </div>
+          ); }
+          if (b.type === 'text') return (
+            <div class="grid block--text"><>{b.heading && <h3>{b.heading}</h3>}</><div class="prose">{paras(b.body).map((t) => <p>{t}</p>)}</div></div>
+          );
+          if (b.type === 'stat') return (
+            <div class="block--stat"><p class="stat__value">{b.value}</p><p class="stat__label">{b.label}</p></div>
+          );
+          if (b.type === 'video') { const c = cap(b.caption); return (
+            <figure class="block--full">
+              {b.mp4 && <video controls playsinline preload="none" poster={b.poster?.src} width="1920" height="1092" aria-label={b.alt}><source src={b.mp4} type="video/mp4" /></video>}
+              {!b.mp4 && b.youtube && <a class="video-card" href={b.youtube}>{b.poster && <Image src={b.poster} alt={b.alt ?? ''} widths={[1200, 2000]} sizes="100vw" />}<span class="video-card__label button button--paper"><Icon name="play" /> Watch on YouTube</span></a>}
+              {c && <figcaption class="plate"><span class="plate__no">{c.no}</span> {c.text}</figcaption>}
+            </figure>
+          ); }
+        })}
+      </section>
+    )}
+
+    {p.outcome && (
+      <section class="section wrap grid case-section" aria-labelledby="outcome" data-reveal-group>
+        <h2 id="outcome" data-reveal>What happened</h2>
+        <div class="prose" data-reveal>{paras(p.outcome).map((t) => <p>{t}</p>)}</div>
+      </section>
+    )}
+
+    {p.link && (
+      <p class="wrap grid case-link"><a class="button button--quiet" href={p.link.url} rel="noopener">{p.link.label}</a></p>
+    )}
+
+    {testimonial && (
+      <figure class="section wrap grid case-quote">
+        <blockquote><p>“{testimonial.data.quote}”</p></blockquote>
+        <figcaption>{testimonial.data.name}, <span>{testimonial.data.role}, {testimonial.data.organisation}</span></figcaption>
+      </figure>
+    )}
+
+    <section class="section wrap" aria-label="Next project">
+      <a class="next-project" href={`/work/${next.id}/`}>
+        <span class="small">Next project · {categoryName[next.data.category]}</span>
+        <span class="next__title">{next.data.title}</span>
+        <span class="card__frame"><Image src={next.data.cover} alt="" widths={[500, 900]} sizes="(max-width: 900px) 100vw, 33vw" /></span>
+      </a>
+    </section>
+    <section class="section wrap" aria-labelledby="case-cta" style="padding-top:0">
+      <div class="grid cta-split">
+        <h2 id="case-cta" class="head">Planning something similar?</h2>
+        <div class="actions"><a class="button" href="/contact/">Start a project</a><a class="text-action" href="/services/"><span>See services and prices</span></a></div>
+      </div>
+    </section>
+  </article>
+</Base>

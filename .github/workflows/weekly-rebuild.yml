@@ -1,0 +1,27 @@
+# The availability line on the site is worked out when the site is built,
+# so this rebuilds it every Monday morning to keep it current.
+name: Weekly rebuild
+
+on:
+  schedule:
+    - cron: '17 6 * * 1' # Mondays 06:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Ask Cloudflare Pages to rebuild
+        env:
+          DEPLOY_HOOK: ${{ secrets.CF_PAGES_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$DEPLOY_HOOK" ]; then
+            echo "::notice::CF_PAGES_DEPLOY_HOOK secret is not set, so no rebuild was requested."
+            exit 0
+          fi
+          curl --fail --silent --show-error --retry 3 -X POST "$DEPLOY_HOOK" > /dev/null
+          echo "Rebuild requested."
