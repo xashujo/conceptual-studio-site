@@ -2,52 +2,64 @@
 
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* The phone tab bar switches to its dark tint over dark sections. */
-function initDock() {
-  const dock = document.querySelector('[data-dock]');
-  if (!dock || matchMedia('(min-width: 900px)').matches) return;
-  const glass = dock.querySelector('.glass');
-  const under = new Set();
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => (e.isIntersecting ? under.add(e.target) : under.delete(e.target)));
-    const dark = under.size > 0;
-    dock.dataset.over = dark ? 'dark' : 'light';
-    glass?.setAttribute('data-tone', dark ? 'dark' : 'light');
-  }, { rootMargin: '-88% 0px -30px 0px' });
-  document.querySelectorAll('.is-dark').forEach((el) => io.observe(el));
+/* The bar is plain at the top of the page and turns to glass once the page moves under it. */
+function initHeader() {
+  const header = document.querySelector('[data-header]');
+  if (!header) return;
+  const update = () => header.classList.toggle('is-scrolled', scrollY > 8);
+  update();
+  addEventListener('scroll', update, { passive: true });
 }
 
-/* The hero's project viewer: crossfades through the featured work. */
-function initViewer() {
-  const v = document.querySelector('[data-viewer]');
-  if (!v) return;
-  const slides = [...v.querySelectorAll('[data-slide]')];
-  const bars = [...v.querySelectorAll('.viewer__bar span')];
-  const title = v.querySelector('[data-viewer-title]');
-  const meta = v.querySelector('[data-viewer-meta]');
-  const link = v.querySelector('[data-viewer-link]');
-  const count = v.querySelector('[data-viewer-count]');
-  const DUR = 5000;
-  let i = 0;
-  let timer;
-  const show = (n) => {
-    i = (n + slides.length) % slides.length;
-    slides.forEach((s, k) => { s.classList.toggle('is-active', k === i); s.tabIndex = k === i ? 0 : -1; });
-    bars.forEach((b, k) => { b.classList.remove('is-active'); if (k === i) { void b.offsetWidth; b.classList.add('is-active'); } });
-    title.textContent = slides[i].dataset.title;
-    meta.textContent = slides[i].dataset.meta;
-    link.href = slides[i].getAttribute('href');
-    count.textContent = String(i + 1).padStart(2, '0');
-    schedule();
+/* Phones: the menu sheet. */
+function initMenu() {
+  const menu = document.querySelector('[data-menu]');
+  const open = document.querySelector('[data-menu-open]');
+  if (!menu || !open) return;
+  const close = menu.querySelector('[data-menu-close]');
+  let glass = false;
+  const set = (on) => {
+    menu.classList.toggle('is-open', on);
+    menu.setAttribute('aria-hidden', String(!on));
+    open.setAttribute('aria-expanded', String(on));
+    document.body.classList.toggle('menu-open', on);
+    if (on) {
+      close.focus();
+      if (!glass) { glass = true; mountLiquid(menu); }
+    } else open.focus();
   };
-  const schedule = () => { clearTimeout(timer); if (!reduceMotion && !v.classList.contains('is-paused')) timer = setTimeout(() => show(i + 1), DUR); };
-  v.style.setProperty('--dur', `${DUR}ms`);
-  v.querySelector('[data-viewer-prev]').addEventListener('click', () => show(i - 1));
-  v.querySelector('[data-viewer-next]').addEventListener('click', () => show(i + 1));
-  v.addEventListener('pointerenter', () => { v.classList.add('is-paused'); clearTimeout(timer); });
-  v.addEventListener('pointerleave', () => { v.classList.remove('is-paused'); show(i); });
-  if (reduceMotion) v.classList.add('is-paused');
-  schedule();
+  open.addEventListener('click', () => set(true));
+  close.addEventListener('click', () => set(false));
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && menu.classList.contains('is-open')) set(false); });
+  menu.querySelectorAll('.menu__links a').forEach((a) => a.addEventListener('click', () => set(false)));
+}
+
+/* The highlights row: buttons, dots, and the right button state at each end. */
+function initReel() {
+  const reel = document.querySelector('[data-reel]');
+  if (!reel) return;
+  const track = reel.querySelector('[data-reel-track]');
+  const items = [...track.children];
+  const dots = [...reel.querySelectorAll('.reel__dots span')];
+  const prev = reel.querySelector('[data-reel-prev]');
+  const next = reel.querySelector('[data-reel-next]');
+  const step = () => items[0].getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap || 16);
+  const update = () => {
+    const max = track.scrollWidth - track.clientWidth;
+    prev.disabled = track.scrollLeft < 8;
+    next.disabled = track.scrollLeft > max - 8;
+    const i = Math.round(track.scrollLeft / step());
+    const cur = Math.min(i, dots.length - 1);
+    dots.forEach((d, k) => d.classList.toggle('is-active', k === cur));
+    const vw = document.documentElement.clientWidth;
+    items.forEach((it) => { const r = it.getBoundingClientRect(); it.classList.toggle('is-current', r.left >= -4 && r.right <= vw + 4); });
+  };
+  prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: reduceMotion ? 'auto' : 'smooth' }));
+  next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: reduceMotion ? 'auto' : 'smooth' }));
+  track.addEventListener('scroll', update, { passive: true });
+  addEventListener('resize', update);
+  update();
+  reel.classList.add('is-ready');
 }
 
 /* Copy email buttons. */
@@ -119,39 +131,46 @@ async function initFilters() {
   });
 }
 
-/* Quiet entrances: cards and panels rise in once as they arrive. No scroll-jacking. */
+/* Entrances: heading, then text, then pictures, rising once as each section arrives.
+   Content is never hidden if this script does not run. */
 function initReveal() {
   if (reduceMotion) return;
-  const els = document.querySelectorAll('.card, .answer, .price-card, .quote, .tier, .steps li');
+  const els = [...document.querySelectorAll('[data-reveal], .card, .case-section > *, .block, .block--pair')];
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
       if (!e.isIntersecting) return;
-      e.target.animate([{ opacity: 0, transform: 'translateY(24px)' }, { opacity: 1, transform: 'none' }], { duration: 800, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'backwards', delay: (Number(e.target.dataset.i) || 0) * 70 });
+      e.target.animate([{ opacity: 0, transform: 'translateY(24px)' }, { opacity: 1, transform: 'none' }], { duration: 850, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'backwards', delay: Number(e.target.dataset.revealDelay || 0) });
       io.unobserve(e.target);
     });
-  }, { rootMargin: '0px 0px -8% 0px' });
+  }, { rootMargin: '0px 0px -6% 0px' });
+  const seen = new Map();
   els.forEach((el) => {
     if (el.getBoundingClientRect().top < innerHeight) return;
-    const item = el.closest('li') ?? el;
-    el.dataset.i = String([...item.parentElement.children].indexOf(item) % 3);
+    const group = el.parentElement;
+    const n = seen.get(group) ?? 0;
+    seen.set(group, n + 1);
+    el.dataset.revealDelay = String(Math.min(n, 5) * 75);
     io.observe(el);
   });
 }
 
-/* Liquid glass: refraction on the header bar in Chromium, and the WebGL glass over engravings. */
+/* Liquid glass: refraction on the bar in Chromium, and the WebGL glass on the menu sheet over its engraving. */
+function mountLiquid(field) {
+  const panel = field.querySelector('[data-liquid]');
+  const img = field.querySelector('[data-liquid-art] img');
+  if (!panel || !img) return;
+  const go = () => import('./liquid-glass.js').then((m) => m.mountLiquidGlass?.(panel, { image: img, tone: panel.dataset.liquid || 'light' })).catch(() => {});
+  img.loading = 'eager';
+  img.complete && img.naturalWidth ? go() : img.addEventListener('load', go, { once: true });
+}
 function initGlass() {
-  const bar = document.querySelector(matchMedia('(min-width: 900px)').matches ? '.site-header__bar' : '.dock .glass');
-  if (bar) import('./refraction.js').then((m) => m.mountRefraction?.(bar)).catch(() => {});
-  document.querySelectorAll('[data-liquid]').forEach((panel) => {
-    const img = panel.closest('[data-liquid-field]')?.querySelector('.engraving img');
-    if (!img) return;
-    const go = () => import('./liquid-glass.js').then((m) => m.mountLiquidGlass?.(panel, { image: img, tone: panel.dataset.liquid || 'light' })).catch(() => {});
-    img.complete ? go() : img.addEventListener('load', go, { once: true });
-  });
+  const bar = document.querySelector('.site-header__bar');
+  if (bar && matchMedia('(min-width: 900px)').matches) import('./refraction.js').then((m) => m.mountRefraction?.(bar)).catch(() => {});
 }
 
-initDock();
-initViewer();
+initHeader();
+initMenu();
+initReel();
 initCopy();
 initClock();
 initLive();

@@ -3,26 +3,23 @@ import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import PageHead from '../../components/PageHead.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
-import art from '../../assets/art/engraved/wedding.webp';
 const all = (await getCollection('projects')).sort((a, b) => Number(a.data.archive) - Number(b.data.archive) || a.data.order - b.data.order || b.data.year - a.data.year);
 const filters = [['all', 'All'], ['brand', 'Brand identity'], ['data', 'Data visualisation'], ['motion', '3D and motion'], ['archive', 'Earlier work']];
 const current = all.filter((p) => !p.data.archive);
 ---
 <Base title="Work" description="Brand identity and data visualisation for colleges and public institutions, plus 3D and motion work. Projects by Conceptual Studio, London.">
-  <PageHead label="Index of work" title="The work" lead="Identities, reports, maps and films, mostly for colleges and public institutions." art={art}>
+  <PageHead title="Work." lead="Identities, reports, maps and films, mostly for colleges and public institutions.">
     <ul class="filters" data-filters aria-label="Filter projects">
       {filters.map(([key, label]) => <li><button type="button" data-filter={key} aria-pressed={key === 'all' ? 'true' : 'false'}>{label}</button></li>)}
     </ul>
-    <p class="micro muted" role="status" data-filter-status>{current.length} projects shown</p>
+    <p class="small secondary" role="status" data-filter-status>{current.length} projects shown</p>
   </PageHead>
-  <section class="wrap" aria-label="Projects" style="padding-bottom: var(--section)">
+  <section class="wrap" aria-label="Projects">
     <ul class="cards" role="list">
       {all.map((p, i) => (
-        <li data-category={p.data.category} data-archive={String(p.data.archive)} hidden={p.data.archive}>
-          <ProjectCard project={p} index={i} eager={i < 2} />
-        </li>
+        <li data-category={p.data.category} data-archive={String(p.data.archive)} hidden={p.data.archive}><ProjectCard project={p} eager={i < 2} /></li>
       ))}
-      <li class="index-empty muted" data-empty hidden>Nothing here yet.</li>
+      <li class="index-empty secondary" data-empty hidden>Nothing here yet.</li>
     </ul>
   </section>
 </Base>

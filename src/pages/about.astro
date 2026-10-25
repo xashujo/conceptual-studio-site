@@ -3,37 +3,35 @@ import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import PageHead from '../components/PageHead.astro';
-import art from '../assets/art/engraved/lairesse.webp';
 import img2 from '../assets/work/exploring-mental-health-through-3d-storytelling/01.webp';
 const testimonials = await getCollection('testimonials');
 const clients = await getCollection('clients');
+const main = testimonials.find((t) => t.id === 'alison-arnaud');
+const others = testimonials.filter((t) => t.id !== 'alison-arnaud');
 ---
 <Base title="About" description="Josh McDonald runs Conceptual Studio, a one-person design studio in London for brand identity and data visualisation, mostly for colleges and public institutions.">
-  <PageHead label="About the studio" title="Just me, doing the work." lead="I’m Joshua McDonald, and Conceptual Studio is my design practice in London. You work with the person doing the work, from the first call to the final file." art={art} />
-  <section class="wrap page-section story" aria-labelledby="story">
+  <PageHead title="Just me, doing the work." lead="I’m Joshua McDonald, and Conceptual Studio is my design practice in London. You work with the person doing the work, from the first call to the final file." />
+  <section class="wrap story" aria-labelledby="story">
     <h2 id="story" class="visually-hidden">My story</h2>
-    <div class="story__pic glass" style="padding: 0.75rem"><Image src={img2} alt="A chrome figure in a field of daisies, from my final major project at Kingston" widths={[500, 900]} sizes="(max-width: 900px) 100vw, 40vw" loading="eager" style="border-radius: 20px" /></div>
+    <div class="story__pic"><Image src={img2} alt="A chrome figure in a field of daisies, from my final major project at Kingston" widths={[500, 900, 1300]} sizes="(max-width: 900px) 100vw, 40vw" loading="eager" /></div>
     <div class="story__text prose">
       <p>I trained at Kingston School of Art, where I learned identity systems, layout and how to think in concepts. My final major project was a 3D film about mental health.</p>
       <p>After that I was design lead at Fou Answer, a tech startup in Tokyo, looking after its brand, product interface, website and 3D. Tokyo taught me to work fast in a small team and to care about every part of a product, not just the logo.</p>
       <p>Since January 2026 the studio has been my full-time job. Most of my clients are colleges and public institutions: identities that end up on buses and tube platforms, and data that ends up in front of governors and the public.</p>
-      <p><a class="button" href="/contact/">Start a project</a></p>
+      <p style="margin-top: 2rem"><a class="button" href="/contact/">Start a project</a></p>
     </div>
   </section>
-  <section class="wrap page-section" aria-labelledby="clients-title">
-    <div class="head"><p class="micro micro--gold head__label">Clients</p><h2 id="clients-title">Who I’ve worked with</h2></div>
-    <ul class="client-cloud" role="list">{clients.map((c) => <li class="glass">{c.data.name}</li>)}</ul>
+  <section class="section wrap" aria-labelledby="clients-title">
+    <div class="clients">
+      <h2 id="clients-title">Who I’ve worked with</h2>
+      <ul role="list">{clients.map((c) => <li>{c.data.name}</li>)}</ul>
+    </div>
   </section>
-  <section class="wrap page-section" aria-labelledby="words-title" style="padding-bottom: 0">
-    <div class="head"><p class="micro micro--gold head__label">In their words</p><h2 id="words-title">What clients say</h2></div>
-    <div class="quotes__grid">
-      {testimonials.map((t) => (
-        <figure class="quote glass">
-          <span class="quote__mark" aria-hidden="true">“</span>
-          <blockquote><p>{t.data.quote}</p></blockquote>
-          <figcaption>{t.data.name}<span>{t.data.role}, {t.data.organisation}</span></figcaption>
-        </figure>
-      ))}
+  <section class="section wrap" aria-labelledby="words-title">
+    <div class="intro"><h2 id="words-title">What clients say.</h2></div>
+    <div class="words">
+      {main && <figure class="words__main"><blockquote><p>“{main.data.excerpt ?? main.data.quote}”</p></blockquote><figcaption>{main.data.name}<span>{main.data.role}, {main.data.organisation}</span></figcaption></figure>}
+      <div class="words__side">{others.map((t) => <figure><blockquote><p>“{t.data.quote}”</p></blockquote><figcaption>{t.data.name}<span>{t.data.role}, {t.data.organisation}</span></figcaption></figure>)}</div>
     </div>
   </section>
 </Base>

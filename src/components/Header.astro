@@ -1,42 +1,48 @@
 ---
 import { Image } from 'astro:assets';
 import logo from '../assets/brand/logo-black.png';
+import menuArt from '../assets/art/engraved/lemoyne.webp';
 import Availability from './Availability.astro';
-import Icon from './Icon.astro';
 const path = Astro.url.pathname;
 const links = [
-  { href: '/work/', label: 'Work', icon: 'work' },
-  { href: '/services/', label: 'Services', icon: 'services' },
-  { href: '/about/', label: 'About', icon: 'about' },
-  { href: '/contact/', label: 'Contact', icon: 'contact' },
-] as const;
+  { href: '/work/', label: 'Work' },
+  { href: '/services/', label: 'Services' },
+  { href: '/about/', label: 'About' },
+  { href: '/contact/', label: 'Contact' },
+];
 const current = (href: string) => (path === href || (href !== '/' && path.startsWith(href)) ? 'page' : undefined);
 ---
-<header class="site-header wrap" data-header>
-  <div class="site-header__bar glass">
-    <a class="brand" href="/" aria-label="Conceptual Studio, home">
-      <Image src={logo} alt="" widths={[200, 400]} sizes="184px" loading="eager" />
-    </a>
-    <nav aria-label="Main">
-      <ul class="nav-links">
-        {links.map((l) => <li><a href={l.href} aria-current={current(l.href)}>{l.label}</a></li>)}
-      </ul>
-    </nav>
-    <div class="site-header__end">
-      <Availability />
-      <a class="button button--small" href="/contact/">Start a project</a>
+<header class="site-header" data-header>
+  <div class="wrap">
+    <div class="site-header__bar glass">
+      <a class="brand" href="/" aria-label="Conceptual Studio, home"><Image src={logo} alt="" widths={[200, 400]} sizes="164px" loading="eager" /></a>
+      <nav aria-label="Main">
+        <ul class="nav-links">{links.map((l) => <li><a href={l.href} aria-current={current(l.href)}>{l.label}</a></li>)}</ul>
+      </nav>
+      <div class="site-header__end">
+        <Availability />
+        <a class="button button--small" href="/contact/">Start a project</a>
+        <button class="menu-button" type="button" data-menu-open aria-expanded="false" aria-controls="menu">Menu</button>
+      </div>
     </div>
   </div>
 </header>
 
-<!-- Phones: a glass tab bar along the bottom, always in reach. -->
-<div class="dock" data-dock>
-  <nav class="dock__inner glass" aria-label="Main">
-    <a class="dock__link" href="/" aria-current={path === '/' ? 'page' : undefined}><Icon name="home" /><span>Home</span></a>
-    {links.map((l) => (
-      <a class:list={['dock__link', l.icon === 'contact' && 'dock__link--primary']} href={l.href} aria-current={current(l.href)}>
-        <Icon name={l.icon} /><span>{l.label}</span>
-      </a>
-    ))}
-  </nav>
+<!-- Phones: the links in a full-screen glass sheet, over an engraving. -->
+<div class="menu" id="menu" data-menu data-liquid-field aria-hidden="true">
+  <div class="menu__art" data-liquid-art aria-hidden="true"><Image src={menuArt} alt="" widths={[800, 1200]} sizes="100vw" loading="lazy" /></div>
+  <div class="menu__sheet" role="dialog" aria-label="Menu" data-liquid="light">
+    <div class="menu__top">
+      <a class="brand" href="/" aria-label="Conceptual Studio, home"><Image src={logo} alt="" widths={[200, 400]} sizes="164px" /></a>
+      <button class="menu-button" type="button" data-menu-close style="display:inline-flex">Close</button>
+    </div>
+    <ul class="menu__links">
+      <li><a href="/">Home</a></li>
+      {links.map((l) => <li><a href={l.href} aria-current={current(l.href)}>{l.label}</a></li>)}
+    </ul>
+    <div class="menu__foot">
+      <Availability />
+      <a class="button" href="/contact/">Start a project</a>
+    </div>
+  </div>
 </div>

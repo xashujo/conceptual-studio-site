@@ -12,9 +12,9 @@ const y = (v: number) => BOTTOM - (v / MAX) * (BOTTOM - TOP);
 // Nudge right-hand labels apart where two values sit close together.
 const nudge = [-9, 9, 0];
 ---
-<div class="live glass" data-live data-view="both">
+<div class="live" data-live data-view="both">
   <div class="live__top">
-    <h3 class="live__title">Adults on essential skills courses in England</h3>
+    <div><h3 class="live__title">Adult essential skills</h3><p class="secondary" style="margin-top: 0.6rem; max-width: 40ch">Adults on maths, English and digital skills courses in England, August to April. Most data starts life as a table. Press Chart.</p></div>
     <div class="live__toggle toggle" role="group" aria-label="Show as">
       <button type="button" data-view-button="table" aria-pressed="true">Table</button>
       <button type="button" data-view-button="chart" aria-pressed="false">Chart</button>

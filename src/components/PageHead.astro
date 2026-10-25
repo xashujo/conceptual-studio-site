@@ -1,14 +1,10 @@
 ---
-// Inner page opening: a micro label, a big serif title, and an engraving fading in from the right.
-import { Image } from 'astro:assets';
-import defaultArt from '../assets/art/engraved/lemoyne.webp';
-interface Props { label?: string; title: string; lead?: string; art?: ImageMetadata | false }
-const { label, title, lead, art = defaultArt } = Astro.props;
+// Inner page opening: a big serif title and one sentence about the page.
+interface Props { title: string; lead?: string }
+const { title, lead } = Astro.props;
 ---
-<section class="page-head">
-  {art && <div class="engraving"><Image src={art} alt="" widths={[1200, 1800, 2600]} sizes="100vw" loading="eager" /></div>}
-  <div class="wrap page-head__inner">
-    {label && <p class="micro micro--gold">{label}</p>}
+<section class="page-head wrap">
+  <div class="page-head__inner">
     <h1>{title}</h1>
     {lead && <p class="lead">{lead}</p>}
     {Astro.slots.has('default') && <div class="page-head__side"><slot /></div>}

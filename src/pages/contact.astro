@@ -1,31 +1,22 @@
 ---
-import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
 import EnquiryForm from '../components/EnquiryForm.astro';
 import Availability from '../components/Availability.astro';
 import CopyEmail from '../components/CopyEmail.astro';
 import { settings } from '../lib/site.js';
-import art from '../assets/art/engraved/lemoyne.webp';
 const s = settings.social;
 ---
 <Base title="Start a project" description="Tell Josh about your project. Brand identity and data visualisation for colleges and public institutions, from London. Replies within one working day.">
-  <section class="art-field" aria-labelledby="contact-title" data-liquid-field>
-    <div class="engraving"><Image src={art} alt="" widths={[1200, 1800, 2600]} sizes="100vw" loading="eager" /></div>
-    <div class="wrap art-field__body">
-      <div class="art-panel glass" data-liquid="light">
-        <p class="micro micro--gold">Start a project</p>
-        <h1 id="contact-title">Tell me what you need.</h1>
-        <p class="lead">A few lines is plenty: what it is, who it’s for and when you need it. {settings.responseTime}</p>
-        <div class="actions"><a class="button" href="#enquire">Fill in the form</a><Availability /></div>
-      </div>
-    </div>
-  </section>
-  <section class="section wrap contact" id="enquire" aria-label="Get in touch">
+  <PageHead title="Start a project." lead={`A few lines is plenty: what it is, who it’s for and when you need it. ${settings.responseTime}`}>
+    <Availability />
+  </PageHead>
+  <section class="wrap contact" id="enquire" aria-label="Get in touch">
     <EnquiryForm />
     <aside>
       <div><h2>Email</h2><CopyEmail /></div>
-      <div><h2>Studio</h2><p>London, United Kingdom. It’s <span data-clock>London time</span> here.</p><p class="muted">Weekdays, 9:00 to 17:00.</p></div>
-      <div><h2>What happens next</h2><p class="muted">I read it, reply within a working day, and we book a short call. Then you get a fixed written quote.</p></div>
+      <div><h2>What happens next</h2><p>I read it and reply within a working day. We book a short call, then you get a fixed written quote.</p></div>
+      <div><h2>Studio</h2><p>London, United Kingdom. It’s <span data-clock>London time</span> here. Weekdays, 9:00 to 17:00.</p></div>
       <div><h2>Elsewhere</h2><p><a class="link" href={s.linkedin}>LinkedIn</a>, <a class="link" href={s.instagram}>Instagram</a>, <a class="link" href={s.tiktok}>TikTok</a></p></div>
     </aside>
   </section>
