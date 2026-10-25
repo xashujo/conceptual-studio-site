@@ -24,17 +24,18 @@ const { onView = false } = Astro.props as { onView?: boolean };
   class GoldFlow extends HTMLElement {
     connectedCallback() {
       if (this.dataset.onView === undefined) return this.start();
-      const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { io.disconnect(); this.start(); } }, { threshold: 0.4 });
-      io.observe(this);
+      // Load it as the footer approaches, play once it is well in view, then rest on the last frame.
+      const near = new IntersectionObserver(([e]) => { if (e.isIntersecting) { near.disconnect(); this.prepare(); } }, { rootMargin: '800px 0px' });
+      const seen = new IntersectionObserver(([e]) => { if (e.isIntersecting) { seen.disconnect(); this.start(); } }, { threshold: 0.6 });
+      near.observe(this);
+      seen.observe(this);
     }
-    start() {
+    video?: HTMLVideoElement;
+    prepare() {
       const still = this.querySelector('img');
       const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       const saveData = (navigator as any).connection?.saveData === true;
-      if (!still || reduce || saveData) return; // keep the finished wordmark as a still
-
-      // Start from the first frame so the swap to video is seamless.
-      still.src = still.dataset.first!;
+      if (this.video || !still || reduce || saveData) return; // keep the finished wordmark as a still
 
       const kind = transparentVideoKind(navigator.userAgent, navigator.maxTouchPoints);
       const video = document.createElement('video');
@@ -52,15 +53,24 @@ const { onView = false } = Astro.props as { onView?: boolean };
       source.type = kind === 'hevc' ? 'video/mp4; codecs="hvc1"' : 'video/webm; codecs="vp9"';
       video.append(source);
       this.append(video);
+      this.video = video;
+    }
+    start() {
+      this.prepare();
+      const video = this.video;
+      const still = this.querySelector('img');
+      if (!video || !still) return;
+      // Start from the first frame so the swap to video is seamless.
+      still.src = still.dataset.first!;
 
       const giveUp = () => {
         video.remove();
         still.src = still.src.replace('gold-flow-first', 'gold-flow-final');
       };
       // iOS Low Power Mode blocks autoplay without an error: if nothing plays soon, keep the finished still.
-      const timer = setTimeout(giveUp, 1500);
+      const timer = setTimeout(giveUp, 4000);
       video.addEventListener('playing', () => { clearTimeout(timer); this.classList.add('is-playing'); }, { once: true });
-      video.addEventListener('ended', () => { still.src = still.src.replace('gold-flow-first', 'gold-flow-final'); }, { once: true });
+      video.addEventListener('ended', () => { video.pause(); still.src = still.src.replace('gold-flow-first', 'gold-flow-final'); }, { once: true });
       video.addEventListener('error', () => { clearTimeout(timer); giveUp(); }, { once: true });
       video.play().catch(() => { clearTimeout(timer); giveUp(); });
     }

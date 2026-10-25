@@ -2,15 +2,13 @@
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import PageHead from '../components/PageHead.astro';
+import Masthead from '../components/Masthead.astro';
 import img2 from '../assets/work/exploring-mental-health-through-3d-storytelling/01.webp';
 const testimonials = await getCollection('testimonials');
 const clients = await getCollection('clients');
-const main = testimonials.find((t) => t.id === 'alison-arnaud');
-const others = testimonials.filter((t) => t.id !== 'alison-arnaud');
 ---
 <Base title="About" description="Josh McDonald runs Conceptual Studio, a one-person design studio in London for brand identity and data visualisation, mostly for colleges and public institutions.">
-  <PageHead title="Just me, doing the work." lead="I’m Joshua McDonald, and Conceptual Studio is my design practice in London. You work with the person doing the work, from the first call to the final file." />
+  <Masthead page title="Just me, doing the work." meta={[{ label: 'About', note: 'The studio' }, { label: 'Kingston · Tokyo · London' }, { label: 'Est. 2024' }]} lead="I’m Joshua McDonald, and Conceptual Studio is my design practice in London. You work with the person doing the work, from the first call to the final file." />
   <section class="wrap story" aria-labelledby="story">
     <h2 id="story" class="visually-hidden">My story</h2>
     <div class="story__pic"><Image src={img2} alt="A chrome figure in a field of daisies, from my final major project at Kingston" widths={[500, 900, 1300]} sizes="(max-width: 900px) 100vw, 40vw" loading="eager" /></div>
@@ -22,16 +20,17 @@ const others = testimonials.filter((t) => t.id !== 'alison-arnaud');
     </div>
   </section>
   <section class="section wrap" aria-labelledby="clients-title">
-    <div class="clients">
-      <h2 id="clients-title">Who I’ve worked with</h2>
-      <ul role="list">{clients.map((c) => <li>{c.data.name}</li>)}</ul>
-    </div>
+    <div class="bar label"><span>Clients <span class="note">(Education, companies, music)</span></span><span></span></div>
+    <div class="section-head"><h2 id="clients-title">Who I’ve worked with.</h2></div>
+    <ul class="client-list" role="list">{clients.map((c) => <li>{c.data.name}</li>)}</ul>
   </section>
-  <section class="section wrap" aria-labelledby="words-title">
-    <div class="intro"><h2 id="words-title">What clients say.</h2></div>
-    <div class="words">
-      {main && <figure class="words__main"><blockquote><p>“{main.data.excerpt ?? main.data.quote}”</p></blockquote><figcaption>{main.data.name}<span>{main.data.role}, {main.data.organisation}</span></figcaption></figure>}
-      <div class="words__side">{others.map((t) => <figure><blockquote><p>“{t.data.quote}”</p></blockquote><figcaption>{t.data.name}<span>{t.data.role}, {t.data.organisation}</span></figcaption></figure>)}</div>
+  <section class="section is-dark" aria-labelledby="voices-title">
+    <div class="wrap">
+      <div class="bar label"><span>In their words <span class="note">(Clients)</span></span><span></span></div>
+      <div class="section-head"><h2 id="voices-title">What clients say.</h2></div>
+      <ul class="voices" role="list">
+        {testimonials.map((t) => <li><figure><blockquote><p>“{t.data.quote}”</p></blockquote><figcaption class="label">{t.data.name}<span class="note">({t.data.role}, {t.data.organisation})</span></figcaption></figure></li>)}
+      </ul>
     </div>
   </section>
 </Base>

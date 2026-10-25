@@ -9,6 +9,7 @@ featured: true
 order: 1
 archive: false
 cover: "../../assets/work/new-city-college-strategic-intent/02.webp"
+thumb: "../../assets/work/new-city-college-strategic-intent/thumb.webp"
 coverAlt: "Black map of east London boroughs showing the colleges that merged to form New City College, with a timeline from 1990 to 2024"
 problem: "New City College needed a strategic intent briefing for senior leadership and institutional stakeholders. The material behind it was dense: demographic forecasts, how the student body breaks down by level, and which employment sectors are growing. It all had to read quickly in a room of busy people."
 approach: "I sorted the data first, then built one visual language for the whole suite, so every chart reads the same way and sits in NCC's brand.\n\nI also drew a timeline and map of NCC's college mergers from 1990 to 2024. It puts the college's growth in context before anyone gets to the forecasts."

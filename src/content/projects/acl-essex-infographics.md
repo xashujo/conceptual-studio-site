@@ -9,6 +9,7 @@ featured: true
 order: 3
 archive: false
 cover: "../../assets/work/acl-essex-infographics/03.webp"
+thumb: "../../assets/work/acl-essex-infographics/thumb.webp"
 coverAlt: "Heat map of Essex showing enrolments per ACL centre by local authority, shaded from light to dark blue"
 problem: "ACL Essex wanted to see its 2024 learner data clearly, centre by centre. The data covered employment status, Universal Credit, ethnicity and where learners live, across seven delivery centres. It had to work for a wide audience, not just analysts."
 approach: "I built every graphic so the seven centres could be compared side by side: the same pie structure for each centre, heat maps for geography, and type chosen for reading at a glance. Everything sits inside ACL's visual identity."

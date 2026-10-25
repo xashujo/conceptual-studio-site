@@ -9,6 +9,7 @@ featured: true
 order: 5
 archive: false
 cover: "../../assets/work/fou-answer/03.webp"
+thumb: "../../assets/work/fou-answer/thumb.webp"
 coverAlt: "Pixelated black eye logo over a field of binary digits"
 problem: ""
 approach: "As lead designer at Fou Answer, a tech startup in Tokyo, I looked after the whole visual identity, from the brand to the product interface. I designed and built the company's website, and made 3D animations and visuals for its client work.\n\nIt was a small core team, so the job ran across branding, product and motion every week."

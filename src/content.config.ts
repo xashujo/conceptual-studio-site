@@ -30,6 +30,7 @@ const projects = defineCollection({
       order: z.number().default(99),
       archive: z.boolean().default(false),
       cover: image(),
+      thumb: opt(image()),
       coverAlt: z.string(),
       problem: text,
       approach: text,

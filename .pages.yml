@@ -83,6 +83,12 @@ content:
         description: The main image, used on cards and at the top of the project page.
         options:
           media: images
+      - name: thumb
+        label: Thumbnail (optional)
+        type: image
+        description: A 4:3 thumbnail for the project cards (1600 by 1200 works well). Leave empty to use the cover image.
+        options:
+          media: images
       - name: coverAlt
         label: Cover image description (alt text)
         type: string

@@ -9,6 +9,7 @@ featured: true
 order: 4
 archive: false
 cover: "../../assets/work/new-city-college-infographics/02.webp"
+thumb: "../../assets/work/new-city-college-infographics/thumb.webp"
 coverAlt: "Page showing a black map of London with BSix and New City College campuses marked in colour"
 problem: "BSix Sixth Form College and New City College were consulting on a merger. The consultation document had to explain the practical side to stakeholders, like where the campuses are and how students travel to learn, without burying anyone in detail."
 approach: "I designed campus maps, travel-to-learn charts and heat maps, all in NCC's colours and type. The colour coding stays readable for everyone, and every page follows the same structure so readers know where to look."

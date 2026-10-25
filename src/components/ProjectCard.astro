@@ -1,15 +1,19 @@
 ---
-// A project: the picture large, then its title, what it was and the year.
+// A project, lit like an exhibit: its 4:3 thumbnail, a ruled label row, then the title.
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
-interface Props { project: CollectionEntry<'projects'>; sizes?: string; eager?: boolean }
-const { project, sizes = '(max-width: 800px) 100vw, 50vw', eager = false } = Astro.props;
+import Icon from './Icon.astro';
+import { categoryName } from '../lib/site.js';
+interface Props { project: CollectionEntry<'projects'>; index?: number; sizes?: string; eager?: boolean }
+const { project, index, sizes = '(max-width: 800px) 100vw, 50vw', eager = false } = Astro.props;
 const p = project.data;
 ---
-<a class="card" href={`/work/${project.id}/`}>
-  <span class="card__frame"><Image src={p.cover} alt={p.coverAlt} widths={[600, 900, 1400, 2000]} sizes={sizes} loading={eager ? 'eager' : 'lazy'} style={`view-transition-name: cover-${project.id}`} /></span>
-  <span class="card__text">
-    <span><span class="card__title">{p.title}</span><span class="card__meta">{p.client}. {p.disciplines.slice(0, 3).join(', ')}.</span></span>
-    <span class="card__year">{p.year}</span>
+<a class="work" href={`/work/${project.id}/`}>
+  <span class="work__frame">
+    <Image src={p.thumb ?? p.cover} alt={p.coverAlt} widths={[600, 900, 1200, 1600]} sizes={sizes} loading={eager ? 'eager' : 'lazy'} style={`view-transition-name: cover-${project.id}`} />
+    <span class="work__view glass" data-tone="dark">View project <Icon name="arrow" /></span>
   </span>
+  <span class="work__meta label"><span>{index !== undefined ? `Nº ${String(index + 1).padStart(2, '0')}` : p.year} <span class="note">({categoryName[p.category]})</span></span><span>{p.year}</span></span>
+  <span class="work__title"><span class="h">{p.title}</span></span>
+  <span class="work__client">{p.client}</span>
 </a>

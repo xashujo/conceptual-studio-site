@@ -2,13 +2,17 @@
 
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* The bar is plain at the top of the page and turns to glass once the page moves under it. */
+/* The glass bar takes the dark tint while a dark section passes under it. */
 function initHeader() {
-  const header = document.querySelector('[data-header]');
-  if (!header) return;
-  const update = () => header.classList.toggle('is-scrolled', scrollY > 8);
-  update();
-  addEventListener('scroll', update, { passive: true });
+  const bar = document.querySelector('.site-header__bar');
+  const darks = document.querySelectorAll('.is-dark');
+  if (!bar || !darks.length) return;
+  const under = new Set();
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => (e.isIntersecting ? under.add(e.target) : under.delete(e.target)));
+    bar.dataset.tone = under.size ? 'dark' : 'light';
+  }, { rootMargin: '-34px 0px -94% 0px' });
+  darks.forEach((el) => io.observe(el));
 }
 
 /* Phones: the menu sheet. */
@@ -34,34 +38,6 @@ function initMenu() {
   menu.querySelectorAll('.menu__links a').forEach((a) => a.addEventListener('click', () => set(false)));
 }
 
-/* The highlights row: buttons, dots, and the right button state at each end. */
-function initReel() {
-  const reel = document.querySelector('[data-reel]');
-  if (!reel) return;
-  const track = reel.querySelector('[data-reel-track]');
-  const items = [...track.children];
-  const dots = [...reel.querySelectorAll('.reel__dots span')];
-  const prev = reel.querySelector('[data-reel-prev]');
-  const next = reel.querySelector('[data-reel-next]');
-  const step = () => items[0].getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap || 16);
-  const update = () => {
-    const max = track.scrollWidth - track.clientWidth;
-    prev.disabled = track.scrollLeft < 8;
-    next.disabled = track.scrollLeft > max - 8;
-    const i = Math.round(track.scrollLeft / step());
-    const cur = Math.min(i, dots.length - 1);
-    dots.forEach((d, k) => d.classList.toggle('is-active', k === cur));
-    const vw = document.documentElement.clientWidth;
-    items.forEach((it) => { const r = it.getBoundingClientRect(); it.classList.toggle('is-current', r.left >= -4 && r.right <= vw + 4); });
-  };
-  prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: reduceMotion ? 'auto' : 'smooth' }));
-  next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: reduceMotion ? 'auto' : 'smooth' }));
-  track.addEventListener('scroll', update, { passive: true });
-  addEventListener('resize', update);
-  update();
-  reel.classList.add('is-ready');
-}
-
 /* Copy email buttons. */
 function initCopy() {
   document.querySelectorAll('[data-copy]').forEach((btn) => {
@@ -84,20 +60,6 @@ function initClock() {
   const tick = () => (el.textContent = fmt.format(new Date()));
   tick();
   setInterval(tick, 30_000);
-}
-
-/* The live chart: a table that becomes a chart. */
-function initLive() {
-  document.querySelectorAll('[data-live]').forEach((live) => {
-    const buttons = live.querySelectorAll('[data-view-button]');
-    live.querySelectorAll('.line').forEach((l) => l.style.setProperty('--len', String(Math.ceil(l.getTotalLength()))));
-    const set = (view) => {
-      live.dataset.view = view;
-      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.viewButton === view)));
-    };
-    buttons.forEach((b) => b.addEventListener('click', () => set(b.dataset.viewButton)));
-    set('table');
-  });
 }
 
 /* Work filters, with a Flip re-layout. */
@@ -135,7 +97,7 @@ async function initFilters() {
    Content is never hidden if this script does not run. */
 function initReveal() {
   if (reduceMotion) return;
-  const els = [...document.querySelectorAll('[data-reveal], .card, .case-section > *, .block, .block--pair')];
+  const els = [...document.querySelectorAll('[data-reveal], .case-section > *, .block, .block--pair')];
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
       if (!e.isIntersecting) return;
@@ -170,10 +132,8 @@ function initGlass() {
 
 initHeader();
 initMenu();
-initReel();
 initCopy();
 initClock();
-initLive();
 initFilters();
 initReveal();
 initGlass();

@@ -1,11 +1,9 @@
 ---
-import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import PageHead from '../../components/PageHead.astro';
+import Masthead from '../../components/Masthead.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 import EnquiryForm from '../../components/EnquiryForm.astro';
-import LiveChart from '../../components/LiveChart.astro';
 import { settings, price } from '../../lib/site.js';
 export async function getStaticPaths() {
   const services = await getCollection('services');
@@ -16,53 +14,52 @@ const { service, related } = Astro.props;
 const s = service.data;
 ---
 <Base title={s.title} description={s.short} image={s.image}>
-  <PageHead title={`${s.title}.`} lead={s.summary}>
+  <Masthead page title={`${s.title}.`} meta={[{ label: 'Service', note: 'Fixed quotes' }, { label: s.title }, { label: 'From £' + price(Math.min(...s.tiers.filter((t) => t.price).map((t) => t.price as number))) }]} lead={s.summary}>
     <a class="button" href="#enquire">Get a quote</a>
-  </PageHead>
-  <figure class="wrap"><div class="case-cover"><div class="frame"><Image src={s.image} alt={s.imageAlt} widths={[900, 1500, 2200]} sizes="100vw" loading="eager" style="max-height: 70svh" /></div></div></figure>
+  </Masthead>
 
-  <section class="section wrap" aria-labelledby="ladder-title">
-    <div class="intro"><h2 id="ladder-title" data-reveal>Pick a starting point.</h2><p data-reveal>{settings.pricesNote}</p></div>
+  <section class="wrap" aria-labelledby="ladder-title">
+    <div class="bar label"><span>Options <span class="note">(Starting prices)</span></span><span></span></div>
+    <div class="section-head"><h2 id="ladder-title">Pick a starting point.</h2><p class="secondary">{settings.pricesNote}</p></div>
     <ol class="ladder" role="list">
       {s.tiers.map((t) => (
-        <li class:list={['tier', !t.price && 'tier--custom']} data-reveal>
+        <li class="tier" data-reveal>
           <h3>{t.name}</h3>
           <p class="tier__amount">{t.price ? `£${price(t.price)}` : 'Quote'}</p>
-          <p class="small secondary">{t.price ? 'Starting price' : 'For anything bigger'}{t.timeline && `. ${t.timeline}`}</p>
+          <p class="label secondary">{t.price ? 'Starting price' : 'For anything bigger'}{t.timeline && ` · ${t.timeline}`}</p>
           <p>{t.description}</p>
           {t.includes.length > 0 && <ul>{t.includes.map((i) => <li>{i}</li>)}</ul>}
-          <a class:list={['button button--small', !t.price && 'button--paper']} href={`?service=${encodeURIComponent(s.title)}&tier=${encodeURIComponent(t.name)}#enquire`}>{t.price ? 'Ask about this' : 'Tell me more'}</a>
+          <a class:list={['button button--small', !t.price && 'button--line']} href={`?service=${encodeURIComponent(s.title)}&tier=${encodeURIComponent(t.name)}#enquire`}>{t.price ? 'Ask about this' : 'Tell me more'}</a>
         </li>
       ))}
     </ol>
   </section>
 
-  {service.id === 'data-visualisation' && (
-    <section class="section wrap" aria-label="Try it">
-      <div class="surface panel" data-reveal><LiveChart /></div>
-    </section>
-  )}
-
   <section class="section wrap two-col" aria-label="What’s included">
-    <div class="surface panel" data-reveal><h2 class="display" style="font-size: var(--t-title)">What’s included</h2><ul class="ticks" style="margin-top: 1.25rem">{s.includes.map((i) => <li>{i}</li>)}</ul></div>
-    <div class="surface panel" data-reveal><h2 class="display" style="font-size: var(--t-title)">The kind of work</h2><ul class="ticks" style="margin-top: 1.25rem">{s.kinds.map((i) => <li>{i}</li>)}</ul></div>
+    <div><div class="bar label"><span>What’s included</span><span></span></div><ul class="ticks" style="margin-top: 1.25rem">{s.includes.map((i) => <li>{i}</li>)}</ul></div>
+    <div><div class="bar label"><span>The kind of work</span><span></span></div><ul class="ticks" style="margin-top: 1.25rem">{s.kinds.map((i) => <li>{i}</li>)}</ul></div>
   </section>
 
   {related.length > 0 && (
-    <section class="section wrap" aria-labelledby="rel-title">
-      <div class="intro"><h2 id="rel-title">Work like this.</h2></div>
-      <ul class="cards" role="list">{related.map((p) => <li data-reveal><ProjectCard project={p!} /></li>)}</ul>
+    <section class="section is-dark" aria-labelledby="rel-title">
+      <div class="wrap">
+        <div class="bar label"><span>Examples <span class="note">(Work like this)</span></span><span></span></div>
+        <div class="section-head"><h2 id="rel-title">Work like this.</h2></div>
+        <ul class="works" role="list">{related.map((p) => <li data-reveal><ProjectCard project={p!} /></li>)}</ul>
+      </div>
     </section>
   )}
 
   {s.faqs.length > 0 && (
-    <section class="section wrap two-col" aria-labelledby="faq-title">
-      <h2 id="faq-title">Good to know.</h2>
-      <ul class="faqs" role="list">{s.faqs.map((f) => <li><details><summary>{f.q}</summary><p>{f.a}</p></details></li>)}</ul>
+    <section class="section wrap" aria-labelledby="faq-title">
+      <div class="faq">
+        <div class="faq__head"><h2 id="faq-title">Good to know.</h2></div>
+        <ul class="faq__list" role="list">{s.faqs.map((f) => <li><details><summary>{f.q}</summary><p>{f.a}</p></details></li>)}</ul>
+      </div>
     </section>
   )}
 
-  <section class="section wrap" id="enquire" aria-label="Enquiry">
+  <section class="wrap" id="enquire" aria-label="Enquiry">
     <EnquiryForm service={s.title} heading={`Ask about ${s.title.toLowerCase()}`} />
   </section>
 </Base>

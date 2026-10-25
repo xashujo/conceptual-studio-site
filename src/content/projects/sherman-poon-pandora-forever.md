@@ -9,6 +9,7 @@ featured: true
 order: 6
 archive: false
 cover: "../../assets/work/sherman-poon-pandora-forever/02.webp"
+thumb: "../../assets/work/sherman-poon-pandora-forever/thumb.webp"
 coverAlt: "Red room with a round window framing a woman\u2019s face, glowing particles and crystals"
 problem: "Hong Kong artist Sherman Poon wanted the video for Pandora Forever (\u6c38\u9060\u6f58\u6735\u62c9) to feel dreamlike. Art director Aurora Wong had sketched the worlds, and they needed building."
 approach: "Working from Aurora's sketches, I built the 3D environments: glowing crystal forms, particles and surreal architecture. Then I integrated them with the live-action footage."

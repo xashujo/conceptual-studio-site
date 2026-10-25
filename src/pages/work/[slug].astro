@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import Masthead from '../../components/Masthead.astro';
 import Icon from '../../components/Icon.astro';
 import { paras, ROMAN, categoryName } from '../../lib/site.js';
 
@@ -24,24 +25,20 @@ const sections = [
 ---
 <Base title={p.title} description={p.summary} image={p.cover}>
   <article>
-    <section class="page-head wrap">
-      <div class="page-head__inner">
-        <h1>{p.title}</h1>
-        <p class="lead">{p.summary}</p>
-        <dl class="case-facts">
-          <dt>Client</dt><dd>{p.client}</dd>
-          <dt>Year</dt><dd>{p.year}</dd>
-          <dt>Work</dt><dd>{p.disciplines.join(', ')}</dd>
-          {p.context && <><dt>Context</dt><dd>{p.context}</dd></>}
-        </dl>
-      </div>
-    </section>
+    <Masthead page title={p.title} meta={[{ label: p.client }, { label: categoryName[p.category] }, { label: String(p.year) }]} lead={p.summary} />
     <figure class="wrap case-cover">
-      <div class="frame"><Image src={p.cover} alt={p.coverAlt} widths={[800, 1400, 2000, 2600]} sizes="100vw" loading="eager" fetchpriority="high" style={`view-transition-name: cover-${project.id}`} /></div>
+      <div class="frame"><Image src={p.thumb ?? p.cover} alt={p.coverAlt} widths={[900, 1400, 2000]} sizes="(max-width: 900px) 100vw, 1100px" loading="eager" fetchpriority="high" style={`view-transition-name: cover-${project.id}`} /></div>
+      <dl class="case-facts label">
+        <div><dt class="note">Client</dt><dd>{p.client}</dd></div>
+        <div><dt class="note">Year</dt><dd>{p.year}</dd></div>
+        <div><dt class="note">Work</dt><dd>{p.disciplines.join(', ')}</dd></div>
+        <div><dt class="note">{p.context ? 'Context' : 'Type'}</dt><dd>{p.context ?? categoryName[p.category]}</dd></div>
+      </dl>
     </figure>
 
     {sections.filter((s) => s.body).map((s) => (
       <section class="wrap case-section" aria-labelledby={s.id}>
+        <div class="bar label"><span>{s.title}</span><span></span></div>
         <h2 id={s.id}>{s.title}</h2>
         <div class="prose">{paras(s.body).map((t) => <p>{t}</p>)}</div>
       </section>
@@ -53,13 +50,13 @@ const sections = [
           if (b.type === 'image') { const c = cap(b.caption); return (
             <figure class={`block block--${b.size}`}>
               <div class="frame"><Image src={b.src} alt={b.alt} widths={[700, 1200, 1800, 2400]} sizes={b.size === 'narrow' ? '(max-width: 900px) 100vw, 900px' : '100vw'} /></div>
-              {c && <figcaption>{c.text}</figcaption>}
+              {c && <figcaption class="label note">{c.no} — {c.text}</figcaption>}
             </figure>
           ); }
           if (b.type === 'pair') { const l = cap(b.left.caption); const r = cap(b.right.caption); return (
             <div class="block--pair">
-              <figure class="block"><div class="frame"><Image src={b.left.src} alt={b.left.alt} widths={[600, 1000, 1500]} sizes="(max-width: 900px) 100vw, 50vw" /></div>{l && <figcaption>{l.text}</figcaption>}</figure>
-              <figure class="block"><div class="frame"><Image src={b.right.src} alt={b.right.alt} widths={[600, 1000, 1500]} sizes="(max-width: 900px) 100vw, 50vw" /></div>{r && <figcaption>{r.text}</figcaption>}</figure>
+              <figure class="block"><div class="frame"><Image src={b.left.src} alt={b.left.alt} widths={[600, 1000, 1500]} sizes="(max-width: 900px) 100vw, 50vw" /></div>{l && <figcaption class="label note">{l.no} — {l.text}</figcaption>}</figure>
+              <figure class="block"><div class="frame"><Image src={b.right.src} alt={b.right.alt} widths={[600, 1000, 1500]} sizes="(max-width: 900px) 100vw, 50vw" /></div>{r && <figcaption class="label note">{r.no} — {r.text}</figcaption>}</figure>
             </div>
           ); }
           if (b.type === 'text') return (
@@ -71,8 +68,8 @@ const sections = [
           if (b.type === 'video') { const c = cap(b.caption); return (
             <figure class="block block--full">
               {b.mp4 && <video controls playsinline preload="none" poster={b.poster?.src} width="1920" height="1092" aria-label={b.alt}><source src={b.mp4} type="video/mp4" /></video>}
-              {!b.mp4 && b.youtube && <a class="video-card" href={b.youtube}>{b.poster && <Image src={b.poster} alt={b.alt ?? ''} widths={[1200, 2000]} sizes="100vw" />}<span class="video-card__label button button--quiet"><Icon name="play" /> Watch on YouTube</span></a>}
-              {c && <figcaption>{c.text}</figcaption>}
+              {!b.mp4 && b.youtube && <a class="video-card" href={b.youtube}>{b.poster && <Image src={b.poster} alt={b.alt ?? ''} widths={[1200, 2000]} sizes="100vw" />}<span class="video-card__label button button--line"><Icon name="play" /> Watch on YouTube</span></a>}
+              {c && <figcaption class="label note">{c.no} — {c.text}</figcaption>}
             </figure>
           ); }
         })}
@@ -81,14 +78,16 @@ const sections = [
 
     {p.outcome && (
       <section class="wrap case-section" aria-labelledby="outcome">
+        <div class="bar label"><span>Outcome</span><span></span></div>
         <h2 id="outcome">What happened</h2>
-        <div class="prose">{paras(p.outcome).map((t) => <p>{t}</p>)}{p.link && <p style="margin-top: 1.5rem"><a class="button button--quiet" href={p.link.url} rel="noopener">{p.link.label} <Icon name="arrow" /></a></p>}</div>
+        <div class="prose">{paras(p.outcome).map((t) => <p>{t}</p>)}{p.link && <p style="margin-top: 1.5rem"><a class="button button--line" href={p.link.url} rel="noopener">{p.link.label} <Icon name="arrow" /></a></p>}</div>
       </section>
     )}
 
     {testimonial && (
-      <div class="wrap">
-        <figure class="case-quote">
+      <div class="wrap" style="padding-top: clamp(3rem, 6vw, 5rem)">
+        <div class="bar label"><span>In their words</span><span></span></div>
+        <figure class="case-quote" style="margin-top: 2rem">
           <blockquote><p>“{testimonial.data.quote}”</p></blockquote>
           <figcaption>{testimonial.data.name}, <span>{testimonial.data.role}, {testimonial.data.organisation}</span></figcaption>
         </figure>
@@ -97,8 +96,8 @@ const sections = [
 
     <section class="section wrap" aria-label="Next project">
       <a class="next" href={`/work/${next.id}/`}>
-        <span><span class="next__label">Next project</span><span class="next__title">{next.data.title}</span></span>
-        <span class="card__frame"><Image src={next.data.cover} alt="" widths={[600, 1000]} sizes="(max-width: 900px) 100vw, 45vw" /></span>
+        <span><span class="label">Next project <span class="note">({categoryName[next.data.category]})</span></span><span class="next__title">{next.data.title}</span></span>
+        <span class="work__frame"><Image src={next.data.thumb ?? next.data.cover} alt="" widths={[600, 1000]} sizes="(max-width: 900px) 100vw, 45vw" /></span>
       </a>
     </section>
   </article>

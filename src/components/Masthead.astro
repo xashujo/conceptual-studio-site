@@ -1,0 +1,18 @@
+---
+// The Kombu-style masthead: a ruled row of labels, a huge serif title, then a ruled foot.
+interface Meta { label: string; note?: string }
+interface Props { title: string; meta: Meta[]; lead?: string; page?: boolean }
+const { title, meta, lead, page = false } = Astro.props;
+---
+<header class:list={['masthead wrap', page && 'masthead--page']}>
+  <div class="masthead__meta">
+    {meta.map((m) => <p class="label">{m.label}{m.note && <><br /><span class="note">({m.note})</span></>}</p>)}
+  </div>
+  <h1 data-load style="--d:60ms">{title}</h1>
+  {(lead || Astro.slots.has('default')) && (
+    <div class="masthead__foot" data-load style="--d:160ms">
+      {lead && <p class="lead">{lead}</p>}
+      <div class="actions"><slot /></div>
+    </div>
+  )}
+</header>

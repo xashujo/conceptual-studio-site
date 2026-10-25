@@ -1,131 +1,114 @@
 ---
-import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import Masthead from '../components/Masthead.astro';
+import ProjectCard from '../components/ProjectCard.astro';
 import Icon from '../components/Icon.astro';
-import LiveChart from '../components/LiveChart.astro';
+import Availability from '../components/Availability.astro';
 import { settings, price } from '../lib/site.js';
 
 const featured = (await getCollection('projects', (p) => p.data.featured && !p.data.archive)).sort((a, b) => a.data.order - b.data.order);
-// The reel opens on the identity seen in the street, then the data work.
-const lead = featured.findIndex((p) => p.id === 'oxford-school-of-english');
-if (lead > 0) featured.unshift(...featured.splice(lead, 1));
 const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
-const clients = await getCollection('clients');
 const testimonials = await getCollection('testimonials');
-const main = testimonials.find((t) => t.id === 'alison-arnaud');
-const others = testimonials.filter((t) => t.id !== 'alison-arnaud');
+const voices = ['alison-arnaud', 'laura-de-vos', 'mark-silverman'].map((id) => testimonials.find((t) => t.id === id)).filter(Boolean);
 const from = (s: (typeof services)[number]) => Math.min(...s.data.tiers.filter((t) => t.price).map((t) => t.price as number));
 
-const answers = [
-  { q: 'What will it cost?', a: `Brand identity from £${price(from(services[0]))}, data visualisation from £${price(from(services[1]))}. Every project gets a fixed written quote before any work begins, so the number doesn’t move.` },
-  { q: 'How long will it take?', a: 'Charts take about a week and a full report two to three. A new identity takes four to six weeks, and a rebrand with rollout eight to twelve.' },
-  { q: 'Who will I work with?', a: 'Me. Conceptual Studio is just me, so you talk to the person doing the work, from the first call to the final file.' },
-  { q: 'Do you know our sector?', a: 'Most of my clients are colleges and public institutions: strategic plans, merger consultations, learner data, and identities that end up on buses and tube platforms.' },
-  { q: 'Can you work with procurement?', a: 'Yes. A formal written quote, purchase orders and invoices from a UK limited company, set out the way your finance team needs.' },
-  { q: 'What do we get at the end?', a: 'Print-ready artwork, web files and guidelines, ready for your team to use. I stay on hand for rollout and the next document.' },
+const questions = [
+  { q: 'What will it cost?', a: `Brand identity starts at £${price(from(services[0]))} and data visualisation at £${price(from(services[1]))}. After a short call you get a fixed written quote, so the number doesn’t move.` },
+  { q: 'How long does it take?', a: 'About a week for a set of charts, two to three weeks for a report, four to six for a new identity and eight to twelve for a full rebrand.' },
+  { q: 'Who will I work with?', a: 'Me. Conceptual Studio is just me, so you talk to the person doing the work from the first call to the final file.' },
+  { q: 'Can you work with our procurement?', a: 'Yes. A formal written quote, purchase orders and invoices from a UK limited company, laid out the way your finance team needs.' },
+  { q: 'What do we get at the end?', a: 'Print-ready artwork, web files and guidelines your team can use straight away. I stay on hand for rollout and the next document.' },
 ];
 ---
 <Base>
-  <section class="hero" aria-labelledby="hero-title">
-    <div class="wrap hero__top">
-      <h1 id="hero-title" data-load>{settings.headline}.</h1>
-      <div class="hero__side" data-load style="--d:120ms">
-        <p>{settings.intro}</p>
-        <div class="actions">
-          <a class="button" href="/contact/">Start a project</a>
-          <a class="more-link" href="#prices">See prices <Icon name="arrow" /></a>
-        </div>
+  <Masthead
+    title={`${settings.headline}.`}
+    meta={[
+      { label: 'Joshua McDonald', note: 'Design & art direction' },
+      { label: 'Brand · Data · Motion', note: 'For education' },
+      { label: 'London', note: 'Est. 2024' },
+    ]}
+    lead={settings.intro}
+  >
+    <a class="button" href="/contact/">Start a project</a>
+    <a class="button button--line" href="#work">See the work</a>
+    <Availability />
+  </Masthead>
+
+  <section class="section is-dark" id="work" aria-labelledby="work-title">
+    <div class="wrap">
+      <div class="bar label"><span>Selected work <span class="note">(2023—2025)</span></span><a class="arrow-link" href="/work/">All projects <Icon name="arrow" /></a></div>
+      <div class="section-head">
+        <h2 id="work-title">The work.</h2>
+        <p class="secondary">Identities, reports and maps for colleges and public institutions, and a few things for companies and artists.</p>
+      </div>
+      <ul class="works" role="list">
+        {featured.map((p, i) => <li data-reveal><ProjectCard project={p} index={i} eager={i < 2} /></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="prices" aria-labelledby="prices-title">
+    <div class="wrap">
+      <div class="bar label"><span>Services & prices <span class="note">(Fixed quotes)</span></span><a class="arrow-link" href="/services/">In detail <Icon name="arrow" /></a></div>
+      <div class="section-head">
+        <h2 id="prices-title">Two services, priced up front.</h2>
+        <p class="secondary">{settings.pricesNote}</p>
+      </div>
+      <div class="price-list">
+        {services.map((s) => (
+          <article class="service" data-reveal>
+            <div class="service__head"><h3>{s.data.title}</h3><a class="arrow-link label" href={`/services/${s.id}/`}>What’s included <Icon name="arrow" /></a></div>
+            <p class="secondary">{s.data.short}</p>
+            <ul class="tiers" role="list">
+              {s.data.tiers.map((t) => (
+                <li>
+                  <span class="tier__name">{t.name}</span>
+                  <span class="tier__price">{t.price ? <><small>From</small>£{price(t.price)}</> : 'Quote'}</span>
+                  <span class="tier__time label">{t.timeline ?? 'Scoped with you'}</span>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+      <div class="quote-strip" data-reveal>
+        <p>Every project gets a fixed written quote before any work begins.</p>
+        <a class="button" href="/contact/">Ask for a quote</a>
       </div>
     </div>
+  </section>
 
-    <div class="reel" data-reel data-load style="--d:220ms">
-      <ul class="reel__track" role="list" data-reel-track aria-label="Selected work">
-        {featured.map((p, i) => (
-          <li class="reel__item">
-            <a href={`/work/${p.id}/`}>
-              <span class="reel__frame"><Image src={p.data.cover} alt={p.data.coverAlt} widths={[700, 1100, 1600, 2200]} sizes="(max-width: 900px) 86vw, min(82vw, 1060px)" loading={i < 2 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : undefined} style={`view-transition-name: cover-${p.id}`} /></span>
-              <span class="reel__caption">
-                <span><h3>{p.data.title}</h3><p>{p.data.client}, {p.data.year}</p></span>
-                <span class="more-link">View project <Icon name="arrow" /></span>
-              </span>
-            </a>
+  <section class="section" aria-labelledby="faq-title" style="padding-top: 0">
+    <div class="wrap">
+      <div class="bar label"><span>Questions <span class="note">(Before you ask)</span></span><span></span></div>
+      <div class="faq" style="margin-top: clamp(1.75rem, 3vw, 2.75rem)">
+        <div class="faq__head">
+          <h2 id="faq-title">Straight answers.</h2>
+          <p class="secondary">Anything else, just ask. {settings.responseTime}</p>
+        </div>
+        <ul class="faq__list" role="list">
+          {questions.map((x, i) => <li><details open={i === 0}><summary>{x.q}</summary><p>{x.a}</p></details></li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section is-dark" aria-labelledby="voices-title">
+    <div class="wrap">
+      <div class="bar label"><span>In their words <span class="note">(Clients)</span></span><span></span></div>
+      <div class="section-head"><h2 id="voices-title">What clients say.</h2></div>
+      <ul class="voices" role="list">
+        {voices.map((t) => (
+          <li data-reveal>
+            <figure>
+              <blockquote><p>“{t!.data.excerpt ?? t!.data.quote}”</p></blockquote>
+              <figcaption class="label">{t!.data.name}<span class="note">({t!.data.role}, {t!.data.organisation})</span></figcaption>
+            </figure>
           </li>
         ))}
       </ul>
-      <div class="wrap reel__controls">
-        <div class="reel__dots" aria-hidden="true">{featured.map((_, i) => <span class:list={[i === 0 && 'is-active']}></span>)}</div>
-        <div class="reel__pad glass">
-          <button class="round" type="button" data-reel-prev aria-label="Previous project" disabled><Icon name="prev" /></button>
-          <button class="round" type="button" data-reel-next aria-label="Next project"><Icon name="next" /></button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section wrap" aria-labelledby="clients-title">
-    <div class="clients">
-      <h2 id="clients-title">Trusted by colleges, companies and artists</h2>
-      <ul role="list">{clients.map((c) => <li data-reveal>{c.data.name}</li>)}</ul>
-    </div>
-  </section>
-
-  <section class="section wrap" id="prices" aria-labelledby="services-title">
-    <div class="intro">
-      <h2 id="services-title" data-reveal>Two services, priced up front.</h2>
-      <p data-reveal>{settings.pricesNote}</p>
-    </div>
-    <div class="bento">
-      {services.map((s) => (
-        <article class="tile tile--service" data-reveal>
-          <div class="tile__pic"><Image src={s.data.image} alt={s.data.imageAlt} widths={[700, 1100, 1500]} sizes="(max-width: 1000px) 100vw, 50vw" /></div>
-          <h3>{s.data.title}</h3>
-          <p class="secondary">{s.data.short}</p>
-          <ul class="tiers" role="list">
-            {s.data.tiers.map((t) => (
-              <li><span class="tier__name">{t.name}</span><span class="tier__price">{t.price ? <><small>from</small>£{price(t.price)}</> : 'Quote'}</span><span class="tier__time">{t.timeline ?? 'Scoped with you'}</span></li>
-            ))}
-          </ul>
-          <div class="actions">
-            <a class="button" href={`/contact/?service=${encodeURIComponent(s.data.title)}`}>Ask for a quote</a>
-            <a class="more-link" href={`/services/${s.id}/`}>What’s included <Icon name="arrow" /></a>
-          </div>
-        </article>
-      ))}
-      <div class="tile tile--live" data-reveal><LiveChart /></div>
-      <div class="tile tile--quote" data-reveal>
-        <p>A fixed written quote before any work begins.</p>
-        <p class="secondary">After a short call you get the scope, timeline and price in writing, set out for procurement if you need it.</p>
-        <div><a class="button button--paper" href="/contact/">Book the call</a></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section wrap" aria-labelledby="answers-title">
-    <div class="intro">
-      <h2 id="answers-title" data-reveal>Straight answers.</h2>
-      <p data-reveal>What people want to know before they hire a studio.</p>
-    </div>
-    <ul class="answers" role="list">{answers.map((x) => <li data-reveal><h3>{x.q}</h3><p>{x.a}</p></li>)}</ul>
-  </section>
-
-  <section class="section wrap" aria-labelledby="words-title">
-    <div class="intro"><h2 id="words-title" data-reveal>What clients say.</h2></div>
-    <div class="words">
-      {main && (
-        <figure class="words__main" data-reveal>
-          <blockquote><p>“{main.data.excerpt ?? main.data.quote}”</p></blockquote>
-          <figcaption>{main.data.name}<span>{main.data.role}, {main.data.organisation}</span></figcaption>
-        </figure>
-      )}
-      <div class="words__side">
-        {others.map((t) => (
-          <figure data-reveal>
-            <blockquote><p>“{t.data.quote}”</p></blockquote>
-            <figcaption>{t.data.name}<span>{t.data.role}, {t.data.organisation}</span></figcaption>
-          </figure>
-        ))}
-      </div>
     </div>
   </section>
 </Base>

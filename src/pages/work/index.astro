@@ -1,25 +1,26 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import PageHead from '../../components/PageHead.astro';
+import Masthead from '../../components/Masthead.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 const all = (await getCollection('projects')).sort((a, b) => Number(a.data.archive) - Number(b.data.archive) || a.data.order - b.data.order || b.data.year - a.data.year);
 const filters = [['all', 'All'], ['brand', 'Brand identity'], ['data', 'Data visualisation'], ['motion', '3D and motion'], ['archive', 'Earlier work']];
 const current = all.filter((p) => !p.data.archive);
 ---
 <Base title="Work" description="Brand identity and data visualisation for colleges and public institutions, plus 3D and motion work. Projects by Conceptual Studio, London.">
-  <PageHead title="Work." lead="Identities, reports, maps and films, mostly for colleges and public institutions.">
-    <ul class="filters" data-filters aria-label="Filter projects">
-      {filters.map(([key, label]) => <li><button type="button" data-filter={key} aria-pressed={key === 'all' ? 'true' : 'false'}>{label}</button></li>)}
-    </ul>
-    <p class="small secondary" role="status" data-filter-status>{current.length} projects shown</p>
-  </PageHead>
-  <section class="wrap" aria-label="Projects">
-    <ul class="cards" role="list">
-      {all.map((p, i) => (
-        <li data-category={p.data.category} data-archive={String(p.data.archive)} hidden={p.data.archive}><ProjectCard project={p} eager={i < 2} /></li>
-      ))}
-      <li class="index-empty secondary" data-empty hidden>Nothing here yet.</li>
-    </ul>
+  <Masthead page title="The work." meta={[{ label: 'Index', note: `${all.length} projects` }, { label: 'Brand · Data · Motion' }, { label: '2019—2025' }]} lead="Identities, reports, maps and films, mostly for colleges and public institutions." />
+  <section class="section is-dark" aria-label="Projects">
+    <div class="wrap">
+      <div class="bar label" style="flex-wrap: wrap">
+        <ul class="filters" data-filters aria-label="Filter projects">
+          {filters.map(([key, label]) => <li><button type="button" data-filter={key} aria-pressed={key === 'all' ? 'true' : 'false'}>{label}</button></li>)}
+        </ul>
+        <span role="status" data-filter-status>{current.length} projects shown</span>
+      </div>
+      <ul class="works" role="list" style="margin-top: 2.5rem">
+        {all.map((p, i) => <li data-category={p.data.category} data-archive={String(p.data.archive)} hidden={p.data.archive}><ProjectCard project={p} eager={i < 2} /></li>)}
+        <li class="index-empty secondary" data-empty hidden>Nothing here yet.</li>
+      </ul>
+    </div>
   </section>
 </Base>

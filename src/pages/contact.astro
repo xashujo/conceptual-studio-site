@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import PageHead from '../components/PageHead.astro';
+import Masthead from '../components/Masthead.astro';
 import EnquiryForm from '../components/EnquiryForm.astro';
 import Availability from '../components/Availability.astro';
 import CopyEmail from '../components/CopyEmail.astro';
@@ -8,9 +8,9 @@ import { settings } from '../lib/site.js';
 const s = settings.social;
 ---
 <Base title="Start a project" description="Tell Josh about your project. Brand identity and data visualisation for colleges and public institutions, from London. Replies within one working day.">
-  <PageHead title="Start a project." lead={`A few lines is plenty: what it is, who it’s for and when you need it. ${settings.responseTime}`}>
+  <Masthead page title="Start a project." meta={[{ label: 'Contact', note: 'Enquiries' }, { label: settings.email }, { label: 'London', note: 'Weekdays' }]} lead={`A few lines is plenty: what it is, who it’s for and when you need it. ${settings.responseTime}`}>
     <Availability />
-  </PageHead>
+  </Masthead>
   <section class="wrap contact" id="enquire" aria-label="Get in touch">
     <EnquiryForm />
     <aside>

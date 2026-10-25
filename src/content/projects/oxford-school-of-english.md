@@ -9,6 +9,7 @@ featured: true
 order: 2
 archive: false
 cover: "../../assets/work/oxford-school-of-english/08.webp"
+thumb: "../../assets/work/oxford-school-of-english/thumb.webp"
 coverAlt: "Oxford School of English poster in a bus shelter on an Oxford street, beside a red double-decker bus"
 problem: "The school's old logo had no real structure, didn't speak to international students, and was close to a copy of the Oxford Dictionary logo. The school wanted to look modern and prestigious while keeping its historic roots."
 approach: "I put an English lion inside a shield, a nod to the traditional English crest. The palette, Oxford Gold and Oxford White, comes from the city's architecture, and the type mixes classic and modern forms.\n\nI worked on it alone, from the logo to the typography and colour, then showed how it works on signage, student cards and posters."

@@ -9,6 +9,7 @@ featured: false
 order: 7
 archive: false
 cover: "../../assets/work/new-york-general-group/01.webp"
+thumb: "../../assets/work/new-york-general-group/thumb.webp"
 coverAlt: "NYGG in white serif letters on a starfield"
 problem: "New York General Group needed a short internal communications video that looked like the company and suited a corporate audience."
 approach: "I made a clean 30-second animation in the group's brand, restrained enough for a boardroom and clear enough to carry the message."
