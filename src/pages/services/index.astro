@@ -1,68 +1,50 @@
 ---
-import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import Icon from '../../components/Icon.astro';
 import { settings, price } from '../../lib/site.js';
+import art from '../../assets/art/engraved/lairesse.webp';
 const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
-const steps = [
-  ['A short call', 'We talk through what you need, your deadline and a rough budget. There’s no charge.'],
-  ['A fixed written quote', 'Scope, timeline and price in writing, set out for procurement if you need it.'],
-  ['First ideas', 'I share early concepts and we choose a direction together.'],
-  ['Refine and check', 'Rounds of changes. For data work, I check every number with you.'],
-  ['Final files', 'Print-ready artwork, accessible files and guidelines, ready to use.'],
-  ['After launch', 'I stay on hand for roll-out, print and the next document.'],
-];
+const from = (s: (typeof services)[number]) => Math.min(...s.data.tiers.filter((t) => t.price).map((t) => t.price as number));
 const c = settings.company;
 ---
 <Base title="Services and prices" description="Brand identity and data visualisation for colleges and public institutions, with starting prices, how projects work and supplier details for procurement teams.">
-  <section class="page-head wrap grid">
-    <h1>Services</h1>
-    <p class="lead">Two things, done properly: brand identity and data visualisation. Most of my clients are colleges and public institutions, so the work is built for procurement, accessibility and deadlines that don’t move.</p>
-  </section>
+  <PageHead label="Services and prices" title="Two services, done properly." lead="Brand identity and data visualisation. Most of my clients are colleges and public institutions, so the work is built for procurement and for deadlines that don’t move." art={art} />
 
-  <section class="wrap service-list" aria-label="Services">
-    {services.map((s) => {
-      const from = Math.min(...s.data.tiers.filter((t) => t.price).map((t) => t.price as number));
-      return (
-        <article class="grid service-entry" data-reveal-group>
-          <figure class="service-entry__pic" data-reveal><div class="frame"><Image src={s.data.image} alt={s.data.imageAlt} widths={[500, 900, 1300]} sizes="(max-width: 900px) 100vw, 40vw" /></div></figure>
-          <div class="service-entry__text">
-            <h2 data-reveal>{s.data.title}</h2>
-            <p class="lead" data-reveal>{s.data.short}</p>
-            <ul class="ticks" data-reveal>{s.data.includes.slice(0, 4).map((i) => <li>{i}</li>)}</ul>
-            <p data-reveal class="num">From £{price(from)}. {settings.pricesNote}</p>
-            <div class="actions" data-reveal><a class="button" href={`/services/${s.id}/`}>See options and prices</a></div>
+  <section class="wrap page-section" aria-label="Services" style="padding-top: 0">
+    <div class="price-cards">
+      {services.map((s, i) => (
+        <article class="price-card glass">
+          <div class="price-card__top"><span class="micro micro--gold">Service {String(i + 1).padStart(2, '0')}</span><span class="micro muted">From £{price(from(s))}</span></div>
+          <h2 class="h3" style="font-size: clamp(2rem, 1.4rem + 1.8vw, 3.25rem)">{s.data.title}</h2>
+          <p class="muted">{s.data.short}</p>
+          <ul class="tiers" role="list">
+            {s.data.tiers.map((t) => (
+              <li><span class="tier__name">{t.name}</span><span class="tier__price">{t.price ? <><small>From</small>£{price(t.price)}</> : 'Quote'}</span><span class="tier__time">{t.timeline ?? 'Scoped with you'}</span></li>
+            ))}
+          </ul>
+          <div class="actions">
+            <a class="button" href={`/services/${s.id}/`}>Options in detail <Icon name="arrow" /></a>
+            <a class="button button--glass" href={`/contact/?service=${encodeURIComponent(s.data.title)}`}>Ask for a quote</a>
           </div>
         </article>
-      );
-    })}
+      ))}
+    </div>
+    <p class="muted small" style="margin-top: 1rem">{settings.pricesNote}</p>
   </section>
 
-  <section class="section wrap" aria-labelledby="how-title">
-    <h2 id="how-title" class="head" style="margin-bottom: 3rem">How projects work</h2>
-    <ol class="steps">{steps.map(([t, d]) => <li><h3>{t}</h3><p>{d}</p></li>)}</ol>
-  </section>
-
-  <section class="procurement" aria-labelledby="proc-title">
-    <div class="grid procurement__grid">
-      <h2 id="proc-title">For procurement teams</h2>
+  <section class="wrap page-section" aria-labelledby="proc-title">
+    <div class="panel glass procurement">
+      <div class="head" style="margin-bottom: 2rem"><p class="micro micro--gold head__label">For procurement teams</p><h2 id="proc-title">Supplier details</h2></div>
       <dl>
         <dt>Supplier</dt><dd>{c.name}, a London-based, UK-registered small business. Registered in {c.registeredIn}{c.number && `, company number ${c.number}`}.</dd>
-        {c.office && <><dt>Registered office</dt><dd>{c.office}</dd></>}
         <dt>VAT</dt><dd>{c.vat ? `VAT number ${c.vat}` : 'Not VAT registered'}</dd>
         <dt>Quotes</dt><dd>A fixed written quote for every project, set out for your quote process on request.</dd>
         <dt>Invoices</dt><dd>30-day payment terms. E-invoices accepted.</dd>
-        <dt>Accessibility</dt><dd>Deliverables designed to WCAG 2.2 AA, including charts with text alternatives and data tables.</dd>
         <dt>Data</dt><dd>Your data is used only for your project and handled under UK GDPR.</dd>
-        <dt>References</dt><dd>Two references from education clients on request, plus a supplier pack.</dd>
+        <dt>References</dt><dd>References from education clients on request.</dd>
       </dl>
-    </div>
-  </section>
-
-  <section class="section wrap" aria-labelledby="svc-cta">
-    <div class="grid cta-split">
-      <h2 id="svc-cta" class="head">Need a quote for your budget holder?</h2>
-      <div class="actions"><a class="button" href="/contact/">Start a project</a></div>
     </div>
   </section>
 </Base>

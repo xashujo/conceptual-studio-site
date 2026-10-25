@@ -2,8 +2,9 @@
 // The gold-flow wordmark: Josh's transparent video, rebuilt from his Framer component.
 // A still shows first; the right video file is chosen in the browser and fades in once it is really playing.
 const base = import.meta.env.BASE_URL;
+const { onView = false } = Astro.props as { onView?: boolean };
 ---
-<gold-flow class="gold-flow" data-hevc={`${base}media/hero/gold-flow-hevc.mp4`} data-webm={`${base}media/hero/gold-flow.webm`}>
+<gold-flow class="gold-flow" data-on-view={onView ? "" : undefined} data-hevc={`${base}media/hero/gold-flow-hevc.mp4`} data-webm={`${base}media/hero/gold-flow.webm`}>
   <img
     class="gold-flow__still"
     src={`${base}media/hero/gold-flow-final.webp`}
@@ -11,7 +12,7 @@ const base = import.meta.env.BASE_URL;
     width="1500"
     height="400"
     alt=""
-    fetchpriority="high"
+    loading={onView ? "lazy" : "eager"}
     decoding="async"
   />
   <span class="visually-hidden">Conceptual Studio</span>
@@ -22,6 +23,11 @@ const base = import.meta.env.BASE_URL;
 
   class GoldFlow extends HTMLElement {
     connectedCallback() {
+      if (this.dataset.onView === undefined) return this.start();
+      const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { io.disconnect(); this.start(); } }, { threshold: 0.4 });
+      io.observe(this);
+    }
+    start() {
       const still = this.querySelector('img');
       const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       const saveData = (navigator as any).connection?.saveData === true;

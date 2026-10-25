@@ -1,55 +1,38 @@
 ---
+// Footer: the call to action, the gold wordmark, small serif links, then a chinoiserie landscape engraved in gold.
 import { Image } from 'astro:assets';
-import art from '../assets/art/de-lairesse-gold.jpg';
-import logo from '../assets/brand/logo-white.png';
+import land from '../assets/art/engraved/garden.webp';
+import GoldFlow from './GoldFlow.astro';
+import Availability from './Availability.astro';
 import CopyEmail from './CopyEmail.astro';
+import Icon from './Icon.astro';
 import { settings } from '../lib/site.js';
 const c = settings.company;
 const s = settings.social;
 ---
-<footer class="site-footer is-dark" data-tone="dark">
-  <figure class="site-footer__art">
-    <Image src={art} alt="Classical relief of Minerva among the Sciences, in gold" widths={[600, 900, 1300]} sizes="(max-width: 900px) 100vw, 50vw" />
-    <figcaption class="plate glass" data-tone="dark"><span class="plate__no">Plate</span> Gerard de Lairesse (1640–1711), Allegory of the Sciences.</figcaption>
-  </figure>
-  <div class="site-footer__menu">
-    <a class="brand" href="/" aria-label="Conceptual Studio, home"><Image src={logo} alt="" widths={[200, 400]} sizes="160px" /></a>
-    <nav aria-label="Footer">
-      <ul class="footer-links">
-        <li><a href="/work/">Work</a></li>
-        <li><a href="/services/">Services</a></li>
-        <li><a href="/about/">About</a></li>
-        <li><a href="/contact/">Contact</a></li>
-      </ul>
-    </nav>
-    <div class="footer-blocks">
-      <div>
-        <h2>Contact</h2>
-        <ul>
-          <li><CopyEmail /></li>
-          <li>London, United Kingdom</li>
-        </ul>
-      </div>
-      <div>
-        <h2>Elsewhere</h2>
-        <ul>
-          <li><a class="link" href={s.linkedin} rel="me noopener">LinkedIn</a></li>
-          <li><a class="link" href={s.instagram} rel="me noopener">Instagram</a></li>
-          <li><a class="link" href={s.tiktok} rel="me noopener">TikTok</a></li>
-        </ul>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer__cta">
+      <p class="micro micro--gold" style="grid-column: 1 / -1">Start a project</p>
+      <h2>Tell me about your project.</h2>
+      <div class="footer__cta-side">
+        <p class="muted">A few lines about what you need and when is plenty. {settings.responseTime} You’ll get a fixed quote after a short call.</p>
+        <div class="actions"><a class="button" href="/contact/">Start a project <Icon name="arrow" /></a><Availability /></div>
+        <CopyEmail />
       </div>
     </div>
-    <div class="footer-legal">
-      <p>
-        © {new Date().getFullYear()} {c.name}. Registered in {c.registeredIn}{c.number && <>, company number {c.number}</>}.
-        {c.office && <> Registered office: {c.office}.</>}{c.vat && <> VAT {c.vat}.</>}
-      </p>
-      <ul>
-        <li><a href="/colophon/">Colophon</a></li>
-        <li><a href="/privacy/">Privacy</a></li>
-        <li><a href="/accessibility/">Accessibility</a></li>
-      </ul>
+    <div class="footer__mark"><GoldFlow onView /></div>
+    <div class="footer__cols">
+      <p class="footer__blurb">Brand identity and data visualisation for colleges, schools and public institutions. A one-person studio in London.</p>
+      <div><h2>Menu</h2><ul><li><a href="/work/">Work</a></li><li><a href="/services/">Services</a></li><li><a href="/about/">About</a></li><li><a href="/contact/">Contact</a></li></ul></div>
+      <div><h2>Elsewhere</h2><ul><li><a href={s.linkedin} rel="me noopener">LinkedIn</a></li><li><a href={s.instagram} rel="me noopener">Instagram</a></li><li><a href={s.tiktok} rel="me noopener">TikTok</a></li></ul></div>
+      <div>
+        <h2>Studio</h2>
+        <p class="footer__legal">© {new Date().getFullYear()} {c.name}<br />Registered in {c.registeredIn}{c.number && <><br />Company number {c.number}</>}{c.vat && <><br />VAT {c.vat}</>}</p>
+        <p class="footer__legal" style="margin-top: 0.75rem"><a href="/privacy/">Privacy</a> · <a href="/colophon/">Colophon</a></p>
+      </div>
     </div>
-    <div class="footer-room" aria-hidden="true"></div>
   </div>
+  <div class="footer__land" aria-hidden="true"><Image src={land} alt="" widths={[900, 1600, 2400]} sizes="100vw" /></div>
+  <div class="footer-room" aria-hidden="true"></div>
 </footer>

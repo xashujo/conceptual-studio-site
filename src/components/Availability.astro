@@ -3,10 +3,13 @@ import { availabilityText } from '../lib/site.js';
 interface Props { tone?: 'light' | 'dark'; href?: string }
 const { tone = 'light', href = '/contact/' } = Astro.props;
 const text = availabilityText();
+// Phones get a short form so the header stays on one line.
+const short = text?.replace(/Booking new projects from (\w{3})\w*/, 'Booking from $1').replace('Taking on new projects', 'Available');
 ---
 {text && (
   <a class="availability glass" data-tone={tone} href={href}>
     <span class="availability__dot" aria-hidden="true"></span>
-    <span>{text}</span>
+    <span class="availability__long">{text}</span>
+    <span class="availability__short" aria-hidden="true">{short}</span>
   </a>
 )}

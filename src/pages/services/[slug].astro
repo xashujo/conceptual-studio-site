@@ -2,10 +2,12 @@
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 import EnquiryForm from '../../components/EnquiryForm.astro';
 import LiveChart from '../../components/LiveChart.astro';
 import { settings, price } from '../../lib/site.js';
+import art from '../../assets/art/engraved/lemoyne.webp';
 export async function getStaticPaths() {
   const services = await getCollection('services');
   const projects = await getCollection('projects');
@@ -15,61 +17,53 @@ const { service, related } = Astro.props;
 const s = service.data;
 ---
 <Base title={s.title} description={s.short} image={s.image}>
-  <section class="page-head wrap grid">
-    <h1>{s.title}</h1>
-    <p class="lead">{s.summary}</p>
-    <div class="page-head__side"><a class="button" href="#enquire">Get a quote</a></div>
-  </section>
-  <figure class="wrap"><div class="cover__frame" style="max-height: 70svh; overflow: clip"><Image src={s.image} alt={s.imageAlt} widths={[800, 1400, 2200]} sizes="100vw" loading="eager" style="width:100%; max-height:70svh; object-fit:cover" /></div></figure>
+  <PageHead label="Service" title={s.title} lead={s.summary} art={art}>
+    <a class="button" href="#enquire">Get a quote</a>
+  </PageHead>
 
-  <section class="section wrap" aria-labelledby="ladder-title">
-    <h2 id="ladder-title" class="head">Options and prices</h2>
-    <p class="muted" style="margin-top: 1rem">{settings.pricesNote}</p>
+  <section class="wrap page-section" aria-labelledby="ladder-title" style="padding-top: 0">
+    <div class="head"><p class="micro micro--gold head__label">Options and prices</p><h2 id="ladder-title">Pick a starting point</h2><p class="head__aside muted">{settings.pricesNote}</p></div>
     <ol class="ladder" role="list">
       {s.tiers.map((t) => (
-        <li class:list={['tier', !t.price && 'tier--custom']}>
+        <li class:list={['tier glass', !t.price && 'tier--custom']}>
           <h3>{t.name}</h3>
-          <p class="tier__price">{t.price ? <>From <strong class="num">£{price(t.price)}</strong></> : <strong>Quote</strong>}</p>
+          <p class="tier__amount">{t.price ? `£${price(t.price)}` : 'Quote'}</p>
+          <p class="small muted">{t.price ? 'Starting price' : 'For anything bigger'}{t.timeline && ` · ${t.timeline}`}</p>
           <p>{t.description}</p>
           {t.includes.length > 0 && <ul>{t.includes.map((i) => <li>{i}</li>)}</ul>}
-          {t.timeline && <p class="tier__time">{t.timeline}</p>}
-          <a class="button button--small" href={`?service=${encodeURIComponent(s.title)}&tier=${encodeURIComponent(t.name)}#enquire`}>{t.price ? 'Ask about this' : 'Tell me more'}</a>
+          <a class:list={['button button--small', !t.price && 'button--paper']} href={`?service=${encodeURIComponent(s.title)}&tier=${encodeURIComponent(t.name)}#enquire`}>{t.price ? 'Ask about this' : 'Tell me more'}</a>
         </li>
       ))}
     </ol>
   </section>
 
   {service.id === 'data-visualisation' && (
-    <section class="section wrap" aria-labelledby="live-title">
-      <h2 id="live-title" class="head" style="margin-bottom: 2rem">From spreadsheet to clarity</h2>
-      <div class="band__live" style="border-radius: 22px"><LiveChart /></div>
+    <section class="wrap page-section" aria-labelledby="live-title">
+      <div class="head"><p class="micro micro--gold head__label">Try it</p><h2 id="live-title">From spreadsheet to clarity</h2><p class="head__aside muted">Most data starts life as a table. Press Chart to see the same numbers designed.</p></div>
+      <LiveChart />
     </section>
   )}
 
-  <section class="section wrap grid case-section" aria-labelledby="inc-title">
-    <h2 id="inc-title">What’s included</h2>
-    <div class="prose"><ul class="ticks">{s.includes.map((i) => <li>{i}</li>)}</ul></div>
-  </section>
-  <section class="section wrap grid case-section" aria-labelledby="kinds-title">
-    <h2 id="kinds-title">The kind of work</h2>
-    <div class="prose"><ul class="ticks">{s.kinds.map((i) => <li>{i}</li>)}</ul></div>
+  <section class="wrap page-section two-col" aria-label="What’s included">
+    <div class="panel glass"><p class="micro micro--gold">What’s included</p><ul class="ticks" style="margin-top: 1.25rem">{s.includes.map((i) => <li>{i}</li>)}</ul></div>
+    <div class="panel glass"><p class="micro micro--gold">The kind of work</p><ul class="ticks" style="margin-top: 1.25rem">{s.kinds.map((i) => <li>{i}</li>)}</ul></div>
   </section>
 
   {related.length > 0 && (
-    <section class="section wrap" aria-labelledby="rel-title">
-      <h2 id="rel-title" class="head">Examples</h2>
-      <ul class="index" role="list">{related.map((p) => <li class="index__item"><ProjectCard project={p!} sizes="(max-width: 900px) 100vw, 50vw" /></li>)}</ul>
+    <section class="wrap page-section" aria-labelledby="rel-title">
+      <div class="head"><p class="micro micro--gold head__label">Examples</p><h2 id="rel-title">Work like this</h2></div>
+      <ul class="cards" role="list">{related.map((p) => <li><ProjectCard project={p!} /></li>)}</ul>
     </section>
   )}
 
   {s.faqs.length > 0 && (
-    <section class="section wrap grid case-section" aria-labelledby="faq-title">
-      <h2 id="faq-title">Questions</h2>
-      <ul class="faqs prose" role="list">{s.faqs.map((f) => <li><details><summary>{f.q}</summary><p>{f.a}</p></details></li>)}</ul>
+    <section class="wrap page-section two-col" aria-labelledby="faq-title">
+      <div><p class="micro micro--gold">Questions</p><h2 id="faq-title" class="h2" style="margin-top: 1rem">Good to know</h2></div>
+      <ul class="faqs" role="list">{s.faqs.map((f) => <li><details class="glass"><summary>{f.q}</summary><p>{f.a}</p></details></li>)}</ul>
     </section>
   )}
 
-  <section class="section wrap grid contact-grid" id="enquire" aria-label="Enquiry">
-    <div class="enquiry-wrap"><EnquiryForm service={s.title} heading={`Ask about ${s.title.toLowerCase()}`} /></div>
+  <section class="wrap page-section" id="enquire" aria-label="Enquiry">
+    <EnquiryForm service={s.title} heading={`Ask about ${s.title.toLowerCase()}`} />
   </section>
 </Base>

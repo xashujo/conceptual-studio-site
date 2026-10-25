@@ -1,15 +1,21 @@
 ---
+// A project in a frosted glass card: title and year, a rule, what was done, then the picture.
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
-interface Props { project: CollectionEntry<'projects'>; sizes?: string; widths?: number[]; eager?: boolean; reveal?: boolean }
-const { project, sizes = '(max-width: 900px) 100vw, 50vw', widths = [480, 800, 1200, 1600], eager = false, reveal = false } = Astro.props;
+import Icon from './Icon.astro';
+interface Props { project: CollectionEntry<'projects'>; index?: number; sizes?: string; eager?: boolean }
+const { project, index, sizes = '(max-width: 900px) 100vw, 50vw', eager = false } = Astro.props;
 const p = project.data;
 ---
-<a href={`/work/${project.id}/`} data-reveal={reveal ? '' : undefined}>
-  <span class="card__client">{p.client}{p.archive && p.context ? ` · ${p.context}` : ''}</span>
-  <span class="card__frame">
-    <Image src={p.cover} alt={p.coverAlt} widths={widths} sizes={sizes} loading={eager ? 'eager' : 'lazy'} style={`view-transition-name: cover-${project.id}; view-transition-class: picture`} />
+<a class="card glass" href={`/work/${project.id}/`}>
+  <span class="card__head"><span class="card__title">{p.title}</span><span class="card__year">{p.year}</span></span>
+  <span class="card__rule" aria-hidden="true"></span>
+  <span class="card__meta">
+    <span class="card__meta-text"><span>{p.disciplines.join(', ')}.</span><span class="muted">{p.client}</span></span>
+    <span class="pill">View project <Icon name="arrow" /></span>
   </span>
-  <span class="card__title">{p.title}</span>
-  <span class="card__summary">{p.summary}</span>
+  <span class="card__frame">
+    {index !== undefined && <span class="card__index micro">Nº {String(index + 1).padStart(2, '0')}</span>}
+    <Image src={p.cover} alt={p.coverAlt} widths={[600, 900, 1400, 2000]} sizes={sizes} loading={eager ? 'eager' : 'lazy'} style={`view-transition-name: cover-${project.id}`} />
+  </span>
 </a>

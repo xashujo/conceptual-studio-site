@@ -1,223 +1,187 @@
 ---
 import { Image } from 'astro:assets';
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import GoldFlow from '../components/GoldFlow.astro';
-import Availability from '../components/Availability.astro';
 import ProjectCard from '../components/ProjectCard.astro';
-import LiveChart from '../components/LiveChart.astro';
-import CopyEmail from '../components/CopyEmail.astro';
 import Icon from '../components/Icon.astro';
 import { settings, price } from '../lib/site.js';
 
-import printSmall from '../assets/work/oxford-school-of-english/09.webp';
-import printTall from '../assets/work/new-city-college-infographics/03.webp';
-import printWide from '../assets/work/acl-essex-infographics/03.webp';
-import boucher from '../assets/art/boucher-chinese-garden.jpg';
-import lemoyne from '../assets/art/lemoyne-apotheosis-of-hercules.jpg';
-import menuPic from '../assets/work/oxford-school-of-english/01.png';
-import band1 from '../assets/work/new-city-college-strategic-intent/03.webp';
-import band2 from '../assets/work/acl-essex-infographics/07.webp';
-import band3 from '../assets/work/new-city-college-infographics/02.webp';
-import step1 from '../assets/work/oxford-school-of-english/02.webp';
-import step2 from '../assets/work/new-city-college-infographics/04.webp';
-import step3 from '../assets/work/oxford-school-of-english/07.webp';
-import step4 from '../assets/work/new-city-college-strategic-intent/05.webp';
-import step5 from '../assets/work/oxford-school-of-english/06.webp';
-import step6 from '../assets/work/sherman-poon-pandora-forever/06.webp';
-import ch1 from '../assets/work/exploring-mental-health-through-3d-storytelling/01.webp';
-import ch2 from '../assets/work/fou-answer/03.webp';
-import ch3 from '../assets/work/new-city-college-infographics/05.webp';
+import heroArt from '../assets/art/engraved/lemoyne.webp';
+import workArt from '../assets/art/engraved/wedding.webp';
+import nightArt from '../assets/art/engraved/lemoyne-night.webp';
+import pricesArt from '../assets/art/engraved/lairesse.webp';
 
 const featured = (await getCollection('projects', (p) => p.data.featured && !p.data.archive)).sort((a, b) => a.data.order - b.data.order);
 const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
 const clients = await getCollection('clients');
-const kinds = ['Education', 'Companies', 'Music'] as const;
-const quote = await getEntry('testimonials', 'alison-arnaud');
+const testimonials = await getCollection('testimonials');
+const order = ['alison-arnaud', 'laura-de-vos', 'mark-silverman'];
+const quotes = order.map((id) => testimonials.find((t) => t.id === id)).filter(Boolean);
+const from = (s: (typeof services)[number]) => Math.min(...s.data.tiers.filter((t) => t.price).map((t) => t.price as number));
 
+const answers = [
+  { q: 'What will it cost?', a: `Brand identity from £${price(from(services[0]))}. Data visualisation from £${price(from(services[1]))}. Every project gets a fixed written quote before any work begins, so the number doesn’t move.` },
+  { q: 'How long will it take?', a: 'Charts take about a week and a full report two to three. A new identity takes four to six weeks, and a rebrand with rollout eight to twelve.' },
+  { q: 'Who will I actually work with?', a: 'Me. Conceptual Studio is just me, so you talk to the person doing the work, from the first call to the final file.' },
+  { q: 'Do you know our sector?', a: 'Most of my clients are colleges and public institutions: strategic plans, merger consultations, learner data, and identities that end up on buses and tube platforms.' },
+  { q: 'Can you work with procurement?', a: 'Yes. A formal written quote, purchase orders and invoices from a UK limited company, set out the way your finance team needs.' },
+  { q: 'What do we get at the end?', a: 'Print-ready artwork, web files and guidelines, ready for your team to use. I stay on hand for rollout and the next document.' },
+];
 const steps = [
-  { title: 'A short call', text: 'We talk through what you need, your deadline and a rough budget. There’s no charge.', img: step1, alt: 'The Oxford School of English shopfront before the rebrand' },
-  { title: 'A fixed quote', text: 'You get the scope, timeline and price in writing, set out for procurement if you need it.', img: step2, alt: 'A page of travel-to-learn charts and a heat map' },
-  { title: 'First ideas', text: 'I share early concepts and we choose a direction together.', img: step3, alt: 'The lion and shield crest drawn for Oxford School of English' },
-  { title: 'Refine and check', text: 'Rounds of changes. For data work, I check every number with you.', img: step4, alt: 'Pie chart of students by level, in New City College colours' },
-  { title: 'Final files', text: 'Print-ready artwork, accessible files and guidelines, ready to use.', img: step5, alt: 'Student ID cards in the new Oxford School of English identity' },
-  { title: 'After launch', text: 'I stay on hand for roll-out, print and the next document.', img: step6, alt: 'Sherman Poon in front of her music video on the Times Square screen in Hong Kong' },
+  ['A short call', 'Your needs, deadline and rough budget. Free.'],
+  ['A fixed quote', 'Scope, timeline and price, in writing.'],
+  ['First ideas', 'Early concepts. We pick a direction.'],
+  ['Refine and check', 'Changes, and every number checked.'],
+  ['Final files', 'Print, web and guidelines, ready to use.'],
+  ['After launch', 'On hand for rollout and what’s next.'],
 ];
-const chapters = [
-  { title: 'Kingston School of Art', role: 'Training', text: 'I learned identity systems, layout and concept-led design, and finished with a 3D film about mental health.', img: ch1, alt: 'A chrome figure in a field of daisies, from my final major project' },
-  { title: 'Fou Answer, Tokyo', role: 'Lead designer', text: 'I ran the brand, product interface, website and 3D for a fast-moving tech startup.', img: ch2, alt: 'The Fou Answer eye logo over binary digits' },
-  { title: 'Conceptual Studio, London', role: 'Founder, full time since January 2026', text: 'Now it’s my full-time practice: identities and data design for colleges and public institutions, from first call to final file.', img: ch3, alt: 'A London map of college campuses and student travel routes' },
-];
+const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI'];
 ---
 <Base>
-  <!-- Hero: the gold wordmark, then three prints hung from one line. -->
-  <section class="hero wrap" aria-labelledby="hero-title">
-    <div class="hero__mark"><GoldFlow /></div>
-    <div class="grid hero__intro-row">
-      <h1 id="hero-title" data-load style="--d:200ms">{settings.headline}</h1>
-      <div class="hero__aside">
-        <p class="hero__intro" data-load style="--d:320ms">{settings.intro}</p>
-        <div class="actions" data-load style="--d:440ms">
-          <a class="button" href="/contact/">Start a project</a>
-          <a class="text-action" href="/work/"><span>See the work</span></a>
+  <!-- Hero: an engraved ceiling, the promise, and the work in a liquid-glass viewer. -->
+  <section class="hero" aria-labelledby="hero-title" data-liquid-field>
+    <div class="engraving"><Image src={heroArt} alt="" widths={[1200, 1800, 2600]} sizes="100vw" loading="eager" fetchpriority="high" /></div>
+    <div class="wrap hero__inner">
+      <div class="hero__text">
+        <p class="micro micro--gold" data-load>Conceptual Studio · Brand and data design · London</p>
+        <h1 id="hero-title" data-load style="--d:80ms">Brand and data design for <em>education</em></h1>
+        <p class="hero__intro" data-load style="--d:160ms">{settings.intro}</p>
+        <div class="actions" data-load style="--d:240ms">
+          <a class="button" href="/contact/">Start a project <Icon name="arrow" /></a>
+          <a class="button button--glass" href="#prices">See prices</a>
+        </div>
+        <ul class="facts-row" data-load style="--d:320ms">
+          <li class="glass">Fixed quotes from £{price(from(services[1]))}</li>
+          <li class="glass">Replies within one working day</li>
+          <li class="glass">Just me, no account managers</li>
+        </ul>
+      </div>
+
+      <div class="viewer glass" data-viewer data-liquid="light" data-load style="--d:200ms">
+        <div class="viewer__top">
+          <span class="micro">Selected work</span>
+          <span class="micro viewer__count"><span data-viewer-count>01</span> / {String(featured.length).padStart(2, '0')}</span>
+          <span class="viewer__nav">
+            <button class="round" type="button" data-viewer-prev aria-label="Previous project"><Icon name="prev" /></button>
+            <button class="round" type="button" data-viewer-next aria-label="Next project"><Icon name="next" /></button>
+          </span>
+        </div>
+        <div class="viewer__stage">
+          {featured.map((p, i) => (
+            <a class:list={['viewer__slide', i === 0 && 'is-active']} href={`/work/${p.id}/`} data-slide data-title={p.data.title} data-meta={`${p.data.client} · ${p.data.year}`} tabindex={i === 0 ? undefined : -1}>
+              <Image src={p.data.cover} alt={p.data.coverAlt} widths={[600, 900, 1200]} sizes="(max-width: 900px) 92vw, 36vw" loading={i < 2 ? 'eager' : 'lazy'} />
+            </a>
+          ))}
+        </div>
+        <div class="viewer__bar" aria-hidden="true">{featured.map((_, i) => <span class:list={[i === 0 && 'is-active']}></span>)}</div>
+        <div class="viewer__foot">
+          <span class="viewer__caption"><span class="viewer__title" data-viewer-title>{featured[0].data.title}</span><span class="small muted" data-viewer-meta>{featured[0].data.client} · {featured[0].data.year}</span></span>
+          <a class="pill" href={`/work/${featured[0].id}/`} data-viewer-link>View <Icon name="arrow" /></a>
         </div>
       </div>
     </div>
-    <div class="grid hero__rail">
-      <figure class="print print--small">
-        <a class="print__frame" href="/work/oxford-school-of-english/" aria-label="Oxford School of English"><Image src={printSmall} alt="New Oxford School of English sign with the lion crest" widths={[300, 600]} sizes="(max-width: 900px) 40vw, 200px" /></a>
-        <figcaption class="plate"><span class="plate__no">Plate I</span> Oxford School of English, 2023</figcaption>
-      </figure>
-      <figure class="print print--tall">
-        <a class="print__frame" href="/work/new-city-college-infographics/"><Image src={printTall} alt="Consultation page with a pie chart and heat map of where BSix students travel from" widths={[400, 700, 1000]} sizes="(max-width: 900px) 75vw, 32vw" /></a>
-        <figcaption class="plate"><span class="plate__no">Plate II</span> BSix merger consultation, New City College, 2024</figcaption>
-      </figure>
-      <figure class="print print--wide">
-        <a class="print__frame" href="/work/acl-essex-infographics/"><Image src={printWide} alt="Heat map of Essex showing enrolments per ACL centre by local authority" widths={[500, 900, 1300]} sizes="(max-width: 900px) 100vw, 32vw" /></a>
-        <figcaption class="plate"><span class="plate__no">Plate III</span> Learner data across seven centres, ACL Essex, 2025</figcaption>
-      </figure>
+
+    <div class="wrap">
+      <div class="marquee">
+        <span class="micro">Trusted by</span>
+        <div class="marquee__track">
+          <ul class="marquee__list" role="list">
+            {[0, 1].map((n) => clients.map((c) => <li aria-hidden={n === 1 ? 'true' : undefined}>{c.data.name}</li>))}
+          </ul>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- Proof: who already trusts the studio. -->
-  <section class="section wrap" aria-labelledby="proof-title">
-    <div class="grid" data-reveal-group>
-      <div class="proof__head">
-        <h2 id="proof-title" class="head" data-reveal>Trusted by</h2>
-        <p class="muted" data-reveal>{settings.audience}</p>
+  <!-- Selected work: glass cards over an engraved chinoiserie. -->
+  <section class="section work-field" aria-labelledby="work-title">
+    <div class="engraving"><Image src={workArt} alt="" widths={[1200, 1800, 2400]} sizes="100vw" /></div>
+    <div class="wrap">
+      <div class="head">
+        <p class="micro micro--gold head__label">01 — Selected work</p>
+        <h2 id="work-title">The work</h2>
+        <p class="head__aside muted">Identities, reports, maps and films. Most of it for colleges and public institutions.</p>
       </div>
-      <ul class="proof__names" data-reveal>
-        {kinds.map((k) => (
-          <>
-            <li class="kind">{k}</li>
-            {clients.filter((c) => c.data.kind === k).map((c) => <li>{c.data.name}</li>)}
-          </>
+      <ul class="cards" role="list">
+        {featured.map((p, i) => <li><ProjectCard project={p} index={i} sizes="(max-width: 900px) 100vw, 46vw" /></li>)}
+      </ul>
+      <p class="more"><a class="button button--glass" href="/work/">All projects <Icon name="arrow" /></a></p>
+    </div>
+  </section>
+
+  <!-- Straight answers to what people worry about with studios. -->
+  <section class="section answers is-dark" aria-labelledby="answers-title">
+    <div class="engraving"><Image src={nightArt} alt="" widths={[1200, 1800, 2600]} sizes="100vw" /></div>
+    <div class="wrap">
+      <div class="head">
+        <p class="micro micro--gold head__label">02 — Before you ask</p>
+        <h2 id="answers-title">Straight answers</h2>
+        <p class="head__aside muted">The things people worry about when they hire a studio, answered up front.</p>
+      </div>
+      <ul class="answers__grid" role="list">
+        {answers.map((x, i) => (
+          <li class="answer glass" data-tone="dark">
+            <span class="micro micro--gold">Q.{String(i + 1).padStart(2, '0')}</span>
+            <h3>{x.q}</h3>
+            <p>{x.a}</p>
+          </li>
         ))}
       </ul>
+      <ol class="steps" role="list" aria-label="How a project runs">
+        {steps.map(([t, d], i) => <li><span class="micro">{ROMAN[i]}</span><h3>{t}</h3><p>{d}</p></li>)}
+      </ol>
     </div>
   </section>
 
-  <!-- Selected work, hung like prints on a wall. -->
-  <section class="section wrap" aria-labelledby="work-title">
-    <div class="work-head">
-      <h2 id="work-title" class="head">Selected work</h2>
-      <p class="scatter__remark">Some of it starts as a spreadsheet. Some of it ends up on the side of a bus.</p>
-    </div>
-    <ol class="scatter" role="list">
-      {featured.map((p) => (
-        <li class="scatter__item" data-reveal-group><ProjectCard project={p} reveal /></li>
-      ))}
-    </ol>
-    <p class="scatter__more"><a class="button button--quiet" href="/work/">All work</a></p>
-  </section>
-
-  <!-- Services and prices, set like a menu. -->
-  <section class="section wrap" aria-labelledby="menu-title">
-    <div class="grid" data-reveal-group>
-      <div class="menu__head">
-        <h2 id="menu-title" class="head" data-reveal>Services and prices</h2>
-        <p class="muted" data-reveal>{settings.pricesNote}</p>
-        <figure data-reveal><div class="menu__pic"><Image src={menuPic} alt="Oxford School of English logo on Oxford Gold" widths={[400, 700]} sizes="(max-width: 900px) 60vw, 22vw" /></div></figure>
+  <!-- Prices, up front. -->
+  <section class="section prices" id="prices" aria-labelledby="prices-title">
+    <div class="engraving"><Image src={pricesArt} alt="" widths={[800, 1400]} sizes="55vw" /></div>
+    <div class="wrap">
+      <div class="head">
+        <p class="micro micro--gold head__label">03 — Services and prices</p>
+        <h2 id="prices-title">Two services, priced up front</h2>
+        <p class="head__aside muted">{settings.pricesNote}</p>
       </div>
-      <div class="menu__groups">
-        {services.map((s) => (
-          <div class="menu__group" data-reveal>
-            <h3><a href={`/services/${s.id}/`}>{s.data.title}</a> <small>from £</small></h3>
-            <ul class="menu__items">
+      <div class="price-cards">
+        {services.map((s, i) => (
+          <article class="price-card glass">
+            <div class="price-card__top"><span class="micro micro--gold">Service {String(i + 1).padStart(2, '0')}</span><span class="micro muted">From £{price(from(s))}</span></div>
+            <h3>{s.data.title}</h3>
+            <p class="muted">{s.data.short}</p>
+            <ul class="tiers" role="list">
               {s.data.tiers.map((t) => (
                 <li>
-                  <div class="menu__row"><span>{t.name}</span><span class="num">{t.price ? price(t.price) : 'Quote'}</span></div>
-                  <p class="menu__desc">{t.description}</p>
+                  <span class="tier__name">{t.name}</span>
+                  <span class="tier__price">{t.price ? <><small>From</small>£{price(t.price)}</> : 'Quote'}</span>
+                  <span class="tier__time">{t.timeline ?? 'Scoped with you'}</span>
                 </li>
               ))}
             </ul>
-            <a class="text-action" href={`/services/${s.id}/`}><span>{s.data.title} in detail</span></a>
-          </div>
+            <div class="actions">
+              <a class="button" href={`/contact/?service=${encodeURIComponent(s.data.title)}`}>Ask for a quote</a>
+              <a class="button button--glass" href={`/services/${s.id}/`}>What’s included <Icon name="arrow" /></a>
+            </div>
+          </article>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- The live thing: a table that becomes a chart. -->
-  <section class="section" aria-labelledby="band-title">
-    <div class="wrap grid">
-      <div class="band__head">
-        <h2 id="band-title" class="head">From spreadsheet to clarity</h2>
-        <p class="muted">Most data starts life as a table. Press Chart to see what the same numbers look like once they’ve been designed.</p>
-      </div>
-    </div>
-    <div class="band">
-      <div class="band__panel band__live"><LiveChart /></div>
-      <figure class="band__panel band__panel--pic" style="--grow:2"><Image src={band1} alt="Bar chart forecasting population growth by London borough" widths={[500, 900]} sizes="(max-width: 900px) 50vw, 20vw" /><figcaption class="glass" data-tone="dark">Demographic forecast, NCC</figcaption></figure>
-      <figure class="band__panel band__panel--pic" style="--grow:3"><Image src={band2} alt="Six pie charts comparing benefit status across ACL centres" widths={[500, 900]} sizes="(max-width: 900px) 50vw, 25vw" /><figcaption class="glass" data-tone="dark">Benefits by centre, ACL Essex</figcaption></figure>
-      <figure class="band__panel band__panel--pic" style="--grow:2"><Image src={band3} alt="Map of BSix and New City College campuses" widths={[500, 900]} sizes="20vw" /><figcaption class="glass" data-tone="dark">Campus map, NCC</figcaption></figure>
-    </div>
-  </section>
-
-  <!-- A client in her own words, over a painting. -->
-  {quote && (
-    <section class="quote-field is-dark" aria-label="What a client said" data-liquid-field>
-      <div class="quote-field__art"><Image src={boucher} alt="" widths={[800, 1188]} sizes="100vw" /></div>
-      <div class="wrap grid quote-field__body">
-        <figure class="quote-panel glass" data-tone="dark" data-liquid="dark">
-          <blockquote><p>“{quote.data.excerpt ?? quote.data.quote}”</p></blockquote>
-          <figcaption>{quote.data.name}<span>{quote.data.role}, {quote.data.organisation}</span></figcaption>
-        </figure>
-      </div>
-    </section>
-  )}
-
-  <!-- How a project runs. -->
-  <section class="section" aria-labelledby="row-title" data-row>
+  <!-- In their words. -->
+  <section class="section" aria-labelledby="quotes-title" style="padding-top: 0">
     <div class="wrap">
-      <div class="row__top">
-        <h2 id="row-title" class="head">How a project runs</h2>
-        <div class="row__buttons">
-          <button class="round-button" type="button" aria-label="Previous stage"><Icon name="prev" /></button>
-          <button class="round-button" type="button" aria-label="Next stage"><Icon name="next" /></button>
-        </div>
+      <div class="head">
+        <p class="micro micro--gold head__label">04 — In their words</p>
+        <h2 id="quotes-title">What clients say</h2>
       </div>
-      <div class="row__bar" aria-hidden="true"><span></span></div>
-    </div>
-    <ol class="row__track">
-      {steps.map((s) => (
-        <li class="row__item">
-          <h3>{s.title}</h3>
-          <p>{s.text}</p>
-          <figure><div class="row__frame"><Image src={s.img} alt={s.alt} widths={[400, 700]} sizes="(max-width: 900px) 72vw, 288px" /></div></figure>
-        </li>
-      ))}
-    </ol>
-  </section>
-
-  <!-- About: three chapters. -->
-  <section class="section wrap" aria-labelledby="about-title">
-    <h2 id="about-title" class="head">Josh McDonald</h2>
-    <ol class="chapters" role="list" data-reveal-group>
-      {chapters.map((c) => (
-        <li class="chapter" data-reveal>
-          <div class="chapter__frame"><Image src={c.img} alt={c.alt} widths={[400, 700]} sizes="(max-width: 900px) 100vw, 30vw" /></div>
-          <h3>{c.title}</h3>
-          <p class="role">{c.role}</p>
-          <p>{c.text}</p>
-        </li>
-      ))}
-    </ol>
-    <p class="about-more"><a class="text-action" href="/about/"><span>More about me</span></a></p>
-  </section>
-
-  <!-- The close: a painting, with liquid glass over it. -->
-  <section class="close-field is-dark" aria-labelledby="close-title" data-liquid-field>
-    <div class="close-field__art"><Image src={lemoyne} alt="" widths={[900, 1600, 2600]} sizes="100vw" /></div>
-    <div class="wrap grid close-field__body">
-      <div class="close-panel glass" data-tone="dark" data-liquid="dark">
-        <h2 id="close-title">Tell me about your project</h2>
-        <p class="muted">Send a few lines about what you need and when. {settings.responseTime} You’ll get a fixed quote after a short call.</p>
-        <div class="actions">
-          <a class="button button--paper" href="/contact/">Start a project</a>
-          <Availability tone="dark" />
-        </div>
-        <CopyEmail />
+      <div class="quotes__grid">
+        {quotes.map((t, i) => (
+          <figure class="quote glass">
+            <span class="quote__mark" aria-hidden="true">“</span>
+            <blockquote><p>{i === 0 ? t!.data.excerpt ?? t!.data.quote : t!.data.quote}</p></blockquote>
+            <figcaption>{t!.data.name}<span>{t!.data.role}, {t!.data.organisation}</span></figcaption>
+          </figure>
+        ))}
       </div>
     </div>
   </section>
