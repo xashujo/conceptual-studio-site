@@ -1,114 +1,19 @@
 ---
-import { getCollection } from 'astro:content';
-import Base from '../layouts/Base.astro';
-import Masthead from '../components/Masthead.astro';
-import ProjectCard from '../components/ProjectCard.astro';
-import Icon from '../components/Icon.astro';
-import Availability from '../components/Availability.astro';
-import { settings, price } from '../lib/site.js';
-
-const featured = (await getCollection('projects', (p) => p.data.featured && !p.data.archive)).sort((a, b) => a.data.order - b.data.order);
-const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
-const testimonials = await getCollection('testimonials');
-const voices = ['alison-arnaud', 'laura-de-vos', 'mark-silverman'].map((id) => testimonials.find((t) => t.id === id)).filter(Boolean);
-const from = (s: (typeof services)[number]) => Math.min(...s.data.tiers.filter((t) => t.price).map((t) => t.price as number));
-
-const questions = [
-  { q: 'What will it cost?', a: `Brand identity starts at £${price(from(services[0]))} and data visualisation at £${price(from(services[1]))}. After a short call you get a fixed written quote, so the number doesn’t move.` },
-  { q: 'How long does it take?', a: 'About a week for a set of charts, two to three weeks for a report, four to six for a new identity and eight to twelve for a full rebrand.' },
-  { q: 'Who will I work with?', a: 'Me. Conceptual Studio is just me, so you talk to the person doing the work from the first call to the final file.' },
-  { q: 'Can you work with our procurement?', a: 'Yes. A formal written quote, purchase orders and invoices from a UK limited company, laid out the way your finance team needs.' },
-  { q: 'What do we get at the end?', a: 'Print-ready artwork, web files and guidelines your team can use straight away. I stay on hand for rollout and the next document.' },
-];
+import '../styles/tokens.css';
+import FooterEngraving from '../components/FooterEngraving.astro';
 ---
-<Base>
-  <Masthead
-    title={`${settings.headline}.`}
-    meta={[
-      { label: 'Joshua McDonald', note: 'Design & art direction' },
-      { label: 'Brand · Data · Motion', note: 'For education' },
-      { label: 'London', note: 'Est. 2024' },
-    ]}
-    lead={settings.intro}
-  >
-    <a class="button" href="/contact/">Start a project</a>
-    <a class="button button--line" href="#work">See the work</a>
-    <Availability />
-  </Masthead>
-
-  <section class="section is-dark" id="work" aria-labelledby="work-title">
-    <div class="wrap">
-      <div class="bar label"><span>Selected work <span class="note">(2023—2025)</span></span><a class="arrow-link" href="/work/">All projects <Icon name="arrow" /></a></div>
-      <div class="section-head">
-        <h2 id="work-title">The work.</h2>
-        <p class="secondary">Identities, reports and maps for colleges and public institutions, and a few things for companies and artists.</p>
-      </div>
-      <ul class="works" role="list">
-        {featured.map((p, i) => <li data-reveal><ProjectCard project={p} index={i} eager={i < 2} /></li>)}
-      </ul>
-    </div>
-  </section>
-
-  <section class="section" id="prices" aria-labelledby="prices-title">
-    <div class="wrap">
-      <div class="bar label"><span>Services & prices <span class="note">(Fixed quotes)</span></span><a class="arrow-link" href="/services/">In detail <Icon name="arrow" /></a></div>
-      <div class="section-head">
-        <h2 id="prices-title">Two services, priced up front.</h2>
-        <p class="secondary">{settings.pricesNote}</p>
-      </div>
-      <div class="price-list">
-        {services.map((s) => (
-          <article class="service" data-reveal>
-            <div class="service__head"><h3>{s.data.title}</h3><a class="arrow-link label" href={`/services/${s.id}/`}>What’s included <Icon name="arrow" /></a></div>
-            <p class="secondary">{s.data.short}</p>
-            <ul class="tiers" role="list">
-              {s.data.tiers.map((t) => (
-                <li>
-                  <span class="tier__name">{t.name}</span>
-                  <span class="tier__price">{t.price ? <><small>From</small>£{price(t.price)}</> : 'Quote'}</span>
-                  <span class="tier__time label">{t.timeline ?? 'Scoped with you'}</span>
-                </li>
-              ))}
-            </ul>
-          </article>
-        ))}
-      </div>
-      <div class="quote-strip" data-reveal>
-        <p>Every project gets a fixed written quote before any work begins.</p>
-        <a class="button" href="/contact/">Ask for a quote</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" aria-labelledby="faq-title" style="padding-top: 0">
-    <div class="wrap">
-      <div class="bar label"><span>Questions <span class="note">(Before you ask)</span></span><span></span></div>
-      <div class="faq" style="margin-top: clamp(1.75rem, 3vw, 2.75rem)">
-        <div class="faq__head">
-          <h2 id="faq-title">Straight answers.</h2>
-          <p class="secondary">Anything else, just ask. {settings.responseTime}</p>
-        </div>
-        <ul class="faq__list" role="list">
-          {questions.map((x, i) => <li><details open={i === 0}><summary>{x.q}</summary><p>{x.a}</p></details></li>)}
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <section class="section is-dark" aria-labelledby="voices-title">
-    <div class="wrap">
-      <div class="bar label"><span>In their words <span class="note">(Clients)</span></span><span></span></div>
-      <div class="section-head"><h2 id="voices-title">What clients say.</h2></div>
-      <ul class="voices" role="list">
-        {voices.map((t) => (
-          <li data-reveal>
-            <figure>
-              <blockquote><p>“{t!.data.excerpt ?? t!.data.quote}”</p></blockquote>
-              <figcaption class="label">{t!.data.name}<span class="note">({t!.data.role}, {t!.data.organisation})</span></figcaption>
-            </figure>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </section>
-</Base>
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Conceptual Studio</title>
+    <link rel="preload" href="/fonts/agatho-medium-subset.woff2" as="font" type="font/woff2" crossorigin />
+  </head>
+  <body style="margin:0">
+    <main style="min-height:80vh;display:grid;place-items:center">
+      <h1 style="font-family:var(--display);font-weight:500">Conceptual Studio</h1>
+    </main>
+    <footer><FooterEngraving /></footer>
+  </body>
+</html>

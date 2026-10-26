@@ -1,0 +1,37 @@
+/* Brief 5.2. The site is light; a section opts into a night chapter with
+   color-scheme: dark, and light-dark() swaps the tokens inside it. */
+:root {
+  color-scheme: light;
+
+  --paper: light-dark(#F1DFC8, #000000);
+  --paper-2: light-dark(#E8D3B8, #000000);
+  --ink: light-dark(#000000, #F1DFC8);
+  --gold: #926E34; /* large text and graphics only, never body text on paper */
+  --live: #1F9D55; /* availability dot only */
+
+  --display: 'Agatho', 'Agatho Fallback', Georgia, serif;
+  --text: 'Inter', 'Inter Fallback', system-ui, sans-serif;
+}
+
+.night { color-scheme: dark; }
+
+@font-face {
+  font-family: 'Agatho';
+  src: url('/fonts/agatho-medium-subset.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/inter-4-variable.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+html {
+  font-synthesis: none;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--text);
+}

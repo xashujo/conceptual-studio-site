@@ -1,0 +1,12 @@
+---
+// Kept from the old build (DECISIONS.md): the garden engraving and its fade.
+import { Image } from 'astro:assets';
+import land from '../assets/art/engraved/garden.webp';
+---
+<div class="footer__land" aria-hidden="true"><Image src={land} alt="" widths={[900, 1600, 2400]} sizes="100vw" /></div>
+
+<style>
+  .footer__land { position: relative; z-index: 0; margin-top: -1.5rem; height: clamp(180px, 20vw, 320px); pointer-events: none; }
+  .footer__land img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 70%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 60%); mask-image: linear-gradient(to bottom, transparent, #000 60%); }
+  @media (max-width: 760px) { .footer__land { height: 200px; } }
+</style>
