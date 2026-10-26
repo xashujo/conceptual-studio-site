@@ -39,9 +39,6 @@ const steps = [
   ['Handover', 'You get the final files in whatever format and by whatever method suits your team.'],
 ];
 
-const credits = {
-  hero: { title: 'Le Jardin Chinois (The Chinese Garden), after François Boucher, after 1743', medium: 'Etching by Jacques Gabriel Huquier. The Met 53.600.1008, public domain. Duotoned' },
-};
 ---
 <!doctype html>
 <html lang="en-GB">
@@ -80,7 +77,6 @@ const credits = {
           <p class="hero__names">{clients.join(', ')}</p>
         </div>
       </header>
-      <div class="wrap hero__credit"><PlateCaption {...credits.hero} /></div>
 
       <!-- Featured work on paper: the etching returns faded at the chapter opening, then the Framer cards, solid. -->
       <section class="fw" id="work" aria-labelledby="fw-h">
@@ -222,7 +218,6 @@ const credits = {
             <span class="sr-only" aria-live="polite" data-status></span>
           </div>
         </div>
-        <div class="close__credit"><PlateCaption title="The Apotheosis of Hercules, François Lemoyne, 1731 to 1736" medium="Ceiling of the Salon d'Hercule, Palace of Versailles. Public domain. Detail, duotoned" /></div>
       </section>
       <footer class="footer">
         <div class="footer__text wrap">
@@ -233,7 +228,6 @@ const credits = {
           <p class="footer__small">© 2026 Conceptual Studio Limited</p>
         </div>
         <div class="footer__land" aria-hidden="true"><Image src={footerArt} alt="" widths={[800, 1600, 2400]} sizes="100vw" /></div>
-        <div class="wrap footer__credit"><PlateCaption title="The Chinese Garden, after François Boucher" medium="Engraving, public domain. Tones reworked for night" /></div>
       </footer>
     </div>
 
@@ -275,7 +269,6 @@ const credits = {
   .hero__with { display: grid; grid-template-columns: 140px 1fr; gap: 24px; align-items: baseline; padding-top: 32px; font-size: 18px; line-height: 1.5; }
   .hero__with-h { font-weight: 600; }
   .hero__names { text-wrap: balance; }
-  .hero__credit { margin-top: 8px; }
 
   /* Featured work: art at the chapter opening only, faded to paper before the first card ends. */
   .fw { position: relative; isolation: isolate; padding-block: 200px 0; }
@@ -347,7 +340,6 @@ const credits = {
   .close { position: relative; isolation: isolate; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-block: min(560px, 40vw) 120px; align-items: end; }
   .close__art { position: absolute; inset: 0 0 auto; height: min(820px, 58vw); z-index: -1; overflow: hidden; }
   .close__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 55%, transparent); mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 55%, transparent); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
-  .close__credit { grid-column: 1 / -1; padding-top: 56px; }
   .close__h { grid-column: 1 / span 7; font-size: clamp(56px, 7.8vw, 120px); }
   .close__body { grid-column: 8 / -1; display: grid; gap: 24px; }
   .close__p { font-size: 20px; line-height: 1.5; }
@@ -360,8 +352,6 @@ const credits = {
   .footer__small { grid-column: 10 / -1; text-align: right; }
   .footer__land { height: clamp(280px, 30vw, 460px); margin-top: -8px; pointer-events: none; }
   .footer__land img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 72%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 55%); mask-image: linear-gradient(to bottom, transparent, #000 55%); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
-  .footer__credit { position: absolute; left: 0; right: 0; bottom: 16px; }
-  .footer__credit :global(.plate span) { color: var(--gold-ink); }
   .end { --gold-ink: #D9BE91; }
 
   @media (max-width: 1099.98px) {

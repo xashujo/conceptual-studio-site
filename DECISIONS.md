@@ -300,3 +300,6 @@ Museum model:
   drape, about a 3x crop, toned #14110D to #9E8058 and faded top and bottom,
   so "Start a project" sits on its dark foot. [TBC: the source of the
   photograph in INSPO, for the credit line.]
+- No art credits on the home page (Josh, 26 Oct). The etching, Lemoyne and
+  footer engraving captions are removed; the plate captions under the work
+  stay. The art's sources are kept in this file for the record.
