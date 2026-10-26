@@ -12,6 +12,7 @@ import huntHills from '../assets/art/engraved/hunt-hills-gold.jpg';
 import ranelagh from '../assets/art/engraved/ranelagh-night.jpg';
 import kew from '../assets/art/engraved/kew-night.jpg';
 import flourish from '../assets/brand/gold-flourish.png';
+import sign from '../assets/work/oxford-school-of-english/sign.webp';
 import busShelter from '../assets/work/oxford-school-of-english/bus-shelter.webp';
 
 const email = 'joshuamcdonald099@gmail.com'; // as on the Framer contact page; TBC if a studio address replaces it
@@ -93,34 +94,32 @@ const nightRows = [{ label: 'Primary on night', kind: 'primary' }, { label: 'Pil
         </div>
       </section>
 
-      <!-- Agatho at display size against small Inter, then Inter at reading size. -->
+      <!-- Agatho at display size against small Inter, then Inter at reading size, beside a real exhibit. -->
       <section class="sec wrap" aria-labelledby="type">
-        <div class="grid">
+        <div class="grid typeset">
           <div class="side">
             <h2 class="h2" id="type">Type</h2>
             <p class="note">Two sizes do the work: Agatho at word scale and Inter at 18 to 24px. Card titles at 40px are the only size between.</p>
           </div>
-          <div class="display">
+          <div class="typeset__main">
             <p class="display__big">Brand identity</p>
-            <p class="display__small">Agatho Medium, 160px, tracking −2%. Display only: one weight, no italic, never in body text.</p>
+            <p class="display__small typeset__spec">Agatho Medium, 160px, tracking −2%. Display only: one weight, no italic, never in body text.</p>
+            <div class="body-spec__text">
+              <p>I design brand identities and data visualisation. Most of my clients are colleges and public bodies, so a lot of what I make has to be understood quickly by people who are busy: reports, infographics, signs on a wall. I also work with companies abroad, like Fou Answer in Tokyo, and with artists on 3D and motion.</p>
+              <p class="body-spec__list">For Oxford School of English, the identity covered:</p>
+              <ul>
+                <li>A lion crest inside a shield</li>
+                <li>A palette of Oxford Gold and Oxford White</li>
+                <li>Type that mixes classic and modern forms</li>
+                <li>Signage, student ID cards and posters</li>
+              </ul>
+              <p class="display__small typeset__spec">Inter 4 at 18px on 28px, black on paper. A line runs 60 to 70 characters.</p>
+            </div>
           </div>
-        </div>
-        <div class="grid body-spec">
-          <div class="side">
-            <p class="note">Inter 4 at 18px on 28px, black on paper. A line runs 60 to 70 characters.</p>
-          </div>
-          <div class="body-spec__text">
-            <p>I design brand identities and data visualisation. Most of my clients are colleges and public bodies, so a lot of what I make has to be understood quickly by people who are busy: reports, infographics, signs on a wall. I also work with companies abroad, like Fou Answer in Tokyo, and with artists on 3D and motion.</p>
-          </div>
-          <div class="body-spec__list">
-            <p>For Oxford School of English, the identity covered:</p>
-            <ul>
-              <li>A lion crest inside a shield</li>
-              <li>A palette of Oxford Gold and Oxford White</li>
-              <li>Type that mixes classic and modern forms</li>
-              <li>Signage, student ID cards and posters</li>
-            </ul>
-          </div>
+          <figure class="typeset__fig">
+            <Image class="typeset__img" src={sign} alt="New square sign with the Oxford School of English lion crest and wordmark on a stone wall" widths={[500, 900]} sizes="(min-width: 1100px) 32vw, 100vw" />
+            <PlateCaption title="Oxford School of English, 2023" medium="Visual identity, the new sign" />
+          </figure>
         </div>
       </section>
 
@@ -287,9 +286,10 @@ const nightRows = [{ label: 'Primary on night', kind: 'primary' }, { label: 'Pil
       .credits .link { min-height: 0; }
 
       /* Colour: three real surfaces, gutterless (LOEWE grid). */
-      .swatches { grid-column: 4 / -1; display: grid; grid-template-columns: 4fr 3fr 5fr; }
+      .swatches { grid-column: 1 / -1; margin-top: 40px; display: grid; grid-template-columns: 4fr 3fr 5fr; }
+      #colour + .note { max-width: 46ch; }
       .sw { display: flex; flex-direction: column; }
-      .sw__field { flex: 1; min-height: 340px; padding: 28px; display: flex; flex-direction: column; justify-content: space-between; gap: 24px; }
+      .sw__field { flex: 1; min-height: 480px; padding: 28px; display: flex; flex-direction: column; justify-content: space-between; gap: 24px; }
       .sw--paper .sw__field { padding-left: 0; }
       .sw--paper2 .sw__field { background: var(--paper-2); justify-content: flex-end; align-items: flex-start; }
       .sw--paper2 .btn { --fill: var(--paper); --fill-hover: color-mix(in srgb, var(--ink) 6%, var(--paper)); }
@@ -307,11 +307,14 @@ const nightRows = [{ label: 'Primary on night', kind: 'primary' }, { label: 'Pil
       .display { grid-column: 4 / -1; display: grid; grid-template-columns: minmax(0, 1fr) 210px; align-items: end; gap: 24px; }
       .display__big { font-family: var(--display); font-size: clamp(44px, 11.2vw, 160px); line-height: 0.92; letter-spacing: -0.02em; }
       .display__small { font-size: 16px; line-height: 1.45; color: var(--ink-2); padding-bottom: 0.4em; }
-      .body-spec { margin-top: 96px; }
-      .body-spec__text { grid-column: 4 / span 5; font-size: 18px; line-height: 28px; }
-      .body-spec__list { grid-column: 10 / span 3; font-size: 18px; line-height: 28px; }
-      .body-spec__list ul { margin-top: 8px; padding-left: 1.1em; }
-      .body-spec__list li + li { margin-top: 4px; }
+      .typeset__main { grid-column: 4 / span 5; }
+      .typeset__spec { margin-top: 16px; max-width: 40ch; }
+      .body-spec__text { margin-top: 72px; font-size: 18px; line-height: 28px; max-width: 62ch; }
+      .body-spec__list { margin-top: 28px; }
+      .body-spec__text ul { margin-top: 8px; padding-left: 1.1em; }
+      .body-spec__text li + li { margin-top: 4px; }
+      .typeset__fig { grid-column: 9 / -1; align-self: stretch; display: flex; flex-direction: column; }
+      .typeset__img { width: 100%; flex: 1; min-height: 520px; object-fit: cover; object-position: 52% 50%; border-radius: 25px; }
 
       /* Painting: full bleed, faded top and bottom into the page like the footer engraving. */
       .art { padding-top: 160px; }
@@ -366,8 +369,9 @@ const nightRows = [{ label: 'Primary on night', kind: 'primary' }, { label: 'Pil
         .swatches { grid-template-columns: 1fr 1fr; }
         .sw--paper { grid-column: 1 / -1; margin-bottom: 48px; }
         .sw--paper .sw__field { min-height: 0; flex-direction: row; align-items: flex-end; padding-bottom: 8px; }
-        .body-spec__text { grid-column: 1 / span 7; }
-        .body-spec__list { grid-column: 9 / -1; }
+        .typeset__main { grid-column: 1 / span 7; }
+        .typeset__fig { grid-column: 8 / -1; align-self: start; }
+        .typeset__img { flex: none; min-height: 0; aspect-ratio: 4 / 5; }
         /* Below 1100 the four states sit two by two, each with its state named on the specimen row's label. */
         .states__head { display: none; }
         .states__row { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-block: 20px; gap: 20px 16px; }
@@ -384,8 +388,10 @@ const nightRows = [{ label: 'Primary on night', kind: 'primary' }, { label: 'Pil
         .sw--paper .sw__field { min-height: 0; padding-bottom: 8px; flex-direction: column; align-items: stretch; }
         .sw--paper2 .sw__label, .sw--night .sw__label { padding-left: 0; padding-bottom: 24px; }
         .display { grid-template-columns: 1fr; }
-        .body-spec { margin-top: 56px; row-gap: 32px; }
-        .body-spec__text, .body-spec__list { grid-column: 1 / -1; font-size: 18px; }
+        .typeset__main, .typeset__fig { grid-column: 1 / -1; }
+        .body-spec__text { margin-top: 48px; }
+        .typeset__fig { margin-top: 48px; }
+        .typeset__img { min-height: 0; flex: none; aspect-ratio: 4 / 5; border-radius: 22px; }
         .art { padding-top: 112px; }
         .art__frame { height: 560px; min-height: 0; }
         .art__img { object-position: 62% 40%; }
