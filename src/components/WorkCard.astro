@@ -1,0 +1,56 @@
+---
+// A small glass thumbnail for /work/ (Josh, 26 Oct): the Framer card shrunk, over the etching.
+// Title left, year right, disciplines, then the image and its plate caption. Only projects
+// with a case study are links.
+import { Image } from 'astro:assets';
+import PlateCaption from './PlateCaption.astro';
+import type { Project } from '../data/work';
+interface Props { p: Project; }
+const { p } = Astro.props;
+const href = p.caseStudy ? `/work/${p.slug}/` : undefined;
+const Title = href ? 'a' : 'span';
+---
+<li class="wc glass" data-flip-id={p.slug} data-tags={p.tags.join(' ')} hidden={p.student}>
+  <header class="wc__head">
+    <h2 class="wc__title"><Title href={href} class="wc__link">{p.title}</Title></h2>
+    <p class="wc__year">{p.year}</p>
+  </header>
+  <p class="wc__disc">{p.disciplines.join(', ')}</p>
+  <figure class="wc__fig">
+    <Image class="wc__img" src={p.image} alt={p.alt} widths={[400, 700, 1000]} sizes="(min-width: 1100px) 40vw, (min-width: 760px) 50vw, 100vw" style={`object-position:${p.position ?? '50% 50%'}`} />
+    <PlateCaption title={p.client.startsWith(p.title) ? `${p.client}, ${p.year}` : `${p.title}, ${p.client}, ${p.year}`} medium={p.medium} />
+  </figure>
+  {href && <span class="btn wc__btn" aria-hidden="true">View project <span class="arrow">→</span></span>}
+</li>
+
+<style>
+  /* Concentric corners (TASTE 12): image 16px + 10px inset = 26px card. */
+  .wc { --inset: 10px; position: relative; display: flex; flex-direction: column; border-radius: calc(16px + var(--inset)); padding: 18px var(--inset) 14px; }
+  .wc[hidden] { display: none; }
+  .wc__head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding-inline: 8px; }
+  .wc__title, .wc__year { font-size: 24px; line-height: 1.2; font-weight: 700; letter-spacing: -0.035em; }
+  .wc__title { text-wrap: balance; }
+  .wc__year { font-variant-numeric: tabular-nums; }
+  .wc__link { text-decoration: none; }
+  /* The whole card is the link's hit area. */
+  a.wc__link::after { content: ''; position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+  a.wc__link:focus-visible { outline: none; }
+  .wc:has(a.wc__link:focus-visible) { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .wc__disc { padding: 6px 8px 14px; font-size: 16px; line-height: 1.45; color: var(--ink-2); }
+  .wc__img { width: 100%; aspect-ratio: var(--ratio, 4 / 3); object-fit: cover; border-radius: 16px; }
+  .wc__fig :global(.plate) { padding-inline: 8px; }
+  .wc__btn { align-self: flex-start; margin: 14px 0 2px; min-height: 40px; padding: 0 16px; font-size: 16px; --fill: color-mix(in srgb, var(--paper) 55%, transparent); }
+  @media (hover: hover) {
+    .wc:has(a.wc__link:hover) .wc__btn { background: var(--fill-hover); }
+    .wc:has(a.wc__link:hover) .arrow { transform: rotate(-45deg); }
+  }
+  /* Card sizes are set by the grid (data-size), so the image ratio follows the slot. */
+  :global(.wc[data-size='l']) { --ratio: 3 / 2; }
+  :global(.wc[data-size='m']) { --ratio: 4 / 3; }
+  :global(.wc[data-size='s']) { --ratio: 4 / 5; }
+  .wc__title, .wc__year { font-size: clamp(20px, 1.6vw, 24px); }
+  @media (max-width: 759.98px) {
+    .wc__title, .wc__year { font-size: 22px; }
+    :global(.wc[data-size]) { --ratio: 4 / 3; }
+  }
+</style>

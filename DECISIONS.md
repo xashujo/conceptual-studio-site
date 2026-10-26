@@ -350,3 +350,54 @@ Museum model:
 - Until the dock is built, real pages have a small top line: "Conceptual
   Studio" home link on the left and "[Services]" on the right, with the
   current page in brackets (TASTE 23).
+
+## /work/ and case studies (26 Oct 2026)
+- Pushed straight to main at Josh's request ("Push all to main", 26 Oct),
+  overriding BRIEF-ADDENDUM's branch-and-preview rule for this task.
+- /work/ cards are small glass thumbnails (Josh). This overrides TASTE's
+  "no glass on every card". They are CSS glass (Tier B), not WebGL, because
+  a page holds more than the four WebGL plates TASTE allows.
+- So every pane has art behind it, the Chinese Garden etching (the home
+  page's 60% "quiet" version) is a fixed field for the whole grid and fades
+  out at its foot. The page word "Work" sits on its open sky, top right.
+- The grid runs in rows of three at varied widths (5 + 4 + 3, 3 + 5 + 4,
+  4 + 3 + 5). A row that would hold one card becomes two rows of two
+  (7 + 5, 5 + 7), so no row is half empty. Two columns on tablets, one on
+  phones.
+- Filters: All, Brand identity, Data visualisation, 3D and motion,
+  "Archive: student work". All shows client work only; the archive appears
+  only under its own filter, with a line naming Kingston School of Art and
+  "Student work" in each plate caption. Re-layout uses GSAP Flip (gsap
+  3.13.0); with reduced motion it switches instantly. Without JavaScript
+  every card shows and the filters hide.
+- Only the two case studies are links. The other cards show no "View
+  project" until their pages exist.
+- Fou Answer and NYGG thumbnails are logos on flat colour, the only images
+  the Framer site has. [TBC: an in-use image for each]
+- Case studies open on clean paper: no art, no glass, no client-colour
+  ground (Josh). This overrides TASTE 14 for now. The nav there is plain
+  text; on /work/ it is glass because the etching is behind it.
+- Case study order follows brief 6.3. The opening exhibit keeps its own
+  shape (a portrait poster stays portrait) and is centred, the page's one
+  centred moment; full-width plates further down are centred the same way.
+- Logos on flat gold come last and small in the Oxford study (the giant
+  wordmark plate was dropped). The NCC logo cover was dropped too.
+- Before and after for Oxford: the old shopfront sign, then the new sign.
+  [TBC: are the bus shelter, station poster and new sign photographs of
+  real placements, or mockups? Captions say neither.]
+- "What happened" uses only the outcomes in brief section 3: the Oxford
+  identity is a UK-registered trademark; the NCC infographics were used in
+  executive merger communications.
+- Fixes from the Framer site: the NCC card no longer carries the NYGG
+  description, "Toyko" is "Tokyo", Fou Answer is past tense ("where I was
+  design lead"), "Detatched" is "Detached". "quite" for "quote" does not
+  appear anywhere in the Framer export. [TBC: where Josh saw it]
+- Plate captions skip a repeated client ("Oxford School of English, 2023",
+  not the name twice).
+- Old slugs /new-city-college-strategic-intent and /oxford-school-of-english
+  (with and without the trailing slash) 301 to their /work/ pages in
+  _redirects.
+- Uses the shared Site.astro from the services work; it gains a Work link
+  (current page in brackets). The nav stays plain text on both pages: on
+  /work/ it sits straight on the etching (TASTE 2), so no glass bar.
+  "Start a project" opens an email until /contact/ exists.

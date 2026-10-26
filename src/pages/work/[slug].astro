@@ -1,0 +1,162 @@
+---
+// Case study template (brief 6.3). Opens on clean paper, no art and no glass (Josh, 26 Oct).
+// Order: title and outcome, the problem, what I did, the work, before and after,
+// what happened, next project, then the call to action.
+import { Image } from 'astro:assets';
+import Site from '../../layouts/Site.astro';
+import PlateCaption from '../../components/PlateCaption.astro';
+import { caseStudies, bySlug, type Plate } from '../../data/work';
+import { email } from '../../site';
+const startHref = `mailto:${email}?subject=New%20project`;
+
+export function getStaticPaths() {
+  return caseStudies.map((cs) => ({ params: { slug: cs.slug }, props: { cs } }));
+}
+const { cs } = Astro.props;
+const p = bySlug(cs.slug);
+const next = bySlug(cs.next);
+const cap = (pl: Plate) => ({ title: p.client.startsWith(p.title) ? `${p.title}, ${p.year}` : `${p.title}, ${p.client}, ${p.year}`, medium: pl.medium });
+const sizes = { full: '(min-width: 760px) 95vw, 100vw', pair: '(min-width: 760px) 48vw, 100vw', trio: '(min-width: 760px) 32vw, 100vw', quad: '(min-width: 760px) 48vw, 100vw' };
+---
+<Site title={`${p.title} | Conceptual Studio`} description={p.summary}>
+  <article>
+    <header class="top wrap">
+      <a class="btn back" href="/work/"><span class="arrow" aria-hidden="true">←</span> All work</a>
+      <div class="top__row">
+        <h1 class="top__h">{p.title}</h1>
+        <p class="top__year">{p.year}</p>
+      </div>
+      <hr class="rule" />
+      <dl class="credits">
+        <div><dt>Client</dt><dd>{p.client}</dd></div>
+        <div><dt>Disciplines</dt><dd>{p.disciplines.join(', ')}</dd></div>
+        <div><dt>Outcome</dt><dd>{cs.outcome}</dd></div>
+      </dl>
+    </header>
+
+    <figure class="lead wrap">
+      <Image src={p.image} alt={p.alt} widths={[800, 1400, 2000, 2800]} sizes="95vw" loading="eager" />
+      <div><PlateCaption {...cap({ image: p.image, alt: p.alt, medium: p.medium })} /></div>
+    </figure>
+
+    <section class="text wrap" aria-labelledby="problem">
+      <h2 class="text__h" id="problem">The problem</h2>
+      <div class="text__body">{cs.problem.map((t) => <p>{t}</p>)}</div>
+    </section>
+
+    <section class="text wrap" aria-labelledby="did">
+      <h2 class="text__h" id="did">What I did</h2>
+      <div class="text__body">{cs.did.map((t) => <p>{t}</p>)}</div>
+    </section>
+
+    <section class="work" aria-labelledby="the-work">
+      <h2 class="text__h wrap" id="the-work">The work</h2>
+      {cs.rows.map((row) => (
+        <div class:list={['row', `row--${row.kind}`, 'wrap']}>
+          {row.plates.map((pl) => (
+            <figure>
+              <Image src={pl.image} alt={pl.alt} widths={[600, 1000, 1600, 2400]} sizes={sizes[row.kind]} />
+              <PlateCaption {...cap(pl)} />
+            </figure>
+          ))}
+        </div>
+      ))}
+    </section>
+
+    {cs.before && (
+      <section class="text wrap ba" aria-labelledby="before-after">
+        <h2 class="text__h" id="before-after">Before and after</h2>
+        <div class="row row--pair ba__pair">
+          {[cs.before.before, cs.before.after].map((pl) => (
+            <figure>
+              <Image src={pl.image} alt={pl.alt} widths={[600, 1000, 1600]} sizes="(min-width: 760px) 48vw, 100vw" />
+              <PlateCaption {...cap(pl)} />
+            </figure>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section class="text wrap" aria-labelledby="happened">
+      <h2 class="text__h" id="happened">What happened</h2>
+      <div class="text__body">{cs.happened.map((t) => <p>{t}</p>)}</div>
+    </section>
+  </article>
+
+  <nav class="next wrap" aria-label="Next project">
+    <hr class="rule" />
+    <a class="next__link" href={`/work/${next.slug}/`}>
+      <span class="next__label">Next project</span>
+      <span class="next__title">{next.title}<span class="arrow" aria-hidden="true">→</span></span>
+    </a>
+    <hr class="rule" />
+    <div class="cta">
+      <p class="cta__p">Have a project like this? Tell me about it and I'll reply within three working days.</p>
+      <a class="btn btn--solid" href={startHref}>Start a project <span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+  </nav>
+</Site>
+
+<style>
+  .top { padding-top: 120px; }
+  .back { min-height: 40px; padding: 0 16px; font-size: 16px; margin-bottom: 48px; }
+  @media (hover: hover) { .back:hover .arrow { transform: rotate(45deg); } }
+  .top__row { display: flex; justify-content: space-between; align-items: baseline; gap: 32px; padding-bottom: 20px; }
+  .top__h { font-family: var(--display); font-weight: 500; font-size: clamp(56px, 7.6vw, 120px); line-height: 0.92; letter-spacing: -0.03em; text-wrap: balance; max-width: 14ch; }
+  .top__year { font-size: 24px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  /* The credits row (TASTE 19): three columns of 24px text under the hairline. */
+  .credits { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin: 0; padding-top: 16px; }
+  .credits dt { font-size: 16px; color: var(--ink-2); }
+  .credits dd { margin: 4px 0 0; font-size: 24px; line-height: 1.3; font-weight: 500; letter-spacing: -0.01em; }
+
+  .lead { margin-top: 64px; }
+  /* The opening exhibit keeps its own shape (a portrait poster stays portrait), as tall as the screen allows. */
+  .lead img { width: auto; max-width: 100%; max-height: 88svh; margin-inline: auto; border-radius: 4px; }
+  .lead :global(.plate) { text-align: center; }
+
+  .text { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; margin-top: 140px; }
+  .text__h { grid-column: 1 / span 4; font-size: 24px; line-height: 1.3; font-weight: 600; letter-spacing: -0.01em; }
+  .text__body { grid-column: 5 / span 7; display: grid; gap: 1em; font-size: 22px; line-height: 1.5; max-width: 62ch; }
+
+  .work { margin-top: 140px; }
+  .work > .text__h { margin-bottom: 32px; }
+  .row { display: grid; gap: 24px; margin-top: 40px; }
+  .row img { width: 100%; }
+  .row--full img { max-height: 88svh; width: auto; max-width: 100%; margin-inline: auto; border-radius: 4px; }
+  .row--full :global(.plate) { text-align: center; }
+  .row--pair, .row--quad { grid-template-columns: 1fr 1fr; align-items: start; }
+  .row--trio { grid-template-columns: repeat(3, 1fr); align-items: start; }
+  .row--pair img, .row--trio img { aspect-ratio: 4 / 3; object-fit: cover; border-radius: 4px; }
+  .row--quad img { aspect-ratio: 1.41; object-fit: cover; border-radius: 4px; }
+  .ba__pair { grid-column: 1 / -1; margin-top: 32px; }
+
+  .next { margin-top: 160px; }
+  .next__link { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; padding-block: 28px; text-decoration: none; }
+  .next__label { font-size: 24px; font-weight: 500; }
+  .next__title { font-family: var(--display); font-size: clamp(40px, 5vw, 72px); line-height: 1; letter-spacing: -0.02em; }
+  @media (hover: hover) { .next__link:hover .arrow { transform: rotate(-45deg); } }
+  .next__link:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .cta { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding-top: 32px; }
+  .cta__p { font-size: 22px; line-height: 1.4; max-width: 34ch; }
+
+  @media (max-width: 759.98px) {
+    .top { padding-top: 92px; }
+    .back { margin-bottom: 32px; }
+    .top__h { font-size: 48px; }
+    .top__year { font-size: 20px; }
+    .credits { grid-template-columns: 1fr; gap: 14px; }
+    .credits dd { font-size: 20px; }
+    .lead { margin-top: 40px; }
+    .lead img { width: 100%; max-height: none; }
+    .text { display: block; margin-top: 88px; }
+    .text__body { margin-top: 16px; font-size: 18px; }
+    .work { margin-top: 88px; }
+    .row { gap: 16px; margin-top: 24px; }
+    .row--pair, .row--trio, .row--quad { grid-template-columns: 1fr; }
+    .next { margin-top: 112px; }
+    .next__link { flex-direction: column; gap: 8px; }
+    .next__label { font-size: 18px; }
+    .cta { flex-direction: column; align-items: flex-start; }
+    .cta__p { font-size: 18px; }
+  }
+</style>

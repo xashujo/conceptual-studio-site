@@ -1,3 +1,5 @@
 # Old Framer slugs → new pages, as real 301s (BRIEF-ADDENDUM.md).
-# Fill in once the /work/ pages exist, e.g.:
-# /fou-answer  /work/fou-answer  301
+/new-city-college-strategic-intent   /work/new-city-college-strategic-intent/   301
+/new-city-college-strategic-intent/  /work/new-city-college-strategic-intent/   301
+/oxford-school-of-english            /work/oxford-school-of-english/            301
+/oxford-school-of-english/           /work/oxford-school-of-english/            301

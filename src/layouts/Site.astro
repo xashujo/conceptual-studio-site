@@ -5,7 +5,7 @@ import '../styles/tokens.css';
 import '../styles/components.css';
 import FooterEngraving from '../components/FooterEngraving.astro';
 import { email } from '../site';
-interface Props { title: string; description: string; current?: 'services'; turnstile?: boolean }
+interface Props { title: string; description: string; current?: 'services' | 'work'; turnstile?: boolean }
 const { title, description, current, turnstile = false } = Astro.props;
 ---
 <!doctype html>
@@ -23,6 +23,7 @@ const { title, description, current, turnstile = false } = Astro.props;
     <header class="top wrap">
       <a class="top__home" href="/">Conceptual Studio</a>
       <nav aria-label="Main">
+        <a href="/work/" aria-current={current === 'work' ? 'page' : undefined}>{current === 'work' ? '[Work]' : 'Work'}</a>
         <a href="/services/" aria-current={current === 'services' ? 'page' : undefined}>{current === 'services' ? '[Services]' : 'Services'}</a>
       </nav>
     </header>

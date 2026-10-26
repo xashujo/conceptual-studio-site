@@ -1,0 +1,94 @@
+---
+// /work/ (brief 6.2): small glass cards in a varied grid over the Chinese Garden etching,
+// which holds still while the cards pass over it, so every pane has art behind it.
+import { Image } from 'astro:assets';
+import Site from '../../layouts/Site.astro';
+import WorkCard from '../../components/WorkCard.astro';
+import PlateCaption from '../../components/PlateCaption.astro';
+import { projects, filters } from '../../data/work';
+import art from '../../assets/art/engraved/jardin-quiet.jpg';
+
+const jardin = { title: 'Le Jardin Chinois (The Chinese Garden), after François Boucher, after 1743', medium: 'Etching and engraving by Jacques Gabriel Huquier. The Met 53.600.1008, public domain. Duotoned' };
+const count = (f: string) => projects.filter((p) => (f === 'all' ? !p.student : p.tags.includes(f as never))).length;
+---
+<Site title="Work | Conceptual Studio" description="Brand identities, data visualisation and 3D work by Conceptual Studio, London." current="work">
+  <section class="field" aria-labelledby="work-h">
+    <div class="field__art" aria-hidden="true">
+      <Image src={art} alt="" widths={[800, 1600, 2400]} sizes="100vw" loading="eager" />
+    </div>
+
+    <header class="head wrap">
+      <h1 class="head__word" id="work-h">Work</h1>
+      <p class="head__p">Brand identities, data visualisation and 3D for colleges, companies and artists.</p>
+    </header>
+
+    <div class="filters wrap" role="group" aria-label="Filter projects">
+      {filters.map(([key, label]) => (
+        <button class="btn filter" type="button" data-filter={key} aria-pressed={key === 'all' ? 'true' : 'false'}>
+          {label}<span class="filter__n">{count(key)}</span>
+        </button>
+      ))}
+    </div>
+    <p class="archive-note wrap" hidden>Student work from my BA at Kingston School of Art, 2021 to 2023.</p>
+
+    <ul class="grid wrap" aria-live="polite">
+      {projects.map((p) => <WorkCard p={p} />)}
+    </ul>
+    <noscript><style>.grid .wc[hidden] { display: flex; } .filters { display: none; }</style></noscript>
+  </section>
+  <div class="wrap art-credit"><PlateCaption {...jardin} /></div>
+</Site>
+
+<script>
+  import { initWorkFilter } from '../../scripts/work-filter';
+  initWorkFilter();
+</script>
+
+<style>
+  /* The art is a fixed field for the length of the section (the "Fixed field" test). */
+  .field { position: relative; isolation: isolate; padding-bottom: 48px; }
+  .field__art { position: sticky; top: 0; z-index: -1; height: 100svh; margin-bottom: -100svh; overflow: hidden; }
+  .field__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 0%; -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent); mask-image: linear-gradient(to bottom, #000 80%, transparent); }
+
+  /* The page word sits on the open sky, top right (TASTE 2 and 3). */
+  .head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-top: 120px; min-height: 58svh; align-content: start; }
+  .head__word { grid-column: 7 / -1; font-family: var(--display); font-weight: 500; font-size: clamp(120px, 17vw, 260px); line-height: 0.82; letter-spacing: -0.04em; color: var(--ink); }
+  .head__p { grid-column: 7 / span 5; margin-top: 20px; font-size: 22px; line-height: 1.4; font-weight: 500; }
+
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .filter { --fill: color-mix(in srgb, var(--paper) 70%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); min-height: 44px; padding: 0 18px; font-size: 16px; gap: 8px; }
+  .filter[aria-pressed='true'] { --fill: var(--ink); --fill-hover: var(--ink); color: var(--paper); }
+  .filter__n { font-variant-numeric: tabular-nums; opacity: 0.6; font-size: 14px; }
+  .filter:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .archive-note { margin-bottom: 12px; font-size: 18px; font-weight: 500; }
+  .archive-note[hidden] { display: none; }
+
+  /* Varied grid: three cards a row in changing widths, 5 + 4 + 3, 3 + 5 + 4, 4 + 3 + 5 (set by the script). */
+  .grid { list-style: none; margin: 12px 0 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; align-items: start; }
+  .grid :global(.wc) { grid-column: span 4; }
+  .grid :global(.wc[data-span='7']) { grid-column: span 7; }
+  .grid :global(.wc[data-span='5']) { grid-column: span 5; }
+  .grid :global(.wc[data-span='3']) { grid-column: span 3; }
+  .grid :global(.wc[data-drop]) { margin-top: 56px; }
+
+  .art-credit { margin-top: 0; }
+
+  @media (max-width: 1099.98px) {
+    .head__word { grid-column: 5 / -1; }
+    .head__p { grid-column: 5 / -1; }
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid :global(.wc), .grid :global(.wc[data-span]) { grid-column: span 1; }
+    .grid :global(.wc[data-drop]) { margin-top: 0; }
+    .grid :global(.wc:nth-child(even of :not([hidden]))) { margin-top: 48px; }
+  }
+  @media (max-width: 759.98px) {
+    .field { padding-bottom: 40px; }
+    .head { display: block; padding-top: 96px; min-height: 52svh; }
+    .head__word { font-size: 104px; }
+    .head__p { font-size: 18px; max-width: 30ch; }
+    .filters { flex-wrap: nowrap; overflow-x: auto; margin-inline: 0; padding-bottom: 4px; scrollbar-width: none; }
+    .filter { flex: none; }
+    .grid { grid-template-columns: 1fr; gap: 16px; }
+    .grid :global(.wc:nth-child(even of :not([hidden]))) { margin-top: 0; }
+  }
+</style>
