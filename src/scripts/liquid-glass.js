@@ -8,7 +8,7 @@
  * is capped at a radius of 4 taps on a mipmapped texture; paper/ink tint with a
  * rim highlight; premultiplied output; renders on demand, never in a loop.
  *
- * mountLiquidGlass(panel, { image, tone, opacity }) -> Promise<{ render, destroy } | null>
+ * mountLiquidGlass(panel, { image, tone, opacity, blur }) -> Promise<{ render, destroy } | null>
  * Resolves null (CSS glass untouched) when WebGL, the shader or the image fail,
  * or under prefers-contrast: more / prefers-reduced-transparency: reduce.
  */
@@ -144,7 +144,7 @@ function compile(gl) {
   return gl.getProgramParameter(prog, gl.LINK_STATUS) ? prog : null;
 }
 
-export async function mountLiquidGlass(panel, { image, tone = 'light', opacity } = {}) {
+export async function mountLiquidGlass(panel, { image, tone = 'light', opacity, blur = BLUR_PX } = {}) {
   if (!panel || !image) return null;
   if (media('(prefers-contrast: more)') || media('(prefers-reduced-transparency: reduce)')) return null;
   try {
@@ -240,8 +240,8 @@ export async function mountLiquidGlass(panel, { image, tone = 'light', opacity }
     gl.uniform1f(u.u_dpr, dpr);
     gl.uniform2f(u.u_uvOrigin, (pr.left - ox) / rw, (pr.top - oy) / rh);
     gl.uniform2f(u.u_pxToUv, 1 / rw, 1 / rh);
-    gl.uniform1f(u.u_blurPx, BLUR_PX);
-    gl.uniform1f(u.u_lodBias, Math.max(0, Math.log2(BLUR_PX * 1.4 * dpr) - 0.5));
+    gl.uniform1f(u.u_blurPx, blur);
+    gl.uniform1f(u.u_lodBias, Math.max(0, Math.log2(blur * 1.4 * dpr) - 0.5));
     gl.uniform1f(u.u_brightness, filterValue(ics.filter, 'brightness', 1));
     gl.uniform1f(u.u_saturate, filterValue(ics.filter, 'saturate', 1));
     gl.clear(gl.COLOR_BUFFER_BIT);

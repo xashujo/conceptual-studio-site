@@ -331,14 +331,21 @@ Museum model:
   design" image): nearly clear, the art bends and magnifies through a rim
   30% of the short side (14px minimum), red bending most and blue least so
   the rim splits colour, a bright rim top left with a weaker catch bottom
-  right. Behind the words a frosted centre at 55% paper, feathered into the
-  rim, so text stays AA even over a black photo. This is the one way it
-  differs from Apple's near-clear glass.
+  right. No paper frosting (Josh, 26 Oct: "looks out of place"): the middle
+  is only slightly blurred (4px in Chromium, about 3px in WebGL) with no
+  tint, feathered into the sharp bent rim. Tint is 8% paper in Chromium and
+  10% in WebGL (25% on night art).
+  [TBC: words on clear glass rely on the art behind being light and soft.
+  Over a dark or busy photo they may fail AA; the nav will need the
+  scroll-edge band (TASTE glass spec) in step 2.]
 - The lens is Chromium only (it needs SVG filters inside backdrop-filter).
   Safari, Firefox and iPhones get the frosted layer 1 glass. Turned on per
   element with data-lens; shown next to the frosted glass on /glass/.
   [TBC: Josh to choose which pieces get the lens: nav, dock, small round
   buttons, the availability pill.]
+- On the /glass/ page the frosted copies are removed; every piece is lens
+  glass. Lens pieces that can't bend (Firefox or Safari over plain paper or
+  black) are clear too: 18% paper (30% Paper 2 at night), 5px blur.
 - Lens bend is -48 (the edge refraction keeps -70): with the wider rim, -70
   smeared the etching into ripples. Lens blur 1.5px softens the fine lines.
 - Firefox and Safari: a lens piece that sits wholly over a known painting

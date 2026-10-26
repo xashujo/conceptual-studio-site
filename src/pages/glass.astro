@@ -8,7 +8,7 @@ import etching from '../assets/art/engraved/jardin-quiet.jpg';
 import lemoyne from '../assets/art/engraved/lemoyne-night.jpg';
 
 const grounds = [
-  { id: 'painting', title: 'Over a painting', note: 'Le Jardin Chinois, as on the home page. In each pair, frosted first, then lens' },
+  { id: 'painting', title: 'Over a painting', note: 'Le Jardin Chinois, as on the home page.' },
   { id: 'paper', title: 'Over paper', note: 'Specimen only: the site never puts glass on flat paper' },
   { id: 'black', title: 'Over black', note: 'A night chapter: the Lemoyne close, then plain warm black' },
 ];
@@ -29,8 +29,8 @@ const grounds = [
           {g.id === 'painting' && <Image class="ground__art" src={etching} alt="" widths={[800, 1600, 2400]} sizes="100vw" loading="eager" />}
           {g.id === 'black' && <Image class="ground__art ground__art--top" src={lemoyne} alt="" widths={[800, 1600, 2400]} sizes="100vw" loading="eager" />}
 
-          {['', 'lens'].map((kind) => (
-            <div class="bar glass" data-lens={kind || undefined}>
+          {['lens'].map(() => (
+            <div class="bar glass" data-lens>
               <span class="bar__mark">Conceptual Studio</span>
               <ul class="bar__links"><li>Work</li><li>Services</li><li>About</li><li>Contact</li></ul>
               <span class="btn btn--solid bar__cta">Start a project</span>
@@ -38,7 +38,6 @@ const grounds = [
           ))}
 
           <div class="row">
-            <div class="dock glass"><ul><li>Work</li><li>Services</li><li>About</li><li>Contact</li></ul></div>
             <div class="dock glass" data-lens><ul><li>Work</li><li>Services</li><li>About</li><li>Contact</li></ul></div>
           </div>
           <div class="row">
@@ -65,14 +64,15 @@ const grounds = [
         const b = image.getBoundingClientRect();
         const solid = image.classList.contains('ground__art--top') ? 0.7 : 1; // the night art fades out below 70%
         if (a.top < b.top || a.bottom > b.top + b.height * solid || a.left < b.left || a.right > b.right) return;
-        mountLiquidGlass(el, { image, tone: el.closest('.night') ? 'dark' : 'light', opacity: el.closest('.night') ? 0.72 : 0.55 });
+        // Clear like the CSS lens: a whisper of tint and a slight blur (tap spacing 1.5px, about 3px sigma).
+        mountLiquidGlass(el, { image, tone: el.closest('.night') ? 'dark' : 'light', opacity: el.closest('.night') ? 0.25 : 0.1, blur: 1.5 });
       });
     </script>
   </body>
 </html>
 
 <style>
-  .ground { position: relative; isolation: isolate; overflow: hidden; min-height: 760px; padding: 48px var(--margin); display: grid; align-content: space-between; gap: 40px; background: var(--paper); color: var(--ink); }
+  .ground { position: relative; isolation: isolate; overflow: hidden; min-height: 620px; padding: 48px var(--margin); display: grid; align-content: space-between; gap: 40px; background: var(--paper); color: var(--ink); }
   .ground__art { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; }
   .ground--painting .ground__art { object-position: 50% 30%; }
   .ground__art--top { height: 58%; object-position: 50% 0; mask-image: linear-gradient(#000 70%, transparent); }
