@@ -1,8 +1,11 @@
 node_modules/
 dist/
 .astro/
-.taste-skill/
 .DS_Store
 .env
 .env.*
 *.log
+BRANDING/*.pdf
+CURRENT WEBSITE/
+*.otf
+*.ttf

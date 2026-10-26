@@ -1,0 +1,6 @@
+---
+// TASTE 8: two lines under every image. Title, client and year in bold; the medium in brackets, light.
+interface Props { title: string; medium: string; }
+const { title, medium } = Astro.props;
+---
+<figcaption class="plate"><b>{title}</b><span>({medium})</span></figcaption>

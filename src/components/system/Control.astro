@@ -1,0 +1,25 @@
+---
+// One control in one state, for /system/. Rest is live; the other states are forced, static copies.
+interface Props { kind: 'primary' | 'pill' | 'link'; state: 'Rest' | 'Hover' | 'Focus' | 'Pressed'; }
+const { kind, state } = Astro.props;
+const live = state === 'Rest';
+const forced = { Rest: '', Hover: 'is-hover', Focus: 'is-focus', Pressed: 'is-pressed' }[state];
+const Tag = live ? 'a' : 'span';
+const href = { primary: '/contact/', pill: '/work/oxford-school-of-english/', link: '/work/' }[kind];
+const cls = { primary: 'btn btn--solid', pill: 'btn', link: 'link' }[kind];
+---
+<div class="st">
+  <Tag class={`${cls} ${forced}`} href={live ? href : undefined} aria-hidden={live ? undefined : 'true'}>
+    {kind === 'primary' && <span class="swap"><span>Book a call</span><span aria-hidden="true">Contact me ↗</span></span>}
+    {kind === 'pill' && <>View project <span class="arrow" aria-hidden="true">→</span></>}
+    {kind === 'link' && <>All work<span class="arrow" aria-hidden="true">→</span></>}
+  </Tag>
+  <p class="st__n" aria-hidden="true">{state}</p>
+</div>
+
+<style>
+  .st { display: grid; justify-items: start; gap: 8px; min-width: 0; }
+  .st__n { display: none; font-size: 14px; color: var(--ink-2); }
+  @media (max-width: 1099.98px) { .st__n { display: block; } }
+  @media (max-width: 459.98px) { .btn { font-size: 16px; padding: 0 16px; gap: 8px; } }
+</style>

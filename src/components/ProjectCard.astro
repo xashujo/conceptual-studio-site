@@ -1,19 +1,56 @@
 ---
-// A project, lit like an exhibit: its 4:3 thumbnail, a ruled label row, then the title.
+// The Framer card (DECISIONS, TASTE 6 and 12): title left, year right, hairline,
+// disciplines, one-line description, "View project" pill, then the work, large.
 import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
-import Icon from './Icon.astro';
-import { categoryName } from '../lib/site.js';
-interface Props { project: CollectionEntry<'projects'>; index?: number; sizes?: string; eager?: boolean }
-const { project, index, sizes = '(max-width: 800px) 100vw, 50vw', eager = false } = Astro.props;
-const p = project.data;
+import type { ImageMetadata } from 'astro';
+import PlateCaption from './PlateCaption.astro';
+interface Props {
+  title: string; year: number; href: string; disciplines: string[]; summary: string;
+  image: ImageMetadata; alt: string; caption: { title: string; medium: string };
+  position?: string;
+}
+const { title, year, href, disciplines, summary, image, alt, caption, position = '50% 50%' } = Astro.props;
 ---
-<a class="work" href={`/work/${project.id}/`}>
-  <span class="work__frame">
-    <Image src={p.thumb ?? p.cover} alt={p.coverAlt} widths={[600, 900, 1200, 1600]} sizes={sizes} loading={eager ? 'eager' : 'lazy'} style={`view-transition-name: cover-${project.id}`} />
-    <span class="work__view glass" data-tone="dark">View project <Icon name="arrow" /></span>
-  </span>
-  <span class="work__meta label"><span>{index !== undefined ? `Nº ${String(index + 1).padStart(2, '0')}` : p.year} <span class="note">({categoryName[p.category]})</span></span><span>{p.year}</span></span>
-  <span class="work__title"><span class="h">{p.title}</span></span>
-  <span class="work__client">{p.client}</span>
-</a>
+<article class="card">
+  <header class="card__head">
+    <h3 class="card__title">{title}</h3>
+    <p class="card__year">{year}</p>
+  </header>
+  <hr class="rule card__rule" />
+  <div class="card__meta">
+    <div>
+      <p class="card__disc">{disciplines.join(', ')}</p>
+      <p class="card__summary">{summary}</p>
+    </div>
+    <a class="btn" href={href}>View project <span class="arrow" aria-hidden="true">→</span></a>
+  </div>
+  <figure class="card__fig">
+    <Image class="card__img" src={image} alt={alt} widths={[700, 1100, 1400, 2000]} sizes="(min-width: 760px) calc(100vw - 5vw - 32px), calc(100vw - 64px)" style={`object-position:${position}`} />
+    <PlateCaption {...caption} />
+  </figure>
+</article>
+
+<style>
+  /* Concentric corners (12): image 25px, inset 16px, card 41px. */
+  .card { --inset: 16px; border-radius: calc(25px + var(--inset)); background: var(--paper-2); padding: 28px var(--inset) 22px; }
+  .card__head { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; padding-inline: 12px; }
+  .card__title, .card__year { font-size: 40px; line-height: 48px; font-weight: 700; letter-spacing: -0.052em; }
+  .card__year { font-variant-numeric: tabular-nums; }
+  .card__rule { margin: 18px 12px 0; border-color: color-mix(in srgb, var(--ink) 30%, transparent); }
+  .card__meta { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 18px 12px 24px; }
+  .card__disc { font-size: 20px; line-height: 30px; }
+  .card__summary { font-size: 20px; line-height: 30px; color: var(--ink-2); }
+  .card__img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 25px; }
+  .card__fig :global(.plate) { padding-inline: 12px; }
+  @media (max-width: 759.98px) {
+    .card { --inset: 10px; padding-top: 20px; }
+    .card__head { padding-inline: 8px; }
+    .card__title, .card__year { font-size: 28px; line-height: 32px; letter-spacing: -0.045em; }
+    .card__rule { margin-inline: 8px; }
+    .card__meta { flex-direction: column; align-items: flex-start; padding-inline: 8px; }
+    .card__disc, .card__summary { font-size: 17px; line-height: 26px; }
+    .card__img { aspect-ratio: 4 / 5; border-radius: 22px; }
+    .card { border-radius: 32px; }
+    .card__fig :global(.plate) { padding-inline: 8px; }
+  }
+</style>
