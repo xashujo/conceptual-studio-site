@@ -241,3 +241,10 @@ Museum model:
 - Recommendation (Claude, for Josh to decide): D's opening with B's
   work row directly under it, Threshold for featured work, A's plate for
   the closing CTA, C's chart inside the data visualisation service.
+- Home page art (Josh, 26 Oct): Le Jardin Chinois (The Chinese Garden),
+  etching by Jacques Gabriel Huquier after Boucher, after 1743. The Met
+  53.600.1008, public domain. It's the etched version of INSPO/Chinese
+  Chinoiserie 01. Duotoned #6E5024 to #F1DFC8, used in the hero and,
+  faded, behind the featured work panes. No free etching of Chinese
+  Chinoiserie 02 found yet.
+- Home headline is option 3, "Brands & Data, Made Clear" (Josh, 26 Oct).

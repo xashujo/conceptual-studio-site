@@ -8,15 +8,15 @@ import Actions from '../../components/prototypes/Actions.astro';
 import PlateCaption from '../../components/PlateCaption.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 import { sentence, clients } from '../../components/prototypes/home';
-import sky from '../../assets/art/engraved/hunt-sky-gold.jpg';
-import panes from '../../assets/art/engraved/hunt-tall-panes.jpg';
+import jardin from '../../assets/art/engraved/jardin-gold.jpg';
+import panes from '../../assets/art/engraved/jardin-panes.jpg';
 import oxford from '../../assets/work/oxford-school-of-english/bus-shelter.webp';
 import ncc from '../../assets/work/new-city-college-strategic-intent/02.webp';
 import pandora from '../../assets/work/sherman-poon-pandora-forever/06.webp';
 
 // Josh, 26 Oct: "&" for "and", first letter of each word capitalised. Wording still open.
 const headline = 'Brands & Data, Made Clear'; // option 3 (Josh, 26 Oct)
-const hunt = { title: 'La Chasse Chinoise (The Chinese Hunt), after François Boucher, after 1743', medium: 'Etching by Gabriel and Jacques Gabriel Huquier. The Met 53.600.1009, CC0. Duotoned' };
+const hunt = { title: 'Le Jardin Chinois (The Chinese Garden), after François Boucher, after 1743', medium: 'Etching and engraving by Jacques Gabriel Huquier. The Met 53.600.1008, public domain. Duotoned' };
 const links = [['Work', '#work'], ['Services', '#'], ['About', '#'], ['Contact', '#']];
 ---
 <Proto title="Prototype A, refined">
@@ -31,7 +31,7 @@ const links = [['Work', '#work'], ['Services', '#'], ['About', '#'], ['Contact',
         </ul>
         <a class="nav__menu" href="#">Menu</a>
       </nav>
-      <Image class="a__art" src={sky} alt="" widths={[800, 1600]} sizes="100vw" loading="eager" />
+      <Image class="a__art" src={jardin} alt="" widths={[800, 1600, 2400]} sizes="100vw" loading="eager" />
       <div class="a__plate plate-glass" data-liquid="a-art" data-tone="light" data-opacity="0.52">
         <h1 class="a__h">{headline}</h1>
         <p class="a__p">{sentence}</p>
@@ -94,7 +94,7 @@ const links = [['Work', '#work'], ['Services', '#'], ['About', '#'], ['Contact',
 
   /* Hero: the painting is the screen. The plate is centred (Josh, 26 Oct). */
   .a { position: relative; isolation: isolate; min-height: 100svh; padding: 116px var(--margin) 40px; display: grid; grid-template-rows: 1fr auto; }
-  .a__art { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; object-position: 50% 70%; -webkit-mask-image: linear-gradient(to bottom, #000 74%, transparent); mask-image: linear-gradient(to bottom, #000 74%, transparent); }
+  .a__art { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 92%); mask-image: linear-gradient(to bottom, #000 58%, transparent 92%); }
   .a__plate { align-self: center; justify-self: center; width: min(640px, 46vw); padding: 44px 44px 40px; display: grid; gap: 22px; }
   .a__h { font-family: var(--display); font-weight: 500; font-size: clamp(34px, 2.9vw, 42px); line-height: 1.06; letter-spacing: -0.02em; text-wrap: balance; }
   .a__p { font-size: 18px; line-height: 1.5; }
@@ -125,7 +125,7 @@ const links = [['Work', '#work'], ['Services', '#'], ['About', '#'], ['Contact',
     .nav__links { display: none; }
     .nav__menu { display: block; padding: 9px 16px; font-weight: 500; font-size: 16px; text-decoration: none; border-radius: var(--pill); background: color-mix(in srgb, var(--ink) 6%, transparent); }
     .a { padding: 84px var(--margin) 24px; }
-    .a__art { object-position: 82% 50%; }
+    .a__art { object-position: 30% 50%; }
     /* On a phone the plate takes the upper part, leaving the palm visible beside and below it. */
     .a__plate { margin: 0; width: 100%; align-self: start; padding: 24px 22px 22px; gap: 16px; border-radius: 26px; }
     .a__h { font-size: 29px; }
