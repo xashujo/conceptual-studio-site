@@ -108,6 +108,49 @@ a { color: inherit; }
 /* A light blur so the bent rim stays readable as a bend (Josh wants visible refraction). */
 .glass.is-refracting { background: color-mix(in srgb, var(--paper) 42%, transparent); -webkit-backdrop-filter: var(--refract) blur(5px) saturate(1.7); backdrop-filter: var(--refract) blur(5px) saturate(1.7); }
 
+/* Lens glass, Chromium only (iOS Liquid Glass, Josh's reference 26 Oct): nearly clear, the art bends
+   and magnifies through a wide rim with a red and blue split, and a bright rim lit from the top left
+   with a weaker catch bottom right. Two sibling layers, so each samples the page itself:
+   ::before is the lens (bend, light blur), ::after is a frosted centre behind the words, feathered
+   into the rim, at a tint that keeps the words AA. Other browsers keep layer 1 above. */
+.glass.is-lens {
+  position: relative; z-index: 0;
+  background: none; -webkit-backdrop-filter: none; backdrop-filter: none;
+  box-shadow:
+    inset 1.5px 1.5px 0 -0.5px rgb(255 250 240 / 0.95),
+    inset -1.5px -1.5px 0 -0.5px rgb(255 250 240 / 0.8),
+    inset 0 0 0 1px rgb(110 80 36 / 0.14),
+    inset 0 0 14px rgb(255 248 236 / 0.28),
+    3px 10px 28px -16px rgb(40 24 8 / 0.32);
+}
+.glass.is-lens::before, .glass.is-lens::after { content: ''; position: absolute; border-radius: inherit; pointer-events: none; }
+.glass.is-lens::before {
+  inset: 0; z-index: -2;
+  background: color-mix(in srgb, var(--paper) 10%, transparent);
+  -webkit-backdrop-filter: var(--refract) blur(1.5px) saturate(1.1) brightness(1.03);
+  backdrop-filter: var(--refract) blur(1.5px) saturate(1.1) brightness(1.03);
+}
+.glass.is-lens::after {
+  inset: calc(var(--lens-band) * 0.2); z-index: -1;
+  background: color-mix(in srgb, var(--paper) 55%, transparent); /* AA for ink even over a black photo */
+  -webkit-backdrop-filter: blur(12px) saturate(1.3);
+  backdrop-filter: blur(12px) saturate(1.3);
+  --f: calc(var(--lens-band) * 0.9);
+  -webkit-mask: linear-gradient(90deg, transparent, #000 var(--f), #000 calc(100% - var(--f)), transparent), linear-gradient(transparent, #000 var(--f), #000 calc(100% - var(--f)), transparent);
+  -webkit-mask-composite: source-in;
+  mask: linear-gradient(90deg, transparent, #000 var(--f), #000 calc(100% - var(--f)), transparent), linear-gradient(transparent, #000 var(--f), #000 calc(100% - var(--f)), transparent);
+  mask-composite: intersect;
+}
+.night .glass.is-lens, .glass.is-lens.is-dark {
+  background: none;
+  box-shadow:
+    inset 1.5px 1.5px 0 -0.5px rgb(237 220 180 / 0.7),
+    inset -1px -1px 0 -0.5px rgb(237 220 180 / 0.35),
+    inset 0 0 14px rgb(237 220 180 / 0.1);
+}
+.night .glass.is-lens::before, .glass.is-lens.is-dark::before { background: color-mix(in srgb, var(--paper-2) 30%, transparent); }
+.night .glass.is-lens::after, .glass.is-lens.is-dark::after { background: color-mix(in srgb, var(--paper-2) 72%, transparent); }
+
 /* Tier A, plate glass: the WebGL canvas replaces the backdrop once it has drawn. */
 .plate-glass { position: relative; border-radius: 28px; }
 .plate-glass:not(.has-liquid) { background: color-mix(in srgb, var(--paper) 78%, transparent); }

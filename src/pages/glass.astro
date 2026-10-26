@@ -8,7 +8,7 @@ import etching from '../assets/art/engraved/jardin-quiet.jpg';
 import lemoyne from '../assets/art/engraved/lemoyne-night.jpg';
 
 const grounds = [
-  { id: 'painting', title: 'Over a painting', note: 'Le Jardin Chinois, as on the home page' },
+  { id: 'painting', title: 'Over a painting', note: 'Le Jardin Chinois, as on the home page. In each pair, frosted first, then lens' },
   { id: 'paper', title: 'Over paper', note: 'Specimen only: the site never puts glass on flat paper' },
   { id: 'black', title: 'Over black', note: 'A night chapter: the Lemoyne close, then plain warm black' },
 ];
@@ -29,28 +29,41 @@ const grounds = [
           {g.id === 'painting' && <Image class="ground__art" src={etching} alt="" widths={[800, 1600, 2400]} sizes="100vw" loading="eager" />}
           {g.id === 'black' && <Image class="ground__art ground__art--top" src={lemoyne} alt="" widths={[800, 1600, 2400]} sizes="100vw" loading="eager" />}
 
-          <div class="bar glass">
-            <span class="bar__mark">Conceptual Studio</span>
-            <ul class="bar__links"><li>Work</li><li>Services</li><li>About</li><li>Contact</li></ul>
-            <span class="btn btn--solid bar__cta">Start a project</span>
-          </div>
+          {['', 'lens'].map((kind) => (
+            <div class="bar glass" data-lens={kind || undefined}>
+              <span class="bar__mark">Conceptual Studio</span>
+              <ul class="bar__links"><li>Work</li><li>Services</li><li>About</li><li>Contact</li></ul>
+              <span class="btn btn--solid bar__cta">Start a project</span>
+            </div>
+          ))}
 
-          <div class="dock glass">
-            <ul><li>Work</li><li>Services</li><li>About</li><li>Contact</li></ul>
+          <div class="row">
+            <div class="dock glass"><ul><li>Work</li><li>Services</li><li>About</li><li>Contact</li></ul></div>
+            <div class="dock glass" data-lens><ul><li>Work</li><li>Services</li><li>About</li><li>Contact</li></ul></div>
+          </div>
+          <div class="row">
+            <span class="round glass" data-lens aria-hidden="true">↗</span>
+            <span class="round glass" data-lens aria-hidden="true">↓</span>
+            <span class="round glass round--wide" data-lens>Taking new projects</span>
           </div>
 
           <p class="plate ground__label"><b id={`t-${g.id}`}>{g.title}</b><span>({g.note})</span></p>
         </section>
       ))}
     </main>
+    <script>
+      import { mountRefraction } from '../scripts/refraction.js';
+      // Lens glass is Chromium only; elsewhere these stay frosted layer 1 glass.
+      document.querySelectorAll<HTMLElement>('[data-lens]').forEach((el) => mountRefraction(el, { lens: true }));
+    </script>
   </body>
 </html>
 
 <style>
-  .ground { position: relative; isolation: isolate; overflow: hidden; min-height: 620px; padding: 48px var(--margin); display: grid; align-content: space-between; gap: 48px; background: var(--paper); color: var(--ink); }
+  .ground { position: relative; isolation: isolate; overflow: hidden; min-height: 760px; padding: 48px var(--margin); display: grid; align-content: space-between; gap: 40px; background: var(--paper); color: var(--ink); }
   .ground__art { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; }
   .ground--painting .ground__art { object-position: 50% 30%; }
-  .ground__art--top { height: 46%; object-position: 50% 0; mask-image: linear-gradient(#000 70%, transparent); }
+  .ground__art--top { height: 58%; object-position: 50% 0; mask-image: linear-gradient(#000 70%, transparent); }
 
   /* Shapes from the glass spec: bars 60px at 28px radius, the dock 60px with round ends. Contents are placeholders until step 2. */
   .bar { height: 60px; border-radius: 28px; display: flex; align-items: center; gap: 24px; padding: 0 8px 0 24px; }
@@ -60,6 +73,9 @@ const grounds = [
   .dock { justify-self: center; height: 60px; border-radius: var(--pill); padding: 0 28px; display: flex; align-items: center; }
   .dock ul { list-style: none; display: flex; gap: 28px; margin: 0; padding: 0; font-size: 16px; font-weight: 500; }
   .ground__label { margin: 0; }
+  .row { display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; }
+  .round { width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; font-size: 26px; }
+  .round--wide { width: auto; padding: 0 28px; border-radius: var(--pill); font-size: 16px; font-weight: 500; }
 
   @media (max-width: 760px) {
     .ground { min-height: 520px; padding-block: 24px; }

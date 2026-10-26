@@ -327,3 +327,17 @@ Museum model:
   the site still never puts glass on flat paper. Delete /glass/ once the nav
   is built.
 - The layer 2 refraction tint (42%) is below AA and gets fixed in step 3.
+- Lens glass (Josh, 26 Oct, from Apple's Liquid Glass "New, universal
+  design" image): nearly clear, the art bends and magnifies through a rim
+  30% of the short side (14px minimum), red bending most and blue least so
+  the rim splits colour, a bright rim top left with a weaker catch bottom
+  right. Behind the words a frosted centre at 55% paper, feathered into the
+  rim, so text stays AA even over a black photo. This is the one way it
+  differs from Apple's near-clear glass.
+- The lens is Chromium only (it needs SVG filters inside backdrop-filter).
+  Safari, Firefox and iPhones get the frosted layer 1 glass. Turned on per
+  element with data-lens; shown next to the frosted glass on /glass/.
+  [TBC: Josh to choose which pieces get the lens: nav, dock, small round
+  buttons, the availability pill.]
+- Lens bend is -48 (the edge refraction keeps -70): with the wider rim, -70
+  smeared the etching into ripples. Lens blur 1.5px softens the fine lines.
