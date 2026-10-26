@@ -248,3 +248,6 @@ Museum model:
   faded, behind the featured work panes. No free etching of Chinese
   Chinoiserie 02 found yet.
 - Home headline is option 3, "Brands & Data, Made Clear" (Josh, 26 Oct).
+- "Worked with" runs as one line drifting left on a loop (Josh, 26 Oct),
+  overriding TASTE 22's "nothing loops". It pauses on hover, and with
+  reduced motion it stops and scrolls by hand.

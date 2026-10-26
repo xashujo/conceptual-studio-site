@@ -40,7 +40,10 @@ const links = [['Work', '#work'], ['Services', '#'], ['About', '#'], ['Contact',
       <!-- Outside the glass: the names straight on the faded foot of the painting (TASTE 2). -->
       <div class="a__with">
         <p class="a__with-h">Worked with</p>
-        <ul>{clients.map((c) => <li>{c}</li>)}</ul>
+        <div class="a__track">
+          <ul class="a__run">{clients.map((c) => <li>{c}</li>)}</ul>
+          <ul class="a__run" aria-hidden="true">{clients.map((c) => <li>{c}</li>)}</ul>
+        </div>
       </div>
     </header>
     <div class="wrap a__credit"><PlateCaption {...hunt} /></div>
@@ -101,7 +104,14 @@ const links = [['Work', '#work'], ['Services', '#'], ['About', '#'], ['Contact',
   .a__plate :global(.avail) { --fill: color-mix(in srgb, var(--paper) 55%, transparent); }
   .a__with { display: grid; grid-template-columns: 140px 1fr; gap: 24px; align-items: baseline; padding-top: 32px; font-size: 18px; line-height: 1.5; }
   .a__with-h { font-weight: 600; }
-  .a__with ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 32px; }
+  /* One line that drifts left forever (Josh, 26 Oct). Two copies of the list, so the loop has no seam. */
+  .a__with { min-width: 0; }
+  .a__track { display: flex; overflow: hidden; -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent); mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent); }
+  .a__run { list-style: none; margin: 0; padding: 0 28px 0 0; display: flex; flex: none; gap: 56px; white-space: nowrap; animation: drift 38s linear infinite; }
+  .a__with:hover .a__run { animation-play-state: paused; }
+  @keyframes drift { to { transform: translateX(-100%); } }
+  /* Reduced motion: still, scrollable by hand, the copy hidden. */
+  @media (prefers-reduced-motion: reduce) { .a__track { overflow-x: auto; } .a__run[aria-hidden] { display: none; } }
   .a__credit { position: relative; margin-top: 8px; }
 
   /* Featured work: every card is its own pane over the etching, which fades but never quite leaves. */
@@ -131,7 +141,7 @@ const links = [['Work', '#work'], ['Services', '#'], ['About', '#'], ['Contact',
     .a__h { font-size: 29px; }
     .a__p { font-size: 16px; line-height: 1.45; }
     .a__with { grid-template-columns: 1fr; gap: 6px; padding-top: 24px; font-size: 15px; }
-    .a__with ul { gap: 2px 16px; }
+    .a__run { gap: 32px; padding-right: 16px; animation-duration: 30s; }
     .fw { padding-block: 112px 80px; }
     .fw__h, .fw__p { grid-column: 1 / -1; }
     .fw__h { font-size: 56px; }
