@@ -9,7 +9,6 @@ import PlateCaption from '../components/PlateCaption.astro';
 import { email, startHref, quoteHref, sentence, clients, clientGroups } from '../data/site';
 import heroArt from '../assets/art/engraved/jardin-quiet.jpg';
 import workArt from '../assets/art/engraved/jardin-panes.jpg';
-import nightArt from '../assets/art/engraved/ranelagh-night.jpg';
 import footerArt from '../assets/art/engraved/garden-night.webp';
 import oxford from '../assets/work/oxford-school-of-english/bus-shelter.webp';
 import pandora from '../assets/work/sherman-poon-pandora-forever/06.webp';
@@ -41,7 +40,6 @@ const steps = [
 
 const credits = {
   hero: { title: 'Le Jardin Chinois (The Chinese Garden), after François Boucher, after 1743', medium: 'Etching by Jacques Gabriel Huquier. The Met 53.600.1008, public domain. Duotoned' },
-  night: { title: 'The Chinese building and Rotunda, Ranelagh Gardens, Chelsea, 1752', medium: 'Etching by Charles Grignion after Canaletto. Rijksmuseum RP-P-1932-457, public domain. Tones reworked' },
 };
 ---
 <!doctype html>
@@ -98,30 +96,7 @@ const credits = {
             image={oxford} alt="Oxford School of English poster in a bus shelter on an Oxford street, beside a red double-decker bus"
             caption={{ title: 'Oxford School of English, 2023', medium: 'Visual identity, on a bus shelter poster' }}
             position="50% 46%" />
-          <div class="fw__pair">
-            <ProjectCard size="half"
-              title="Pandora Forever" year={2023} href="/work/sherman-poon-pandora-forever/"
-              disciplines={['CGI', '3D animation']}
-              summary="CGI worlds for Sherman Poon's music video, shown on billboards including Times Square in Hong Kong."
-              image={pandora} alt="Sherman Poon waving in front of the video on the Times Square screen in Hong Kong"
-              caption={{ title: 'Pandora Forever, Sherman Poon, 2023', medium: 'CGI, on the Times Square screen, Hong Kong' }}
-              position="50% 42%" />
-            <ProjectCard size="half"
-              title="KUT Magazine" year={2023} href="/work/kut-magazine/"
-              disciplines={['Visual identity', 'Editorial design']}
-              summary="An arts magazine about emerging creatives, from the identity to the interviews to the printed copy."
-              image={kut} alt="Two spreads from KUT Magazine: a portrait of an artist and an interview with Kit Sivers"
-              caption={{ title: 'KUT Magazine, independent project, 2023', medium: 'Identity and editorial design, printed spreads' }}
-              position="50% 50%" />
-          </div>
-        </div>
-      </section>
-
-      <!-- The night chapter: one case study on warm black, the Ranelagh etching glowing at its threshold. -->
-      <section class="night chapter" aria-labelledby="night-h">
-        <div class="chapter__art" aria-hidden="true"><Image src={nightArt} alt="" widths={[800, 1600]} sizes="100vw" /></div>
-        <div class="wrap chapter__body">
-          <ProjectCard heading="h2" headingId="night-h"
+          <ProjectCard
             title="Strategic Intent" year={2025} href="/work/new-city-college-strategic-intent/"
             disciplines={['Data visualisation', 'Graphic design']}
             summary="Infographics for New City College's strategic intent briefing, used in its executive communications around mergers."
@@ -142,10 +117,25 @@ const credits = {
               <PlateCaption title="16 to 18 students by level, 2024/25" medium="Pie chart, 10,404 students" />
             </figure>
           </div>
-          <p class="chapter__all"><a class="link" href="/work/">All projects<span class="arrow" aria-hidden="true">→</span></a></p>
-          <div class="chapter__credit"><PlateCaption {...credits.night} /></div>
+          <div class="fw__pair">
+            <ProjectCard size="half"
+              title="Pandora Forever" year={2023} href="/work/sherman-poon-pandora-forever/"
+              disciplines={['CGI', '3D animation']}
+              summary="CGI worlds for Sherman Poon's music video, shown on billboards including Times Square in Hong Kong."
+              image={pandora} alt="Sherman Poon waving in front of the video on the Times Square screen in Hong Kong"
+              caption={{ title: 'Pandora Forever, Sherman Poon, 2023', medium: 'CGI, on the Times Square screen, Hong Kong' }}
+              position="50% 42%" />
+            <ProjectCard size="half"
+              title="KUT Magazine" year={2023} href="/work/kut-magazine/"
+              disciplines={['Visual identity', 'Editorial design']}
+              summary="An arts magazine about emerging creatives, from the identity to the interviews to the printed copy."
+              image={kut} alt="Two spreads from KUT Magazine: a portrait of an artist and an interview with Kit Sivers"
+              caption={{ title: 'KUT Magazine, independent project, 2023', medium: 'Identity and editorial design, printed spreads' }}
+              position="50% 50%" />
+          </div>
         </div>
       </section>
+
 
       <!-- Services, set like a menu: the name and its starting price on one line, the description under it. -->
       <section class="services wrap" id="services" aria-labelledby="services-h">
@@ -292,17 +282,13 @@ const credits = {
   .fw__p { grid-column: 1 / span 5; margin-top: 20px; font-size: 20px; line-height: 1.45; }
   .fw__cards { display: grid; gap: 24px; }
   .fw__pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+  .fw__all { font-size: 20px; padding-top: 8px; }
 
-  /* Night chapter: warm black, the Ranelagh etching glowing at its top, the work lit in full colour. */
-  .chapter { position: relative; isolation: isolate; margin-top: 200px; padding-block: min(580px, 40vw) 120px; }
-  .chapter__art { position: absolute; inset: 0 0 auto; height: min(680px, 47vw); z-index: -1; overflow: hidden; }
-  .chapter__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 92%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 74%, transparent); mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 74%, transparent); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
-  .chapter__body { display: grid; gap: 24px; }
+  /* Strategic Intent's charts: one large, two stacked beside it. */
   .charts { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: auto auto; gap: 24px; align-items: start; }
+  .charts { margin-bottom: 64px; } /* room so the last caption never reads as a label over the next card */
   .charts__big { grid-row: span 2; }
   .charts img { width: 100%; height: auto; border-radius: 25px; }
-  .chapter__all { font-size: 20px; }
-  .chapter__credit { padding-top: 24px; }
 
   /* Services: heading and intro on the left third, the menu on the right. */
   .services { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-block: 200px 0; }
@@ -402,12 +388,8 @@ const credits = {
     .fw__h, .fw__p { grid-column: 1 / -1; }
     .fw__h { font-size: 56px; }
     .fw__p { font-size: 17px; }
-    .fw__cards, .fw__pair, .chapter__body { gap: 48px; }
+    .fw__cards, .fw__pair { gap: 48px; }
     .fw__pair { grid-template-columns: 1fr; }
-    .chapter { margin-top: 120px; padding-block: 160px 96px; }
-    .chapter { padding-top: 360px; }
-    .chapter__art { height: 440px; }
-    .chapter__art img { object-position: 44% 92%; }
     .charts { grid-template-columns: 1fr; gap: 16px; }
     .charts__big { grid-row: auto; }
     .charts img { border-radius: 22px; }
