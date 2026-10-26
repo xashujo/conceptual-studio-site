@@ -292,3 +292,8 @@ Museum model:
   plus small-text (the 12px plate captions section 4 allows) and still-page
   (no motion yet, by request). Art fades carry taste-skill-ignore.
 - Links to pages not built yet: /work/*, /services/*, /about/.
+- The close has a detail of Lemoyne's Apotheosis of Hercules behind it
+  (Josh, 26 Oct, in place of Ranelagh): Jupiter and the gods under the gold
+  drape, about a 3x crop, toned #14110D to #9E8058 and faded top and bottom,
+  so "Start a project" sits on its dark foot. [TBC: the source of the
+  photograph in INSPO, for the credit line.]

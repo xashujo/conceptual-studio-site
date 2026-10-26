@@ -10,6 +10,7 @@ import { email, startHref, quoteHref, sentence, clients, clientGroups } from '..
 import heroArt from '../assets/art/engraved/jardin-quiet.jpg';
 import workArt from '../assets/art/engraved/jardin-panes.jpg';
 import footerArt from '../assets/art/engraved/garden-night.webp';
+import closeArt from '../assets/art/engraved/lemoyne-night.jpg';
 import oxford from '../assets/work/oxford-school-of-english/bus-shelter.webp';
 import pandora from '../assets/work/sherman-poon-pandora-forever/06.webp';
 import kut from '../assets/work/kut-magazine/04.webp';
@@ -133,9 +134,9 @@ const credits = {
               caption={{ title: 'KUT Magazine, independent project, 2023', medium: 'Identity and editorial design, printed spreads' }}
               position="50% 50%" />
           </div>
+          <p class="fw__all"><a class="link" href="/work/">All projects<span class="arrow" aria-hidden="true">→</span></a></p>
         </div>
       </section>
-
 
       <!-- Services, set like a menu: the name and its starting price on one line, the description under it. -->
       <section class="services wrap" id="services" aria-labelledby="services-h">
@@ -210,6 +211,8 @@ const credits = {
     <!-- Close and footer: one night chapter to the end of the page, the garden engraving rising from the bottom. -->
     <div class="night end">
       <section class="close wrap" id="contact" aria-labelledby="close-h">
+        <!-- Lemoyne's ceiling, cropped to Jupiter and the gods, toned gold on warm black and faded into the night (Josh, 26 Oct). -->
+        <div class="close__art" aria-hidden="true"><Image src={closeArt} alt="" widths={[800, 1400, 1900]} sizes="100vw" /></div>
         <h2 class="close__h big" id="close-h">Start a project</h2>
         <div class="close__body">
           <p class="close__p">If you're collecting quotes for a project, I'd be glad to be one of them. Send me a short note and I'll reply within three working days.</p>
@@ -219,6 +222,7 @@ const credits = {
             <span class="sr-only" aria-live="polite" data-status></span>
           </div>
         </div>
+        <div class="close__credit"><PlateCaption title="The Apotheosis of Hercules, François Lemoyne, 1731 to 1736" medium="Ceiling of the Salon d'Hercule, Palace of Versailles. Public domain. Detail, duotoned" /></div>
       </section>
       <footer class="footer">
         <div class="footer__text wrap">
@@ -340,7 +344,10 @@ const credits = {
 
   /* Close and footer, on warm black. */
   .end { background: var(--paper); }
-  .close { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-block: 200px 120px; align-items: end; }
+  .close { position: relative; isolation: isolate; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-block: min(560px, 40vw) 120px; align-items: end; }
+  .close__art { position: absolute; inset: 0 0 auto; height: min(820px, 58vw); z-index: -1; overflow: hidden; }
+  .close__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 55%, transparent); mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 55%, transparent); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
+  .close__credit { grid-column: 1 / -1; padding-top: 56px; }
   .close__h { grid-column: 1 / span 7; font-size: clamp(56px, 7.8vw, 120px); }
   .close__body { grid-column: 8 / -1; display: grid; gap: 24px; }
   .close__p { font-size: 20px; line-height: 1.5; }
@@ -411,7 +418,9 @@ const credits = {
     .about { padding-block: 120px; }
     .about__lead { font-size: 20px; }
     .about__facts { grid-template-columns: 1fr; gap: 20px; padding-top: 40px; }
-    .close { padding-block: 120px 80px; }
+    .close { padding-block: 300px 80px; }
+    .close__art { height: 440px; }
+    .close__art img { object-position: 42% 30%; }
     .close__h { font-size: 56px; }
     .footer__text { font-size: 16px; }
     .footer__land { height: 300px; }
