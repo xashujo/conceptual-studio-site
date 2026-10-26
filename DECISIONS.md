@@ -251,3 +251,7 @@ Museum model:
 - "Worked with" runs as one line drifting left on a loop (Josh, 26 Oct),
   overriding TASTE 22's "nothing loops". It pauses on hover, and with
   reduced motion it stops and scrolls by hand.
+- Home opening: the etching fills the screen at 60% strength, cropped so
+  the trees and sky sit behind the card (Josh chose this "quiet" version
+  over full strength and a half-page layout, 26 Oct). Featured work uses
+  the same strength, fading to a soft tone behind the lower panes.

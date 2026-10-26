@@ -1,35 +1,29 @@
 ---
-// Prototype A, refined (Josh, 26 Oct): a glass nav bar, a narrower plate whose edge crosses
+// Prototype A, refined (Josh, 26 Oct). The etching at 60% strength (the "quiet" version Josh chose): a glass nav bar, a narrower plate whose edge crosses
 // the palm, client names set straight on the painting outside the glass, then featured work
 // with every card in its own pane of glass over the etching.
 import { Image } from 'astro:assets';
-import Proto from '../../../components/prototypes/Proto.astro';
-import Actions from '../../../components/prototypes/Actions.astro';
-import PlateCaption from '../../../components/PlateCaption.astro';
-import ProjectCard from '../../../components/ProjectCard.astro';
-import { sentence, clients } from '../../../components/prototypes/home';
-import jardin from '../../../assets/art/engraved/jardin-gold.jpg';
-import quietArt from '../../../assets/art/engraved/jardin-quiet.jpg';
-import panes from '../../../assets/art/engraved/jardin-panes.jpg';
-import oxford from '../../../assets/work/oxford-school-of-english/bus-shelter.webp';
-import ncc from '../../../assets/work/new-city-college-strategic-intent/02.webp';
-import pandora from '../../../assets/work/sherman-poon-pandora-forever/06.webp';
+import Proto from '../../components/prototypes/Proto.astro';
+import Actions from '../../components/prototypes/Actions.astro';
+import PlateCaption from '../../components/PlateCaption.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { sentence, clients } from '../../components/prototypes/home';
+import quietArt from '../../assets/art/engraved/jardin-quiet.jpg';
+import panes from '../../assets/art/engraved/jardin-panes.jpg';
+import oxford from '../../assets/work/oxford-school-of-english/bus-shelter.webp';
+import ncc from '../../assets/work/new-city-college-strategic-intent/02.webp';
+import pandora from '../../assets/work/sherman-poon-pandora-forever/06.webp';
 
 // Josh, 26 Oct: "&" for "and", first letter of each word capitalised. Wording still open.
 const headline = 'Brands & Data, Made Clear'; // option 3 (Josh, 26 Oct)
 const hunt = { title: 'Le Jardin Chinois (The Chinese Garden), after François Boucher, after 1743', medium: 'Etching and engraving by Jacques Gabriel Huquier. The Met 53.600.1008, public domain. Duotoned' };
-// Three versions of the opening (Josh, 26 Oct): full strength, quieter at full size, and the art on half the screen.
-export function getStaticPaths() { return [{ params: { v: undefined } }, { params: { v: 'quiet' } }, { params: { v: 'half' } }]; }
-const v = (Astro.params.v ?? 'full') as 'full' | 'quiet' | 'half';
-const art = v === 'quiet' ? quietArt : jardin;
-const half = v === 'half';
 const links = [['Work', '#work'], ['Services', '#'], ['About', '#'], ['Contact', '#']];
 ---
-<Proto title={`Prototype A, ${v}`}>
+<Proto title="Prototype A">
 
   <main>
-    <header class:list={["a", `a--${v}`]} id="a-art">
-      <nav class:list={["nav", { "plate-glass": !half }]} aria-label="Main" data-liquid={half ? undefined : "a-art"} data-tone="light" data-opacity="0.52">
+    <header class="a" id="a-art">
+      <nav class="nav plate-glass" aria-label="Main" data-liquid="a-art" data-tone="light" data-opacity="0.52">
         <a class="nav__mark" href="/prototypes/home-a/">Conceptual Studio</a>
         <ul class="nav__links">
           <li><a href="/prototypes/home-a/" aria-current="page">[Home]</a></li>
@@ -37,26 +31,13 @@ const links = [['Work', '#work'], ['Services', '#'], ['About', '#'], ['Contact',
         </ul>
         <a class="nav__menu" href="#">Menu</a>
       </nav>
-      <Image class="a__art" src={art} alt="" widths={[800, 1600, 2400]} sizes="100vw" loading="eager" />
-      {half ? (
-        <>
-          <div class="a__left">
-            <h1 class="a__h a__h--big">{headline}</h1>
-            <p class="a__p">{sentence}</p>
-          </div>
-          <div class="a__plate plate-glass a__cta" data-liquid="a-art" data-tone="light" data-opacity="0.52">
-            <p class="a__cta-h">Have a project in mind?</p>
-            <Actions />
-          </div>
-        </>
-      ) : (
+      <Image class="a__art" src={quietArt} alt="" widths={[800, 1600, 2400]} sizes="100vw" loading="eager" />
       <div class="a__plate plate-glass" data-liquid="a-art" data-tone="light" data-opacity="0.52">
           <h1 class="a__h">{headline}</h1>
           <p class="a__p">{sentence}</p>
           <Actions />
         </div>
-        )}
-      <!-- Outside the glass: the names straight on the faded foot of the painting (TASTE 2). -->
+        <!-- Outside the glass: the names straight on the faded foot of the painting (TASTE 2). -->
       <div class="a__with">
         <p class="a__with-h">Worked with</p>
         <div class="a__track">
@@ -116,7 +97,7 @@ const links = [['Work', '#work'], ['Services', '#'], ['About', '#'], ['Contact',
 
   /* Hero: the painting is the screen. The plate is centred (Josh, 26 Oct). */
   .a { position: relative; isolation: isolate; min-height: 100svh; padding: 116px var(--margin) 40px; display: grid; grid-template-rows: 1fr auto; }
-  .a__art { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 92%); mask-image: linear-gradient(to bottom, #000 58%, transparent 92%); }
+  .a__art { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 92%); mask-image: linear-gradient(to bottom, #000 58%, transparent 92%); }
   .a__plate { align-self: center; justify-self: center; width: min(640px, 46vw); padding: 44px 44px 40px; display: grid; gap: 22px; }
   .a__h { font-family: var(--display); font-weight: 500; font-size: clamp(34px, 2.9vw, 42px); line-height: 1.06; letter-spacing: -0.02em; text-wrap: balance; }
   .a__p { font-size: 18px; line-height: 1.5; }
@@ -167,25 +148,5 @@ const links = [['Work', '#work'], ['Services', '#'], ['About', '#'], ['Contact',
     .fw__p { font-size: 17px; }
     .fw__cards, .fw__pair { gap: 16px; }
     .fw__pair { grid-template-columns: 1fr; }
-  }
-  /* Quiet: the same painting at 60% strength, cropped so the trees and sky sit behind the card. */
-  .a--quiet .a__art { object-position: 50% 12%; }
-  /* Half: cream on the left with the words, the painting on the right with a small glass CTA over it. */
-  .a--half { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr auto; column-gap: 0; padding-right: 0; }
-  .a--half .a__art { inset: 0 0 0 50%; width: 50%; object-position: 30% 40%; -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent); mask-image: linear-gradient(to bottom, #000 70%, transparent); }
-  .a--half .nav { background: color-mix(in srgb, var(--paper) 80%, transparent); }
-  .a__left { align-self: center; display: grid; gap: 24px; padding-right: 48px; }
-  .a__h--big { font-size: clamp(48px, 5.4vw, 84px); line-height: 0.98; letter-spacing: -0.03em; }
-  .a__left .a__p { font-size: 20px; max-width: 34ch; }
-  .a__cta { grid-column: 2; align-self: end; justify-self: center; width: min(460px, 80%); margin: 0 0 40px; padding: 28px; gap: 16px; }
-  .a__cta-h { font-size: 20px; font-weight: 600; }
-  .a--half .a__with { grid-column: 1 / -1; padding-right: var(--margin); }
-  @media (max-width: 759.98px) {
-    .a--half { grid-template-columns: 1fr; padding-right: var(--margin); }
-    .a--half .a__art { inset: auto 0 0 0; width: 100%; height: 52%; }
-    .a__left { padding: 0 0 24px; align-self: start; }
-    .a__h--big { font-size: 44px; }
-    .a__left .a__p { font-size: 17px; }
-    .a__cta { grid-column: 1; width: 100%; margin: 0 0 24px; }
   }
 </style>
