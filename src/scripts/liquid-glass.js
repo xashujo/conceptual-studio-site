@@ -1,0 +1,292 @@
+/*
+ * Liquid glass panel: WebGL refraction of a known background <img>.
+ * Adapted from liquid-glass-js by Armagan Amcalar (MIT). See liquid-glass.LICENSE.
+ *
+ * Changes from the original: the texture is a same-origin <img> drawn with
+ * object-fit: cover (no html2canvas page snapshot); refraction is measured in
+ * CSS px and scaled with the panel; the sampled-gradient pass is gone; the blur
+ * is capped at a radius of 4 taps on a mipmapped texture; paper/ink tint with a
+ * rim highlight; premultiplied output; renders on demand, never in a loop.
+ *
+ * mountLiquidGlass(panel, { image, tone, opacity }) -> Promise<{ render, destroy } | null>
+ * Resolves null (CSS glass untouched) when WebGL, the shader or the image fail,
+ * or under prefers-contrast: more / prefers-reduced-transparency: reduce.
+ */
+
+const VS = `attribute vec2 a_pos;
+varying vec2 v_uv;
+void main() {
+  v_uv = vec2(a_pos.x, -a_pos.y) * 0.5 + 0.5;
+  gl_Position = vec4(a_pos, 0.0, 1.0);
+}`;
+
+const FS = `precision mediump float;
+uniform sampler2D u_image;
+uniform vec2 u_size;        // panel, CSS px
+uniform float u_radius;     // CSS px
+uniform float u_dpr;
+uniform vec2 u_uvOrigin;    // image UV under the panel's top-left corner
+uniform vec2 u_pxToUv;      // image UV per CSS px
+uniform float u_scale;      // refraction px per unit (grows with panel size)
+uniform float u_dscale;     // falloff distance scale (shrinks with panel size)
+uniform float u_blurPx;     // blur tap spacing, CSS px
+uniform float u_lodBias;
+uniform float u_brightness;
+uniform float u_saturate;
+uniform vec3 u_tint;
+uniform float u_tintOpacity;
+uniform float u_dark;
+varying vec2 v_uv;
+
+// Original liquid-glass-js defaults (warp off, so base intensity is 0).
+const float EDGE_I = 0.01;
+const float RIM_I = 0.05;
+const float BASE_I = 0.0;
+const float EDGE_D = 0.15;
+const float RIM_D = 0.8;
+const float BASE_D = 0.1;
+const float CORNER = 0.02;
+const float RIPPLE = 0.1;
+
+void main() {
+  vec2 p = v_uv * u_size;
+  vec2 c = u_size * 0.5;
+  float minDim = min(u_size.x, u_size.y);
+
+  // Rounded-rect SDF (covers pill and circle too): < 0 inside.
+  vec2 k = abs(p - c) - (c - u_radius);
+  float sdf = length(max(k, 0.0)) + min(max(k.x, k.y), 0.0) - u_radius;
+  float inside = max(-sdf, 0.0);
+  float d = inside * u_dscale;
+
+  // Normal: the original radial normal, bent toward the true edge normal near the rim.
+  vec2 radial = normalize(v_uv - 0.5 + 1e-5);
+  vec2 e = p - clamp(p, vec2(u_radius), u_size - u_radius);
+  vec2 edgeN = dot(e, e) > 1e-4 ? normalize(e) : radial;
+  vec2 n = normalize(mix(radial, edgeN, clamp(1.0 - inside / max(u_radius, 1.0), 0.0, 1.0)));
+
+  float baseI = 1.0 - exp(-d * BASE_D);
+  float edgeI = exp(-d * EDGE_D);
+  float rimI = exp(-d * RIM_D);
+  float total = baseI * BASE_I + edgeI * EDGE_I + rimI * RIM_I;
+  vec2 prox = min(p, u_size - p);
+  float cornerI = exp(-max(prox.x, prox.y) * u_dscale * 0.3) * CORNER;
+  float ripple = sin(inside / minDim * 25.0) * RIPPLE * rimI;
+  vec2 refr = n * (total + cornerI) + vec2(-n.y, n.x) * ripple;
+  vec2 uv = u_uvOrigin + (p + refr * u_scale) * u_pxToUv;
+
+  // Gaussian blur, radius 4 taps, checkerboard-thinned (mipmaps prefilter the gaps).
+  vec3 acc = vec3(0.0);
+  float wsum = 0.0;
+  vec2 stepUv = u_blurPx * u_pxToUv;
+  for (int i = -4; i <= 4; i++) {
+    for (int j = -4; j <= 4; j++) {
+      float r2 = float(i * i + j * j);
+      if (r2 > 16.0 || mod(float(i + j), 2.0) > 0.5) continue;
+      float w = exp(-r2 / 8.0);
+      acc += texture2D(u_image, uv + vec2(float(i), float(j)) * stepUv, u_lodBias).rgb * w;
+      wsum += w;
+    }
+  }
+  vec3 col = acc / wsum;
+
+  // Match the CSS filter on the painting, then tint toward paper or ink.
+  col *= u_brightness;
+  col = mix(vec3(dot(col, vec3(0.2126, 0.7152, 0.0722))), col, u_saturate);
+  col = mix(col, u_tint, u_tintOpacity);
+
+  // Specular on the top rim, rgb(255 250 240), brighter for iOS 27 (TASTE.md glass spec).
+  // The light comes from the top left (TASTE 4), so the rim is strongest there.
+  float top = max(-n.y, 0.0) * (0.75 + 0.25 * max(-n.x, 0.0));
+  col += vec3(1.0, 0.98, 0.94) * exp(-inside * 0.45) * top * mix(0.30, 0.20, u_dark);
+  col += vec3(1.0, 0.97, 0.92) * exp(-inside * 0.7) * 0.08 * u_dark;
+  // iOS 27's darkened edge: a 1px inner ring, black at 10% (light) or 35% (dark).
+  col = mix(col, vec3(0.0), (1.0 - smoothstep(0.0, 1.0, inside)) * mix(0.10, 0.35, u_dark));
+  col = clamp(col, 0.0, 1.0);
+
+  float aa = 1.0 / u_dpr;
+  float mask = 1.0 - smoothstep(-aa, aa, sdf);
+  gl_FragColor = vec4(col * mask, mask);
+}`;
+
+const UNIFORMS = ['u_image', 'u_size', 'u_radius', 'u_dpr', 'u_uvOrigin', 'u_pxToUv', 'u_scale', 'u_dscale',
+  'u_blurPx', 'u_lodBias', 'u_brightness', 'u_saturate', 'u_tint', 'u_tintOpacity', 'u_dark'];
+
+const TONES = {
+  light: { tint: [241 / 255, 223 / 255, 200 / 255], opacity: 0.48, dark: 0 }, // #F1DFC8, clearer for iOS 27 (tuned)
+  dark: { tint: [20 / 255, 17 / 255, 13 / 255], opacity: 0.62, dark: 1 }, // #14110D, warm (TASTE 9)
+};
+const BLUR_PX = 4; // tap spacing; sigma = 2 taps = 8 CSS px
+const MAX_TEX = 2048;
+
+const media = (q) => window.matchMedia?.(q).matches;
+const filterValue = (filter, name, fallback) => {
+  const m = filter && filter.match(new RegExp(`${name}\\(\\s*([\\d.]+)(%?)\\s*\\)`));
+  return m ? parseFloat(m[1]) / (m[2] ? 100 : 1) : fallback;
+};
+const position = (token, free) => {
+  if (token?.endsWith('%')) return (free * parseFloat(token)) / 100;
+  if (token?.endsWith('px')) return parseFloat(token);
+  return free / 2;
+};
+const radiusPx = (value, width) => (value?.endsWith('%') ? (parseFloat(value) / 100) * width : parseFloat(value) || 0);
+
+function compile(gl) {
+  const shader = (type, src) => {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null;
+  };
+  const vs = shader(gl.VERTEX_SHADER, VS);
+  const fs = shader(gl.FRAGMENT_SHADER, FS);
+  if (!vs || !fs) return null;
+  const prog = gl.createProgram();
+  gl.attachShader(prog, vs);
+  gl.attachShader(prog, fs);
+  gl.bindAttribLocation(prog, 0, 'a_pos');
+  gl.linkProgram(prog);
+  return gl.getProgramParameter(prog, gl.LINK_STATUS) ? prog : null;
+}
+
+export async function mountLiquidGlass(panel, { image, tone = 'light', opacity } = {}) {
+  if (!panel || !image) return null;
+  if (media('(prefers-contrast: more)') || media('(prefers-reduced-transparency: reduce)')) return null;
+  try {
+    await image.decode();
+  } catch {
+    return null;
+  }
+  const nw = image.naturalWidth;
+  const nh = image.naturalHeight;
+  if (!nw || !nh) return null;
+
+  const canvas = document.createElement('canvas');
+  canvas.className = 'lg-canvas';
+  canvas.setAttribute('aria-hidden', 'true');
+  const gl = canvas.getContext('webgl', {
+    alpha: true, premultipliedAlpha: true, preserveDrawingBuffer: false,
+    antialias: false, depth: false, stencil: false,
+  });
+  const prog = gl && compile(gl);
+  if (!prog) return null;
+  gl.useProgram(prog);
+  const u = Object.fromEntries(UNIFORMS.map((name) => [name, gl.getUniformLocation(prog, name)]));
+
+  // One oversized triangle covers the viewport.
+  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(0);
+  gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+
+  // Resample to a power-of-two texture (within MAX_TEXTURE_SIZE) so WebGL1 can mipmap it.
+  const limit = Math.min(gl.getParameter(gl.MAX_TEXTURE_SIZE), MAX_TEX);
+  const pot = (n) => Math.min(limit, 2 ** Math.ceil(Math.log2(n)));
+  const off = document.createElement('canvas');
+  off.width = pot(nw);
+  off.height = pot(nh);
+  const ctx = off.getContext('2d');
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(image, 0, 0, off.width, off.height);
+  gl.bindTexture(gl.TEXTURE_2D, gl.createTexture());
+  try {
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, off);
+  } catch {
+    return null;
+  }
+  gl.generateMipmap(gl.TEXTURE_2D);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.uniform1i(u.u_image, 0);
+  const t = TONES[tone] || TONES.light;
+  gl.uniform3fv(u.u_tint, t.tint);
+  gl.uniform1f(u.u_tintOpacity, opacity ?? t.opacity); // a plate raises its tint until its text reads
+  gl.uniform1f(u.u_dark, t.dark);
+  gl.clearColor(0, 0, 0, 0);
+
+  panel.prepend(canvas);
+  panel.style.isolation = 'isolate'; // keep the z-index:-1 canvas inside the panel once backdrop-filter is removed
+
+  let inView = false;
+  let raf = 0;
+  let drawn = false;
+  let dead = false;
+
+  function render() {
+    raf = 0;
+    if (dead || gl.isContextLost()) return;
+    const pr = canvas.getBoundingClientRect();
+    const ir = image.getBoundingClientRect();
+    if (!pr.width || !pr.height || !ir.width || !ir.height) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = Math.round(pr.width * dpr);
+    const h = Math.round(pr.height * dpr);
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w;
+      canvas.height = h;
+    }
+
+    // object-fit: cover + object-position -> where the painting's pixels sit on screen.
+    const ics = getComputedStyle(image);
+    const s = Math.max(ir.width / nw, ir.height / nh);
+    const rw = nw * s;
+    const rh = nh * s;
+    const [posX, posY] = ics.objectPosition.split(/\s+/);
+    const ox = ir.left + position(posX, ir.width - rw);
+    const oy = ir.top + position(posY, ir.height - rh);
+    const minDim = Math.min(pr.width, pr.height);
+    const radius = Math.min(radiusPx(getComputedStyle(canvas).borderTopLeftRadius, pr.width), minDim / 2);
+
+    gl.viewport(0, 0, w, h);
+    gl.uniform2f(u.u_size, pr.width, pr.height);
+    gl.uniform1f(u.u_radius, radius);
+    gl.uniform1f(u.u_dpr, dpr);
+    gl.uniform2f(u.u_uvOrigin, (pr.left - ox) / rw, (pr.top - oy) / rh);
+    gl.uniform2f(u.u_pxToUv, 1 / rw, 1 / rh);
+    gl.uniform1f(u.u_scale, minDim * 2.4);
+    gl.uniform1f(u.u_dscale, Math.min(1, Math.max(0.25, 120 / minDim)));
+    gl.uniform1f(u.u_blurPx, BLUR_PX);
+    gl.uniform1f(u.u_lodBias, Math.max(0, Math.log2(BLUR_PX * 1.4 * dpr) - 0.5));
+    gl.uniform1f(u.u_brightness, filterValue(ics.filter, 'brightness', 1));
+    gl.uniform1f(u.u_saturate, filterValue(ics.filter, 'saturate', 1));
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    if (!drawn && gl.getError() === gl.NO_ERROR) {
+      drawn = true;
+      panel.classList.add('has-liquid');
+    }
+  }
+
+  const schedule = () => {
+    if (!raf && inView && !dead) raf = requestAnimationFrame(render);
+  };
+  const io = new IntersectionObserver(([entry]) => {
+    inView = entry.isIntersecting;
+    schedule();
+  }, { rootMargin: '120px' });
+  const ro = new ResizeObserver(schedule);
+  io.observe(panel);
+  ro.observe(panel);
+  ro.observe(image);
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule);
+
+  function destroy() {
+    if (dead) return;
+    dead = true;
+    cancelAnimationFrame(raf);
+    io.disconnect();
+    ro.disconnect();
+    window.removeEventListener('scroll', schedule);
+    window.removeEventListener('resize', schedule);
+    panel.classList.remove('has-liquid');
+    panel.style.isolation = '';
+    gl.getExtension('WEBGL_lose_context')?.loseContext();
+    canvas.remove();
+  }
+  canvas.addEventListener('webglcontextlost', destroy); // fall back to the CSS glass
+
+  return { render, destroy };
+}

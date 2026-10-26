@@ -1,16 +1,22 @@
-/* Brief 5.2. The site is light; a section opts into a night chapter with
-   color-scheme: dark, and light-dark() swaps the tokens inside it. */
+/* Brief 5.2, TASTE.md 9 and 13. The site is light; a section opts into a night
+   chapter with class "night", and light-dark() swaps the tokens inside it. */
 :root {
   color-scheme: light;
 
-  --paper: light-dark(#F1DFC8, #000000);
-  --paper-2: light-dark(#E8D3B8, #000000);
+  --paper: light-dark(#F1DFC8, #14110D); /* night is warm black, never #000 */
+  --paper-2: light-dark(#E8D3B8, #221D17);
   --ink: light-dark(#000000, #F1DFC8);
-  --gold: #926E34; /* large text and graphics only, never body text on paper */
+  --ink-2: color-mix(in srgb, var(--ink) 62%, var(--paper)); /* warm secondary text, never a neutral grey */
+  --gold: #926E34; /* large text and graphics only, never body text on paper; same in both */
   --live: #1F9D55; /* availability dot only */
+  --amber: #F1A90F; /* the London clock dot only */
 
   --display: 'Agatho', 'Agatho Fallback', Georgia, serif;
   --text: 'Inter', 'Inter Fallback', system-ui, sans-serif;
+
+  --margin: max(16px, 2.5vw); /* TASTE 18: 36px at 1440 */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1); /* Framer's label slide */
+  --pill: 999px;
 }
 
 .night { color-scheme: dark; }
