@@ -55,19 +55,29 @@ Museum model:
   tagline. Vary sentence length; don't make every line short and
   punchy.
 
-## Home page copy (proposed in copy/home.md, Josh to confirm)
-- "Colleges" is used once on the home page, in the "Who I work with"
-  line. Headlines say "education" or "public institutions" instead.
-- "Who I work with" lists only real client types: further education
-  colleges, adult learning, a language school, a Tokyo tech startup,
-  corporate clients, musicians and artists. No universities, academy
-  trusts or charities until there's work to show for them.
-- Home services section has two lines (brand identity, data
-  visualisation). 3D and motion stays out unless Josh asks for it.
+## Home page copy (copy/home.md)
+- No personal name anywhere on the site. Say "Conceptual Studio";
+  the voice stays "I". (Josh, 26 Oct 2026)
+- Headline: "Brand identity and data visualisation for education and
+  public institutions" (option A). (Josh)
+- 3D and motion is a third service, alongside brand identity and data
+  visualisation. (Josh)
+- Pricing is set per project by scope and client. Day rate £350.
+  Proposed "from" prices: brand identity £2,500, data visualisation
+  £1,200, 3D and motion £1,500. (Josh to confirm)
+- Availability pill says "Taking new projects" with no month, so it
+  doesn't need monthly updates. (Josh)
+- Reply time: within three working days. (Josh)
+- Home testimonial: Alison Arnaud, Principal, Tower Hamlets College,
+  verbatim. Its "the college" doesn't count against the
+  once-per-page rule. (proposed)
+- "Colleges" is used once in my own copy, in the "Who I work with"
+  line. No universities, academy trusts or charities until there's
+  work to show for them. (proposed)
+- How I work: call and brief, design and feedback, revisions and
+  finishing, handover. (Josh)
 - Keep "View project" from the Framer site. Primary action is
-  "Start a project" in the hero and the close.
-- The close speaks to invited quotes ("If you're collecting quotes
-  for a project, I'd be glad to be one of them").
+  "Start a project". (proposed)
 
 ## Cancelled
 - Hero video (brief section 8). The gold flourish is a still, lit
