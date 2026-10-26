@@ -1,0 +1,121 @@
+---
+// Glass review sheet (step 1 of the nav work): the CSS glass alone, over the three grounds it
+// will meet. Hidden like the other prototypes.
+import { Image } from 'astro:assets';
+import Proto from '../../components/prototypes/Proto.astro';
+import PlateCaption from '../../components/PlateCaption.astro';
+import { sentence } from '../../components/prototypes/home';
+const headline = 'Brands & Data, Made Clear'; // DECISIONS, 26 Oct
+import jardin from '../../assets/art/engraved/jardin-quiet.jpg';
+import ranelagh from '../../assets/art/engraved/ranelagh-night.jpg';
+import busShelter from '../../assets/work/oxford-school-of-english/bus-shelter.webp';
+
+const items = ['Work', 'Services', 'About', 'Contact'];
+---
+<Proto title="Glass: review sheet">
+  <main>
+    <header class="wrap top">
+      <h1 class="h2">Glass with refraction</h1>
+      <p class="top__p">Chrome and Edge: nearly clear glass (paper at 38%, warm black at 52% at night), a 1.5px blur, and a lens rim that bends the art behind it, with a slight red and blue split at the edge. Safari and Firefox can't bend the backdrop yet, so they get paper at 56% with an 8px blur. With Increase Contrast on, the glass goes near-opaque with a 2px ink edge.</p>
+    </header>
+
+    <!-- 1. Over a painting -->
+    <h2 class="wrap h2 label">Over a painting</h2>
+    <section class="stage stage--art">
+      <Image class="stage__art" src={jardin} alt="" widths={[800, 1600, 2400]} sizes="100vw" loading="eager" />
+      <div class="bar glass" aria-hidden="true" data-refract>
+        {items.map((i) => <span>{i}</span>)}
+        <span class="btn btn--solid bar__cta">Start a project</span>
+      </div>
+      <div class="plate-spec glass" aria-hidden="true" data-refract>
+        <p class="spec__k">Light glass, 28px radius</p>
+        <p>Ink on paper at 38%. The etching stays sharp in the middle and bends at the rim.</p>
+      </div>
+    </section>
+    <div class="wrap">
+      <PlateCaption title="Le Jardin Chinois (The Chinese Garden), after François Boucher, after 1743" medium="Etching by Jacques Gabriel Huquier. The Met 53.600.1008, CC0. Duotoned, 60% strength" />
+    </div>
+
+    <!-- 2. Over paper, with the page's own type and a work image passing under -->
+    <h2 class="wrap h2 label">Over paper</h2>
+    <section class="stage stage--paper wrap">
+      <div class="paper__under">
+        <p class="paper__h">{headline}</p>
+        <hr class="rule" />
+        <p class="paper__p">{sentence}</p>
+        <Image class="paper__img" src={busShelter} alt="" widths={[600, 1200]} sizes="(min-width: 900px) 40vw, 90vw" />
+      </div>
+      <div class="bar glass" aria-hidden="true" data-refract>
+        {items.map((i) => <span>{i}</span>)}
+        <span class="btn btn--solid bar__cta">Start a project</span>
+      </div>
+      <div class="plate-spec glass" aria-hidden="true" data-refract>
+        <p class="spec__k">Light glass over type</p>
+        <p>The page's own words and a work photo pass under the same glass.</p>
+      </div>
+    </section>
+
+    <!-- 3. Over a black chapter -->
+    <h2 class="wrap h2 label">Over a night chapter</h2>
+    <section class="night">
+      <div class="stage stage--art">
+        <Image class="stage__art" src={ranelagh} alt="" widths={[800, 1600]} sizes="100vw" />
+        <div class="bar glass" aria-hidden="true" data-refract>
+          {items.map((i) => <span>{i}</span>)}
+          <span class="btn btn--solid bar__cta">Start a project</span>
+        </div>
+        <div class="plate-spec glass" aria-hidden="true" data-refract>
+          <p class="spec__k">Dark glass, warm black</p>
+          <p>Paper on #14110D at 52%. The rim catches gold here too.</p>
+        </div>
+      </div>
+      <div class="wrap night__cap">
+        <PlateCaption title="The Chinese Building and Rotunda, Ranelagh Gardens, Chelsea, 1752" medium="Hand-coloured etching by Charles Grignion after Canaletto. Rijksmuseum RP-P-1932-457, CC0. Toned for night" />
+      </div>
+    </section>
+  </main>
+</Proto>
+
+<style>
+  .top { padding-block: 48px 8px; max-width: 760px; box-sizing: content-box; }
+  .top__p { margin-top: 10px; color: var(--ink-2); }
+  .label { padding-block: 48px 16px; }
+
+  .stage { position: relative; height: clamp(520px, 52vw, 760px); overflow: hidden; }
+  .stage__art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+  /* Bar: Tier B dock shape, 60px tall with fully round ends (TASTE glass spec). */
+  .bar {
+    position: absolute; top: 48px; left: 50%; translate: -50% 0;
+    display: flex; align-items: center; gap: 4px;
+    height: 60px; padding: 0 6px 0 22px; border-radius: var(--pill);
+    font-size: 16px; font-weight: 500; white-space: nowrap;
+  }
+  .bar > span:not(.btn) { padding: 0 14px; }
+  .bar__cta { min-height: 48px; margin-left: 10px; font-size: 16px; }
+
+  .plate-spec {
+    position: absolute; left: var(--margin); bottom: 48px;
+    width: min(420px, calc(100% - 2 * var(--margin))); padding: 24px 26px; border-radius: 28px;
+    font-size: 18px; line-height: 1.45;
+  }
+  .spec__k { font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
+
+  /* Paper: the page's own type and a work image run under both pieces of glass. */
+  .stage--paper { height: auto; padding-block: 24px 48px; }
+  .paper__h { font: 500 clamp(40px, 5vw, 72px)/1.04 var(--display); max-width: 15em; margin-bottom: 24px; }
+  .paper__p { margin-top: 20px; max-width: 34em; font-size: 22px; line-height: 1.45; }
+  .paper__img { margin-top: 32px; width: min(560px, 100%); border-radius: 25px; }
+  .stage--paper .bar { top: 120px; }
+  .stage--paper .plate-spec { left: auto; right: var(--margin); bottom: 120px; }
+
+  .night__cap { padding-block: 14px 64px; }
+
+  @media (max-width: 760px) {
+    .bar { left: var(--margin); right: var(--margin); translate: none; justify-content: space-around; gap: 0; padding: 0 8px; font-size: 15px; }
+    .bar > span:not(.btn) { padding: 0 6px; }
+    .bar__cta { display: none; } /* the real phone dock is step 2 */
+    .stage--paper .bar { top: 90px; }
+    .stage--paper .plate-spec { left: var(--margin); bottom: 200px; }
+  }
+</style>

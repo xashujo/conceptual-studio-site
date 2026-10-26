@@ -15,12 +15,12 @@ const media = (q) => window.matchMedia?.(q).matches;
 const radiusPx = (value, width) => (value?.endsWith('%') ? (parseFloat(value) / 100) * width : parseFloat(value) || 0);
 
 // Edge normal in R/G around 128, strongest at the edge, zero from `band` inward.
-function displacementMap(w, h, r) {
+function displacementMap(w, h, r, bandPx) {
   const f = Math.min(1, MAX_MAP / Math.max(w, h));
   const mw = Math.max(1, Math.round(w * f));
   const mh = Math.max(1, Math.round(h * f));
   const rr = r * f;
-  const band = Math.min(Math.max(rr, 16 * f), Math.min(mw, mh) / 2);
+  const band = bandPx * f;
   const hx = mw / 2;
   const hy = mh / 2;
   const canvas = document.createElement('canvas');
@@ -45,7 +45,7 @@ function displacementMap(w, h, r) {
       else ny = 1;
       const sdf = Math.hypot(Math.max(kx, 0), Math.max(ky, 0)) + Math.min(Math.max(kx, ky), 0) - rr;
       const t = Math.min(1, Math.max(0, 1 + sdf / band));
-      const s = t * t;
+      const s = 1 - Math.sqrt(1 - t * t); // convex lens: flat in the middle, bending hard at the rim
       const i = (y * mw + x) * 4;
       px[i] = 128 + Math.sign(dx) * nx * s * 127;
       px[i + 1] = 128 + Math.sign(dy) * ny * s * 127;
@@ -77,13 +77,36 @@ export function mountRefraction(el) {
   map.setAttribute('y', '0');
   map.setAttribute('preserveAspectRatio', 'none');
   map.setAttribute('result', 'map');
-  const disp = document.createElementNS(SVG_NS, 'feDisplacementMap');
-  disp.setAttribute('in', 'SourceGraphic');
-  disp.setAttribute('in2', 'map');
-  disp.setAttribute('scale', '-70'); // stronger bend to match the plates (Josh, 26 Oct)
-  disp.setAttribute('xChannelSelector', 'R');
-  disp.setAttribute('yChannelSelector', 'G');
-  filter.append(map, disp);
+  filter.append(map);
+  // Three bends, one per colour channel, so red and blue split slightly at the rim (iOS 27's
+  // fringe). Negative scale samples inward, so the art behind is magnified towards the edge.
+  const disps = [];
+  const channels = [['r', 1.08, '1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0'], ['g', 1, '0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0'], ['b', 0.92, '0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0']];
+  for (const [c, k, matrix] of channels) {
+    const disp = document.createElementNS(SVG_NS, 'feDisplacementMap');
+    disp.setAttribute('in', 'SourceGraphic');
+    disp.setAttribute('in2', 'map');
+    disp.dataset.k = String(k);
+    disps.push(disp);
+    disp.setAttribute('xChannelSelector', 'R');
+    disp.setAttribute('yChannelSelector', 'G');
+    disp.setAttribute('result', `d${c}`);
+    const pick = document.createElementNS(SVG_NS, 'feColorMatrix');
+    pick.setAttribute('in', `d${c}`);
+    pick.setAttribute('values', matrix);
+    pick.setAttribute('result', c);
+    filter.append(disp, pick);
+  }
+  for (const [a, b, out] of [['r', 'g', 'rg'], ['rg', 'b', 'rgb']]) {
+    const add = document.createElementNS(SVG_NS, 'feComposite');
+    add.setAttribute('in', a);
+    add.setAttribute('in2', b);
+    add.setAttribute('operator', 'arithmetic');
+    add.setAttribute('k2', '1');
+    add.setAttribute('k3', '1');
+    add.setAttribute('result', out);
+    filter.append(add);
+  }
   svg.append(filter);
   document.body.append(svg);
 
@@ -99,7 +122,11 @@ export function mountRefraction(el) {
     key = next;
     map.setAttribute('width', String(w));
     map.setAttribute('height', String(h));
-    map.setAttribute('href', displacementMap(w, h, r));
+    // The lens rim matches the plates (DECISIONS): 20% of the short side, 14 to 48px, and the art
+    // bends up to 1.1x the rim's width at the edge (displacement is scale / 2 at full strength).
+    const band = Math.min(Math.max(0.2 * Math.min(w, h), 14), 48, Math.min(w, h) / 2);
+    disps.forEach((d) => d.setAttribute('scale', String(-2.2 * band * Number(d.dataset.k))));
+    map.setAttribute('href', displacementMap(w, h, r, band));
     el.style.setProperty('--refract', `url(#${id})`);
     el.classList.add('is-refracting');
   }
