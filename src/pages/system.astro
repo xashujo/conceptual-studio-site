@@ -7,16 +7,20 @@ import FooterEngraving from '../components/FooterEngraving.astro';
 import PlateCaption from '../components/PlateCaption.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import Control from '../components/system/Control.astro';
-import archGold from '../assets/art/painted/lairesse-arch-gold.jpg';
-import minervaGold from '../assets/art/painted/lairesse-minerva-gold.jpg';
-import minervaNight from '../assets/art/painted/lairesse-minerva-night.jpg';
+import huntSky from '../assets/art/engraved/hunt-sky-gold.jpg';
+import huntHills from '../assets/art/engraved/hunt-hills-gold.jpg';
+import ranelagh from '../assets/art/engraved/ranelagh-night.jpg';
 import flourish from '../assets/brand/gold-flourish.png';
 import busShelter from '../assets/work/oxford-school-of-english/bus-shelter.webp';
 
 const email = 'joshuamcdonald099@gmail.com'; // as on the Framer contact page; TBC if a studio address replaces it
-const lairesse = {
-  title: 'Allegory of the Sciences (detail), Gerard de Lairesse, c. 1675–83',
-  medium: 'Oil on canvas, grisaille. Rijksmuseum SK-A-4177, CC0. Duotoned',
+const hunt = {
+  title: 'La Chasse Chinoise (The Chinese Hunt), after François Boucher, after 1743',
+  medium: 'Etching and engraving by Gabriel and Jacques Gabriel Huquier. The Met 53.600.1009, CC0. Duotoned',
+};
+const ranelaghPlate = {
+  title: 'The Chinese Building and Rotunda, Ranelagh Gardens, Chelsea, 1752',
+  medium: 'Hand-coloured etching by Charles Grignion after Canaletto. Rijksmuseum RP-P-1932-457, CC0. Toned for night',
 };
 const states = ['Rest', 'Hover', 'Focus', 'Pressed'] as const;
 const rows = [{ label: 'Primary', kind: 'primary' }, { label: 'Pill', kind: 'pill' }, { label: 'Link', kind: 'link' }] as const;
@@ -34,12 +38,11 @@ const nightRows = [{ label: 'Primary on night', kind: 'primary' }, { label: 'Pil
   </head>
   <body>
     <main>
-      <!-- The page's one big Agatho word, standing on a hairline (TASTE 3), over the credits row (19). -->
+      <!-- The page's one big Agatho word over the credits row (TASTE 19). No hairline under it (Josh, 26 Oct). -->
       <header class="open">
-        <div class="open__art" aria-hidden="true"><Image src={archGold} alt="" widths={[800, 1440]} sizes="100vw" loading="eager" /></div>
+        <div class="open__art" aria-hidden="true"><Image src={huntSky} alt="" widths={[800, 1440]} sizes="100vw" loading="eager" /></div>
         <div class="wrap">
         <h1 class="open__word">System</h1>
-        <hr class="rule" />
         <div class="credits">
           <p>Conceptual Studio</p>
           <p>Colour, type, glass and controls, at the size they are used</p>
@@ -62,7 +65,7 @@ const nightRows = [{ label: 'Primary on night', kind: 'primary' }, { label: 'Pil
                 <div>
                   <p class="sw__text sw__text--2">Secondary text is 62% ink, 5.6:1.</p>
                   <hr class="rule sw__rule" />
-                  <p class="sw__text sw__text--2">The hairline is 1px ink. On a page it runs margin to margin, like the one under System.</p>
+                  <p class="sw__text sw__text--2">The hairline is 1px ink. On a page it runs margin to margin, like the one in the project card.</p>
                 </div>
               </div>
               <p class="sw__label"><b>Paper #F1DFC8</b><span>The ground. Black text at 16.1:1</span></p>
@@ -118,10 +121,10 @@ const nightRows = [{ label: 'Primary on night', kind: 'primary' }, { label: 'Pil
 
       <!-- A threshold: one painted detail, duotoned gold on paper and faded into the page. Light plate glass in its quiet part. -->
       <section class="art" aria-labelledby="painting">
-        <h2 class="h2 wrap art__h" id="painting">Painting and glass</h2>
+        <h2 class="h2 wrap art__h" id="painting">Chinoiserie and glass</h2>
         <figure class="art__fig">
           <div class="art__frame" id="art-gold">
-            <Image class="art__img" src={minervaGold} alt="Detail of a grisaille painting: the head of Minerva in a plumed helmet against a cracked marble niche, toned in gold on cream" widths={[800, 1100]} sizes="100vw" />
+            <Image class="art__img" src={huntHills} alt="Detail of an 18th-century chinoiserie print: a pavilion, an archer and a figure under tall trees, with hills and open sky, in gold on cream" widths={[800, 1600]} sizes="100vw" />
             <div class="plate-glass art__plate" data-liquid="art-gold" data-tone="light">
               <h3 class="plate__h">Tell me about your project</h3>
               <p>A short call is the quickest way to find out if I'm the right fit.</p>
@@ -130,7 +133,7 @@ const nightRows = [{ label: 'Primary on night', kind: 'primary' }, { label: 'Pil
               </div>
             </div>
           </div>
-          <div class="wrap"><PlateCaption {...lairesse} /></div>
+          <div class="wrap"><PlateCaption {...hunt} /></div>
         </figure>
       </section>
 
@@ -161,7 +164,7 @@ const nightRows = [{ label: 'Primary on night', kind: 'primary' }, { label: 'Pil
           <h2 class="h2 wrap art__h" id="glass-night">Glass over black</h2>
           <figure class="art__fig">
             <div class="art__frame" id="art-night">
-              <Image class="art__img" src={minervaNight} alt="The same detail of Minerva, toned in cream and gold on warm black" widths={[800, 1100]} sizes="100vw" />
+              <Image class="art__img" src={ranelagh} alt="The Chinese pavilion on the canal at Ranelagh Gardens, with the Rotunda behind it, its etched lines in gold on warm black" widths={[800, 1600]} sizes="100vw" />
               <div class="plate-glass art__plate" data-liquid="art-night" data-tone="dark">
                 <h3 class="plate__h">Start a project</h3>
                 <p>Send me the brief, or just the problem. I'll come back with questions.</p>
@@ -178,7 +181,7 @@ const nightRows = [{ label: 'Primary on night', kind: 'primary' }, { label: 'Pil
                 <a href="#menu" aria-label="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14M5 12h14M5 16h14"/></svg></a>
               </nav>
             </div>
-            <div class="wrap"><PlateCaption {...lairesse} medium="Oil on canvas, grisaille. Rijksmuseum SK-A-4177, CC0. Duotoned for night" /></div>
+            <div class="wrap"><PlateCaption {...ranelaghPlate} /></div>
           </figure>
         </section>
       </div>
@@ -270,9 +273,9 @@ const nightRows = [{ label: 'Primary on night', kind: 'primary' }, { label: 'Pil
       .open + .sec { padding-top: 40px; }
       /* The threshold (TASTE 1, 2): a quiet passage of the painting, the word set straight onto it, no scrim. */
       .open__art { position: absolute; z-index: -1; inset: 0; }
-      .open__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 100%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 66%, transparent); mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 66%, transparent); }
-      .open__word { font-family: var(--display); font-weight: 500; font-size: clamp(104px, 27.5vw, 420px); line-height: 0.8; letter-spacing: -0.035em; margin-left: -0.04em; padding-bottom: 0.17em; }
-      .credits { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; padding-top: 14px; font-size: 24px; line-height: 1.3; letter-spacing: -0.01em; }
+      .open__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 100%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 10%, #000 48%, transparent 94%); mask-image: linear-gradient(to bottom, transparent, #000 10%, #000 48%, transparent 94%); }
+      .open__word { font-family: var(--display); font-weight: 500; font-size: clamp(104px, 27.5vw, 420px); line-height: 0.8; letter-spacing: -0.035em; margin-left: -0.04em; padding-bottom: 0.2em; }
+      .credits { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; padding-top: 0; font-size: 24px; line-height: 1.3; letter-spacing: -0.01em; }
       .credits p:nth-child(2) { color: var(--ink-2); }
       .credits p:last-child { justify-self: end; }
       .credits .link { min-height: 0; }
@@ -324,7 +327,8 @@ const nightRows = [{ label: 'Primary on night', kind: 'primary' }, { label: 'Pil
       .obj__img { width: 100%; filter: drop-shadow(28px 40px 36px rgb(0 0 0 / 0.55)); }
       .obj__piece :global(.plate) { margin-top: 56px; }
       .art--night { padding-top: 200px; }
-      .art--night .art__img { object-position: 30% 30%; }
+      .art--night .art__img { object-position: 50% 100%; }
+      .art--night .art__plate { top: 22%; transform: none; }
       .dock { position: absolute; right: calc(var(--margin) + 4vw); bottom: 10%; display: flex; gap: 6px; height: 60px; padding: 6px 12px; border-radius: var(--pill); align-items: center; }
       .dock a { display: grid; place-items: center; width: 52px; height: 48px; border-radius: var(--pill); color: color-mix(in srgb, var(--ink) 55%, transparent); transition: color 120ms ease-out; }
       .dock a:hover { color: var(--ink); }
@@ -358,7 +362,7 @@ const nightRows = [{ label: 'Primary on night', kind: 'primary' }, { label: 'Pil
         .sec { padding-top: 112px; }
         .credits { grid-template-columns: 1fr; gap: 6px; font-size: 20px; }
         .open { padding-block: 96px 96px; }
-        .open__art img { object-position: 32% 100%; }
+        .open__art img { object-position: 78% 100%; }
         .credits p:last-child { justify-self: start; }
         .swatches { grid-template-columns: 1fr; }
         .sw__field { min-height: 240px; }
@@ -369,12 +373,15 @@ const nightRows = [{ label: 'Primary on night', kind: 'primary' }, { label: 'Pil
         .body-spec__text, .body-spec__list { grid-column: 1 / -1; font-size: 18px; }
         .art { padding-top: 112px; }
         .art__frame { height: 560px; min-height: 0; }
-        .art__img { object-position: 58% 30%; }
+        .art__img { object-position: 62% 40%; }
         .art__plate { left: var(--margin); right: var(--margin); width: auto; top: auto; bottom: 12%; transform: none; padding: 22px; }
         .obj { padding-top: 112px; }
                 .obj__piece { width: 100%; }
         .dock { right: auto; left: var(--margin); bottom: auto; top: 13%; }
-        .art--night .art__img { object-position: 62% 30%; }
+        .art--night .art__frame { height: 860px; }
+        .art--night .art__img { object-position: 30% 100%; }
+        .art--night .art__plate { top: auto; bottom: 6%; }
+        .art--night .dock { top: 52%; }
         .states__row { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-inline: 16px; }
         .nightch { margin-top: 112px; padding-bottom: 112px; }
         .nightch > .sec { padding-top: 112px; }
