@@ -326,13 +326,13 @@ const credits = {
   .how { padding-block: 160px 0; display: grid; gap: 48px; }
   .how__head { display: grid; gap: 12px; max-width: 40ch; }
   .how__head p { font-size: 20px; line-height: 1.45; }
-  .how__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; padding-bottom: 8px; }
-  .how__list li { display: grid; align-content: start; gap: 10px; padding-right: 16px; }
-  .how__list li:nth-child(2) { margin-top: 56px; }
-  .how__list li:nth-child(3) { margin-top: 112px; }
-  .how__list li:nth-child(4) { margin-top: 168px; }
+  /* Bento (Josh, 26 Oct): two rows of unequal tiles, wide then narrow, then narrow then wide. Title at the top, text at the foot. */
+  .how__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; }
+  .how__list li { display: flex; flex-direction: column; justify-content: space-between; gap: 48px; min-height: 280px; padding: 32px 32px 36px; border-radius: 28px; background: var(--paper-2); }
+  .how__list li:nth-child(1), .how__list li:nth-child(4) { grid-column: span 7; }
+  .how__list li:nth-child(2), .how__list li:nth-child(3) { grid-column: span 5; }
   .how__t { font-size: 24px; line-height: 1.2; font-weight: 600; letter-spacing: -0.02em; }
-  .how__list p { font-size: 18px; line-height: 1.5; }
+  .how__list p { font-size: 20px; line-height: 1.5; max-width: 40ch; }
 
   /* About: the sentence on the left, the facts on the right. */
   .about { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-block: 160px 160px; }
@@ -372,9 +372,9 @@ const credits = {
     .menu, .proof__quote, .about__facts { grid-column: 1 / -1; }
     .menu { margin-top: 56px; }
     .proof__quote { margin-top: 64px; }
-    .how__list { grid-template-columns: 1fr 1fr; }
-    .how__list li:nth-child(3) { margin-top: 0; }
-    .how__list li:nth-child(4) { margin-top: 56px; }
+    .how__list li:nth-child(1), .how__list li:nth-child(4) { grid-column: span 7; }
+    .how__list li:nth-child(2), .how__list li:nth-child(3) { grid-column: span 5; }
+    .how__list li { min-height: 240px; padding: 28px; }
     .close__h, .close__body { grid-column: 1 / -1; }
     .close__body { margin-top: 32px; }
     .footer__name, .footer__links, .footer__small { grid-column: 1 / -1; text-align: left; }
@@ -413,8 +413,9 @@ const credits = {
     .menu__item--quote { padding: 22px; }
     .proof__names ul { font-size: 17px; }
     .proof__quote p { font-size: 20px; }
-    .how__list { grid-template-columns: 1fr; gap: 32px; }
-    .how__list li, .how__list li:nth-child(n) { margin-top: 0; }
+    .how__list { grid-template-columns: 1fr; gap: 12px; }
+    .how__list li:nth-child(n) { grid-column: auto; min-height: 0; gap: 20px; padding: 24px 22px 26px; border-radius: 26px; }
+    .how__list p { font-size: 17px; }
     .about { padding-block: 120px; }
     .about__lead { font-size: 20px; }
     .about__facts { grid-template-columns: 1fr; gap: 20px; padding-top: 40px; }

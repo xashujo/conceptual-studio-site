@@ -282,8 +282,11 @@ Museum model:
 - Proof: client names grouped Education, then Companies and international,
   beside Alison Arnaud's quote verbatim. "Read the project" is left off until
   it is clear which project the quote is about. [TBC]
-- How I work: a real <ol> stepping down in four columns, no boxes (no rows of
-  identical cards).
+- How I work is a bento (Josh, 26 Oct: he disliked the stepped text): a real
+  <ol> in two rows of filled paper 2 tiles, wide then narrow (7 and 5
+  columns), then narrow then wide, 28px corners, title at the top and text at
+  the foot. One column on phones. Overrides TASTE.md's never-do on bentos for
+  this section only.
 - About: the sentence and four facts. [TBC: a photograph, brief 6.1.]
 - The email address is not shown as text on the page because it carries a
   personal name; the copy button and mailto links use it.
