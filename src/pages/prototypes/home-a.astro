@@ -21,7 +21,7 @@ const crops: Record<string, string> = {
 // From the CMS: clients ticked "Show in Trusted by", and projects ticked "Show on the home page", by position.
 const clients = (await getCollection('clients', (c) => c.data.trustedBy)).map((c) => c.data.name);
 const [lead, ...pair] = (await getCollection('projects', (p) => p.data.featured && !p.data.archive))
-  .sort((a, b) => (a.data.featuredOrder ?? 99) - (b.data.featuredOrder ?? 99))
+  .sort((a, b) => (a.data.featuredOrder ?? 99) - (b.data.featuredOrder ?? 99) || a.data.title.localeCompare(b.data.title))
   .slice(0, 3) // the layout is one large card and a pair
   .map(({ data: p }) => ({
     title: p.title, year: p.year, href: `/work/${p.slug}/`, disciplines: p.disciplines, summary: p.outcome,

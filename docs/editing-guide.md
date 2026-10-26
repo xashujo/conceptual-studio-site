@@ -76,7 +76,7 @@ The home page shows up to three projects: one large card, then a pair.
 4. To take a project off the home page, turn **Show on the home page** off.
 5. Save each project.
 
-If two projects share a number, their order isn't fixed. Give each one its own number.
+If two projects share a number, they go in alphabetical order. Only the first three are shown, so turn off "Show on the home page" for any project that drops out.
 
 ## Check a preview before it goes live
 
