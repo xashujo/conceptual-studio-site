@@ -55,6 +55,20 @@ Museum model:
   tagline. Vary sentence length; don't make every line short and
   punchy.
 
+## Home page copy (proposed in copy/home.md, Josh to confirm)
+- "Colleges" is used once on the home page, in the "Who I work with"
+  line. Headlines say "education" or "public institutions" instead.
+- "Who I work with" lists only real client types: further education
+  colleges, adult learning, a language school, a Tokyo tech startup,
+  corporate clients, musicians and artists. No universities, academy
+  trusts or charities until there's work to show for them.
+- Home services section has two lines (brand identity, data
+  visualisation). 3D and motion stays out unless Josh asks for it.
+- Keep "View project" from the Framer site. Primary action is
+  "Start a project" in the hero and the close.
+- The close speaks to invited quotes ("If you're collecting quotes
+  for a project, I'd be glad to be one of them").
+
 ## Cancelled
 - Hero video (brief section 8). The gold flourish is a still, lit
   brand object.
