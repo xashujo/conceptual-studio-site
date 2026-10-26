@@ -1,0 +1,102 @@
+---
+// /glass/: Layer 1 glass (brief 7.2) over the three grounds it has to survive. A review specimen:
+// not in the nav, not indexed. Delete once the nav is built.
+import '../styles/tokens.css';
+import '../styles/components.css';
+import { Image } from 'astro:assets';
+import etching from '../assets/art/engraved/jardin-quiet.jpg';
+import lemoyne from '../assets/art/engraved/lemoyne-night.jpg';
+
+const grounds = [
+  { id: 'painting', title: 'Over a painting', note: 'Le Jardin Chinois, as on the home page.' },
+  { id: 'paper', title: 'Over paper', note: 'Specimen only: the site never puts glass on flat paper' },
+  { id: 'black', title: 'Over black', note: 'A night chapter: the Lemoyne close, then plain warm black' },
+];
+---
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Glass</title>
+    <link rel="preload" href="/fonts/inter-4-variable.woff2" as="font" type="font/woff2" crossorigin />
+  </head>
+  <body>
+    <main>
+      {grounds.map((g) => (
+        <section class:list={['ground', `ground--${g.id}`, g.id === 'black' && 'night']} aria-labelledby={`t-${g.id}`}>
+          {g.id === 'painting' && <Image class="ground__art" src={etching} alt="" widths={[800, 1600, 2400]} sizes="100vw" loading="eager" />}
+          {g.id === 'black' && <Image class="ground__art ground__art--top" src={lemoyne} alt="" widths={[800, 1600, 2400]} sizes="100vw" loading="eager" />}
+
+          {['lens'].map(() => (
+            <div class="bar glass" data-lens>
+              <span class="bar__mark">Conceptual Studio</span>
+              <ul class="bar__links"><li>Work</li><li>Services</li><li>About</li><li>Contact</li></ul>
+              <span class="btn btn--solid bar__cta">Start a project</span>
+            </div>
+          ))}
+
+          <div class="row">
+            <div class="dock glass" data-lens><ul><li>Work</li><li>Services</li><li>About</li><li>Contact</li></ul></div>
+          </div>
+          <div class="row">
+            <span class="round glass" data-lens aria-hidden="true">↗</span>
+            <span class="round glass" data-lens aria-hidden="true">↓</span>
+            <span class="round glass round--wide" data-lens>Taking new projects</span>
+          </div>
+
+          <p class="plate ground__label"><b id={`t-${g.id}`}>{g.title}</b><span>({g.note})</span></p>
+        </section>
+      ))}
+    </main>
+    <script>
+      import { mountRefraction } from '../scripts/refraction.js';
+      import { mountLiquidGlass } from '../scripts/liquid-glass.js';
+      // Lens glass: Chromium bends the live page (SVG). Firefox and Safari can't, so where the
+      // piece sits wholly over a known painting, the WebGL glass bends that painting instead.
+      // Anywhere else they stay frosted layer 1 glass.
+      document.querySelectorAll<HTMLElement>('[data-lens]').forEach((el) => {
+        if (mountRefraction(el, { lens: true })) return;
+        const image = el.closest('.ground')?.querySelector<HTMLImageElement>('.ground__art');
+        if (!image) return;
+        const a = el.getBoundingClientRect();
+        const b = image.getBoundingClientRect();
+        const solid = image.classList.contains('ground__art--top') ? 0.7 : 1; // the night art fades out below 70%
+        if (a.top < b.top || a.bottom > b.top + b.height * solid || a.left < b.left || a.right > b.right) return;
+        // Clear like the CSS lens: a whisper of tint and a slight blur (tap spacing 1.5px, about 3px sigma).
+        mountLiquidGlass(el, { image, tone: el.closest('.night') ? 'dark' : 'light', opacity: el.closest('.night') ? 0.25 : 0.1, blur: 1.5 });
+      });
+    </script>
+  </body>
+</html>
+
+<style>
+  .ground { position: relative; isolation: isolate; overflow: hidden; min-height: 620px; padding: 48px var(--margin); display: grid; align-content: space-between; gap: 40px; background: var(--paper); color: var(--ink); }
+  .ground__art { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; }
+  .ground--painting .ground__art { object-position: 50% 30%; }
+  .ground__art--top { height: 58%; object-position: 50% 0; mask-image: linear-gradient(#000 70%, transparent); }
+
+  .bar, .dock, .round { position: relative; } /* holds the WebGL canvas */
+  /* Shapes from the glass spec: bars 60px at 28px radius, the dock 60px with round ends. Contents are placeholders until step 2. */
+  .bar { height: 60px; border-radius: 28px; display: flex; align-items: center; gap: 24px; padding: 0 8px 0 24px; }
+  .bar__mark { font-family: var(--display); font-size: 24px; letter-spacing: -0.02em; margin-right: auto; }
+  .bar__links { list-style: none; display: flex; gap: 28px; margin: 0; padding: 0; font-size: 18px; font-weight: 500; }
+  .bar__cta { min-height: 44px; font-size: 16px; }
+  .dock { justify-self: center; height: 60px; border-radius: var(--pill); padding: 0 6px; display: flex; align-items: center; }
+  /* Each label is its own 44px target; 12px each side gives 24px between words and 18px at the ends. */
+  .dock ul { list-style: none; display: flex; margin: 0; padding: 0; font-size: 16px; font-weight: 500; }
+  .dock li { display: grid; place-items: center; min-height: 44px; padding: 0 12px; }
+  .ground__label { margin: 0; }
+  .row { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; }
+  .round { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; font-size: 22px; }
+  .round--wide { width: auto; padding: 0 20px; border-radius: var(--pill); font-size: 16px; font-weight: 500; }
+
+  @media (max-width: 760px) {
+    .ground { min-height: 520px; padding-block: 24px; }
+    .bar { padding-left: 18px; }
+    .bar__mark { font-size: 21px; }
+    .bar__links { display: none; }
+    .dock li { padding: 0 10px; }
+  }
+</style>

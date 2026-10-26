@@ -422,3 +422,109 @@ Museum model:
 - Maps (Strategic Intent, ACL, BSix) are anchored at the top so their own
   headings survive the crop, on /work/ too.
 - To make it live: swap <WorkIndex /> for <WorkIndex bento /> on /work/.
+## Homepage build (26 Oct 2026, branch home)
+- Built at / from Prototype A (the quiet etching). Still for now: no motion,
+  and the glass is the static CSS tier on the nav and the hero plate only (no
+  WebGL). The "Worked with" line is static until the motion pass.
+- The nav sits inside the opening and scrolls away with it, so it can never
+  cover a headline. The scroll dock comes with the motion pass.
+- Featured work on paper: Oxford School of English (full card), then Pandora
+  Forever and KUT Magazine as a pair. The cards are solid paper 2, never glass
+  (brief section 4). The Jardin etching shows only at the chapter opening and
+  fades out behind the first card.
+- The warm black chapter is Strategic Intent (NCC, 2025): the black merger map
+  suits the night ground and it is the core data service. The Ranelagh etching
+  shows the Rotunda above the card, then three charts in a 2:1 grid.
+  [TBC: Josh to confirm this is the case study for the night chapter.]
+- Close and footer are one night chapter. The footer keeps the garden
+  engraving and its fade, re-toned as a lamplit positive (dark lines on dim
+  gold, #14110D to #6B5436). A straight inversion was tried and dropped: it
+  turns the faces black. Footer text in #D9BE91. [TBC: source of the garden
+  engraving for its credit line.]
+- Services are set like a menu (taste skill blueprint): name and "from" price
+  on one line, the time under it. Times follow copy/pricing.md (brand identity
+  from 4 weeks, calendar time), not the 14 working days above. The Oxford
+  student ID card mockup sits under the heading.
+- Proof: client names grouped Education, then Companies and international,
+  beside Alison Arnaud's quote verbatim. "Read the project" is left off until
+  it is clear which project the quote is about. [TBC]
+- How I work is a bento (Josh, 26 Oct: he disliked the stepped text): a real
+  <ol> in two rows of filled paper 2 tiles, wide then narrow (7 and 5
+  columns), then narrow then wide, 28px corners, title at the top and text at
+  the foot. One column on phones. Overrides TASTE.md's never-do on bentos for
+  this section only.
+- About: the sentence and four facts. [TBC: a photograph, brief 6.1.]
+- The email address is not shown as text on the page because it carries a
+  personal name; the copy button and mailto links use it.
+- Plate captions stay 12px. The inspector runs with --allow glass, pill-nav,
+  shadow, gradient, micro-label, hairline, palette-cream (brief section 4),
+  plus small-text (the 12px plate captions section 4 allows) and still-page
+  (no motion yet, by request). Art fades carry taste-skill-ignore.
+- Links to pages not built yet: /work/*, /services/*, /about/.
+- The close has a detail of Lemoyne's Apotheosis of Hercules behind it
+  (Josh, 26 Oct, in place of Ranelagh): Jupiter and the gods under the gold
+  drape, about a 3x crop, toned #14110D to #9E8058 and faded top and bottom,
+  so "Start a project" sits on its dark foot. [TBC: the source of the
+  photograph in INSPO, for the credit line.]
+- No art credits on the home page (Josh, 26 Oct). The etching, Lemoyne and
+  footer engraving captions are removed; the plate captions under the work
+  stay. The art's sources are kept in this file for the record.
+
+## Glass, layer 1 (26 Oct 2026, branch glass)
+- CSS glass, every browser: paper tint 66%, blur 24px, saturate 1.3. This
+  replaces TASTE.md's Tier B values (68%, 18px, 1.6): above 1.3 saturate the
+  paper turns peach, and 24px (2a7589f's bar) is needed to diffuse the
+  etching's lines. [TBC: Josh to approve at step 1 review.]
+- Rim: one 1px warm highlight on the top and left edges (light from the top
+  left), plus a 1px gold darkened edge at 16% so the edge still shows on
+  cream. Lift: a soft shadow falling down and right (3px 10px 28px, -16px).
+- Over black chapters the glass is Paper 2 at night (#221D17) at 72%, one
+  step above the ground so it has a body over plain black. A cream-gold rim
+  replaces the dark edge and shadow, which vanish on black (brief 7.2).
+- Worst-case contrast, worked out for pure black and pure white underneath:
+  ink on light glass 7.0:1 or better, cream on dark glass 5.1:1 or better.
+  Both pass AA without relying on prefers-reduced-transparency (Safari
+  ignores it).
+- Increase contrast: glass becomes 94% opaque, keeps the blur, and gets a
+  2px ink outline drawn inside its edge.
+- Browsers without backdrop-filter get a 92% tint.
+- /glass/ is a review specimen (painting, paper, black). Hidden from search
+  engines and not in the nav. The paper panel only exists for comparison:
+  the site still never puts glass on flat paper. Delete /glass/ once the nav
+  is built.
+- The layer 2 refraction tint (42%) is below AA and gets fixed in step 3.
+- Lens glass (Josh, 26 Oct, from Apple's Liquid Glass "New, universal
+  design" image): nearly clear, the art bends and magnifies through a rim
+  30% of the short side (14px minimum), red bending most and blue least so
+  the rim splits colour, a bright rim top left with a weaker catch bottom
+  right. No paper frosting (Josh, 26 Oct: "looks out of place"): the middle
+  is only slightly blurred (4px in Chromium, about 3px in WebGL) with no
+  tint, feathered into the sharp bent rim. Tint is 8% paper in Chromium and
+  10% in WebGL (25% on night art).
+  [TBC: words on clear glass rely on the art behind being light and soft.
+  Over a dark or busy photo they may fail AA; the nav will need the
+  scroll-edge band (TASTE glass spec) in step 2.]
+- The lens is Chromium only (it needs SVG filters inside backdrop-filter).
+  Safari, Firefox and iPhones get the frosted layer 1 glass. Turned on per
+  element with data-lens; shown next to the frosted glass on /glass/.
+  [TBC: Josh to choose which pieces get the lens: nav, dock, small round
+  buttons, the availability pill.]
+- On the /glass/ page the frosted copies are removed; every piece is lens
+  glass. Lens pieces that can't bend (Firefox or Safari over plain paper or
+  black) are clear too: 18% paper (30% Paper 2 at night), 5px blur.
+- Lens bend is -48 (the edge refraction keeps -70): with the wider rim, -70
+  smeared the etching into ripples. Lens blur 1.5px softens the fine lines.
+- Firefox and Safari: a lens piece that sits wholly over a known painting
+  uses the WebGL glass (liquid-glass.js), which bends that painting in every
+  browser. Anywhere else (over live content, plain paper, plain black) they
+  keep the frosted glass. Checked by forcing the non-Chromium path in
+  Chromium; not yet seen in a real Firefox or Safari.
+- Apple Music's web player (music.apple.com, checked 26 Oct) does not refract:
+  its glass is backdrop-filter saturate(220%) blur(16px) over #F5F5F7 at 55%,
+  a 1px inner stroke (black 5% on light, white 20% on dark) and a shadow,
+  opaque under Increase Contrast. No SVG displacement and no WebGL. So the
+  site's layer 1 glass already matches what Apple ships on the web; the
+  bend is extra.
+- Spacing (Josh, 26 Oct: "a bit too big"): dock labels are 44px targets with
+  12px each side (24px between words, 18px at the ends); round buttons 56px;
+  pill padding 20px; 16px between pieces.
