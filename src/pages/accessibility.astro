@@ -1,0 +1,36 @@
+---
+// Accessibility statement (brief 6.7): the WCAG 2.2 AA target, what's been done, known issues, contact.
+import Page from '../layouts/Page.astro';
+import Opening from '../components/Opening.astro';
+import art from '../assets/art/engraved/hunt-sky-gold.jpg';
+import { art as credits, email, replyTime } from '../lib/site';
+const sections = [
+  { h: 'The target', p: [
+    'I aim for this site to meet the Web Content Accessibility Guidelines (WCAG) 2.2 at level AA.',
+  ] },
+  { h: 'What I\'ve done', p: [
+    'Every page can be used with a keyboard, with a visible focus ring. Text meets AA contrast against its background, including the text on glass. Every image of my work has a description, and the art behind the pages is marked as decoration so screen readers skip it.',
+    'The site follows your device settings. With reduce motion on, nothing slides or blinks. With reduce transparency or increase contrast on, the glass turns solid. Copying my email address is announced to screen readers.',
+  ] },
+  { h: 'Known issues', p: [
+    'On phones, the menu uses a browser feature that versions older than 2024 don\'t support, so it may not open there. Every page is also linked from the footer.',
+    'Automated tests can\'t measure the contrast of text laid over the art and the glass, so I measured it from screenshots instead. The lowest I found was 5.4:1.',
+    'The site has been checked with automated tests and a keyboard. It hasn\'t yet been tested by disabled people or with a range of screen readers. [TBC: date of a full manual audit.]',
+  ] },
+  { h: 'Tell me about a problem', p: [
+    `If something on the site doesn't work for you, email ${email} and say which page and what went wrong. ${replyTime} I'll send you the information in a form that works for you while I fix it.`,
+  ] },
+];
+---
+<Page title="Accessibility" description="The accessibility target for the Conceptual Studio website, what's been done, known issues and how to report a problem.">
+  <Opening word="Accessibility" fit={0.22} art={art} credit={credits.hunt} position="50% 0%" tall={0.18} />
+  <div class="wrap">
+    <p class="lead">Prepared on 26 October 2026.</p>
+  </div>
+  {sections.map((s, i) => (
+    <section class="wrap sec sec--text" aria-labelledby={`a${i}`}>
+      <h2 class="sec__h" id={`a${i}`}>{s.h}</h2>
+      <div class="prose">{s.p.map((t) => <p>{t}</p>)}</div>
+    </section>
+  ))}
+</Page>
