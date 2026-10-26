@@ -278,3 +278,24 @@ Museum model:
 - Review sheet at /prototypes/glass/ (hidden, not indexed).
 - Open for step 2: over body text, faint words still show through the
   bar. The scroll-edge band (TASTE) should handle it.
+
+## Glass, clearer with refraction (26 Oct 2026, branch glass)
+- Josh, after step 1: "too blurry, not enough refraction", pointing at
+  Apple's Liquid Glass Control Centre (art sharp behind the glass, bent
+  at the rim). This brings brief 7.2 layer 2 forward into the glass
+  itself, and replaces the 60 to 70% tint from step 1.
+- Chrome and Edge (refraction on): paper tint 38%, warm black 52% at
+  night, blur 1.5px, saturate 1.2 (1.1 at night). Any blur over 2px wiped
+  out the etching's fine lines, and saturate 1.8 turned the sepia orange.
+- The lens rim matches the plates: 20% of the short side (14 to 48px),
+  convex profile, the art bending up to 1.1x the rim width at the edge,
+  red and blue split by 8%. A rim as wide as half the bar smeared the
+  whole pill.
+- Safari and Firefox (no refraction yet): paper at 56%, blur 8px.
+- Rim: light also catches inside the bottom-right edge, faintly, as on
+  iOS 27. The cast light still comes from the top left.
+- Contrast measured on every specimen against the worst backdrop pixel:
+  4.6:1 or better over art and paper, 6:1 or better at night. Open: light
+  glass over the darkest part of a photo drops to 3.1:1 on phones. Step
+  2's scroll-edge band covers the nav; plates over photos need a heavier
+  tint. [TBC: Josh to choose]

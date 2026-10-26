@@ -15,21 +15,21 @@ const items = ['Work', 'Services', 'About', 'Contact'];
 <Proto title="Glass: review sheet">
   <main>
     <header class="wrap top">
-      <h1 class="h2">Glass, CSS layer only</h1>
-      <p class="top__p">Paper tint 66% (warm black 68% over night chapters), blur 18px, saturate 1.4, a gold rim lit from the top left, and a soft lift down and to the right. With Increase Contrast on, the tint goes to 94% with a 2px ink edge.</p>
+      <h1 class="h2">Glass with refraction</h1>
+      <p class="top__p">Chrome and Edge: nearly clear glass (paper at 38%, warm black at 52% at night), a 1.5px blur, and a lens rim that bends the art behind it, with a slight red and blue split at the edge. Safari and Firefox can't bend the backdrop yet, so they get paper at 56% with an 8px blur. With Increase Contrast on, the glass goes near-opaque with a 2px ink edge.</p>
     </header>
 
     <!-- 1. Over a painting -->
     <h2 class="wrap h2 label">Over a painting</h2>
     <section class="stage stage--art">
       <Image class="stage__art" src={jardin} alt="" widths={[800, 1600, 2400]} sizes="100vw" loading="eager" />
-      <div class="bar glass" aria-hidden="true">
+      <div class="bar glass" aria-hidden="true" data-refract>
         {items.map((i) => <span>{i}</span>)}
         <span class="btn btn--solid bar__cta">Start a project</span>
       </div>
-      <div class="plate-spec glass" aria-hidden="true">
+      <div class="plate-spec glass" aria-hidden="true" data-refract>
         <p class="spec__k">Light glass, 28px radius</p>
-        <p>Ink on paper at 66%. The etching's lines blur into soft gold, so the words stay readable.</p>
+        <p>Ink on paper at 38%. The etching stays sharp in the middle and bends at the rim.</p>
       </div>
     </section>
     <div class="wrap">
@@ -45,11 +45,11 @@ const items = ['Work', 'Services', 'About', 'Contact'];
         <p class="paper__p">{sentence}</p>
         <Image class="paper__img" src={busShelter} alt="" widths={[600, 1200]} sizes="(min-width: 900px) 40vw, 90vw" />
       </div>
-      <div class="bar glass" aria-hidden="true">
+      <div class="bar glass" aria-hidden="true" data-refract>
         {items.map((i) => <span>{i}</span>)}
         <span class="btn btn--solid bar__cta">Start a project</span>
       </div>
-      <div class="plate-spec glass" aria-hidden="true">
+      <div class="plate-spec glass" aria-hidden="true" data-refract>
         <p class="spec__k">Light glass over type</p>
         <p>The page's own words and a work photo pass under the same glass.</p>
       </div>
@@ -60,13 +60,13 @@ const items = ['Work', 'Services', 'About', 'Contact'];
     <section class="night">
       <div class="stage stage--art">
         <Image class="stage__art" src={ranelagh} alt="" widths={[800, 1600]} sizes="100vw" />
-        <div class="bar glass" aria-hidden="true">
+        <div class="bar glass" aria-hidden="true" data-refract>
           {items.map((i) => <span>{i}</span>)}
           <span class="btn btn--solid bar__cta">Start a project</span>
         </div>
-        <div class="plate-spec glass" aria-hidden="true">
+        <div class="plate-spec glass" aria-hidden="true" data-refract>
           <p class="spec__k">Dark glass, warm black</p>
-          <p>Paper on #14110D at 68%. The rim catches gold here too.</p>
+          <p>Paper on #14110D at 52%. The rim catches gold here too.</p>
         </div>
       </div>
       <div class="wrap night__cap">
