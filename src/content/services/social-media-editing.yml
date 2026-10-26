@@ -1,0 +1,17 @@
+name: Social media editing
+slug: social-media-editing
+summary: Short videos cut from your footage, with captions and versions sized for each platform. Single edits, monthly packs or a monthly retainer.
+includes: []
+tiers:
+  - name: Single edit
+    fromPrice: £200
+    timeline: from 3 days
+    includes: One short video cut from your footage, with captions and versions sized for each platform, and one round of changes.
+  - name: Monthly pack
+    fromPrice: £1,200 a month
+    includes: Eight short edits a month, planned together so they look like a set.
+  - name: Monthly retainer
+    fromPrice: £1,800 a month
+    includes: Twelve edits a month, about three a week, at a fixed monthly price, for teams posting every week. Three-month minimum.
+faqs: []
+related: []

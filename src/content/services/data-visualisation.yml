@@ -1,0 +1,19 @@
+name: Data visualisation and reports
+slug: data-visualisation
+summary: Charts, maps and infographics, and the reports they sit in, from annual reports to sustainability reports, drawn from your own figures.
+includes: []
+tiers:
+  - name: Charts and infographics
+    fromPrice: £700
+    timeline: from 1 week
+    includes: The charts your document needs, built from your own figures and supplied as PNG and PDF, ready to drop into your own layout.
+  - name: Charts and full report
+    fromPrice: £1,400
+    timeline: from 2 weeks
+    includes: The charts plus the whole report designed around them, such as an annual, strategy or sustainability report. Supplied as print-ready PDFs for coated and uncoated paper, an accessible PDF and PNGs. Priced for a report of around 16 pages; longer reports are quoted.
+  - name: Maps and recurring reports
+    fromPrice: £2,800
+    timeline: from 4 weeks
+    includes: Custom data maps, like the London borough heat maps, or a report designed as a template you can reuse each year. Quoted per project.
+faqs: []
+related: [src/content/projects/new-city-college-strategic-intent.yml]

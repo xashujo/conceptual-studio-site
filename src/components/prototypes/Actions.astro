@@ -1,12 +1,15 @@
 ---
 // The hero's actions: "Start a project", the availability pill, and a quiet link to the work.
-import { startHref, email } from './home';
+import { getEntry } from 'astro:content';
 interface Props { work?: boolean; }
 const { work = true } = Astro.props;
+// Availability and email come from Site settings in the CMS.
+const { availability, availabilityText, email } = (await getEntry('settings', 'site'))!.data;
+const startHref = `mailto:${email}?subject=New%20project`; // shortcut: no /contact/ page yet, point it there once built
 ---
 <div class="acts">
   <a class="btn btn--solid" href={startHref}><span class="swap"><span>Start a project</span><span aria-hidden="true">Contact me ↗</span></span></a>
-  <a class="avail" href={`mailto:${email}`}><span class="avail__dot" aria-hidden="true"></span><span class="swap"><span>Taking new projects</span><span aria-hidden="true">↗ Email me</span></span></a>
+  {availability && <a class="avail" href={`mailto:${email}`}><span class="avail__dot" aria-hidden="true"></span><span class="swap"><span>{availabilityText}</span><span aria-hidden="true">↗ Email me</span></span></a>}
   {work && <a class="link" href="#work">See the work<span class="arrow" aria-hidden="true">→</span></a>}
 </div>
 <style>
