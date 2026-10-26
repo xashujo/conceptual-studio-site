@@ -1,10 +1,13 @@
 /*
- * Live edge refraction for CSS glass (Chromium only: Safari and Firefox do not
- * render SVG filters inside backdrop-filter).
+ * Edge refraction for CSS glass.
  *
- * mountRefraction(el) -> cleanup function, or null when skipped.
- * Builds a per-element SVG filter (displacement map sized to the element's box
- * and border radius), points --refract at it and adds .is-refracting.
+ * mountRefraction(el, backdrop?) -> cleanup function, or null when skipped.
+ *
+ * With a backdrop (the element the glass sits over), every browser: a copy of the backdrop is
+ * placed inside the glass, lined up with the original, and bent by an SVG filter on the copy.
+ * Firefox and Safari support SVG filters on `filter`; only `backdrop-filter: url()` is
+ * Chromium-only. Adds .has-lens.
+ * Without one, Chromium only: the filter goes on backdrop-filter instead. Adds .is-refracting.
  */
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -57,12 +60,27 @@ function displacementMap(w, h, r, bandPx) {
   return canvas.toDataURL('image/png');
 }
 
-export function mountRefraction(el) {
+const COPIED = ['font', 'color', 'lineHeight', 'letterSpacing', 'wordSpacing', 'whiteSpace', 'textTransform', 'textAlign', 'fontVariantNumeric'];
+
+// The copy of the backdrop that the lens bends: same element, minus any glass on it.
+function makeCopy(backdrop) {
+  const copy = backdrop.cloneNode(true);
+  copy.querySelectorAll('.glass, [id]').forEach((n) => (n.classList.contains('glass') ? n.remove() : n.removeAttribute('id')));
+  copy.removeAttribute('id');
+  copy.querySelectorAll('img').forEach((img) => (img.loading = 'eager'));
+  copy.classList.add('glass__copy');
+  copy.setAttribute('aria-hidden', 'true');
+  copy.inert = true;
+  const cs = getComputedStyle(backdrop); // text inside the glass is styled differently, so carry the backdrop's own
+  for (const k of COPIED) copy.style[k] = cs[k];
+  return copy;
+}
+
+export function mountRefraction(el, backdrop) {
   const chromium = navigator.userAgentData?.brands?.some((b) => /Chromium|Google Chrome|Microsoft Edge/.test(b.brand));
-  if (!el || !chromium) return null;
+  if (!el || (!backdrop && !chromium)) return null;
   if (media('(prefers-contrast: more)') || media('(prefers-reduced-transparency: reduce)')) return null;
 
-  const id = `cs-refract-${++uid}`;
   const svg = document.createElementNS(SVG_NS, 'svg');
   svg.setAttribute('width', '0');
   svg.setAttribute('height', '0');
@@ -70,11 +88,8 @@ export function mountRefraction(el) {
   svg.setAttribute('focusable', 'false');
   svg.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden;pointer-events:none';
   const filter = document.createElementNS(SVG_NS, 'filter');
-  filter.id = id;
   filter.setAttribute('color-interpolation-filters', 'sRGB');
   const map = document.createElementNS(SVG_NS, 'feImage');
-  map.setAttribute('x', '0');
-  map.setAttribute('y', '0');
   map.setAttribute('preserveAspectRatio', 'none');
   map.setAttribute('result', 'map');
   filter.append(map);
@@ -110,6 +125,21 @@ export function mountRefraction(el) {
   svg.append(filter);
   document.body.append(svg);
 
+  let lens = null;
+  let copy = null;
+  if (backdrop) {
+    lens = document.createElement('div');
+    lens.className = 'glass__lens';
+    lens.setAttribute('aria-hidden', 'true');
+    copy = makeCopy(backdrop);
+    lens.append(copy);
+    if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
+    el.prepend(lens);
+  } else {
+    filter.setAttribute('x', '0');
+    filter.setAttribute('y', '0');
+  }
+
   let key = '';
   let timer = 0;
   function update() {
@@ -117,18 +147,33 @@ export function mountRefraction(el) {
     const h = el.offsetHeight;
     if (!w || !h) return;
     const r = Math.min(radiusPx(getComputedStyle(el).borderTopLeftRadius, w), w / 2, h / 2);
-    const next = `${w}x${h}r${r}`;
+    let ox = 0;
+    let oy = 0;
+    if (backdrop) {
+      const g = el.getBoundingClientRect();
+      const b = backdrop.getBoundingClientRect();
+      ox = Math.round(g.left - b.left);
+      oy = Math.round(g.top - b.top);
+      Object.assign(copy.style, { left: `${-ox}px`, top: `${-oy}px`, width: `${backdrop.offsetWidth}px`, height: `${backdrop.offsetHeight}px` });
+    }
+    const next = `${w}x${h}r${r}@${ox},${oy}`;
     if (next === key) return;
     key = next;
-    map.setAttribute('width', String(w));
-    map.setAttribute('height', String(h));
     // The lens rim matches the plates (DECISIONS): 20% of the short side, 14 to 48px, and the art
     // bends up to 1.1x the rim's width at the edge (displacement is scale / 2 at full strength).
     const band = Math.min(Math.max(0.2 * Math.min(w, h), 14), 48, Math.min(w, h) / 2);
     disps.forEach((d) => d.setAttribute('scale', String(-2.2 * band * Number(d.dataset.k))));
+    // On the copy, the filter works in the copy's own space: only the glass's patch of it is bent.
+    for (const [n, v] of [['x', ox], ['y', oy], ['width', w], ['height', h]]) {
+      map.setAttribute(n, String(v));
+      if (backdrop) filter.setAttribute(n, String(v));
+    }
+    if (backdrop) filter.setAttribute('filterUnits', 'userSpaceOnUse');
     map.setAttribute('href', displacementMap(w, h, r, band));
-    el.style.setProperty('--refract', `url(#${id})`);
-    el.classList.add('is-refracting');
+    // A fresh id on every change: Safari caches a filter's output by its id.
+    filter.id = `cs-refract-${++uid}`;
+    el.style.setProperty('--refract', `url(#${filter.id})`);
+    el.classList.add(backdrop ? 'has-lens' : 'is-refracting');
   }
   update();
   const ro = new ResizeObserver(() => {
@@ -136,11 +181,13 @@ export function mountRefraction(el) {
     timer = setTimeout(update, 150);
   });
   ro.observe(el);
+  if (backdrop) ro.observe(backdrop);
 
   return () => {
     clearTimeout(timer);
     ro.disconnect();
-    el.classList.remove('is-refracting');
+    el.classList.remove('is-refracting', 'has-lens');
+    lens?.remove();
     el.style.removeProperty('--refract');
     svg.remove();
   };

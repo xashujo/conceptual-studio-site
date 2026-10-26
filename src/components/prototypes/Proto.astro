@@ -20,7 +20,8 @@ const { title } = Astro.props;
     <script>
       import { mountLiquidGlass } from '../../scripts/liquid-glass.js';
       import { mountRefraction } from '../../scripts/refraction.js';
-      document.querySelectorAll<HTMLElement>('[data-refract]').forEach((el) => mountRefraction(el));
+      // The glass bends a copy of the nearest [data-backdrop] it sits over (every browser).
+      document.querySelectorAll<HTMLElement>('[data-refract]').forEach((el) => mountRefraction(el, el.closest<HTMLElement>('[data-backdrop]')));
       // Plate glass samples the art behind it: data-liquid names the element holding that <img>.
       document.querySelectorAll<HTMLElement>('[data-liquid]').forEach((panel) => {
         const image = document.getElementById(panel.dataset.liquid!)?.querySelector('img');

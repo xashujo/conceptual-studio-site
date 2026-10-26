@@ -16,12 +16,12 @@ const items = ['Work', 'Services', 'About', 'Contact'];
   <main>
     <header class="wrap top">
       <h1 class="h2">Glass with refraction</h1>
-      <p class="top__p">Chrome and Edge: nearly clear glass (paper at 38%, warm black at 52% at night), a 1.5px blur, and a lens rim that bends the art behind it, with a slight red and blue split at the edge. Safari and Firefox can't bend the backdrop yet, so they get paper at 56% with an 8px blur. With Increase Contrast on, the glass goes near-opaque with a 2px ink edge.</p>
+      <p class="top__p">Nearly clear glass (paper at 38%, warm black at 52% at night), a 1.5px blur, and a lens rim that bends the art behind it, with a slight red and blue split at the edge. The bend is drawn on a copy of what sits behind the glass, so it works in Chrome, Safari and Firefox. With Increase Contrast or Reduce Transparency on, the glass goes near-opaque and the bend switches off.</p>
     </header>
 
     <!-- 1. Over a painting -->
     <h2 class="wrap h2 label">Over a painting</h2>
-    <section class="stage stage--art">
+    <section class="stage stage--art" data-backdrop>
       <Image class="stage__art" src={jardin} alt="" widths={[800, 1600, 2400]} sizes="100vw" loading="eager" />
       <div class="bar glass" aria-hidden="true" data-refract>
         {items.map((i) => <span>{i}</span>)}
@@ -38,7 +38,7 @@ const items = ['Work', 'Services', 'About', 'Contact'];
 
     <!-- 2. Over paper, with the page's own type and a work image passing under -->
     <h2 class="wrap h2 label">Over paper</h2>
-    <section class="stage stage--paper wrap">
+    <section class="stage stage--paper wrap" data-backdrop>
       <div class="paper__under">
         <p class="paper__h">{headline}</p>
         <hr class="rule" />
@@ -58,7 +58,7 @@ const items = ['Work', 'Services', 'About', 'Contact'];
     <!-- 3. Over a black chapter -->
     <h2 class="wrap h2 label">Over a night chapter</h2>
     <section class="night">
-      <div class="stage stage--art">
+      <div class="stage stage--art" data-backdrop>
         <Image class="stage__art" src={ranelagh} alt="" widths={[800, 1600]} sizes="100vw" />
         <div class="bar glass" aria-hidden="true" data-refract>
           {items.map((i) => <span>{i}</span>)}

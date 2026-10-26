@@ -83,42 +83,56 @@ a { color: inherit; }
 /* Light comes from the top left (4): the rim catches it on the top and left edges, in cream-gold
    not white (11), and the lift falls down and to the right. --tint is the paper share. */
 .glass {
-  --tint: 56%; /* Safari and Firefox, no bend: enough tint for the words over a clearer blur */
+  --tint: 56%; /* no bend (no known backdrop, or an old browser): enough tint over a clearer blur */
+  --rim:
+    inset 0.5px 1px 0.5px rgb(255 250 240 / 0.9),
+    inset -0.5px -1px 0.5px rgb(255 250 240 / 0.4), /* light caught again inside the far edge (iOS 27) */
+    inset 0 0 0 1px color-mix(in srgb, var(--gold) 28%, transparent);
+  --lift: 2px 10px 24px -12px rgb(40 24 8 / 0.24);
+  --lens: blur(1.5px) saturate(1.2) brightness(1.04);
   background: color-mix(in srgb, var(--paper) var(--tint), transparent);
   color: var(--ink);
   /* saturate stays low: at 1.6 the sepia art went orange and read as a card, not a lens. */
   -webkit-backdrop-filter: blur(8px) saturate(1.5) brightness(1.04);
   backdrop-filter: blur(8px) saturate(1.5) brightness(1.04);
-  box-shadow:
-    inset 0.5px 1px 0.5px rgb(255 250 240 / 0.9),
-    inset -0.5px -1px 0.5px rgb(255 250 240 / 0.4), /* light caught again inside the far edge (iOS 27) */
-    inset 0 0 0 1px color-mix(in srgb, var(--gold) 28%, transparent),
-    2px 10px 24px -12px rgb(40 24 8 / 0.24);
+  box-shadow: var(--rim), var(--lift);
 }
 /* Over a night chapter the tint turns warm black: inside .night, or with .is-dark on chrome that
    sits outside it (the nav). color-scheme flips light-dark(), so paper and ink swap. */
 .glass.is-dark { color-scheme: dark; }
 .night .glass, .glass.is-dark {
   --tint: 68%; /* paper text stays above 4.5:1 even over the brightest gold in the etching */
-  box-shadow:
+  --rim:
     inset 0.5px 1px 0.5px rgb(255 248 236 / 0.28),
     inset -0.5px -1px 0.5px rgb(255 248 236 / 0.12),
-    inset 0 0 0 1px color-mix(in srgb, var(--gold) 38%, transparent),
-    2px 12px 32px -14px rgb(0 0 0 / 0.6);
+    inset 0 0 0 1px color-mix(in srgb, var(--gold) 38%, transparent);
+  --lift: 2px 12px 32px -14px rgb(0 0 0 / 0.6);
+  --lens: blur(1.5px) saturate(1.1) brightness(0.85);
 }
-/* Chromium with refraction on (iOS 27, Josh's reference): nearly clear. A blur over 2px wipes out
-   the etching's fine lines, and saturate over 1.2 turns the sepia orange, so both stay low and
-   the lens rim does the work. */
+
+/* Refraction, every browser (iOS 27, Josh's reference): a copy of what sits behind the glass is
+   placed inside it and bent by an SVG filter on the copy (refraction.js). Nearly clear: a blur over
+   2px wipes out the etching's fine lines. The tint sits over the copy; the rim over both. */
+.glass.has-lens {
+  --tint: 38%;
+  isolation: isolate;
+  background: none;
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+  box-shadow: var(--lift);
+}
+.night .glass.has-lens, .glass.is-dark.has-lens { --tint: 52%; }
+.glass.has-lens::after { content: ''; position: absolute; inset: 0; border-radius: inherit; box-shadow: var(--rim); pointer-events: none; }
+.glass__lens { position: absolute; inset: 0; z-index: -1; overflow: hidden; border-radius: inherit; pointer-events: none; }
+.glass__lens::after { content: ''; position: absolute; inset: 0; background: color-mix(in srgb, var(--paper) var(--tint), transparent); }
+.glass__copy { position: absolute !important; margin: 0 !important; filter: var(--refract) var(--lens); }
+
+/* Chromium only, for glass with no known backdrop (the nav, until step 2): bend the live backdrop. */
 .glass.is-refracting {
   --tint: 38%;
-  -webkit-backdrop-filter: var(--refract) blur(1.5px) saturate(1.2) brightness(1.04);
-  backdrop-filter: var(--refract) blur(1.5px) saturate(1.2) brightness(1.04);
+  -webkit-backdrop-filter: var(--refract) var(--lens);
+  backdrop-filter: var(--refract) var(--lens);
 }
-.night .glass.is-refracting, .glass.is-dark.is-refracting {
-  --tint: 52%;
-  -webkit-backdrop-filter: var(--refract) blur(1.5px) saturate(1.1) brightness(0.85);
-  backdrop-filter: var(--refract) blur(1.5px) saturate(1.1) brightness(0.85);
-}
+.night .glass.is-refracting, .glass.is-dark.is-refracting { --tint: 52%; }
 
 /* Tier A, plate glass: the WebGL canvas replaces the backdrop once it has drawn. */
 .plate-glass { position: relative; border-radius: 28px; }
@@ -127,11 +141,13 @@ a { color: inherit; }
 .has-liquid { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; background: transparent !important; }
 
 @media (prefers-reduced-transparency: reduce) {
-  .glass, .glass.is-refracting, .plate-glass:not(.has-liquid) { background: var(--paper); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .glass__lens { display: none; }
+  .glass, .glass.has-lens, .glass.is-refracting, .plate-glass:not(.has-liquid) { background: var(--paper); -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
 /* Increase Contrast: near-opaque, and a 2px ink edge in place of the rim. */
 @media (prefers-contrast: more) {
-  .glass, .glass.is-dark, .glass.is-refracting, .night .glass {
+  .glass__lens, .glass.has-lens::after { display: none; }
+  .glass, .glass.is-dark, .glass.is-refracting, .glass.has-lens, .night .glass {
     --tint: 94%;
     background: color-mix(in srgb, var(--paper) var(--tint), transparent);
     -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px);

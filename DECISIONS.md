@@ -299,3 +299,14 @@ Museum model:
   glass over the darkest part of a photo drops to 3.1:1 on phones. Step
   2's scroll-edge band covers the nav; plates over photos need a heavier
   tint. [TBC: Josh to choose]
+- Refraction now works in every browser (Josh, 26 Oct: "Apple manages it
+  on Firefox"). The bend is drawn on a copy of what sits behind the glass,
+  placed inside it and lined up, with the SVG filter on `filter`, which
+  Firefox and Safari support. Only `backdrop-filter: url()` is
+  Chromium-only. Method from Aave's "Building Glass for the Web".
+- Glass marks what it sits over with `data-backdrop`. Glass with no
+  backdrop (the nav, until step 2) keeps the Chromium-only route.
+- A fresh filter id on every change, because Safari caches filter output
+  by id. Not yet checked on a real iPhone, Safari or Firefox.
+- Open: with glass this clear, black body text behind the bar drops to
+  2.9:1 against the bar's own words. Step 2's scroll-edge band is the fix.
