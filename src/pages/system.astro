@@ -10,6 +10,7 @@ import Control from '../components/system/Control.astro';
 import huntSky from '../assets/art/engraved/hunt-sky-gold.jpg';
 import huntHills from '../assets/art/engraved/hunt-hills-gold.jpg';
 import ranelagh from '../assets/art/engraved/ranelagh-night.jpg';
+import kew from '../assets/art/engraved/kew-night.jpg';
 import flourish from '../assets/brand/gold-flourish.png';
 import busShelter from '../assets/work/oxford-school-of-english/bus-shelter.webp';
 
@@ -17,6 +18,10 @@ const email = 'joshuamcdonald099@gmail.com'; // as on the Framer contact page; T
 const hunt = {
   title: 'La Chasse Chinoise (The Chinese Hunt), after François Boucher, after 1743',
   medium: 'Etching and engraving by Gabriel and Jacques Gabriel Huquier. The Met 53.600.1009, CC0. Duotoned',
+};
+const kewPlate = {
+  title: 'View of the Wilderness at Kew, William Marlow, 1763',
+  medium: 'Watercolour, for Sir William Chambers. The Met 25.19.43, CC0. Toned for night',
 };
 const ranelaghPlate = {
   title: 'The Chinese Building and Rotunda, Ranelagh Gardens, Chelsea, 1752',
@@ -139,16 +144,17 @@ const nightRows = [{ label: 'Primary on night', kind: 'primary' }, { label: 'Pil
 
       <!-- Night chapter: warm black, the work lit from the top left. -->
       <div class="night nightch">
-        <section class="sec wrap" aria-labelledby="night">
-          <div class="grid">
-            <div class="side">
-              <h2 class="h2" id="night">Night</h2>
-              <p class="note">Agatho in paper on warm black. Paper and ink swap; gold does not.</p>
-            </div>
-            <div class="display">
-              <p class="display__big">Data visualisation</p>
-              <p class="display__small">The same 160px, set in paper. Small Inter beside it at 16px, so the scale reads.</p>
-            </div>
+        <!-- Night threshold (TASTE 2): the words sit straight on the dark sky beside the pagoda, no glass, no scrim. -->
+        <section class="kew" aria-labelledby="night">
+          <figure class="kew__fig">
+            <div class="kew__art"><Image src={kew} alt="The Great Pagoda at Kew rising above trees, with a classical temple at the left edge, its lines glowing gold on warm black" widths={[800, 1600]} sizes="100vw" /></div>
+            <div class="wrap"><PlateCaption {...kewPlate} /></div>
+          </figure>
+          <div class="kew__words wrap">
+            <h2 class="h2" id="night">Night</h2>
+            <p class="note">Agatho in paper on warm black. Paper and ink swap; gold does not.</p>
+            <p class="display__big kew__big">Data visualisation</p>
+            <p class="display__small kew__small">The same 160px, set in paper, with 16px Inter beneath it so the scale reads.</p>
           </div>
         </section>
 
@@ -321,6 +327,15 @@ const nightRows = [{ label: 'Primary on night', kind: 'primary' }, { label: 'Pil
       /* Night chapter. */
       .nightch { margin-top: 160px; padding-bottom: 160px; }
       .nightch > .sec { padding-top: 160px; }
+      .nightch > .kew { padding-top: 40px; }
+      .kew { position: relative; isolation: isolate; }
+      .kew__art { position: relative; z-index: -1; height: min(64vw, 920px); min-height: 660px; }
+      .kew__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 60%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 86%, transparent); mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 86%, transparent); }
+      /* The words take the empty sky right of the pagoda (from column 6). */
+      .kew__words { position: absolute; top: 9%; left: 0; right: 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; }
+      .kew__words > * { grid-column: 6 / -1; }
+      .kew__big { margin-top: 48px; }
+      .kew__small { margin-top: 20px; max-width: 34ch; }
       .obj { padding-top: 200px; display: grid; justify-items: center; }
       .obj__h { justify-self: start; margin-bottom: 72px; }
       .obj__piece { width: min(72vw, 1040px); }
@@ -385,6 +400,11 @@ const nightRows = [{ label: 'Primary on night', kind: 'primary' }, { label: 'Pil
         .states__row { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-inline: 16px; }
         .nightch { margin-top: 112px; padding-bottom: 112px; }
         .nightch > .sec { padding-top: 112px; }
+        /* Phones: the words first on plain night, then the pagoda as its own band. */
+        .kew { display: flex; flex-direction: column-reverse; padding-top: 112px; }
+        .kew__words { position: static; display: block; }
+        .kew__art { height: 520px; margin-top: 24px; }
+        .kew__art img { object-position: 30% 60%; }
       }
     </style>
   </body>
