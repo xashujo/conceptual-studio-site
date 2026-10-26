@@ -1,0 +1,74 @@
+---
+// Prototype B, "Work first" (LOEWE's gutterless grid): the offer in one band, then four
+// projects photographed in use, edge to edge, each with its plate caption.
+import { Image } from 'astro:assets';
+import Proto from '../../components/prototypes/Proto.astro';
+import Actions from '../../components/prototypes/Actions.astro';
+import { headline, sentence, clientLine } from '../../components/prototypes/home';
+import oxford from '../../assets/work/oxford-school-of-english/bus-shelter.webp';
+import bsix from '../../assets/work/new-city-college-infographics/02.webp';
+import pandora from '../../assets/work/sherman-poon-pandora-forever/06.webp';
+import kut from '../../assets/work/kut-magazine/04.webp';
+
+const work = [
+  { img: oxford, pos: '50% 40%', href: '/work/oxford-school-of-english/', alt: 'Oxford School of English poster in a bus shelter on an Oxford street, beside a red double-decker bus', title: 'Oxford School of English, 2023', medium: 'Visual identity, on a bus shelter' },
+  { img: bsix, pos: '50% 30%', href: '/work/new-city-college-infographics/', alt: 'Consultation page with a black map of London marking the BSix and New City College campuses', title: 'New City College London, 2024', medium: 'Maps for the BSix merger consultation' },
+  { img: pandora, pos: '50% 35%', href: '/work/sherman-poon-pandora-forever/', alt: 'Sherman Poon waving in front of the video on the Times Square screen in Hong Kong', title: 'Pandora Forever, Sherman Poon, 2023', medium: 'CGI, on the Times Square screen, Hong Kong' },
+  { img: kut, pos: '0% 50%', href: '/work/kut-magazine/', alt: 'A printed KUT Magazine page with a portrait of the artist Kit Sivers in front of drawings', title: 'KUT Magazine, 2023', medium: 'Identity and editorial design, a printed page' },
+];
+---
+<Proto title="Prototype B: Work first">
+  <main>
+    <header class="b wrap">
+      <h1 class="b__h">{headline}</h1>
+      <div class="b__side">
+        <p class="b__p">{sentence}</p>
+        <Actions work={false} />
+      </div>
+      <p class="b__clients"><span>Clients include</span> {clientLine}.</p>
+    </header>
+    <ul class="b__grid" id="work" aria-label="Selected work">
+      {work.map((w) => (
+        <li>
+          <a href={w.href} class="b__item">
+            <Image class="b__img" src={w.img} alt={w.alt} widths={[400, 720, 1000]} sizes="(min-width: 760px) 25vw, 50vw" style={`object-position:${w.pos}`} loading="eager" />
+          </a>
+          <p class="plate b__cap"><b>{w.title}</b><span>({w.medium})</span></p>
+        </li>
+      ))}
+    </ul>
+  </main>
+</Proto>
+
+<style>
+  /* The offer: headline left, the sentence and actions right, client names across the foot of the band. */
+  .b { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; row-gap: 22px; padding-top: 40px; padding-bottom: 28px; align-items: end; }
+  .b__h { grid-column: 1 / span 7; font-family: var(--display); font-weight: 500; font-size: clamp(40px, 3.9vw, 60px); line-height: 1; letter-spacing: -0.025em; text-wrap: balance; }
+  .b__side { grid-column: 9 / -1; display: grid; gap: 20px; }
+  .b__p { font-size: 18px; line-height: 1.5; }
+  .b__clients { grid-column: 1 / -1; font-size: 16px; line-height: 1.5; color: var(--ink-2); padding-top: 14px; border-top: 1px solid var(--ink); }
+  .b__clients span { color: var(--ink); font-weight: 500; }
+  /* Gutterless: the four exhibits touch. Square corners, the work at full colour. */
+  .b__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .b__item { display: block; overflow: hidden; }
+  .b__img { width: 100%; height: min(58svh, 560px); object-fit: cover; transition: transform 700ms var(--ease-out); }
+  .b__item:hover .b__img { transform: scale(1.02); }
+  .b__cap { margin-top: 10px; padding-inline: 14px; }
+  li:first-child .b__cap { padding-left: var(--margin); }
+  @media (max-width: 1099.98px) {
+    .b__h { grid-column: 1 / -1; }
+    .b__side { grid-column: 1 / span 8; }
+  }
+  @media (max-width: 759.98px) {
+    .b { padding-top: 24px; row-gap: 18px; }
+    .b__h { font-size: 31px; line-height: 1.04; }
+    .b__side { grid-column: 1 / -1; gap: 16px; }
+    .b__p { font-size: 17px; }
+    .b__clients { font-size: 15px; }
+    .b__grid { grid-template-columns: 1fr 1fr; }
+    .b__img { height: auto; aspect-ratio: 4 / 5; }
+    .b__cap { padding-inline: 10px; }
+    li:nth-child(odd) .b__cap { padding-left: var(--margin); }
+    li:nth-child(even) .b__cap { padding-right: var(--margin); }
+  }
+</style>

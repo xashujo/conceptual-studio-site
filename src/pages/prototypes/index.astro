@@ -1,0 +1,124 @@
+---
+// /prototypes/: every home prototype side by side, with a verdict on each. Not in the nav, not indexed.
+import Proto from '../../components/prototypes/Proto.astro';
+
+const heroes = [
+  { id: 'a', href: '/prototypes/hero-a/', name: 'A. Painting through glass',
+    taste: 'Strongest on wonder and the glass spec (top-left rim, gold-catching edge), but the plate hides most of the etching and the headline sits in glass, which TASTE 2 avoids.',
+    buyer: 'Probably: everything a buyer needs is in one calm card, though the first impression is "gallery" before "supplier".' },
+  { id: 'b', href: '/prototypes/hero-b/', name: 'B. Work first',
+    taste: 'Best on "my work is the exhibit" and TASTE 7 (signage, a printed consultation, a billboard, a spread), but no art, gold or glass, and four exhibits break TASTE 6.',
+    buyer: 'Most likely: a bus shelter and a college consultation document are proof before they have read a word.' },
+  { id: 'c', href: '/prototypes/hero-c/', name: 'C. Live chart', extra: { href: '/prototypes/shots/hero-c-1440-chart.jpg', label: 'After the tap' },
+    taste: 'Plain, specific and the gold line is on-brand, but there is no painting, glass or flourish, so wonder and preciousness are missing.',
+    buyer: 'Yes for data buyers, who will recognise FE numbers handled well. A brand buyer sees none of the work.' },
+  { id: 'd', href: '/prototypes/hero-d/', name: 'D. Quiet',
+    taste: 'Closest to TASTE\'s "hard test" opening: the flourish lit from the top left, one hairline, the credits row. No work or art on the first screen.',
+    buyer: 'Possibly: it reads as calm and credible, but proof is names only until they scroll.' },
+];
+const works = [
+  { id: 'light', name: 'Light through glass',
+    taste: 'At 18% the etching does not survive the blur, so the cards read as plain cream glass, the "glass on flat paper" TASTE warns against.',
+    buyer: 'Neutral: the cards are clear and the work is crisp. Nobody will notice the effect.' },
+  { id: 'threshold', name: 'Threshold',
+    taste: 'Closest to the museum model: art opens the chapter and fades out. Glass only on the card that sits over it, and the pair stays solid.',
+    buyer: 'Yes: the chapter feels considered and nothing competes with the work.' },
+  { id: 'fixed', name: 'Fixed field',
+    taste: 'The most convincing glass, but art behind every card for the whole section breaks "thresholds only" and "glass on every card".',
+    buyer: 'Likely, though over a long page it starts to feel decorative. It is also the heaviest on phones.' },
+  { id: 'control', name: 'Control',
+    taste: 'Fully within the rules: the Framer card on paper 2, unchanged. It has none of the wonder.',
+    buyer: 'Yes: it is the safest version. It is also the one most like every other portfolio.' },
+];
+---
+<Proto title="Home prototypes">
+  <main class="cmp wrap">
+    <header class="cmp__head">
+      <h1 class="cmp__h">Prototypes</h1>
+      <p class="cmp__intro">The home page's first screen in four versions, then the featured work section in four treatments, at 1440 and 390. Open any picture full size, or the live page.</p>
+    </header>
+
+    <section aria-labelledby="p1">
+      <h2 class="cmp__h2" id="p1">Part 1: the first screen</h2>
+      <ul class="cmp__grid">
+        {heroes.map((h) => (
+          <li class="cmp__item">
+            <h3 class="cmp__name"><a href={h.href}>{h.name}<span class="arrow" aria-hidden="true">→</span></a></h3>
+            <a class="cmp__shot" href={`/prototypes/shots/hero-${h.id}-1440.jpg`}><img src={`/prototypes/shots/hero-${h.id}-1440.jpg`} alt={`${h.name} at 1440 wide`} loading="lazy" width="1200" height="750" /></a>
+            <div class="cmp__phones">
+              <a class="cmp__shot cmp__phone" href={`/prototypes/shots/hero-${h.id}-390.jpg`}><img src={`/prototypes/shots/hero-${h.id}-390.jpg`} alt={`${h.name} on a phone, first two screens`} loading="lazy" width="390" height="1688" /></a>
+              {h.extra && <a class="cmp__shot cmp__phone" href={`/prototypes/shots/hero-c-390-chart.jpg`}><img src="/prototypes/shots/hero-c-390-chart.jpg" alt="C on a phone after tapping Show as a chart" loading="lazy" width="390" height="1688" /></a>}
+            </div>
+            {h.extra && <p class="cmp__more"><a class="link" href={h.extra.href}>{h.extra.label}, at 1440<span class="arrow" aria-hidden="true">→</span></a></p>}
+            <dl class="cmp__v">
+              <dt>TASTE.md</dt><dd>{h.taste}</dd>
+              <dt>Would a college marketing head enquire?</dt><dd>{h.buyer}</dd>
+            </dl>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section aria-labelledby="p2">
+      <h2 class="cmp__h2" id="p2">Part 2: featured work</h2>
+      <ul class="cmp__grid">
+        {works.map((w) => (
+          <li class="cmp__item">
+            <h3 class="cmp__name"><a href={`/prototypes/work/${w.id}/`}>{w.name}<span class="arrow" aria-hidden="true">→</span></a></h3>
+            <a class="cmp__shot" href={`/prototypes/shots/work-${w.id}-1440.jpg`}><img src={`/prototypes/shots/work-${w.id}-1440.jpg`} alt={`${w.name} at 1440 wide, first two screens`} loading="lazy" width="960" height="1200" /></a>
+            <div class="cmp__phones">
+              <a class="cmp__shot cmp__phone" href={`/prototypes/shots/work-${w.id}-390.jpg`}><img src={`/prototypes/shots/work-${w.id}-390.jpg`} alt={`${w.name} on a phone, first two screens`} loading="lazy" width="390" height="1688" /></a>
+            </div>
+            <dl class="cmp__v">
+              <dt>TASTE.md</dt><dd>{w.taste}</dd>
+              <dt>Would a college marketing head enquire?</dt><dd>{w.buyer}</dd>
+            </dl>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="cmp__rec" aria-labelledby="rec">
+      <h2 class="cmp__h2" id="rec">Recommendation</h2>
+      <div class="cmp__rec-body">
+        <p><b>Open with D, and let B's row of work start on the first screen.</b> D gives the flourish, the headline and the credits row. Put B's four exhibits directly under it, with the flourish a little smaller, so the row starts above the fold at 1440 and a buyer sees names and real work before scrolling. That combination isn't built yet. On a phone, the credits row and "Start a project" fit the first screen and the work starts on the second.</p>
+        <p><b>Use Threshold for featured work.</b> The art opens the chapter and fades out, only the large card is glass, and the pair below stays solid. It is the only treatment that follows "art at thresholds only".</p>
+        <p><b>Keep A's glass plate for the close.</b> A single plate over a painting is right for the "Start a project" card at the end of the page, where DECISIONS asks for glass CTA cards.</p>
+        <p><b>Move C's live chart into the data visualisation service.</b> It is good proof for data buyers but too narrow to open the page.</p>
+      </div>
+    </section>
+  </main>
+</Proto>
+
+<style>
+  .cmp { padding-block: 56px 120px; }
+  .cmp__head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; align-items: end; }
+  .cmp__h { grid-column: 1 / span 7; font-family: var(--display); font-weight: 500; font-size: clamp(64px, 11vw, 168px); line-height: 0.85; letter-spacing: -0.035em; }
+  .cmp__intro { grid-column: 9 / -1; font-size: 20px; line-height: 1.45; padding-bottom: 0.5em; }
+  .cmp__h2 { font-size: 24px; line-height: 1.25; font-weight: 600; letter-spacing: -0.01em; margin: 120px 0 28px; }
+  .cmp__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 40px 24px; }
+  .cmp__item { display: grid; gap: 14px; align-content: start; }
+  .cmp__name { font-size: 20px; line-height: 1.3; font-weight: 600; }
+  .cmp__name a { text-decoration: none; }
+  .cmp__name a:hover .arrow { transform: rotate(-45deg); }
+  .cmp__shot { display: block; border-radius: 12px; overflow: hidden; background: var(--paper-2); }
+  .cmp__shot img { width: 100%; height: auto; }
+  .cmp__phones { display: flex; gap: 12px; }
+  .cmp__phone { width: 44%; }
+  .cmp__more { font-size: 16px; }
+  .cmp__v { margin: 4px 0 0; font-size: 16px; line-height: 1.5; display: grid; gap: 6px; }
+  .cmp__v dt { font-weight: 600; margin-top: 8px; }
+  .cmp__v dd { margin: 0; }
+  .cmp__rec-body { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 48px; font-size: 20px; line-height: 1.45; max-width: 1200px; }
+  .cmp__rec b { font-weight: 600; }
+  @media (max-width: 1099.98px) {
+    .cmp__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .cmp__h, .cmp__intro { grid-column: 1 / -1; }
+    .cmp__intro { margin-top: 20px; }
+  }
+  @media (max-width: 759.98px) {
+    .cmp__grid, .cmp__rec-body { grid-template-columns: 1fr; }
+    .cmp__h2 { margin-top: 88px; }
+    .cmp__intro, .cmp__rec-body { font-size: 17px; }
+  }
+</style>

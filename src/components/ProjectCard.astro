@@ -8,10 +8,16 @@ interface Props {
   title: string; year: number; href: string; disciplines: string[]; summary: string;
   image: ImageMetadata; alt: string; caption: { title: string; medium: string };
   position?: string;
+  /** id of the element holding the art behind: the card becomes plate glass over it. */
+  glass?: string;
+  /** half: one of a pair, 5:4 image on desktop. */
+  size?: 'full' | 'half';
+  /** glass tint opacity, when the default reads too flat */
+  tint?: number;
 }
-const { title, year, href, disciplines, summary, image, alt, caption, position = '50% 50%' } = Astro.props;
+const { title, year, href, disciplines, summary, image, alt, caption, position = '50% 50%', glass, size = 'full', tint } = Astro.props;
 ---
-<article class="card">
+<article class:list={['card', { 'plate-glass': glass, 'card--half': size === 'half' }]} data-liquid={glass} data-tone={glass && 'light'} data-opacity={glass && tint}>
   <header class="card__head">
     <h3 class="card__title">{title}</h3>
     <p class="card__year">{year}</p>
@@ -42,6 +48,13 @@ const { title, year, href, disciplines, summary, image, alt, caption, position =
   .card__summary { font-size: 20px; line-height: 30px; color: var(--ink-2); }
   .card__img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 25px; }
   .card__fig :global(.plate) { padding-inline: 12px; }
+  /* As glass (prototypes): CSS frost until the WebGL plate has drawn. */
+  .card.plate-glass:not(.has-liquid) { background: color-mix(in srgb, var(--paper) 62%, transparent); -webkit-backdrop-filter: blur(24px) saturate(1.3); backdrop-filter: blur(24px) saturate(1.3); }
+  .card--half .card__meta { flex-direction: column; align-items: flex-start; }
+  .card--half .card__img { aspect-ratio: 5 / 4; }
+  @media (max-width: 1099.98px) {
+    .card--half .card__title, .card--half .card__year { font-size: 28px; line-height: 32px; letter-spacing: -0.045em; }
+  }
   @media (max-width: 759.98px) {
     .card { --inset: 10px; padding-top: 20px; }
     .card__head { padding-inline: 8px; }
@@ -49,7 +62,7 @@ const { title, year, href, disciplines, summary, image, alt, caption, position =
     .card__rule { margin-inline: 8px; }
     .card__meta { flex-direction: column; align-items: flex-start; padding-inline: 8px; }
     .card__disc, .card__summary { font-size: 17px; line-height: 26px; }
-    .card__img { aspect-ratio: 4 / 5; border-radius: 22px; }
+    .card__img, .card--half .card__img { aspect-ratio: 4 / 5; border-radius: 22px; }
     .card { border-radius: 32px; }
     .card__fig :global(.plate) { padding-inline: 8px; }
   }

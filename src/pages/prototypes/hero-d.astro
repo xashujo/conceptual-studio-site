@@ -1,0 +1,44 @@
+---
+// Prototype D, "Quiet": paper, the gold flourish as a still lit object, the headline large,
+// then the credits row (TASTE 19): what I do, who for, the action.
+import { Image } from 'astro:assets';
+import Proto from '../../components/prototypes/Proto.astro';
+import Actions from '../../components/prototypes/Actions.astro';
+import { headline, sentence, clientLine } from '../../components/prototypes/home';
+import flourish from '../../assets/brand/gold-flourish.png';
+---
+<Proto title="Prototype D: Quiet">
+  <main class="d wrap">
+    <Image class="d__flourish" src={flourish} alt="" widths={[700, 1346]} sizes="(min-width: 760px) 62vw, 100vw" loading="eager" />
+    <h1 class="d__h">{headline}</h1>
+    <div class="d__credits">
+      <div class="d__first"><p>{sentence}</p><a class="link" href="#work">See the work<span class="arrow" aria-hidden="true">→</span></a></div>
+      <p class="d__clients"><span>Clients include</span> {clientLine}.</p>
+      <Actions work={false} />
+    </div>
+    <div id="work"></div>
+  </main>
+</Proto>
+
+<style>
+  .d { min-height: 100svh; display: grid; align-content: center; padding-block: 48px 64px; }
+  /* The flourish: the opening's one centred moment, lit from the top left so it casts down and right. */
+  .d__flourish { justify-self: center; width: min(62vw, 900px); filter: drop-shadow(18px 26px 22px rgb(70 44 12 / 0.28)); margin-bottom: clamp(40px, 6vh, 72px); }
+  .d__h { font-family: var(--display); font-weight: 500; font-size: clamp(40px, 4.9vw, 72px); line-height: 1; letter-spacing: -0.03em; max-width: 19.5em; text-wrap: balance; }
+  /* Credits row: one hairline margin to margin, three columns of 20px Inter under it. */
+  .d__credits { margin-top: clamp(36px, 5vh, 56px); padding-top: 18px; border-top: 1px solid var(--ink); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; font-size: 20px; line-height: 1.45; letter-spacing: -0.01em; }
+  .d__first .link { margin-top: 10px; }
+  .d__clients { color: var(--ink-2); }
+  .d__clients span { color: var(--ink); font-weight: 500; }
+  .d__credits :global(.acts) { justify-content: flex-end; align-content: start; }
+  @media (max-width: 1099.98px) {
+    .d__credits { grid-template-columns: 1fr 1fr; }
+    .d__credits :global(.acts) { grid-column: 1 / -1; justify-content: flex-start; }
+  }
+  @media (max-width: 759.98px) {
+    .d { align-content: start; padding-top: 40px; }
+    .d__flourish { width: 100%; margin-bottom: 32px; filter: drop-shadow(8px 12px 10px rgb(70 44 12 / 0.28)); }
+    .d__h { font-size: 31px; line-height: 1.04; }
+    .d__credits { grid-template-columns: 1fr; gap: 16px; font-size: 17px; margin-top: 28px; }
+  }
+</style>

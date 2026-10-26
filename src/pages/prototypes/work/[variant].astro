@@ -1,0 +1,127 @@
+---
+// Part 2: the featured work section in four treatments. The Framer cards, one large then a
+// pair; the work images stay crisp and in full colour in every version.
+import { Image } from 'astro:assets';
+import Proto from '../../../components/prototypes/Proto.astro';
+import ProjectCard from '../../../components/ProjectCard.astro';
+import PlateCaption from '../../../components/PlateCaption.astro';
+import oxford from '../../../assets/work/oxford-school-of-english/bus-shelter.webp';
+import ncc from '../../../assets/work/new-city-college-strategic-intent/02.webp';
+import pandora from '../../../assets/work/sherman-poon-pandora-forever/06.webp';
+import light from '../../../assets/art/engraved/hunt-hills-18.jpg';
+import threshold from '../../../assets/art/engraved/hunt-sky-threshold.jpg';
+import fixed from '../../../assets/art/engraved/hunt-hills-28.jpg';
+
+const variants = {
+  light: { title: 'Light through glass', art: light },
+  threshold: { title: 'Threshold', art: threshold },
+  fixed: { title: 'Fixed field', art: fixed },
+  control: { title: 'Control', art: undefined },
+} as const;
+type V = keyof typeof variants;
+export function getStaticPaths() {
+  return ['light', 'threshold', 'fixed', 'control'].map((variant) => ({ params: { variant } }));
+}
+const v = Astro.params.variant as V;
+const { title, art } = variants[v];
+// Glass only where art sits behind the card (DECISIONS). In Threshold the art has faded to paper
+// before the pair begins, so the pair stays solid paper 2.
+const big = art ? 'fw-art' : undefined;
+const pair = art && v !== 'threshold' ? 'fw-art' : undefined;
+// Light through glass: a thinner tint so the 18% art reads as tone inside the cards.
+const tint = v === 'light' ? 0.3 : undefined;
+const hunt = { title: 'La Chasse Chinoise (The Chinese Hunt), after François Boucher, after 1743', medium: 'Etching by Gabriel and Jacques Gabriel Huquier. The Met 53.600.1009, CC0. Duotoned' };
+---
+<Proto title={`Featured work: ${title}`}>
+  <main>
+    <section class={`fw fw--${v}`} aria-labelledby="fw-h">
+      {art && (
+        <div class="fw__art" id="fw-art" aria-hidden="true">
+          <Image src={art} alt="" widths={[800, 1600]} sizes="100vw" loading="eager" />
+        </div>
+      )}
+      <header class="fw__head wrap">
+        <h2 class="fw__h" id="fw-h">Featured work</h2>
+        <p class="fw__p">Recent projects, each with a line on where it was used.</p>
+      </header>
+      <div class="fw__cards wrap">
+        <ProjectCard
+          glass={big} tint={tint}
+          title="Oxford School of English" year={2023} href="/work/oxford-school-of-english/"
+          disciplines={['Visual identity', 'Branding']}
+          summary="A new identity for a private English school in Oxford, now a UK-registered trademark."
+          image={oxford} alt="Oxford School of English poster in a bus shelter on an Oxford street, beside a red double-decker bus"
+          caption={{ title: 'Oxford School of English, 2023', medium: 'Visual identity, on a bus shelter poster' }}
+          position="50% 46%"
+        />
+        <div class="fw__pair">
+          <ProjectCard
+            glass={pair} tint={tint} size="half"
+            title="Strategic Intent" year={2025} href="/work/new-city-college-strategic-intent/"
+            disciplines={['Data visualisation', 'Graphic design']}
+            summary="Infographics for New City College's strategic intent briefing, used in its executive merger communications."
+            image={ncc} alt="Black map of east London boroughs showing the colleges that merged to form New City College, with a timeline from 1990 to 2024"
+            caption={{ title: 'Strategic Intent, New City College London, 2025', medium: 'Map and timeline of the college mergers, 1990 to 2024' }}
+            position="0% 50%"
+          />
+          <ProjectCard
+            glass={pair} tint={tint} size="half"
+            title="Pandora Forever" year={2023} href="/work/sherman-poon-pandora-forever/"
+            disciplines={['CGI', '3D animation']}
+            summary="CGI worlds for Sherman Poon's music video, shown on billboards including Times Square in Hong Kong."
+            image={pandora} alt="Sherman Poon waving in front of the video on the Times Square screen in Hong Kong"
+            caption={{ title: 'Pandora Forever, Sherman Poon, 2023', medium: 'CGI, on the Times Square screen, Hong Kong' }}
+            position="50% 42%"
+          />
+        </div>
+        <p class="fw__all"><a class="link" href="/work/">All projects<span class="arrow" aria-hidden="true">→</span></a></p>
+      </div>
+      {art && <div class="wrap fw__credit"><PlateCaption {...hunt} /></div>}
+    </section>
+  </main>
+</Proto>
+
+<style>
+  .fw { position: relative; isolation: isolate; padding-block: 120px 96px; }
+  .fw__head { position: relative; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; align-items: end; margin-bottom: 40px; }
+  .fw__h { grid-column: 1 / span 6; font-family: var(--display); font-weight: 500; font-size: clamp(56px, 7.4vw, 112px); line-height: 0.9; letter-spacing: -0.03em; }
+  .fw__p { grid-column: 9 / -1; font-size: 20px; line-height: 1.45; padding-bottom: 0.4em; }
+  .fw__cards { position: relative; display: grid; gap: 24px; }
+  .fw__pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+  .fw__all { padding-top: 8px; font-size: 20px; }
+  .fw__credit { position: relative; margin-top: 40px; }
+
+  /* The art layer, behind everything in the section. */
+  .fw__art { position: absolute; inset: 0; z-index: -1; overflow: hidden; }
+  .fw__art img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* Light through glass: the art is at 18% and never shown on the page itself, only blurred inside the cards. */
+  .fw--light .fw__art img { opacity: 0; object-position: 50% 40%; }
+
+  /* Threshold: clear at the top, the heading set in its sky, gone to paper by the time the pair begins. */
+  .fw--threshold { padding-top: 0; }
+  .fw--threshold .fw__art { bottom: auto; height: max(118svh, 980px); }
+  .fw--threshold .fw__art img { object-position: 50% 0%; }
+  .fw--threshold .fw__head { padding-top: max(26svh, 200px); }
+  /* The sentence joins the heading in the open sky, off the dense trees on the right (TASTE 2). */
+  .fw--threshold .fw__p { grid-column: 1 / span 5; grid-row: 2; padding-top: 16px; }
+
+  /* Fixed field: the art at 28% holds still for the whole section while the cards scroll over it. */
+  .fw--fixed { padding-top: 0; }
+  .fw--fixed .fw__art { inset: auto; position: sticky; top: 0; height: 100svh; margin-bottom: -100svh; }
+  .fw--fixed .fw__head { padding-top: 120px; }
+
+  @media (max-width: 759.98px) {
+    .fw { padding-block: 88px 72px; }
+    .fw--fixed { padding-top: 0; }
+    .fw--fixed .fw__head { padding-top: 88px; }
+    .fw__head { display: block; margin-bottom: 28px; }
+    .fw__h { font-size: 56px; }
+    .fw__p { margin-top: 14px; font-size: 17px; }
+    .fw__cards, .fw__pair { gap: 16px; }
+    .fw__pair { grid-template-columns: 1fr; }
+    .fw--threshold .fw__art { height: 760px; }
+    .fw--threshold .fw__art img { object-position: 40% 0%; }
+    .fw--threshold .fw__head { padding-top: 220px; }
+  }
+</style>

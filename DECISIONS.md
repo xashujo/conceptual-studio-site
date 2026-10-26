@@ -190,3 +190,54 @@ Museum model:
   a photo of the new sign in place on the shopfront?]
 - Copy email uses joshuamcdonald099@gmail.com, as on the Framer contact
   page. [TBC: a studio address instead?]
+
+## Home prototypes (26 Oct 2026, /prototypes/)
+- Built on main at Josh's request, not on a branch. /prototypes/ and
+  its pages are hidden from search engines, not in the nav and not part
+  of the site. Delete the folder once a direction is chosen.
+- Four first screens (A Painting through glass, B Work first, C Live
+  chart, D Quiet) and four featured work treatments (Light through
+  glass, Threshold, Fixed field, Control), compared side by side on
+  /prototypes/.
+- "Never glass over a headline" is read as never glass laid on top of a
+  headline, so A's headline sits inside its plate. This breaks TASTE 2
+  (words straight onto the painting) on purpose. [TBC: Josh to confirm
+  the reading.]
+- In the featured work tests the Framer cards are the WebGL plate glass,
+  over the Huquier hunt etching. Light and Fixed put glass on every card
+  on purpose, against the TASTE never-do list, so the options can be
+  compared.
+- In Threshold only the large card is glass. The art has faded to paper
+  before the pair begins, so the pair stays solid paper 2 (no glass on
+  flat paper).
+- Art strengths are baked into the image files (18%, 28%, and the
+  threshold fade from the open-sky crop), so the glass samples exactly
+  what the page shows.
+- At 18% (Light through glass) the etching does not survive the blur,
+  and the cards read as plain cream glass, even with the tint lowered
+  to 0.30.
+- A uses the open-sky crop (hunt-sky-gold), not the pavilion crop: the
+  plate needs a quiet passage behind it (TASTE 2).
+- Half-width cards (the pair) use a 5:4 image on desktop and 4:5 on
+  phones, with 28px titles below 1100px.
+- C's dataset: adult (19+) government-funded FE and skills participation
+  in England, apprenticeships included, 2019/20 to 2024/25. Source: DfE,
+  Further education and skills, Explore education statistics. Each year
+  is as first published in its own release (2019/20 from the 2020/21
+  release). [TBC: switch to the latest revised time series before
+  launch.]
+- The decided headline fits two lines at 1440 (44 to 72px Agatho) but
+  needs three lines on a 390 phone at 30 to 31px. [TBC: accept three
+  lines on phones, or write a shorter phone headline.]
+- "Start a project" opens an email until /contact/ exists.
+- Pandora Forever card keeps the old site's wording ("shown on
+  billboards including Times Square in Hong Kong"). [TBC: confirm
+  wording, as brief section 3 asks.]
+- Work images restored from the old build's history: NCC Strategic
+  Intent 02, NCC BSix consultation 02, Sherman Poon 06, KUT 04.
+- The taste skill's lint flags the art fade mask, the credits hairline
+  and the flourish's cast shadow. All three are required by TASTE.md and
+  DECISIONS.md, so they stay.
+- Recommendation (Claude, for Josh to decide): D's opening with B's
+  work row directly under it, Threshold for featured work, A's plate for
+  the closing CTA, C's chart inside the data visualisation service.
