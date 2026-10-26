@@ -60,13 +60,15 @@ Museum model:
   the voice stays "I". (Josh, 26 Oct 2026)
 - Headline: "Brand identity and data visualisation for education and
   public institutions" (option A). (Josh)
-- 3D and motion is a third service, alongside brand identity and data
-  visualisation. (Josh)
+- Three services: brand identity, data visualisation and reports,
+  social media editing. 3D and motion is no longer a service; it
+  stays in the portfolio. Each service has a three-rung pricing
+  ladder (copy/pricing.md). (Josh)
 - Pricing is set per project by scope and client. Day rate £350.
   Each service shows a "from" price and a "from" time, built from
   days x £350: brand identity from £4,900 and 14 days (Josh: a full
-  identity takes at least that long solo), data visualisation from
-  £1,750 and 5 days, 3D and motion from £2,450 and 7 days (proposed).
+  identity takes at least that long solo). Other ladder rungs and
+  times are proposed in copy/pricing.md. (proposed)
 - Availability pill says "Taking new projects" with no month, so it
   doesn't need monthly updates. (Josh)
 - Reply time: within three working days. (Josh)
@@ -78,8 +80,7 @@ Museum model:
   work to show for them. (proposed)
 - "Who I work with" lists colleges, adult learning, a language
   school, a Tokyo tech startup and corporate clients (New York
-  General Group). No "musicians and artists": there's one, and she
-  belongs under 3D and motion (music videos). (Josh)
+  General Group). No "musicians and artists": there's only one. (Josh)
 - How I work: call and brief, design and feedback, revisions and
   finishing, handover. (Josh)
 - Keep "View project" from the Framer site. Primary action is
