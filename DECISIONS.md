@@ -255,3 +255,26 @@ Museum model:
   the trees and sky sit behind the card (Josh chose this "quiet" version
   over full strength and a half-page layout, 26 Oct). Featured work uses
   the same strength, fading to a soft tone behind the lower panes.
+
+## Glass, CSS layer (26 Oct 2026, branch glass)
+- Josh: ignore DECISIONS' limits on where glass may sit for this work
+  (flat paper, over the work, over a headline). Earlier lines saying
+  "never glass on..." no longer bind the nav and glass build.
+- Tier B glass as built: paper tint 66% (Josh asked for 60 to 70%),
+  blur 18px, saturate 1.4, brightness 1.04. Saturate 1.6 from TASTE
+  turned the sepia art orange and made the glass look darker than the
+  paper beside it, so it read as a card, not a lens.
+- Night tint: warm black #14110D at 68%, so paper text stays above
+  4.5:1 even over the brightest gold in the etching.
+- Rim: a 1px gold ring (gold at 28% light, 38% dark) with a cream
+  highlight on the top and left edges, because the light comes from the
+  top left. It replaces the 0.5px cream ring and 1px black edge, which
+  vanished on light grounds.
+- Lift: 2px 10px 24px, warm brown at 24%, falling down and to the right.
+  The old 12px 32px at 35% left a grey smudge under the bar on paper.
+- Chrome outside a night section turns dark with class "is-dark".
+- Increase Contrast: glass goes to 94% tint (near-opaque, not solid)
+  with a 2px ink edge, in light and dark. Reduce Transparency: solid.
+- Review sheet at /prototypes/glass/ (hidden, not indexed).
+- Open for step 2: over body text, faint words still show through the
+  bar. The scroll-edge band (TASTE) should handle it.
