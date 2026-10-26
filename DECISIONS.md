@@ -63,8 +63,10 @@ Museum model:
 - 3D and motion is a third service, alongside brand identity and data
   visualisation. (Josh)
 - Pricing is set per project by scope and client. Day rate £350.
-  Proposed "from" prices: brand identity £2,500, data visualisation
-  £1,200, 3D and motion £1,500. (Josh to confirm)
+  Each service shows a "from" price and a "from" time, built from
+  days x £350: brand identity from £4,900 and 14 days (Josh: a full
+  identity takes at least that long solo), data visualisation from
+  £1,750 and 5 days, 3D and motion from £2,450 and 7 days (proposed).
 - Availability pill says "Taking new projects" with no month, so it
   doesn't need monthly updates. (Josh)
 - Reply time: within three working days. (Josh)

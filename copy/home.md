@@ -1,4 +1,4 @@
-# Home page copy (draft 3)
+# Home page copy (draft 4)
 
 Rules applied: DECISIONS.md, brief sections 1, 3 and 6.1. Plain British English, "I", no em dashes, none of the banned words. No personal name anywhere on the page: the studio is "Conceptual Studio" and the voice is "I".
 
@@ -39,13 +39,16 @@ Link under the section: All projects
 
 Every project is priced on its scope, so these are starting points. You'll get a fixed quote after our first call.
 
-Brand identity, from £2,500
-A logo, colours, type and the rules for using them, so your own team can make new material without coming back to me every time.
+Brand identity
+From £4,900, from 14 days
+A logo, colours, type, mockups and the rules for using them, so your own team can make new material without coming back to me every time.
 
-Data visualisation, from £1,200
+Data visualisation
+From £1,750, from 5 days
 Charts, maps and infographics for annual reports, strategy documents and sustainability reports, drawn from your own figures.
 
-3D and motion, from £1,500
+3D and motion
+From £2,450, from 7 days
 3D visuals and short animations for campaigns, launches and music videos, from a single still to a finished sequence.
 
 Service links: Brand identity prices / Data visualisation prices / 3D and motion prices
