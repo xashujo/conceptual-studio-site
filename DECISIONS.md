@@ -105,4 +105,28 @@ Museum model:
 
 ## Kept from the old build (xashujo/conceptual-studio-site)
 - The footer engraving and its fade.
-- The best glass version from its git history (to be identified).
+- The best glass version from its git history: commit 2a7589f, its phone
+  menu sheet (light liquid glass over the gold engraving). 69b19e3's dark
+  plates are the model for night chapters. Identified 26 Oct; confirm.
+
+## Build setup (26 Oct 2026)
+- The new site replaces main's contents as ordinary commits on top of
+  its history (no force-push), built on the `rebuild` branch first.
+- Astro 7.4.2, static output, no integrations yet.
+- Colour tokens use light-dark(). The site is light; a night chapter
+  is a section with class "night", which switches it to the dark
+  values (paper and ink swap). Gold stays the same in both.
+- Fonts: Agatho Medium as a Latin subset WOFF2 (48 KB), Inter 4
+  variable WOFF2, Latin only (48 KB). font-synthesis: none.
+- Security headers (CSP, HSTS, nosniff, Referrer-Policy,
+  frame-ancestors) live in Cloudflare's _headers file, not a meta tag.
+  The CSP allows only the site itself for now; add Turnstile,
+  Web3Forms, Cal.com, R2 and analytics as each is used.
+- From the old footer, only the garden engraving and its fade were
+  kept. Its old text ("for colleges, schools and public institutions")
+  was dropped because it breaks the positioning rule.
+
+## Glass and taste (26 Oct 2026)
+- Glass is built on dashersw/liquid-glass-js and should match Apple's
+  iOS 27 Liquid Glass as closely as the web allows. Full spec in TASTE.md.
+- TASTE.md holds the taste rules; this file wins where they disagree.
