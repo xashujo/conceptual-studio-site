@@ -255,3 +255,42 @@ Museum model:
   the trees and sky sit behind the card (Josh chose this "quiet" version
   over full strength and a half-page layout, 26 Oct). Featured work uses
   the same strength, fading to a soft tone behind the lower panes.
+
+## About, Contact, small pages and footer (26 Oct 2026, branch pages)
+- Every page opens on duotoned art with prototype A's plate-glass nav over it
+  (Josh: "Add the glass"). Contact adds a plate-glass desk over the hills; the
+  404 uses dark plate glass. The phone menu is a CSS glass sheet over the
+  opening art.
+- The page's name is the big Agatho word, sized to run margin to margin (a
+  measured fit per word, capped at Framer's 509px). Words with a descender
+  (Colophon, Privacy, Accessibility) stand without the hairline, extending the
+  /system/ decision above.
+- Text pages use the hunt-sky crop, not the faint threshold crop: glass over the
+  faint crop read as glass on flat paper.
+- Footer keeps the garden engraving, not brief 5.7's Hollar view of London.
+  Text and links are in #6E5024, the dark end of the gold duotone (5.7:1 on
+  paper), so art and text share one ink (TASTE 15). The logo is the black
+  wordmark with the gold flourish, restored from 2a7589f, because the footer is
+  paper, not black.
+- Company number 15410582 (Companies House, checked 26 Oct). [TBC: registered
+  office. UK law asks for it on the site; Josh to choose which address.]
+- No personal name: the colophon says "Designed and written by Conceptual
+  Studio", overriding brief 6.7's "Josh's name". About names Fou Answer as the
+  Tokyo startup, as the Framer About page does.
+- Contact shows "I reply within three working days" (DECISIONS above), not the
+  brief's one working day. Hours, weekdays 9:00 to 17:00, are from Framer
+  /contact. (proposed: Josh asked for [TBC]; confirm)
+- The enquiry form and call booking aren't built. "Start a project" opens an
+  email. Privacy describes the form and Cloudflare Web Analytics as planned,
+  with [TBC] where unconfirmed.
+- The footer engraving comes from a scan of Boucher's painting (Besançon) whose
+  source isn't recorded. This conflicts with the note above that the paintings
+  have no free-to-use files. [TBC: find the scan's source, or redraw the footer
+  from Huquier's Le Jardin Chinois etching, which is CC0.]
+- 404: a night chapter with the Kew pagoda, words on the sky beside it. Below
+  1100px the words sit on plain night above the pagoda band, so they never
+  cover it. The dark glass nav there sits over plain night. [TBC: accept.]
+- About photo is a placeholder box marked [TBC: photo of Josh], never a render.
+- Accessibility statement known issues are from the 26 Oct checks: axe found no
+  violations on any page at 1440 and 390; glass text contrast measured from
+  screenshots, lowest 5.4:1 against the backdrop.

@@ -1,0 +1,53 @@
+---
+// The designed 404 (brief 6.7): a night chapter. Kew's pagoda at night, the words straight on the
+// dark sky beside it (TASTE 2), dark glass nav, and a way to the work.
+import { Image } from 'astro:assets';
+import Page from '../layouts/Page.astro';
+import Nav from '../components/Nav.astro';
+import PlateCaption from '../components/PlateCaption.astro';
+import kew from '../assets/art/engraved/kew-night.jpg';
+import { art as credits } from '../lib/site';
+---
+<Page title="Page not found" description="This page has moved or never existed." night>
+  <header class="lost" id="open-art">
+    <Nav art="open-art" tone="dark" />
+    <Image class="lost__art" src={kew} alt="" widths={[800, 1600]} sizes="100vw" loading="eager" fetchpriority="high" />
+    <div class="lost__text">
+      <h1 class="lost__h">This page isn't here</h1>
+      <p class="lost__p">It has moved, or it never existed. The work is still where it was.</p>
+      <div class="lost__acts">
+        <a class="btn btn--solid" href="/work/"><span class="swap"><span>See the work</span><span aria-hidden="true">Work ↗</span></span></a>
+        <a class="link" href="/">Home page<span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </header>
+  <div class="wrap lost__credit"><PlateCaption {...credits.kew} /></div>
+</Page>
+
+<style>
+  .lost { position: relative; isolation: isolate; min-height: 100svh; display: grid; align-items: center; padding: 120px var(--margin) 64px; }
+  .lost__art { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; object-position: 20% 100%; }
+  /* The words take the open sky to the right of the pagoda. */
+  .lost__text { justify-self: end; width: min(620px, 46vw); margin-right: 4vw; margin-top: -12vh; display: grid; gap: 24px; }
+  .lost__h { font-family: var(--display); font-weight: 500; font-size: clamp(48px, 6vw, 96px); line-height: 0.98; letter-spacing: -0.03em; text-wrap: balance; }
+  .lost__p { font-size: 20px; line-height: 1.5; max-width: 26em; }
+  .lost__acts { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 20px; padding-top: 6px; }
+  .lost__credit { padding-block: 22px 120px; }
+  .lost__credit :global(.plate) { margin-top: 0; }
+
+  @media (max-width: 1099.98px) {
+    /* Narrow screens: the words first on the night sky, then the pagoda as its own band below
+       (as /system/ does on phones), so no word sits on the pagoda. */
+    .lost { align-items: start; padding-top: 136px; min-height: 1080px; }
+    .lost__art { inset: 300px 0 0; height: calc(100% - 300px); object-position: 24% 100%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 18%); mask-image: linear-gradient(to bottom, transparent, #000 18%); }
+    .lost__text { justify-self: start; width: min(560px, 100%); margin: 0; }
+  }
+  @media (max-width: 759.98px) {
+    .lost { padding-top: 112px; min-height: 900px; }
+    .lost__art { inset: 330px 0 0; height: calc(100% - 330px); object-position: 22% 100%; }
+    .lost__text { gap: 18px; }
+    .lost__h { font-size: 44px; }
+    .lost__p { font-size: 18px; }
+    .lost__credit { padding-bottom: 80px; }
+  }
+</style>

@@ -1,0 +1,76 @@
+---
+// Colophon (brief 6.7): every artwork with its credit and where it hangs, the type, how the site is built.
+import { Image } from 'astro:assets';
+import Page from '../layouts/Page.astro';
+import Opening from '../components/Opening.astro';
+import PlateCaption from '../components/PlateCaption.astro';
+import art from '../assets/art/engraved/hunt-sky-gold.jpg';
+import hunt from '../assets/art/engraved/hunt-hills-gold.jpg';
+import jardin from '../assets/art/engraved/jardin-quiet.jpg';
+import kew from '../assets/art/engraved/kew-night.jpg';
+import ranelagh from '../assets/art/engraved/ranelagh-night.jpg';
+import garden from '../assets/art/engraved/garden.webp';
+import { art as credits } from '../lib/site';
+const works = [
+  { img: garden, credit: credits.garden, where: 'The footer of every page.' },
+  { img: hunt, credit: credits.hunt, where: 'The openings of About, Contact, this page, Privacy and Accessibility.' },
+  { img: jardin, credit: credits.jardin, where: 'The home page.' },
+  { img: kew, credit: credits.kew, where: 'The page-not-found page.' },
+  { img: ranelagh, credit: credits.ranelagh, where: 'The design system page.' },
+];
+---
+<Page title="Colophon" description="The artworks, typefaces and tools behind the Conceptual Studio website, with a credit for each.">
+  <Opening word="Colophon" fit={0.289} art={art} credit={credits.hunt} position="50% 0%" tall={0.18} />
+
+  <section class="wrap sec" aria-labelledby="art-h">
+    <div class="sec__head">
+      <h2 class="sec__h" id="art-h">The art</h2>
+      <p class="sec__p">Old prints and paintings, all out of copyright, toned into the site's gold. My own work is always shown in full colour; the art only frames it.</p>
+    </div>
+    <ul class="works">
+      {works.map((w) => (
+        <li>
+          <figure>
+            <Image src={w.img} alt="" widths={[480, 960]} sizes="(max-width: 760px) 100vw, 30vw" />
+            <PlateCaption {...w.credit} />
+          </figure>
+          <p class="works__where">{w.where}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="wrap sec sec--text" aria-labelledby="type-h">
+    <h2 class="sec__h" id="type-h">Type</h2>
+    <div class="prose">
+      <p>Headings and large words are set in Agatho Medium by Andrii Shevchyk (AndFonts), used under a commercial licence. Everything else is set in Inter by Rasmus Andersson, under the SIL Open Font License.</p>
+    </div>
+  </section>
+
+  <section class="wrap sec sec--text" aria-labelledby="built-h">
+    <h2 class="sec__h" id="built-h">How it's built</h2>
+    <div class="prose">
+      <p>The site is built with Astro and plain CSS, and hosted on Cloudflare Pages. The glass over the art adapts the shader from liquid-glass-js by Armagan Amcalar, under the MIT licence. The fonts are served from this site, so nothing loads from anyone else's.</p>
+      <p>Designed and written by Conceptual Studio.</p>
+    </div>
+  </section>
+</Page>
+
+<style>
+  .sec__head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; margin-bottom: 48px; }
+  .sec__p { grid-column: 7 / span 6; font-size: 20px; line-height: 1.55; }
+  .works { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 56px 24px; }
+  .works img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 25px; }
+  .works__where { margin-top: 8px; font-size: 16px; line-height: 1.5; }
+
+  @media (max-width: 899.98px) {
+    .works { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 759.98px) {
+    .sec__head { grid-template-columns: 1fr; row-gap: 16px; }
+    .sec__p { grid-column: 1; }
+    .sec__p { font-size: 18px; }
+    .works { grid-template-columns: 1fr; gap: 40px; }
+    .works img { border-radius: 22px; }
+  }
+</style>

@@ -1,0 +1,85 @@
+---
+// Shell for the site's pages: head, the page, the footer, and the three small scripts
+// (plate glass, copy email, London clock).
+import '../styles/tokens.css';
+import '../styles/components.css';
+import Footer from '../components/Footer.astro';
+interface Props { title: string; description: string; night?: boolean; }
+const { title, description, night = false } = Astro.props;
+---
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title === 'Conceptual Studio' ? title : `${title} · Conceptual Studio`}</title>
+    <meta name="description" content={description} />
+    <link rel="preload" href="/fonts/agatho-medium-subset.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter-4-variable.woff2" as="font" type="font/woff2" crossorigin />
+  </head>
+  <body>
+    <main class:list={{ night }}><slot /></main>
+    <Footer />
+    <p class="sr" aria-live="polite" data-copy-status></p>
+    <script>
+      import { mountLiquidGlass } from '../scripts/liquid-glass.js';
+      // Plate glass samples the art behind it: data-liquid names the element holding that <img>.
+      document.querySelectorAll<HTMLElement>('[data-liquid]').forEach((panel) => {
+        const image = document.getElementById(panel.dataset.liquid!)?.querySelector('img');
+        const opacity = panel.dataset.opacity ? Number(panel.dataset.opacity) : undefined;
+        mountLiquidGlass(panel, { image, tone: panel.dataset.tone, opacity });
+      });
+
+      // Copy email (TASTE micro-interactions): the label swaps, reverts after 1.55s, announced politely.
+      const status = document.querySelector<HTMLElement>('[data-copy-status]');
+      document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+        const label = btn.querySelector<HTMLElement>('[data-copy-label]')!;
+        const rest = label.textContent;
+        let timer = 0;
+        btn.addEventListener('click', async () => {
+          try { await navigator.clipboard.writeText(btn.dataset.copy!); } catch { window.location.href = `mailto:${btn.dataset.copy}`; return; }
+          label.textContent = 'Copied';
+          btn.classList.add('is-copied');
+          if (status) status.textContent = 'Email address copied';
+          clearTimeout(timer);
+          timer = window.setTimeout(() => { label.textContent = rest; btn.classList.remove('is-copied'); if (status) status.textContent = ''; }, 1550);
+        });
+      });
+
+      // The London clock: hours and minutes, London time, whatever the visitor's own zone.
+      const clocks = document.querySelectorAll<HTMLElement>('[data-clock]');
+      if (clocks.length) {
+        const fmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit' });
+        const tick = () => clocks.forEach((c) => { c.textContent = fmt.format(new Date()); });
+        tick();
+        setInterval(tick, 15000);
+      }
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  main.night { background: var(--paper); color: var(--ink); }
+  /* Running text pages share one measure. */
+  .prose { max-width: 40em; font-size: 20px; line-height: 1.55; }
+  .prose p + p { margin-top: 1em; }
+  .lead { padding-top: 64px; font-size: 24px; line-height: 1.35; letter-spacing: -0.01em; max-width: 32em; }
+  /* Text pages: the heading on the left third, the text from the middle (Colophon, Privacy, Accessibility). */
+  .sec { padding-top: 160px; }
+  .sec__h { grid-column: 1 / span 5; font-size: 40px; line-height: 1.1; font-weight: 700; letter-spacing: -0.05em; }
+  .sec--text { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-top: 120px; }
+  .sec--text .prose { grid-column: 7 / span 6; }
+  @media (max-width: 759.98px) {
+    .lead { padding-top: 48px; font-size: 20px; }
+    .sec { padding-top: 96px; }
+    .sec--text { grid-template-columns: 1fr; row-gap: 16px; padding-top: 72px; }
+    .sec__h, .sec--text .prose { grid-column: 1; }
+    .sec__h { font-size: 32px; }
+    .prose { font-size: 18px; }
+  }
+  .is-copied { background: color-mix(in srgb, var(--ink) 17%, var(--paper)) !important; }
+  .clock { display: inline-flex; align-items: center; gap: 10px; font-variant-numeric: tabular-nums; }
+  .clock__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--amber); flex: none; animation: breathe 6s ease-in-out infinite alternate; }
+  @keyframes breathe { from { opacity: 0.18; } to { opacity: 1; } }
+</style>

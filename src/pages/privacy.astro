@@ -1,0 +1,39 @@
+---
+// Privacy (brief 6.7): what the form collects and who processes it, analytics, how to object.
+import Page from '../layouts/Page.astro';
+import Opening from '../components/Opening.astro';
+import art from '../assets/art/engraved/hunt-sky-gold.jpg';
+import { art as credits, company, email } from '../lib/site';
+const sections = [
+  { h: 'Who is responsible', p: [
+    `${company.name} is responsible for the personal information this site and I collect. Registered in ${company.registeredIn}, company number ${company.number}. Registered office: ${company.office}.`,
+    `Email me about anything on this page at ${email}.`,
+  ] },
+  { h: 'When you email me', p: [
+    'I get your name, email address and whatever you write. I use it to reply, to prepare a quote and, if we work together, to run the project. My email is hosted by Google.',
+    'I keep enquiries for [TBC: how long enquiries are kept], and project records for as long as the law asks me to keep business records.',
+  ] },
+  { h: 'The enquiry form', p: [
+    'The form isn\'t on the site yet. When it is, it will collect your name, email, organisation and project details, and send them to my inbox through Web3Forms, which handles the message for me and nothing else. [TBC: Web3Forms storage and location, checked against its terms before launch.]',
+  ] },
+  { h: 'Analytics and cookies', p: [
+    'The site sets no cookies and doesn\'t follow you to other websites. Visits are counted with Cloudflare Web Analytics, which works without cookies and doesn\'t build a profile of you. [TBC: switched on at launch.] You can block it with any content blocker, or email me to object.',
+    'Cloudflare also hosts the site, so like any web host it handles your IP address to send you the pages.',
+  ] },
+  { h: 'Your rights', p: [
+    'You can ask me what I hold about you, and ask me to correct it, delete it or stop using it. Email me and I\'ll answer within one month. If you\'re unhappy with how I\'ve handled your information, you can complain to the Information Commissioner\'s Office at ico.org.uk.',
+  ] },
+];
+---
+<Page title="Privacy" description="What the Conceptual Studio website collects, who handles it, and how to object.">
+  <Opening word="Privacy" fit={0.366} art={art} credit={credits.hunt} position="50% 0%" tall={0.18} />
+  <div class="wrap">
+    <p class="lead">This site collects as little as it can. Last updated 26 October 2026.</p>
+  </div>
+  {sections.map((s, i) => (
+    <section class="wrap sec sec--text" aria-labelledby={`p${i}`}>
+      <h2 class="sec__h" id={`p${i}`}>{s.h}</h2>
+      <div class="prose">{s.p.map((t) => <p>{t}</p>)}</div>
+    </section>
+  ))}
+</Page>

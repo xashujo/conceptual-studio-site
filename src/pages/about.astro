@@ -1,0 +1,74 @@
+---
+// About (brief 6.5): the story in my voice, a real photo (placeholder until it exists, never a render),
+// the clients, and the work I want. No personal name (DECISIONS). Colleges mentioned once.
+import Page from '../layouts/Page.astro';
+import Opening from '../components/Opening.astro';
+import PlateCaption from '../components/PlateCaption.astro';
+import art from '../assets/art/engraved/hunt-sky-gold.jpg';
+import { art as credits, clients, startHref } from '../lib/site';
+---
+<Page title="About" description="Conceptual Studio is a one-person design practice in London for brand identity and data visualisation. Trained at Kingston School of Art, then lead designer at a Tokyo startup.">
+  <Opening word="About" fit={0.456} art={art} credit={credits.hunt} current="About" position="50% 0%" tall={0.3}>
+    <p>Conceptual Studio</p>
+    <p>Brand identity and data visualisation, from London</p>
+    <a class="btn btn--solid" href={startHref}><span class="swap"><span>Start a project</span><span aria-hidden="true">Email me ↗</span></span></a>
+  </Opening>
+
+  <section class="wrap story" aria-labelledby="story-h">
+    <figure class="story__pic">
+      <div class="story__ph" role="img" aria-label="[TBC: photo of Josh]"><span>[TBC: photo of Josh]</span></div>
+      <PlateCaption title="[TBC: photo of Josh]" medium="Photograph, [TBC: place and year]" />
+    </figure>
+    <div class="story__text">
+      <h2 class="story__h" id="story-h">It's just me</h2>
+      <div class="prose">
+        <p>Conceptual Studio is my design practice in London, and I run it on my own. You talk to the person doing the work, from the first call to the final files.</p>
+        <p>I trained at Kingston School of Art, where I learned identity systems, layout and how to build a design from one idea. After that I was lead designer at Fou Answer, a tech startup in Tokyo, looking after its product and brand in a small team that moved quickly.</p>
+        <p>The studio has been my full-time job since January 2026. Most of what I make is brand identity and data visualisation: logos that end up on buses and station platforms, and reports whose figures have to make sense the first time someone reads them. I also edit short videos for social media.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap want" aria-labelledby="want-h">
+    <h2 class="want__h" id="want-h">The work I want</h2>
+    <div class="prose want__text">
+      <p>I'd like more of what I already do: colleges and public bodies that need an identity their own team can use, or numbers that have to be understood by governors, staff and the public. Companies with the same problem are just as welcome, here or abroad.</p>
+      <p>I'm a good fit if you want one person to take a project from brief to files, and a less good one if you need a large team on call every day.</p>
+    </div>
+  </section>
+
+  <section class="wrap clients" aria-labelledby="clients-h">
+    <h2 class="clients__h" id="clients-h">Who I've worked with</h2>
+    <ul class="clients__list">{clients.map((c) => <li>{c}</li>)}</ul>
+    <p class="clients__more">
+      <a class="link" href="/work/">See the work<span class="arrow" aria-hidden="true">→</span></a>
+      <a class="link" href="/contact/">Contact<span class="arrow" aria-hidden="true">→</span></a>
+    </p>
+  </section>
+</Page>
+
+<style>
+  .story { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-top: 160px; align-items: start; }
+  .story__pic { grid-column: 1 / span 5; }
+  .story__ph { aspect-ratio: 4 / 5; border-radius: 25px; background: var(--paper-2); display: grid; place-items: center; color: var(--ink-2); font-size: 18px; }
+  .story__text { grid-column: 7 / span 6; }
+  .story__h, .want__h, .clients__h { font-size: 40px; line-height: 1.1; font-weight: 700; letter-spacing: -0.05em; margin-bottom: 28px; }
+  .want { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-top: 160px; }
+  .want__h { grid-column: 1 / span 5; }
+  .want__text { grid-column: 7 / span 6; }
+  .clients { padding-top: 160px; }
+  .clients__list { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 24px; font-family: var(--display); font-size: clamp(32px, 4.4vw, 64px); line-height: 1.12; letter-spacing: -0.02em; }
+  .clients__list li { break-inside: avoid; padding-block: 6px; }
+  .clients__more { display: flex; gap: 32px; margin-top: 40px; font-size: 20px; }
+
+  @media (max-width: 899.98px) {
+    .story, .want { grid-template-columns: 1fr; }
+    .story__pic, .story__text, .want__h, .want__text { grid-column: 1; }
+    .story { padding-top: 96px; row-gap: 48px; }
+    .want, .clients { padding-top: 96px; }
+    .story__h, .want__h, .clients__h { font-size: 32px; margin-bottom: 20px; }
+    .prose { font-size: 18px; }
+    .clients__list { columns: 1; font-size: 32px; }
+    .story__ph { border-radius: 22px; }
+  }
+</style>

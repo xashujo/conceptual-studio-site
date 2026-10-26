@@ -1,0 +1,66 @@
+---
+// The footer is a landscape, not a sitemap (TASTE 15, brief 5.7): the kept garden engraving
+// rises from the bottom in gold and dissolves upward; the small print sits above it in the same ink.
+import { Image } from 'astro:assets';
+import land from '../assets/art/engraved/garden.webp';
+import logo from '../assets/brand/logo-black.png';
+import { nav, social, email, company } from '../lib/site';
+const year = new Date().getFullYear();
+---
+<footer class="foot">
+  <div class="wrap foot__top">
+    <a class="foot__logo" href="/"><Image src={logo} alt="Conceptual Studio, home" widths={[360, 720]} sizes="360px" /></a>
+    <div class="foot__cols">
+      <div>
+        <h2 class="foot__h">Studio</h2>
+        <ul>{nav.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
+      </div>
+      <div>
+        <h2 class="foot__h">Elsewhere</h2>
+        <ul>
+          {social.map((s) => <li><a href={s.href} rel="me noopener">{s.label}</a></li>)}
+          <li><a href={`mailto:${email}`}>Email</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="foot__h">Small print</h2>
+        <ul>
+          <li><a href="/colophon/">Colophon</a></li>
+          <li><a href="/privacy/">Privacy</a></li>
+          <li><a href="/accessibility/">Accessibility</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <p class="wrap foot__legal">© {year} {company.name}. Registered in {company.registeredIn}, company number {company.number}. Registered office: {company.office}.</p>
+  <div class="foot__land" aria-hidden="true"><Image src={land} alt="" widths={[900, 1600, 2400]} sizes="100vw" /></div>
+</footer>
+
+<style>
+  /* One ink for art and text: the dark end of the gold duotone (#6E5024, 5.7:1 on paper). */
+  .foot { --foot-ink: #6E5024; position: relative; isolation: isolate; background: #F1DFC8; color: var(--foot-ink); padding-top: 120px; }
+  .foot__top { display: grid; grid-template-columns: 5fr 7fr; gap: 24px; align-items: start; }
+  .foot__logo { display: block; width: min(360px, 100%); }
+  .foot__cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+  .foot__h { font-size: 16px; line-height: 1.4; font-weight: 600; margin-bottom: 10px; }
+  .foot ul { list-style: none; margin: 0; padding: 0; }
+  .foot li a { display: inline-block; padding-block: 5px; font-family: var(--display); font-size: 24px; line-height: 1.2; letter-spacing: -0.01em; text-decoration: none; background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size 300ms var(--ease-out); }
+  .foot li a:hover { background-size: 100% 1px; }
+  .foot a:focus-visible { outline: 2px solid var(--foot-ink); outline-offset: 3px; border-radius: 2px; }
+  .foot__legal { margin-top: 48px; font-size: 14px; line-height: 1.5; max-width: 60em; }
+  /* The engraving fills the bottom of the footer, no top edge. */
+  .foot__land { position: relative; z-index: -1; margin-top: -40px; height: clamp(300px, 36vw, 560px); pointer-events: none; }
+  .foot__land img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 78%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 55%); mask-image: linear-gradient(to bottom, transparent, #000 55%); }
+
+  @media (max-width: 759.98px) {
+    .foot { padding-top: 80px; }
+    .foot__top { grid-template-columns: 1fr; gap: 40px; }
+    .foot__logo { width: 240px; }
+    .foot__cols { grid-template-columns: 1fr 1fr; row-gap: 32px; }
+    .foot li a { font-size: 22px; }
+    .foot__legal { margin-top: 40px; font-size: 13px; }
+    /* On a phone, crop to the reclining figure and the flowers. */
+    .foot__land { height: 300px; margin-top: -10px; }
+    .foot__land img { object-position: 22% 88%; }
+  }
+</style>

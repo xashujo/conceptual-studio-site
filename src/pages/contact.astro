@@ -1,0 +1,81 @@
+---
+// Contact (brief 6.6): availability, the London clock, copy email, reply time. The enquiry form
+// and the call booking come later (shortcut: "Start a project" opens an email until then).
+import Page from '../layouts/Page.astro';
+import Opening from '../components/Opening.astro';
+import art from '../assets/art/engraved/hunt-hills-gold.jpg';
+import { art as credits, email, startHref, replyTime, hours, social } from '../lib/site';
+const steps = [
+  ['Call and brief', 'We talk through what you need, your budget, the formats, and what you want the work to achieve, so we both know what to expect before I start.'],
+  ['Design and feedback', 'I share work in progress and we go back and forth on it, so nothing reaches the final round as a surprise.'],
+  ['Revisions and finishing', 'I make your changes and finish every detail before anything is signed off.'],
+  ['Handover', 'You get the final files in whatever format and by whatever method suits your team.'],
+];
+---
+<Page title="Contact" description={`Start a project with Conceptual Studio, a design practice in London. ${replyTime}`}>
+  <Opening word="Contact" fit={0.362} art={art} credit={credits.hunt} current="Contact" position="50% 40%" tall={0.3}>
+    <div><p class="clock"><span class="clock__dot" aria-hidden="true"></span><span>London, UK <span data-clock>(local time)</span></span></p><p class="hours">{hours}</p></div>
+    <p><a class="link mail" href={`mailto:${email}`}>{email}</a><br />{replyTime}</p>
+    <button class="btn" type="button" data-copy={email}><span data-copy-label>Copy email</span></button>
+    <div class="desk plate-glass" slot="over" data-liquid="open-art" data-tone="light" data-opacity="0.52">
+      <h2 class="desk__h">Tell me about your project</h2>
+      <p class="desk__p">A few lines on what it is, who it's for and when you need it is plenty. I'll come back with questions or a time to talk.</p>
+      <div class="desk__acts">
+        <a class="btn btn--solid" href={startHref}><span class="swap"><span>Start a project</span><span aria-hidden="true">Email me ↗</span></span></a>
+        <a class="avail" href={`mailto:${email}`}><span class="avail__dot" aria-hidden="true"></span><span class="swap"><span>Taking new projects</span><span aria-hidden="true">↗ Email me</span></span></a>
+      </div>
+    </div>
+  </Opening>
+
+  <section class="wrap next" aria-labelledby="next-h">
+    <h2 class="next__h" id="next-h">What happens next</h2>
+    <ol class="next__list">
+      {steps.map(([t, d]) => <li><h3>{t}</h3><p>{d}</p></li>)}
+    </ol>
+  </section>
+
+  <section class="wrap else" aria-labelledby="else-h">
+    <h2 class="next__h" id="else-h">Elsewhere</h2>
+    <ul class="else__list">
+      {social.map((s) => <li><a href={s.href} rel="me noopener">{s.label}<span class="arrow" aria-hidden="true">→</span></a></li>)}
+    </ul>
+  </section>
+</Page>
+
+<style>
+  /* The desk: plate glass over the hills, right of centre so the trees show round it. */
+  .desk { position: absolute; z-index: 2; top: 100px; right: calc(var(--margin) + 4vw); width: min(520px, 40vw); padding: 32px 34px 28px; display: grid; gap: 16px; }
+  .desk__h { font-family: var(--display); font-weight: 500; font-size: 40px; line-height: 1.05; letter-spacing: -0.02em; }
+  .desk__p { font-size: 18px; line-height: 1.5; }
+  .desk__acts { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .desk :global(.avail) { --fill: color-mix(in srgb, var(--paper) 55%, transparent); }
+  .mail { padding-block: 0; }
+  .hours { margin-top: 6px; font-size: 16px; line-height: 1.45; color: var(--ink-2); max-width: 22em; }
+
+  .next { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-top: 160px; }
+  .next__h { grid-column: 1 / span 4; font-size: 40px; line-height: 1.1; font-weight: 700; letter-spacing: -0.05em; }
+  .next__list { grid-column: 6 / span 7; list-style: none; margin: 0; padding: 0; display: grid; gap: 36px; counter-reset: step; }
+  .next__list h3 { font-size: 24px; line-height: 1.3; font-weight: 600; letter-spacing: -0.01em; margin: 0 0 6px; }
+  .next__list p { font-size: 20px; line-height: 1.5; color: var(--ink-2); max-width: 36em; }
+  .else { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-top: 120px; }
+  .else__list { grid-column: 6 / span 7; list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 48px; }
+  .else__list a { font-family: var(--display); font-size: clamp(36px, 4vw, 56px); line-height: 1.1; letter-spacing: -0.02em; text-decoration: none; }
+  .else__list a:hover .arrow { transform: rotate(-45deg); }
+
+  @media (max-width: 1099.98px) {
+    .desk { width: min(560px, 72vw); right: var(--margin); }
+    :global(#open-art) { padding-top: 440px; }
+  }
+  @media (max-width: 759.98px) {
+    /* Phones: the desk sits in the art's upper part, full width, the hills below it. */
+    .desk { top: 80px; left: var(--margin); right: var(--margin); width: auto; padding: 24px 22px 22px; gap: 14px; border-radius: 26px; }
+    :global(#open-art) { padding-top: 400px; }
+    .desk__h { font-size: 30px; }
+    .desk__p { font-size: 16px; }
+    .next, .else { grid-template-columns: 1fr; padding-top: 96px; row-gap: 28px; }
+    .next__h, .next__list, .else__list { grid-column: 1; }
+    .next__h { font-size: 32px; }
+    .next__list h3 { font-size: 20px; }
+    .next__list p { font-size: 18px; }
+  }
+</style>
