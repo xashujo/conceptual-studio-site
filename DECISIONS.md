@@ -303,3 +303,27 @@ Museum model:
 - No art credits on the home page (Josh, 26 Oct). The etching, Lemoyne and
   footer engraving captions are removed; the plate captions under the work
   stay. The art's sources are kept in this file for the record.
+
+## Glass, layer 1 (26 Oct 2026, branch glass)
+- CSS glass, every browser: paper tint 66%, blur 24px, saturate 1.3. This
+  replaces TASTE.md's Tier B values (68%, 18px, 1.6): above 1.3 saturate the
+  paper turns peach, and 24px (2a7589f's bar) is needed to diffuse the
+  etching's lines. [TBC: Josh to approve at step 1 review.]
+- Rim: one 1px warm highlight on the top and left edges (light from the top
+  left), plus a 1px gold darkened edge at 16% so the edge still shows on
+  cream. Lift: a soft shadow falling down and right (3px 10px 28px, -16px).
+- Over black chapters the glass is Paper 2 at night (#221D17) at 72%, one
+  step above the ground so it has a body over plain black. A cream-gold rim
+  replaces the dark edge and shadow, which vanish on black (brief 7.2).
+- Worst-case contrast, worked out for pure black and pure white underneath:
+  ink on light glass 7.0:1 or better, cream on dark glass 5.1:1 or better.
+  Both pass AA without relying on prefers-reduced-transparency (Safari
+  ignores it).
+- Increase contrast: glass becomes 94% opaque, keeps the blur, and gets a
+  2px ink outline drawn inside its edge.
+- Browsers without backdrop-filter get a 92% tint.
+- /glass/ is a review specimen (painting, paper, black). Hidden from search
+  engines and not in the nav. The paper panel only exists for comparison:
+  the site still never puts glass on flat paper. Delete /glass/ once the nav
+  is built.
+- The layer 2 refraction tint (42%) is below AA and gets fixed in step 3.
