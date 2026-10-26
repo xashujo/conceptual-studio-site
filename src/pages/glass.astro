@@ -53,8 +53,20 @@ const grounds = [
     </main>
     <script>
       import { mountRefraction } from '../scripts/refraction.js';
-      // Lens glass is Chromium only; elsewhere these stay frosted layer 1 glass.
-      document.querySelectorAll<HTMLElement>('[data-lens]').forEach((el) => mountRefraction(el, { lens: true }));
+      import { mountLiquidGlass } from '../scripts/liquid-glass.js';
+      // Lens glass: Chromium bends the live page (SVG). Firefox and Safari can't, so where the
+      // piece sits wholly over a known painting, the WebGL glass bends that painting instead.
+      // Anywhere else they stay frosted layer 1 glass.
+      document.querySelectorAll<HTMLElement>('[data-lens]').forEach((el) => {
+        if (mountRefraction(el, { lens: true })) return;
+        const image = el.closest('.ground')?.querySelector<HTMLImageElement>('.ground__art');
+        if (!image) return;
+        const a = el.getBoundingClientRect();
+        const b = image.getBoundingClientRect();
+        const solid = image.classList.contains('ground__art--top') ? 0.7 : 1; // the night art fades out below 70%
+        if (a.top < b.top || a.bottom > b.top + b.height * solid || a.left < b.left || a.right > b.right) return;
+        mountLiquidGlass(el, { image, tone: el.closest('.night') ? 'dark' : 'light', opacity: el.closest('.night') ? 0.72 : 0.55 });
+      });
     </script>
   </body>
 </html>
@@ -65,24 +77,26 @@ const grounds = [
   .ground--painting .ground__art { object-position: 50% 30%; }
   .ground__art--top { height: 58%; object-position: 50% 0; mask-image: linear-gradient(#000 70%, transparent); }
 
+  .bar, .dock, .round { position: relative; } /* holds the WebGL canvas */
   /* Shapes from the glass spec: bars 60px at 28px radius, the dock 60px with round ends. Contents are placeholders until step 2. */
   .bar { height: 60px; border-radius: 28px; display: flex; align-items: center; gap: 24px; padding: 0 8px 0 24px; }
   .bar__mark { font-family: var(--display); font-size: 24px; letter-spacing: -0.02em; margin-right: auto; }
   .bar__links { list-style: none; display: flex; gap: 28px; margin: 0; padding: 0; font-size: 18px; font-weight: 500; }
   .bar__cta { min-height: 44px; font-size: 16px; }
-  .dock { justify-self: center; height: 60px; border-radius: var(--pill); padding: 0 28px; display: flex; align-items: center; }
-  .dock ul { list-style: none; display: flex; gap: 28px; margin: 0; padding: 0; font-size: 16px; font-weight: 500; }
+  .dock { justify-self: center; height: 60px; border-radius: var(--pill); padding: 0 6px; display: flex; align-items: center; }
+  /* Each label is its own 44px target; 12px each side gives 24px between words and 18px at the ends. */
+  .dock ul { list-style: none; display: flex; margin: 0; padding: 0; font-size: 16px; font-weight: 500; }
+  .dock li { display: grid; place-items: center; min-height: 44px; padding: 0 12px; }
   .ground__label { margin: 0; }
-  .row { display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; }
-  .round { width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; font-size: 26px; }
-  .round--wide { width: auto; padding: 0 28px; border-radius: var(--pill); font-size: 16px; font-weight: 500; }
+  .row { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; }
+  .round { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; font-size: 22px; }
+  .round--wide { width: auto; padding: 0 20px; border-radius: var(--pill); font-size: 16px; font-weight: 500; }
 
   @media (max-width: 760px) {
     .ground { min-height: 520px; padding-block: 24px; }
     .bar { padding-left: 18px; }
     .bar__mark { font-size: 21px; }
     .bar__links { display: none; }
-    .dock { padding: 0 22px; }
-    .dock ul { gap: 20px; }
+    .dock li { padding: 0 10px; }
   }
 </style>

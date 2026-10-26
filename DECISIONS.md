@@ -341,3 +341,17 @@ Museum model:
   buttons, the availability pill.]
 - Lens bend is -48 (the edge refraction keeps -70): with the wider rim, -70
   smeared the etching into ripples. Lens blur 1.5px softens the fine lines.
+- Firefox and Safari: a lens piece that sits wholly over a known painting
+  uses the WebGL glass (liquid-glass.js), which bends that painting in every
+  browser. Anywhere else (over live content, plain paper, plain black) they
+  keep the frosted glass. Checked by forcing the non-Chromium path in
+  Chromium; not yet seen in a real Firefox or Safari.
+- Apple Music's web player (music.apple.com, checked 26 Oct) does not refract:
+  its glass is backdrop-filter saturate(220%) blur(16px) over #F5F5F7 at 55%,
+  a 1px inner stroke (black 5% on light, white 20% on dark) and a shadow,
+  opaque under Increase Contrast. No SVG displacement and no WebGL. So the
+  site's layer 1 glass already matches what Apple ships on the web; the
+  bend is extra.
+- Spacing (Josh, 26 Oct: "a bit too big"): dock labels are 44px targets with
+  12px each side (24px between words, 18px at the ends); round buttons 56px;
+  pill padding 20px; 16px between pieces.
