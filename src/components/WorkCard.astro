@@ -12,7 +12,7 @@ const Title = href ? 'a' : 'span';
 ---
 <li class="wc glass" data-flip-id={p.slug} data-tags={p.tags.join(' ')} hidden={p.student}>
   <header class="wc__head">
-    <h2 class="wc__title"><Title href={href} class="wc__link">{p.title}</Title></h2>
+    <h2 class="wc__title"><Title href={href} class="wc__link">{p.title}</Title>{href && <span class="arrow wc__arrow" aria-hidden="true">→</span>}</h2>
     <p class="wc__year">{p.year}</p>
   </header>
   <p class="wc__disc">{p.disciplines.join(', ')}</p>
@@ -32,6 +32,7 @@ const Title = href ? 'a' : 'span';
   .wc__title { text-wrap: balance; }
   .wc__year { font-variant-numeric: tabular-nums; }
   .wc__link { text-decoration: none; }
+  .wc__arrow { display: none; font-weight: 400; }
   /* The whole card is the link's hit area. */
   a.wc__link::after { content: ''; position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
   a.wc__link:focus-visible { outline: none; }
@@ -43,6 +44,7 @@ const Title = href ? 'a' : 'span';
   @media (hover: hover) {
     .wc:has(a.wc__link:hover) .wc__btn { background: var(--fill-hover); }
     .wc:has(a.wc__link:hover) .arrow { transform: rotate(-45deg); }
+    .wc:has(a.wc__link:hover) .wc__img { filter: brightness(1.04); }
   }
   /* Card sizes are set by the grid (data-size), so the image ratio follows the slot. */
   :global(.wc[data-size='l']) { --ratio: 3 / 2; }

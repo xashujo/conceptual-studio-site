@@ -19,7 +19,7 @@ function spansFor(n: number) {
   return [...Array.from({ length: full }, (_, i) => three[i % three.length]), ...tail];
 }
 
-function layout(cards: HTMLElement[]) {
+function varied(cards: HTMLElement[]) {
   const spans = spansFor(cards.length);
   cards.forEach((c, i) => {
     const span = spans[i];
@@ -29,9 +29,34 @@ function layout(cards: HTMLElement[]) {
   });
 }
 
+// Bento trial: a placement per number of cards, in the order the cards appear, as
+// [first column, columns, first row, rows] on a 12-column grid. Each set fills its block
+// with no holes. Portrait images (Oxford, BSix, Pandora) get the tall tiles.
+type Cell = [number, number, number, number];
+const BENTO: Record<number, Cell[]> = {
+  // Strategic Intent, Oxford, ACL, Fou Answer, NYGG, BSix, Pandora Forever
+  7: [[1, 7, 1, 4], [8, 5, 1, 6], [1, 4, 5, 4], [1, 3, 9, 3], [4, 4, 9, 3], [5, 3, 5, 4], [8, 5, 7, 5]],
+  // the archive: KUT, the final major project, then three square renders
+  5: [[1, 7, 1, 5], [8, 5, 1, 5], [1, 4, 6, 4], [5, 4, 6, 4], [9, 4, 6, 4]],
+  // data and motion: one large, one wide below it, one tall beside both
+  3: [[1, 8, 1, 5], [1, 8, 6, 4], [9, 4, 1, 9]],
+  // brand: Oxford's portrait poster, then Fou Answer
+  2: [[1, 5, 1, 6], [6, 7, 1, 6]],
+};
+
+function bento(cards: HTMLElement[]) {
+  const cells = BENTO[cards.length];
+  cards.forEach((c, i) => {
+    const cell = cells?.[i];
+    if (cell) c.style.setProperty('--area', `${cell[2]} / ${cell[0]} / span ${cell[3]} / span ${cell[1]}`);
+    else c.style.removeProperty('--area'); // shortcut: other counts fall back to auto-placed 4 x 3 tiles; add a set if a filter ever has another count
+  });
+}
+
 export function initWorkFilter() {
   const grid = document.querySelector<HTMLElement>('.grid');
   if (!grid) return;
+  const layout = grid.dataset.layout === 'bento' ? bento : varied;
   const cards = [...grid.querySelectorAll<HTMLElement>('.wc')];
   const buttons = [...document.querySelectorAll<HTMLButtonElement>('[data-filter]')];
   const note = document.querySelector<HTMLElement>('.archive-note');

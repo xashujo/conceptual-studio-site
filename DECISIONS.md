@@ -401,3 +401,24 @@ Museum model:
   (current page in brackets). The nav stays plain text on both pages: on
   /work/ it sits straight on the etching (TASTE 2), so no glass bar.
   "Start a project" opens an email until /contact/ exists.
+
+## /work/ bento trial (26 Oct 2026, /prototypes/work-bento/)
+- Josh asked to try the work in a bento grid ("worth a try"). Built as a
+  prototype beside the live /work/ so the two can be compared; hidden from
+  search engines and not in the nav. TASTE's "never do" names a services
+  bento; this one shows work, so it is a trial, not a rule change.
+- Same cards, filters, Flip animation and etching as /work/; both pages
+  share one component, with a bento switch.
+- Desktop: tiles locked together on a 12-column grid with fixed-height rows
+  (84 to 112px). Each filter result has its own hand-set arrangement (7, 5,
+  3 and 2 tiles), checked to fill its block with no holes or overlaps.
+  Portrait images (Oxford, BSix, Pandora) get the tall tiles.
+- Tiles drop the disciplines line and the "View project" pill to give the
+  image the room. Case-study tiles carry a turning arrow after the title.
+  Plate captions stay under every image.
+- Tablet: two columns, every third tile across both. Phone: the same, with
+  square images in the half tiles and the year under the title so names
+  are never cut short.
+- Maps (Strategic Intent, ACL, BSix) are anchored at the top so their own
+  headings survive the crop, on /work/ too.
+- To make it live: swap <WorkIndex /> for <WorkIndex bento /> on /work/.

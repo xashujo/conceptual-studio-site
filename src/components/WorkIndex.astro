@@ -1,0 +1,126 @@
+---
+// The /work/ index: page word on the etching, filters, and the cards. Two layouts:
+// the varied rows (live on /work/) and a bento trial (/prototypes/work-bento/).
+import { Image } from 'astro:assets';
+import WorkCard from './WorkCard.astro';
+import PlateCaption from './PlateCaption.astro';
+import { projects, filters } from '../data/work';
+import art from '../assets/art/engraved/jardin-quiet.jpg';
+interface Props { bento?: boolean }
+const { bento = false } = Astro.props;
+
+const jardin = { title: 'Le Jardin Chinois (The Chinese Garden), after François Boucher, after 1743', medium: 'Etching and engraving by Jacques Gabriel Huquier. The Met 53.600.1008, public domain. Duotoned' };
+const count = (f: string) => projects.filter((p) => (f === 'all' ? !p.student : p.tags.includes(f as never))).length;
+---
+  <section class="field" aria-labelledby="work-h">
+    <div class="field__art" aria-hidden="true">
+      <Image src={art} alt="" widths={[800, 1600, 2400]} sizes="100vw" loading="eager" />
+    </div>
+
+    <header class="head wrap">
+      <h1 class="head__word" id="work-h">Work</h1>
+      <p class="head__p">Brand identities, data visualisation and 3D for colleges, companies and artists.</p>
+    </header>
+
+    <div class="filters wrap" role="group" aria-label="Filter projects">
+      {filters.map(([key, label]) => (
+        <button class="btn filter" type="button" data-filter={key} aria-pressed={key === 'all' ? 'true' : 'false'}>
+          {label}<span class="filter__n">{count(key)}</span>
+        </button>
+      ))}
+    </div>
+    <p class="archive-note wrap" hidden>Student work from my BA at Kingston School of Art, 2021 to 2023.</p>
+
+    <ul class:list={['grid wrap', { 'grid--bento': bento }]} data-layout={bento ? 'bento' : 'varied'} aria-live="polite">
+      {projects.map((p) => <WorkCard p={p} />)}
+    </ul>
+    <noscript><style>.grid .wc[hidden] { display: flex; } .filters { display: none; }</style></noscript>
+  </section>
+  <div class="wrap art-credit"><PlateCaption {...jardin} /></div>
+
+<script>
+  import { initWorkFilter } from '../scripts/work-filter';
+  initWorkFilter();
+</script>
+
+<style>
+  /* The art is a fixed field for the length of the section (the "Fixed field" test). */
+  .field { position: relative; isolation: isolate; padding-bottom: 48px; }
+  .field__art { position: sticky; top: 0; z-index: -1; height: 100svh; margin-bottom: -100svh; overflow: hidden; }
+  .field__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 0%; -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent); mask-image: linear-gradient(to bottom, #000 80%, transparent); }
+
+  /* The page word sits on the open sky, top right (TASTE 2 and 3). */
+  .head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-top: 120px; min-height: 58svh; align-content: start; }
+  .head__word { grid-column: 7 / -1; font-family: var(--display); font-weight: 500; font-size: clamp(120px, 17vw, 260px); line-height: 0.82; letter-spacing: -0.04em; color: var(--ink); }
+  .head__p { grid-column: 7 / span 5; margin-top: 20px; font-size: 22px; line-height: 1.4; font-weight: 500; }
+
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .filter { --fill: color-mix(in srgb, var(--paper) 70%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); min-height: 44px; padding: 0 18px; font-size: 16px; gap: 8px; }
+  .filter[aria-pressed='true'] { --fill: var(--ink); --fill-hover: var(--ink); color: var(--paper); }
+  .filter__n { font-variant-numeric: tabular-nums; opacity: 0.6; font-size: 14px; }
+  .filter:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .archive-note { margin-bottom: 12px; font-size: 18px; font-weight: 500; }
+  .archive-note[hidden] { display: none; }
+
+  /* Varied grid: three cards a row in changing widths, 5 + 4 + 3, 3 + 5 + 4, 4 + 3 + 5 (set by the script). */
+  .grid { list-style: none; margin: 12px 0 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; align-items: start; }
+  .grid :global(.wc) { grid-column: span 4; }
+  .grid :global(.wc[data-span='7']) { grid-column: span 7; }
+  .grid :global(.wc[data-span='5']) { grid-column: span 5; }
+  .grid :global(.wc[data-span='3']) { grid-column: span 3; }
+  .grid :global(.wc[data-drop]) { margin-top: 56px; }
+
+  /* Bento trial (Josh, 26 Oct): tiles of set sizes that lock together into one block. On
+     desktop the script gives each tile its place (--area); below 1100px it's two columns. */
+  .grid--bento { grid-auto-rows: clamp(84px, 7vw, 112px); align-items: stretch; grid-auto-flow: row dense; }
+  @media (min-width: 1100px) {
+    .grid--bento :global(.wc) { grid-area: var(--area, auto / span 4 / auto / span 3); margin-top: 0 !important; }
+  }
+  .grid--bento :global(.wc) { min-height: 0; }
+  .grid--bento :global(.wc__fig) { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+  .grid--bento :global(.wc__img) { flex: 1; min-height: 0; height: 100%; aspect-ratio: auto; }
+  .grid--bento :global(.wc__btn), .grid--bento :global(.wc__disc) { display: none; }
+  /* Only case studies are links: their title carries the turning arrow instead of the pill. */
+  .grid--bento :global(.wc__arrow) { display: inline-block; margin-left: 0.3em; }
+  .grid--bento :global(.wc__head) { padding-bottom: 12px; }
+  .grid--bento :global(.wc__title) { font-size: 20px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .grid--bento :global(.wc__year) { font-size: 20px; }
+
+  .art-credit { margin-top: 0; }
+
+  @media (max-width: 1099.98px) {
+    .head__word { grid-column: 5 / -1; }
+    .head__p { grid-column: 5 / -1; }
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid :global(.wc), .grid :global(.wc[data-span]) { grid-column: span 1; }
+    .grid :global(.wc[data-drop]) { margin-top: 0; }
+    .grid :global(.wc:nth-child(even of :not([hidden]))) { margin-top: 48px; }
+    /* Bento on tablets: two columns, every third tile across both. */
+    .grid--bento { grid-auto-rows: auto; }
+    .grid--bento :global(.wc:nth-child(even of :not([hidden]))) { margin-top: 0; }
+    .grid--bento :global(.wc:nth-child(3n + 1 of :not([hidden]))) { grid-column: span 2; }
+    .grid--bento :global(.wc__img) { aspect-ratio: 4 / 3; flex: none; height: auto; }
+  }
+  @media (max-width: 759.98px) {
+    .field { padding-bottom: 40px; }
+    .head { display: block; padding-top: 96px; min-height: 52svh; }
+    .head__word { font-size: 104px; }
+    .head__p { font-size: 18px; max-width: 30ch; }
+    .filters { flex-wrap: nowrap; overflow-x: auto; margin-inline: 0; padding-bottom: 4px; scrollbar-width: none; }
+    .filter { flex: none; }
+    .grid { grid-template-columns: 1fr; gap: 16px; }
+    .grid :global(.wc:nth-child(even of :not([hidden]))) { margin-top: 0; }
+    /* Bento on phones: two columns, every third tile across both; half tiles keep a square image. */
+    .grid--bento { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .grid--bento :global(.wc) { --inset: 6px; padding-top: 12px; border-radius: calc(12px + var(--inset)); }
+    .grid--bento :global(.wc__img) { border-radius: 12px; }
+    .grid--bento :global(.wc:not(:nth-child(3n + 1 of :not([hidden])))) :global(.wc__img) { aspect-ratio: 1; }
+    .grid--bento :global(.wc__head) { padding-inline: 6px; padding-bottom: 10px; }
+    .grid--bento :global(.wc__title), .grid--bento :global(.wc__year) { font-size: 17px; }
+    .grid--bento :global(.wc__title) { display: block; -webkit-line-clamp: none; }
+    /* Half tiles: the year goes under the title so the name is never cut short. */
+    .grid--bento :global(.wc:not(:nth-child(3n + 1 of :not([hidden])))) :global(.wc__head) { flex-direction: column; gap: 2px; }
+    .grid--bento :global(.wc:not(:nth-child(3n + 1 of :not([hidden])))) :global(.wc__year) { font-weight: 500; color: var(--ink-2); }
+    .grid--bento :global(.plate) { padding-inline: 6px !important; font-size: 11px; letter-spacing: 0.04em; }
+  }
+</style>
