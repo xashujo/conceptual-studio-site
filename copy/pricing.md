@@ -1,4 +1,4 @@
-# Pricing ladders (draft 2)
+# Pricing ladders (draft 3)
 
 For the services pages. The home page shows the first rung of each ladder as its "from" price.
 
@@ -17,14 +17,14 @@ A full identity applied across the things people actually see, such as signage, 
 
 ## Data visualisation and reports
 
-Infographic set, from £1,750, from 2 weeks
-Charts and infographics for one document, built from your own figures. [TBC: how many graphics are included]
+Charts and infographics, from £700, from 1 week
+The charts your document needs, built from your own figures and supplied as PNG and PDF, ready to drop into your own layout.
 
-Designed report, from £4,200, from 4 weeks
-A whole report laid out with its charts, such as an annual, strategy or sustainability report. [TBC: page count included]
+Charts and full report, from £1,400, from 2 weeks
+The charts plus the whole report designed around them, such as an annual, strategy or sustainability report. Supplied as print-ready PDFs for coated and uncoated paper, an accessible PDF and PNGs. Priced for a report of around 16 pages; longer reports are quoted.
 
-Maps and recurring reports, from £7,000, from 6 weeks
-Custom data maps, like the London borough heat maps, or a report designed as a template you can reuse each year. Quoted per project.
+Maps and recurring reports, from £2,800, from 4 weeks
+Custom data maps, like the London borough heat maps, or a report designed as a template you can reuse each year. Quoted per project. [TBC: how long the heat maps took]
 
 ## Social media editing
 
@@ -35,7 +35,7 @@ Monthly pack, from £1,200 a month
 Eight short edits a month, planned together so they look like a set.
 
 Monthly retainer, from £1,800 a month
-Twelve edits a month, about three a week, at a fixed monthly price, for teams posting every week. Three-month minimum. [TBC: confirm 12 videos and the minimum term]
+Twelve edits a month, about three a week, at a fixed monthly price, for teams posting every week. Three-month minimum.
 
 ## Custom quote
 

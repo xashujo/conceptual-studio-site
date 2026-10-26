@@ -74,6 +74,11 @@ Museum model:
 - Social media editing is priced for someone new to selling it: single
   edit from £200, monthly pack (8 videos) from £1,200, retainer
   (12 videos, 3-month minimum) from £1,800 a month. (proposed)
+- Data ladder is based on a real job: a 16-page report with charts,
+  coated and uncoated print PDFs, accessible PDF and PNGs took 3 days
+  (£1,050). Charts only from £700; charts and full report from
+  £1,400; maps and recurring reports from £2,800. Retainer confirmed:
+  12 videos a month, 3-month minimum. (Josh, prices proposed)
 - There is a custom quote option on the home page and the pricing
   page, answered within three working days. (Josh)
 - Availability pill says "Taking new projects" with no month, so it

@@ -1,4 +1,4 @@
-# Home page copy (draft 6)
+# Home page copy (draft 7)
 
 Rules applied: DECISIONS.md, brief sections 1, 3 and 6.1. Plain British English, "I", no em dashes, none of the banned words. No personal name anywhere on the page: the studio is "Conceptual Studio" and the voice is "I".
 
@@ -44,7 +44,7 @@ From £4,900, from 4 weeks
 A logo, colours, type, mockups and the rules for using them, so your own team can make new material without coming back to me every time.
 
 Data visualisation and reports
-From £1,750, from 2 weeks
+From £700, from 1 week
 Charts, maps and infographics, and the reports they sit in, from annual reports to sustainability reports, drawn from your own figures.
 
 Social media editing
