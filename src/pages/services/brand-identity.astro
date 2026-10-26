@@ -1,0 +1,26 @@
+---
+import ServicePage from '../../components/ServicePage.astro';
+import art from '../../assets/art/engraved/hunt-sky-gold.jpg';
+import oxford from '../../assets/work/oxford-school-of-english/bus-shelter.webp';
+import kut from '../../assets/work/kut-magazine/04.webp';
+---
+<ServicePage
+  service="brand"
+  title="Brand identity | Conceptual Studio"
+  description="Brand identity design from a London studio: logos, colour, type, guidelines, templates and rollout, with starting prices."
+  word={['Brand', 'identity']}
+  size="clamp(84px, 17vw, 260px)"
+  art={art}
+  kinds="That can be a new identity from scratch, guidelines and templates for a team that makes its own material, or a rollout across signage, prospectuses and campaigns."
+  exhibits={[
+    { img: oxford, pos: '50% 40%', alt: 'Oxford School of English poster in a bus shelter on an Oxford street, beside a red double-decker bus', title: 'Oxford School of English, 2023', medium: 'Visual identity, on a bus shelter poster' },
+    { img: kut, pos: '0% 50%', alt: 'A printed KUT Magazine page with a portrait of the artist Kit Sivers in front of drawings', title: 'KUT Magazine, 2023', medium: 'Identity and editorial design, a printed page' },
+  ]}
+  faqs={[
+    { q: 'Do the prices include VAT?', a: '[TBC]' },
+    { q: 'How long does a new identity take?', a: 'From 4 weeks for a logo and essentials, from 8 for a full identity and from 12 with a rollout. Those are calendar weeks from our first call to your final files, feedback rounds included.' },
+    { q: 'Can my team make new material after you hand over?', a: 'Yes. That is what the guidelines and templates are for: your team can make new social posts, letters and presentations in the identity without coming back to me each time.' },
+    { q: 'Can you handle the printing?', a: 'Yes. On a rollout I handle print through my print partners, so signage and print arrive finished.' },
+    { q: 'We already have a logo. Can you work with it?', a: '[TBC: whether a refresh of an existing logo is offered, and how it is priced]' },
+  ]}
+/>

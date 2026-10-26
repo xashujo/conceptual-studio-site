@@ -1,0 +1,217 @@
+---
+// The enquiry form (brief 11). Web3Forms, a Turnstile check and a honeypot. Four required fields,
+// "What you need" preset from the page and from any ladder button. Inline validation and an
+// inline thank-you, no reload. Without JavaScript it still posts straight to Web3Forms.
+import { services, budgets } from '../data/services';
+import { email, calUrl, web3formsKey, turnstileSiteKey } from '../site';
+interface Props { service?: string; heading?: string }
+const { service, heading = 'Start a project' } = Astro.props;
+const preset = service ? `${service}:unsure` : '';
+---
+<section class="enq wrap" id="enquire" aria-labelledby="enq-h">
+  <div class="enq__side">
+    <h2 class="enq__h" id="enq-h">{heading}</h2>
+    <p class="enq__p">Tell me what you need and when you need it by. I reply within three working days, and every project gets a fixed quote after our first call.</p>
+    <p class="enq__alt">Or email your brief to <a href={`mailto:${email}`}>{email}</a>. The form can't take attachments.</p>
+    <p><a class="link" href={calUrl}>Book a 20-minute call<span class="arrow" aria-hidden="true">→</span></a></p>
+  </div>
+
+  <form class="enq__form" action="https://api.web3forms.com/submit" method="POST" novalidate data-enquiry>
+    <input type="hidden" name="access_key" value={web3formsKey} />
+    <input type="hidden" name="subject" value="New enquiry from conceptualstudio.co.uk" />
+    <input type="hidden" name="from_name" value="Conceptual Studio website" />
+    <!-- Honeypot: people never see it; Web3Forms drops any submission that ticks it. -->
+    <input class="enq__trap" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+    <div class="f">
+      <label for="enq-name">Name</label>
+      <input id="enq-name" name="name" type="text" autocomplete="name" required data-msg="Please tell me your name." />
+    </div>
+    <div class="f">
+      <label for="enq-email">Work email</label>
+      <input id="enq-email" name="email" type="email" autocomplete="email" required data-msg="Please enter an email address, like name@organisation.org.uk." />
+    </div>
+    <div class="f">
+      <label for="enq-org">Organisation</label>
+      <input id="enq-org" name="organisation" type="text" autocomplete="organization" required data-msg="Please tell me who the work is for." />
+    </div>
+    <div class="f">
+      <label for="enq-date">Needed by <span>optional</span></label>
+      <input id="enq-date" name="needed_by" type="date" />
+    </div>
+    <div class="f f--wide">
+      <label for="enq-need">What you need</label>
+      <select id="enq-need" name="need" required data-msg="Please choose what you need, or Custom if you're not sure.">
+        <option value="" selected={!preset}>Choose one</option>
+        {services.map((s) => (
+          <optgroup label={s.name}>
+            {s.tiers.map((t) => <option value={`${s.id}:${t.id}`}>{s.name}: {t.name}</option>)}
+            <option value={`${s.id}:unsure`} selected={preset === `${s.id}:unsure`}>{s.name}: not sure which yet</option>
+            <option value={`${s.id}:custom`}>{s.name}: custom quote</option>
+          </optgroup>
+        ))}
+        <optgroup label="Something else">
+          <option value="mix:custom">A mix of services, or something not listed</option>
+        </optgroup>
+      </select>
+    </div>
+    <div class="f f--wide">
+      <label for="enq-budget">Budget <span>optional</span></label>
+      <select id="enq-budget" name="budget" aria-describedby="enq-budget-help">
+        <option value="">Choose a band</option>
+        {budgets.map((b) => <option>{b}</option>)}
+      </select>
+      <p class="f__help" id="enq-budget-help">A rough band helps me suggest the right scope.</p>
+    </div>
+    <div class="f f--wide">
+      <label for="enq-msg">Tell me about the project <span>optional</span></label>
+      <textarea id="enq-msg" name="message" rows="5"></textarea>
+    </div>
+    <label class="tick f--wide">
+      <input type="checkbox" name="formal_quote" value="Yes" />
+      <span>I need a formal written quote for procurement</span>
+    </label>
+    <div class="cf-turnstile f--wide" data-sitekey={turnstileSiteKey} data-theme="light"></div>
+    <div class="enq__send f--wide">
+      <button class="btn btn--solid" type="submit"><span data-send>Send enquiry</span><span class="arrow" aria-hidden="true">→</span></button>
+      <p class="enq__status" role="status" aria-live="polite" data-status></p>
+    </div>
+  </form>
+
+  <div class="enq__done" tabindex="-1" hidden data-done>
+    <h3 class="enq__done-h">Thanks, I've got it.</h3>
+    <p>I'll reply within three working days. If it's easier to talk it through first, book a call.</p>
+    <p><a class="btn btn--solid" href={calUrl}><span class="swap"><span>Book a 20-minute call</span><span aria-hidden="true">Open Cal.com ↗</span></span></a></p>
+  </div>
+</section>
+
+<script>
+  import { email } from '../site';
+  const form = document.querySelector<HTMLFormElement>('[data-enquiry]');
+  if (form) {
+    const done = document.querySelector<HTMLElement>('[data-done]')!;
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    const send = form.querySelector<HTMLElement>('[data-send]')!;
+    const need = form.querySelector<HTMLSelectElement>('select[name="need"]')!;
+    const fields = [...form.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[required]')];
+
+    // Preset "What you need" from a ladder button, or from ?need= when someone arrives by link.
+    const choose = (v: string | null) => { if (v && [...need.options].some((o) => o.value === v)) need.value = v; };
+    choose(new URLSearchParams(location.search).get('need'));
+    document.querySelectorAll<HTMLAnchorElement>('[data-need]').forEach((a) => a.addEventListener('click', (e) => {
+      e.preventDefault();
+      choose(a.dataset.need!);
+      clear(need);
+      document.getElementById('enquire')!.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+      need.focus({ preventScroll: true });
+    }));
+
+    const errorFor = (el: Element) => {
+      const wrap = el.closest('.f')!;
+      let p = wrap.querySelector<HTMLElement>('.f__err');
+      if (!p) { p = document.createElement('p'); p.className = 'f__err'; p.id = `${el.id}-err`; wrap.append(p); }
+      return p;
+    };
+    const clear = (el: HTMLInputElement | HTMLSelectElement) => {
+      el.removeAttribute('aria-invalid');
+      el.closest('.f')?.querySelector('.f__err')?.remove();
+      const help = el.id === 'enq-budget' ? 'enq-budget-help' : '';
+      help ? el.setAttribute('aria-describedby', help) : el.removeAttribute('aria-describedby');
+    };
+    const check = (el: HTMLInputElement | HTMLSelectElement) => {
+      if (el.checkValidity()) { clear(el); return true; }
+      el.setAttribute('aria-invalid', 'true');
+      const p = errorFor(el);
+      p.textContent = el.dataset.msg!;
+      el.setAttribute('aria-describedby', p.id);
+      return false;
+    };
+    // Check a field when someone leaves it, then live once it has shown an error.
+    fields.forEach((el) => {
+      el.addEventListener('blur', () => { if (el.value) check(el); });
+      el.addEventListener('input', () => { if (el.hasAttribute('aria-invalid')) check(el); });
+      el.addEventListener('change', () => { if (el.hasAttribute('aria-invalid')) check(el); });
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const bad = fields.filter((el) => !check(el));
+      if (bad.length) { bad[0].focus(); status.textContent = ''; return; }
+      const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
+      if (!data.access_key) { status.textContent = `The form isn't connected yet. Please email ${email} for now.`; return; }
+      data.need = need.selectedOptions[0].text;
+      form.setAttribute('aria-busy', 'true');
+      send.textContent = 'Sending';
+      status.textContent = '';
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) });
+        const json = await res.json();
+        if (!json.success) throw new Error(json.message);
+        form.hidden = true;
+        done.hidden = false;
+        done.focus();
+      } catch {
+        status.textContent = `That didn't send. Please try again, or email ${email}.`;
+        (window as any).turnstile?.reset();
+      } finally {
+        form.removeAttribute('aria-busy');
+        send.textContent = 'Send enquiry';
+      }
+    });
+  }
+</script>
+
+<style>
+  .enq { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; scroll-margin-top: 24px; }
+  .enq__side { grid-column: 1 / span 4; display: flex; flex-direction: column; gap: 18px; align-self: start; }
+  .enq__h { font-family: var(--display); font-weight: 500; font-size: clamp(44px, 4.4vw, 64px); line-height: 0.98; letter-spacing: -0.03em; text-wrap: balance; }
+  .enq__p { font-size: 20px; line-height: 1.45; max-width: 30ch; }
+  .enq__alt { font-size: 16px; line-height: 1.5; color: var(--ink-2); max-width: 34ch; }
+  .enq__alt a { color: var(--ink); text-underline-offset: 4px; text-decoration-thickness: 1px; overflow-wrap: anywhere; }
+
+  .enq__form, .enq__done { grid-column: 6 / -1; }
+  .enq__form { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 24px; border-top: 1px solid var(--ink); padding-top: 28px; }
+  .enq__form[hidden] { display: none; }
+  .enq__form[aria-busy] { opacity: 0.6; pointer-events: none; }
+  .f { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .f--wide { grid-column: 1 / -1; }
+  .f label { font-size: 16px; font-weight: 500; }
+  .f label span { font-weight: 400; color: var(--ink-2); margin-left: 6px; }
+  .f :is(input, select, textarea) {
+    width: 100%; min-height: 52px; padding: 13px 16px; border: 1px solid transparent; border-radius: 14px;
+    background: var(--paper-2); color: var(--ink); font: 400 18px/1.4 var(--text); appearance: none;
+    transition: border-color 150ms ease-out, background-color 150ms ease-out;
+  }
+  .f select { padding-right: 44px; background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%); background-size: 6px 6px; background-position: calc(100% - 24px) 50%, calc(100% - 18px) 50%; background-repeat: no-repeat; }
+  .f textarea { resize: vertical; min-height: 132px; }
+  .f :is(input, select, textarea):hover { border-color: color-mix(in srgb, var(--ink) 25%, transparent); }
+  .f :is(input, select, textarea):focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .f [aria-invalid] { border-color: #A3341F; }
+  .f__err { font-size: 15px; line-height: 1.4; color: #A3341F; font-weight: 500; }
+  .f__help { font-size: 15px; line-height: 1.4; color: var(--ink-2); }
+  .tick { display: flex; gap: 12px; align-items: flex-start; font-size: 18px; line-height: 1.4; cursor: pointer; padding-block: 4px; }
+  /* A warm tickbox: paper 2 with a hairline, filled with ink when ticked. */
+  .tick input { appearance: none; width: 24px; height: 24px; margin: 0; flex: none; border-radius: 7px; background: var(--paper-2); border: 1px solid color-mix(in srgb, var(--ink) 30%, transparent); display: grid; place-items: center; cursor: pointer; transition: background-color 150ms ease-out; }
+  .tick input::after { content: ''; width: 11px; height: 6px; border: solid var(--paper); border-width: 0 0 2px 2px; transform: translateY(-1px) rotate(-45deg); opacity: 0; }
+  .tick input:checked { background: var(--ink); border-color: var(--ink); }
+  .tick input:checked::after { opacity: 1; }
+  .tick input:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .enq__trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+  .enq__send { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-top: 6px; }
+  .enq__status { font-size: 16px; line-height: 1.4; }
+
+  .enq__done { border-top: 1px solid var(--ink); padding-top: 28px; display: flex; flex-direction: column; gap: 16px; font-size: 20px; line-height: 1.45; outline: none; }
+  .enq__done[hidden] { display: none; }
+  .enq__done-h { font-size: 40px; line-height: 1.1; font-weight: 700; letter-spacing: -0.045em; }
+  .enq__done .btn { margin-top: 8px; }
+
+  @media (max-width: 1099.98px) {
+    .enq__side { grid-column: 1 / -1; margin-bottom: 40px; }
+    .enq__form, .enq__done { grid-column: 1 / -1; }
+  }
+  @media (max-width: 759.98px) {
+    .enq__form { grid-template-columns: 1fr; gap: 20px; }
+    .enq__p { font-size: 18px; }
+    .enq__done-h { font-size: 32px; }
+  }
+</style>

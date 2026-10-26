@@ -255,3 +255,98 @@ Museum model:
   the trees and sky sit behind the card (Josh chose this "quiet" version
   over full strength and a half-page layout, 26 Oct). Featured work uses
   the same strength, fading to a soft tone behind the lower panes.
+
+## Services pages (26 Oct 2026, built on main at Josh's request)
+- /services/, /services/brand-identity/ and /services/data-visualisation/
+  are built. Social media editing is on /services/ with a button that
+  opens the form preset to it; it has no page of its own yet (brief 6.4:
+  launch with two).
+- Every price shows as "From £[TBC]" until Josh confirms the ladder
+  (Josh, 26 Oct). Rung names, contents and times come from
+  copy/pricing.md draft 3. The ladder data lives in src/data/services.ts.
+- The ladder is four columns under one hairline (three rungs and Custom),
+  not boxed cards. Custom is a paper 2 tone step with the 25px corner.
+  Below 1100px it swipes, one rung at a time, with the next one peeking.
+- Each rung's button opens the form below with that rung chosen. A link
+  with ?need=service:rung does the same, so a rung can be linked to.
+- Service rows on /services/ follow the Framer card head: name left,
+  "from" price where the year sits, hairline under, then the line and
+  the button.
+- Page openings reuse the system page's: a duotoned Huquier hunt crop,
+  the page name in big Agatho, the credits row under it. Brand identity
+  uses the open-sky crop because the hills crop put the word over trees
+  (TASTE 2). Data visualisation uses the lighter threshold crop.
+- Lead paragraphs are 24px, not 32px (TASTE 20: two sizes do the work).
+- Footer text is #6E5024, the dark end of the gold duotone, not the
+  --gold token: tokens.css keeps --gold off small text on paper, and
+  #6E5024 is still the engraving's own ink (TASTE 15).
+- The "how a project runs" steps carry no numbers (TASTE never-do: index
+  labels). The list is still an ordered list for screen readers.
+- Procurement block on /services/ as brief 6.4, with every fact Josh
+  hasn't given marked [TBC]: company number, registered office, VAT,
+  insurance, data protection, quality and environment statements, and
+  confirmation of 30-day terms, e-invoices, the accessibility standard
+  and references. "Supplier pack on request" opens an email. [TBC: is
+  there a supplier pack yet?]
+- Registered office: Josh said the site shows the company number but not
+  the address. UK company law asks for the registered office on the
+  website, so this needs a decision: a registered-office service address
+  would solve both. [TBC]
+
+## Spreadsheet-to-chart piece (26 Oct 2026)
+- The component from home prototype C is shared (DataChart.astro) and
+  sits on the data visualisation page beside a short explanation.
+- No script: the table and the finished chart both show, with the
+  finding and the credit; the toggle button stays hidden. The toggle
+  only appears once the script runs.
+- With script, only one view shows at a time, so the card never holds
+  an empty band for the hidden view. The gold line still draws in.
+- Line is 2px and points have a 2px paper ring (dataviz skill). The end
+  label sits under the last point so it never crosses the line.
+- The dataviz validator passes the gold on paper 2 for contrast (above
+  3:1) but flags its chroma as low ("reads grey"). It's one series in
+  the brand gold, so it stays. Revisit if the chart ever gets a second
+  series.
+
+## Enquiry form (26 Oct 2026, brief 11)
+- Required: name, work email, organisation, what you need. Optional:
+  needed-by date, budget band (brief 11 bands), a message, and "I need a
+  formal written quote for procurement". A message box was added
+  because a quote needs some description; it is optional.
+- "What you need" lists every rung of every service, plus "not sure
+  which yet" and "custom quote" per service and "a mix of services".
+  Service pages preset it to "not sure which yet" for that service.
+- Errors show under each field, in plain words, once a field is left or
+  the form is sent. Focus moves to the first problem. Success replaces
+  the form in place with the thank-you and the Cal.com link.
+- Web3Forms honeypot is its own "botcheck" field. Without JavaScript the
+  form still posts straight to Web3Forms.
+- Turnstile only counts if something checks its answer. Web3Forms only
+  does that on its paid Pro plan (its docs, checked 26 Oct). On the free
+  plan the widget shows but stops nothing. [TBC: Web3Forms Pro, a small
+  Cloudflare Pages Function that checks Turnstile before passing the
+  form on, or drop Turnstile and rely on the honeypot.]
+- Keys live in src/site.ts. [TBC: Web3Forms access key; Josh's real
+  Turnstile site key (Cloudflare's always-pass test key is in for now);
+  Josh's Cal.com link (it points at cal.com for now)]. Until the
+  Web3Forms key is in, sending shows "The form isn't connected yet" with
+  the email address.
+- The form says "the form can't take attachments" next to the email
+  link, as the free plan has no uploads.
+
+## Security headers (26 Oct 2026)
+- CSP now allows Turnstile (script-src and frame-src
+  challenges.cloudflare.com) and Web3Forms (connect-src and form-action
+  api.web3forms.com). Tested in a browser with the policy applied: no
+  violations.
+- Cal.com is a plain link, so the CSP doesn't need it: a policy can't
+  block or allow following a link. It would only need adding if the
+  booking page were ever embedded, which the brief rules out.
+- Astro inlined small scripts into the page, which the CSP would block
+  on Cloudflare. astro.config.mjs now sets assetsInlineLimit to 0, so
+  every script ships as a file.
+
+## Small top line (26 Oct 2026)
+- Until the dock is built, real pages have a small top line: "Conceptual
+  Studio" home link on the left and "[Services]" on the right, with the
+  current page in brackets (TASTE 23).

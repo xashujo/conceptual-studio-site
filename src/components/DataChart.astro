@@ -1,0 +1,142 @@
+---
+// "From spreadsheet to clarity" (brief 5.1): a real, credited FE dataset as a table that turns
+// into a gold-line chart on tap. Built for home prototype C, shared with /services/data-visualisation/.
+// Without JavaScript the table and the finished chart both show and the button stays hidden:
+// the figure only becomes a toggle once the script gives it data-view.
+
+// Adult (19+) government-funded FE and skills participation, England, including apprenticeships.
+// Each year as first published in its own DfE release (2019/20 is the comparison in the 2020/21 release).
+const rows = [
+  { year: '2019/20', n: 1745800 },
+  { year: '2020/21', n: 1640300 },
+  { year: '2021/22', n: 1719600 },
+  { year: '2022/23', n: 1818480 },
+  { year: '2023/24', n: 1830650 },
+  { year: '2024/25', n: 1798970 },
+];
+interface Props { id: string; class?: string; }
+const { id, class: cls } = Astro.props;
+const fmt = (n: number) => n.toLocaleString('en-GB');
+const millions = (n: number) => `${(n / 1e6).toFixed(2)}m`;
+
+// Not zero-based: a line chart of change, with the range stated on the axis.
+const W = 640, H = 340, L = 56, R = 24, T = 28, B = 54;
+const lo = 1.6e6, hi = 1.9e6;
+const x = (i: number) => L + (i * (W - L - R)) / (rows.length - 1);
+const y = (n: number) => T + ((hi - n) * (H - T - B)) / (hi - lo);
+const path = rows.map((r, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)} ${y(r.n).toFixed(1)}`).join(' ');
+const ticks = [1.6e6, 1.7e6, 1.8e6, 1.9e6];
+const labelled = new Set([0, 1, rows.length - 1]); // start, the low, now
+---
+<figure class:list={['dc', cls]} data-chart>
+  <div class="dc__head">
+    <h2 class="dc__title" id={`${id}-title`}>Adults in government-funded further education, England</h2>
+    <button class="btn dc__toggle" type="button" aria-pressed="false" aria-controls={`${id}-body`} hidden>
+      <span data-label>Show as a chart</span><span class="arrow" aria-hidden="true">→</span>
+    </button>
+  </div>
+  <div class="dc__body" id={`${id}-body`}>
+    <table class="dc__table" aria-labelledby={`${id}-title`}>
+      <thead><tr><th scope="col">Academic year</th><th scope="col">Learners aged 19 and over</th></tr></thead>
+      <tbody>
+        {rows.map((r) => <tr><th scope="row">{r.year}</th><td>{fmt(r.n)}</td></tr>)}
+      </tbody>
+    </table>
+    <svg class="dc__chart" viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby={`${id}-title ${id}-find`}>
+      {ticks.map((t) => (
+        <g class="dc__tick">
+          <line x1={L} x2={W - R} y1={y(t)} y2={y(t)} />
+          <text x={L - 10} y={y(t) + 4} text-anchor="end">{(t / 1e6).toFixed(1)}m</text>
+        </g>
+      ))}
+      {rows.map((r, i) => <text class="dc__x" x={x(i)} y={H - 14} text-anchor="middle"><tspan class="dc__long">{r.year}</tspan><tspan class="dc__short">{r.year.slice(2)}</tspan></text>)}
+      <path class="dc__line" d={path} pathLength="1" />
+      {rows.map((r, i) => (
+        <g class:list={['dc__pt', { 'is-labelled': labelled.has(i) }]} tabindex="0">
+          <circle class="dc__hit" cx={x(i)} cy={y(r.n)} r="18" />
+          <circle class="dc__dot" cx={x(i)} cy={y(r.n)} r="5" />
+          <text x={x(i)} y={y(r.n) + (i === 0 ? -14 : 28)} text-anchor={i === rows.length - 1 ? 'end' : i === 0 ? 'start' : 'middle'}>{millions(r.n)}</text>
+          <title>{r.year}: {fmt(r.n)} learners</title>
+        </g>
+      ))}
+    </svg>
+  </div>
+  <p class="dc__find" id={`${id}-find`}>Participation fell to 1.64 million in the first Covid year, 2020/21, and has been back at about 1.8 million since 2022/23.</p>
+  <figcaption class="plate">
+    <b>Further education and skills, Department for Education, 2020/21 to 2024/25</b>
+    <span>(Explore education statistics. Each year as first published, apprenticeships included)</span>
+  </figcaption>
+</figure>
+
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-chart]').forEach((fig) => {
+    const btn = fig.querySelector<HTMLButtonElement>('.dc__toggle')!;
+    const label = btn.querySelector<HTMLElement>('[data-label]')!;
+    fig.dataset.view = 'table';
+    btn.hidden = false;
+    btn.addEventListener('click', () => {
+      const chart = fig.dataset.view === 'table';
+      fig.dataset.view = chart ? 'chart' : 'table';
+      btn.setAttribute('aria-pressed', String(chart));
+      label.textContent = chart ? 'Show as a table' : 'Show as a chart';
+    });
+  });
+</script>
+
+<style>
+  /* A tone step, not a box (paper 2), with the image-corner radius. */
+  .dc { background: var(--paper-2); border-radius: 25px; padding: 28px 28px 22px; display: grid; gap: 18px; }
+  .dc__head { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+  .dc__title { font-size: 20px; line-height: 1.3; font-weight: 600; letter-spacing: -0.01em; max-width: 26ch; }
+  .dc__toggle[hidden] { display: none; }
+  .dc__toggle { --fill: var(--paper); --fill-hover: color-mix(in srgb, var(--ink) 6%, var(--paper)); flex: none; font-size: 16px; min-height: 44px; }
+  /* No script: table, then the finished chart. With script: one view at a time, so the card is
+     never held open by the hidden view (the gold line still draws in). */
+  .dc__body { display: grid; gap: 28px; }
+  .dc[data-view] .dc__body { gap: 0; }
+  .dc[data-view='table'] .dc__chart, .dc[data-view='chart'] .dc__table { display: none; }
+
+  .dc__table { width: 100%; border-collapse: collapse; font-size: 18px; font-variant-numeric: tabular-nums; align-self: start; }
+  .dc__table th, .dc__table td { text-align: left; padding: 11px 0; border-bottom: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); font-weight: 400; }
+  .dc__table thead th:last-child { text-align: right; }
+  .dc__table thead th { font-size: 14px; color: var(--ink-2); padding-top: 0; border-bottom-color: var(--ink); }
+  .dc__table td { text-align: right; }
+  .dc__table tbody tr:last-child > * { border-bottom: 0; font-weight: 600; }
+
+  .dc__chart { width: 100%; height: auto; overflow: visible; font: 500 14px/1 var(--text); }
+  .dc__tick line { stroke: color-mix(in srgb, var(--ink) 14%, transparent); stroke-width: 1; }
+  .dc__tick text, .dc__x { fill: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .dc__line { fill: none; stroke: var(--gold); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .dc[data-view] .dc__line { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .dc__dot { fill: var(--gold); stroke: var(--paper-2); stroke-width: 2; transition: opacity 200ms ease-out 700ms; }
+  .dc[data-view='table'] .dc__dot { opacity: 0; }
+  .dc__hit { fill: transparent; }
+  .dc__pt { outline: none; cursor: default; }
+  .dc__pt text { fill: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; opacity: 0; transition: opacity 150ms ease-out; }
+  .dc:not([data-view]) .is-labelled text { opacity: 1; }
+  .dc__pt:is(:hover, :focus-visible) .dc__dot { r: 7; }
+  .dc__pt:is(:hover, :focus-visible) text { opacity: 1; }
+  .dc__find { font-size: 16px; line-height: 1.5; }
+  .dc__short { display: none; }
+
+  .dc[data-view='table'] .dc__chart, .dc[data-view='table'] .dc__find { opacity: 0; pointer-events: none; visibility: hidden; }
+  .dc[data-view='table'] .dc__find { display: none; }
+  .dc[data-view='chart'] .dc__table { opacity: 0; pointer-events: none; visibility: hidden; }
+  /* On tap the gold line draws itself once, then the points and the three labels arrive. */
+  .dc[data-view='chart'] .dc__line { stroke-dashoffset: 0; transition: stroke-dashoffset 900ms var(--ease-out) 150ms; }
+  .dc[data-view='chart'] .dc__dot { opacity: 1; }
+  .dc[data-view='chart'] .is-labelled text { opacity: 1; transition-delay: 800ms; }
+
+  @media (max-width: 759.98px) {
+    .dc { padding: 20px 16px 18px; border-radius: 22px; }
+    .dc__head { flex-direction: column; align-items: flex-start; }
+    .dc__title { font-size: 18px; }
+    .dc__table { font-size: 16px; }
+    /* Phones: no cross-fade cell, the hidden view simply goes, so there's no empty band. */
+    .dc__chart { font-size: 27px; }
+    .dc__line { stroke-width: 3.6; }
+    .dc__long { display: none; }
+    .dc__short { display: inline; }
+  }
+</style>

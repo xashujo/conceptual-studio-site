@@ -1,0 +1,114 @@
+---
+// One service page (brief 6.4): what's included, the kinds of work with real examples, the ladder,
+// process, FAQs and the enquiry form preset to this service. The "live" slot holds the chart.
+import type { ImageMetadata } from 'astro';
+import Site from '../layouts/Site.astro';
+import PageOpen from './PageOpen.astro';
+import Exhibits from './Exhibits.astro';
+import Ladder from './Ladder.astro';
+import Stages from './Stages.astro';
+import Enquiry from './Enquiry.astro';
+import { serviceById } from '../data/services';
+
+interface Props {
+  service: string; title: string; description: string;
+  word: string[]; size: string; art: ImageMetadata; artPosition?: string;
+  kinds: string;
+  exhibits: { img: ImageMetadata; alt: string; pos?: string; title: string; medium: string }[];
+  faqs: { q: string; a: string }[];
+}
+const { service, title, description, word, size, art, artPosition, kinds, exhibits, faqs } = Astro.props;
+const s = serviceById(service);
+---
+<Site title={title} description={description} current="services" turnstile>
+  <main>
+    <PageOpen word={word} art={art} artPosition={artPosition} size={size} who="Conceptual Studio" what={`${s.tiers[0].price}, ${s.tiers[0].time}`}>
+      <a class="link" href="#prices">See the prices<span class="arrow" aria-hidden="true">→</span></a>
+    </PageOpen>
+
+    <section class="sp-intro wrap" aria-label="What's included">
+      <p class="sp-lead">{s.line}</p>
+      <p class="sp-kinds">{kinds}</p>
+    </section>
+
+    {Astro.slots.has('live') && <section class="sp-live wrap"><slot name="live" /></section>}
+
+    <section class="sp-work wrap" aria-labelledby="work-h">
+      <h2 class="h2 sp-h" id="work-h">Recent work</h2>
+      <Exhibits items={exhibits} />
+    </section>
+
+    <section class="sp-prices wrap" id="prices" aria-labelledby="prices-h">
+      <div class="sp-prices__head">
+        <h2 class="h2" id="prices-h">Prices</h2>
+        <p>Every project is priced on its scope, so these are starting points. You’ll get a fixed quote after our first call. Times run from that call to your final files, feedback included. [TBC: whether prices include VAT]</p>
+      </div>
+      <Ladder service={service} />
+    </section>
+
+    <section class="sp-how wrap" aria-labelledby="how-h">
+      <h2 class="h2 sp-h" id="how-h">How a project runs</h2>
+      <Stages />
+    </section>
+
+    <section class="sp-faq wrap" aria-labelledby="faq-h">
+      <h2 class="h2 sp-faq__h" id="faq-h">Questions</h2>
+      <div class="sp-faq__list">
+        {faqs.map((f) => (
+          <details>
+            <summary>{f.q}<span class="arrow" aria-hidden="true">→</span></summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <Enquiry service={service} />
+  </main>
+</Site>
+
+<style>
+  .sp-intro { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-top: 160px; }
+  .sp-lead { grid-column: 1 / span 8; font-size: 24px; line-height: 1.4; letter-spacing: -0.01em; font-weight: 500; max-width: 40ch; text-wrap: pretty; }
+  .sp-kinds { grid-column: 1 / span 6; margin-top: 24px; font-size: 20px; line-height: 1.45; color: var(--ink-2); }
+  .sp-live { padding-top: 96px; }
+  .sp-work { padding-top: 120px; }
+  .sp-h { margin-bottom: 24px; }
+
+  .sp-prices { padding-top: 160px; scroll-margin-top: 24px; }
+  .sp-prices__head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; margin-bottom: 32px; align-items: end; }
+  .sp-prices__head h2 { grid-column: 1 / span 4; }
+  .sp-prices__head p { grid-column: 6 / -1; font-size: 18px; line-height: 1.5; color: var(--ink-2); max-width: 56ch; }
+
+  .sp-how { padding-top: 160px; }
+
+  .sp-faq { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-block: 160px; }
+  .sp-faq__h { grid-column: 1 / span 4; }
+  .sp-faq__list { grid-column: 6 / -1; border-top: 1px solid var(--ink); }
+  .sp-faq details { border-bottom: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); }
+  .sp-faq summary { display: flex; justify-content: space-between; gap: 24px; align-items: baseline; padding-block: 18px; font-size: 20px; line-height: 1.35; font-weight: 500; cursor: pointer; list-style: none; }
+  .sp-faq summary::-webkit-details-marker { display: none; }
+  .sp-faq summary .arrow { transform: rotate(90deg); transition: transform 180ms ease-out; }
+  .sp-faq details[open] summary .arrow { transform: rotate(-90deg); }
+  .sp-faq summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 4px; }
+  .sp-faq details p { padding-bottom: 22px; font-size: 18px; line-height: 1.5; max-width: 60ch; }
+
+  @media (max-width: 1099.98px) {
+    .sp-lead { grid-column: 1 / -1; font-size: 24px; }
+    .sp-kinds { grid-column: 1 / span 9; }
+    .sp-prices__head h2, .sp-prices__head p { grid-column: 1 / -1; }
+    .sp-prices__head p { margin-top: 12px; }
+    .sp-faq__h, .sp-faq__list { grid-column: 1 / -1; }
+    .sp-faq__h { margin-bottom: 24px; }
+  }
+  @media (max-width: 759.98px) {
+    .sp-intro { padding-top: 112px; }
+    .sp-lead { font-size: 20px; line-height: 1.45; }
+    .sp-kinds { grid-column: 1 / -1; font-size: 18px; }
+    .sp-live { padding-top: 64px; }
+    .sp-work { padding-top: 80px; }
+    .sp-prices, .sp-how { padding-top: 112px; }
+    .sp-faq { padding-block: 112px; }
+    .sp-faq summary { font-size: 18px; }
+  }
+</style>

@@ -1,0 +1,53 @@
+---
+// The pricing ladder (brief 6.4): three rungs plus Custom, side by side on desktop, swiped on phones.
+// Columns under one margin-to-margin hairline (TASTE 18), not boxed cards (TASTE never-do).
+// Each button opens the enquiry form below with that rung chosen.
+import { serviceById, custom } from '../data/services';
+interface Props { service: string }
+const s = serviceById(Astro.props.service);
+const rungs = [...s.tiers.map((t) => ({ ...t, value: `${s.id}:${t.id}` })), { ...custom, value: `${s.id}:custom` }];
+---
+<div class="ladder" role="list">
+  {rungs.map((t) => (
+    <article class:list={['rung', { 'rung--custom': t.id === 'custom' }]} role="listitem" aria-labelledby={`rung-${t.value.replace(':', '-')}`}>
+      <h3 class="rung__name" id={`rung-${t.value.replace(':', '-')}`}>{t.name}</h3>
+      <p class="rung__price">{t.price}</p>
+      {t.time && <p class="rung__time">{t.time}</p>}
+      <p class="rung__inc">{t.included}</p>
+      {t.note && <p class="rung__note">{t.note}</p>}
+      <a class="btn rung__btn" href={`?need=${t.value}#enquire`} data-need={t.value}>
+        <span class="swap"><span>{t.id === 'custom' ? 'Ask for a quote' : 'Choose this'}</span><span aria-hidden="true">Open the form</span></span><span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </article>
+  ))}
+</div>
+
+<style>
+  .ladder { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--ink); }
+  .rung { display: flex; flex-direction: column; gap: 10px; padding: 24px 24px 28px; }
+  .rung:first-child { padding-left: 0; }
+  .rung + .rung { border-left: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); }
+  /* Custom is a tone step, not another box, with Framer's 25px corner at the bottom. */
+  .rung--custom { background: var(--paper-2); border-radius: 0 0 25px 25px; border-left-color: transparent !important; }
+  .rung__name { font-size: 20px; line-height: 1.3; font-weight: 600; letter-spacing: -0.01em; }
+  .rung__price { font-size: 40px; line-height: 1.1; font-weight: 700; letter-spacing: -0.045em; margin-top: 18px; }
+  .rung__time { font-size: 20px; line-height: 1.3; color: var(--ink-2); }
+  .rung__inc { font-size: 18px; line-height: 1.5; margin-top: 14px; }
+  .rung__note { font-size: 16px; line-height: 1.5; color: var(--ink-2); }
+  .rung__btn { margin-top: auto; align-self: flex-start; }
+  .rung > :nth-last-child(2) { margin-bottom: 24px; }
+  .rung--custom .rung__btn { --fill: var(--ink); --fill-hover: var(--ink); --fill-pressed: color-mix(in srgb, var(--ink) 84%, var(--paper)); color: var(--paper); }
+
+  /* Phones and small tablets: one rung per swipe, the next one peeking in. */
+  @media (max-width: 1099.98px) {
+    .ladder { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: min(78%, 340px); overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--margin); margin-inline: calc(-1 * var(--margin)); padding-inline: var(--margin); border-top: 0; scrollbar-width: none; }
+    .ladder::-webkit-scrollbar { display: none; }
+    .rung { scroll-snap-align: start; border-top: 1px solid var(--ink); padding-left: 20px; }
+    .rung:first-child { padding-left: 0; }
+    .rung--custom { padding-left: 20px !important; }
+  }
+  @media (max-width: 759.98px) {
+    .rung { padding: 20px 16px 24px; }
+    .rung__price { font-size: 34px; }
+  }
+</style>

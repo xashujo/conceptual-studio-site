@@ -1,0 +1,49 @@
+---
+// Shell for real pages: head, a small top line, and the footer landscape (TASTE 15).
+// The dock (TASTE 24) replaces the top line once it's built.
+import '../styles/tokens.css';
+import '../styles/components.css';
+import FooterEngraving from '../components/FooterEngraving.astro';
+import { email } from '../site';
+interface Props { title: string; description: string; current?: 'services'; turnstile?: boolean }
+const { title, description, current, turnstile = false } = Astro.props;
+---
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="preload" href="/fonts/agatho-medium-subset.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter-4-variable.woff2" as="font" type="font/woff2" crossorigin />
+    {turnstile && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
+  </head>
+  <body>
+    <header class="top wrap">
+      <a class="top__home" href="/">Conceptual Studio</a>
+      <nav aria-label="Main">
+        <a href="/services/" aria-current={current === 'services' ? 'page' : undefined}>{current === 'services' ? '[Services]' : 'Services'}</a>
+      </nav>
+    </header>
+    <slot />
+    <footer class="foot">
+      <div class="foot__text wrap">
+        <p>Conceptual Studio Limited, registered in England and Wales. Company number [TBC].</p>
+        <p><a href={`mailto:${email}`}>{email}</a></p>
+      </div>
+      <FooterEngraving />
+    </footer>
+  </body>
+</html>
+
+<style>
+  .top { position: absolute; z-index: 2; inset: 0 0 auto; display: flex; justify-content: space-between; align-items: center; height: 72px; font-size: 18px; font-weight: 500; letter-spacing: -0.01em; }
+  .top a { text-decoration: none; padding-block: 12px; }
+  .top nav { display: flex; gap: 28px; }
+  /* Footer: small text in the top third, in the engraving's gold ink (TASTE 15). */
+  .foot { margin-top: 160px; color: #6E5024; } /* the duotone's dark ink: same ink as the engraving, readable at 16px */
+  .foot__text { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; font-size: 16px; line-height: 1.5; font-weight: 500; }
+  .foot__text a { text-underline-offset: 4px; text-decoration-thickness: 1px; }
+  @media (max-width: 759.98px) { .foot { margin-top: 112px; } .top { height: 60px; font-size: 17px; } }
+</style>

@@ -1,0 +1,27 @@
+---
+// Real work, shown in use, full colour, each with its plate caption (TASTE 7, 8). A pair: 5:4 on
+// desktop, 4:5 on phones, with Framer's 25px image corner (DECISIONS).
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import PlateCaption from './PlateCaption.astro';
+interface Item { img: ImageMetadata; alt: string; pos?: string; title: string; medium: string }
+interface Props { items: Item[] }
+const { items } = Astro.props;
+---
+<div class="ex">
+  {items.map((it) => (
+    <figure>
+      <Image src={it.img} alt={it.alt} widths={[600, 900, 1400]} sizes="(max-width: 759px) 100vw, 50vw" style={`object-position:${it.pos ?? '50% 50%'}`} />
+      <PlateCaption title={it.title} medium={it.medium} />
+    </figure>
+  ))}
+</div>
+
+<style>
+  .ex { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .ex img { width: 100%; aspect-ratio: 5 / 4; object-fit: cover; border-radius: 25px; }
+  @media (max-width: 759.98px) {
+    .ex { grid-template-columns: 1fr; gap: 40px; }
+    .ex img { aspect-ratio: 4 / 5; border-radius: 22px; }
+  }
+</style>

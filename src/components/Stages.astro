@@ -1,0 +1,31 @@
+---
+// How a project runs (DECISIONS: call and brief, design and feedback, revisions and finishing, handover).
+const stages = [
+  { name: 'Call and brief', text: 'We talk about what you need, who it’s for and when you need it. I send a fixed quote within three working days.' },
+  { name: 'Design and feedback', text: 'I design the first round and take you through it. You tell me what’s working and what isn’t.' },
+  { name: 'Revisions and finishing', text: 'I make the changes and prepare the final files. [TBC: rounds of changes included]' },
+  { name: 'Handover', text: 'You get the final files in the formats agreed in the quote.' },
+];
+---
+<ol class="stages">
+  {stages.map((s) => (
+    <li><h3>{s.name}</h3><p>{s.text}</p></li>
+  ))}
+</ol>
+
+<style>
+  .stages { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--ink); }
+  .stages li { padding: 22px 24px 0 0; display: flex; flex-direction: column; gap: 10px; }
+  .stages li + li { padding-left: 24px; border-left: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); }
+  .stages h3 { font-size: 20px; line-height: 1.3; font-weight: 600; letter-spacing: -0.01em; }
+  .stages p { font-size: 18px; line-height: 1.5; max-width: 30ch; }
+  @media (max-width: 1099.98px) {
+    .stages { grid-template-columns: 1fr 1fr; row-gap: 32px; }
+    .stages li:nth-child(3) { padding-left: 0; border-left: 0; }
+  }
+  @media (max-width: 759.98px) {
+    .stages { grid-template-columns: 1fr; row-gap: 0; }
+    .stages li, .stages li + li { padding: 18px 0 20px; border-left: 0; }
+    .stages li + li { border-top: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); }
+  }
+</style>

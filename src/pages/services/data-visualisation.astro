@@ -1,0 +1,47 @@
+---
+import ServicePage from '../../components/ServicePage.astro';
+import DataChart from '../../components/DataChart.astro';
+import art from '../../assets/art/engraved/hunt-sky-threshold.jpg';
+import strategic from '../../assets/work/new-city-college-strategic-intent/02.webp';
+import bsix from '../../assets/work/new-city-college-infographics/02.webp';
+---
+<ServicePage
+  service="data"
+  title="Data visualisation and reports | Conceptual Studio"
+  description="Charts, maps, infographics and reports from a London design studio, built from your own figures, with starting prices."
+  word={['Data', 'visualisation']}
+  size="clamp(60px, 14.6vw, 230px)"
+  art={art}
+  artPosition="50% 0%"
+  kinds="That can be a set of charts for a document you're laying out yourself, a whole annual, strategy or sustainability report, or custom maps, like heat maps of London boroughs."
+  exhibits={[
+    { img: strategic, alt: 'Black map of east London boroughs showing the colleges that merged to form New City College, with a timeline from 1990 to 2024', title: 'Strategic Intent, New City College London, 2025', medium: 'Map and timeline of the college mergers, 1990 to 2024' },
+    { img: bsix, pos: '50% 30%', alt: 'Consultation page with a black map of London marking the BSix and New City College campuses', title: 'New City College London, 2024', medium: 'Maps for the BSix merger consultation' },
+  ]}
+  faqs={[
+    { q: 'Do the prices include VAT?', a: '[TBC]' },
+    { q: 'What files do I get?', a: 'Charts come as PNG and PDF, ready for your own layout. A full report comes as print-ready PDFs for coated and uncoated paper, an accessible PDF and PNGs of every chart.' },
+    { q: 'Can the charts match our brand?', a: 'Yes. They are drawn in your colours and typefaces, so they sit in your documents as if your own team had made them.' },
+    { q: 'How long does a report take?', a: 'Charts take from 1 week and a report of around 16 pages from 2 weeks, counted in calendar time from our first call to your final files. Longer reports are quoted.' },
+    { q: 'Can you design a report we reuse every year?', a: 'Yes. That is the top rung: the report is built as a template, so next year’s edition starts from your new figures, not a blank page.' },
+  ]}
+>
+  <div class="live" slot="live">
+    <div class="live__text">
+      <h2 class="h2">A table becomes a chart</h2>
+      <p>These are real figures from the Department for Education, shown as the table you’d get in a spreadsheet. Press the button to see what I do with them.</p>
+    </div>
+    <div class="live__chart"><DataChart id="dv-chart" /></div>
+  </div>
+</ServicePage>
+
+<style>
+  .live { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; align-items: start; }
+  .live__text { grid-column: 1 / span 4; display: flex; flex-direction: column; gap: 14px; padding-top: 28px; }
+  .live__text p { font-size: 18px; line-height: 1.5; max-width: 32ch; }
+  .live__chart { grid-column: 5 / -1; }
+  @media (max-width: 1099.98px) {
+    .live__text, .live__chart { grid-column: 1 / -1; }
+    .live__text { padding-top: 0; margin-bottom: 28px; }
+  }
+</style>
