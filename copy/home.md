@@ -1,4 +1,4 @@
-# Home page copy (draft 5)
+# Home page copy (draft 6)
 
 Rules applied: DECISIONS.md, brief sections 1, 3 and 6.1. Plain British English, "I", no em dashes, none of the banned words. No personal name anywhere on the page: the studio is "Conceptual Studio" and the voice is "I".
 
@@ -40,18 +40,21 @@ Link under the section: All projects
 Every project is priced on its scope, so these are starting points. You'll get a fixed quote after our first call.
 
 Brand identity
-From £4,900, from 14 days
+From £4,900, from 4 weeks
 A logo, colours, type, mockups and the rules for using them, so your own team can make new material without coming back to me every time.
 
 Data visualisation and reports
-From £1,750, from 5 days
+From £1,750, from 2 weeks
 Charts, maps and infographics, and the reports they sit in, from annual reports to sustainability reports, drawn from your own figures.
 
 Social media editing
-From £350, from 1 day
+From £200 per video, or from £1,200 a month
 Short videos cut from your footage, with captions and versions sized for each platform. Single edits, monthly packs or a monthly retainer.
 
 Service links: Brand identity prices / Data visualisation prices / Social media editing prices
+
+Need something else, or a mix of these? I'll send a fixed quote within three working days.
+Link: Ask for a custom quote
 
 ## Proof
 

@@ -69,6 +69,13 @@ Museum model:
   days x £350: brand identity from £4,900 and 14 days (Josh: a full
   identity takes at least that long solo). Other ladder rungs and
   times are proposed in copy/pricing.md. (proposed)
+- Times on the site are always calendar time (first call to final
+  files), never working days. (Josh)
+- Social media editing is priced for someone new to selling it: single
+  edit from £200, monthly pack (8 videos) from £1,200, retainer
+  (12 videos, 3-month minimum) from £1,800 a month. (proposed)
+- There is a custom quote option on the home page and the pricing
+  page, answered within three working days. (Josh)
 - Availability pill says "Taking new projects" with no month, so it
   doesn't need monthly updates. (Josh)
 - Reply time: within three working days. (Josh)
