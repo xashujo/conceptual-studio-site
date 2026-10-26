@@ -20,17 +20,17 @@ const hunt = { title: 'La Chasse Chinoise (The Chinese Hunt), after François Bo
 const links = [['Work', '#work'], ['Services', '#'], ['About', '#'], ['Contact', '#']];
 ---
 <Proto title="Prototype A, refined">
-  <nav class="nav glass" aria-label="Main" data-refract>
-    <a class="nav__mark" href="/prototypes/home-a/">Conceptual Studio</a>
-    <ul class="nav__links">
-      <li><a href="/prototypes/home-a/" aria-current="page">[Home]</a></li>
-      {links.map(([l, h]) => <li><a href={h}>{l}</a></li>)}
-    </ul>
-    <a class="nav__menu" href="#">Menu</a>
-  </nav>
 
   <main>
     <header class="a" id="a-art">
+      <nav class="nav plate-glass" aria-label="Main" data-liquid="a-art" data-tone="light" data-opacity="0.52">
+        <a class="nav__mark" href="/prototypes/home-a/">Conceptual Studio</a>
+        <ul class="nav__links">
+          <li><a href="/prototypes/home-a/" aria-current="page">[Home]</a></li>
+          {links.map(([l, h]) => <li><a href={h}>{l}</a></li>)}
+        </ul>
+        <a class="nav__menu" href="#">Menu</a>
+      </nav>
       <Image class="a__art" src={sky} alt="" widths={[800, 1600]} sizes="100vw" loading="eager" />
       <div class="a__plate plate-glass" data-liquid="a-art" data-tone="light" data-opacity="0.52">
         <h1 class="a__h">{headline}</h1>
@@ -84,18 +84,18 @@ const links = [['Work', '#work'], ['Services', '#'], ['About', '#'], ['Contact',
 </Proto>
 
 <style>
-  /* Nav: chrome glass (Tier B) floating over the painting; the current page in brackets (TASTE 23). */
-  .nav { position: fixed; z-index: 10; top: 14px; left: var(--margin); right: var(--margin); height: 60px; border-radius: 28px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 12px 0 24px; }
+  /* Nav: the same plate glass as the hero card, set over the painting at the top of the page; the current page in brackets (TASTE 23). */
+  .nav { position: absolute; z-index: 10; top: 14px; left: var(--margin); right: var(--margin); height: 60px; border-radius: 28px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 12px 0 24px; }
   .nav__mark { font-family: var(--display); font-size: 24px; letter-spacing: -0.02em; text-decoration: none; }
   .nav__links { list-style: none; display: flex; gap: 4px; margin: 0; padding: 0; }
   .nav__links a { display: block; padding: 10px 14px; font-size: 17px; font-weight: 500; text-decoration: none; border-radius: var(--pill); transition: background-color 200ms ease-out; }
   .nav__links a:hover { background: color-mix(in srgb, var(--ink) 6%, transparent); }
   .nav__menu { display: none; }
 
-  /* Hero: the painting is the screen. The plate is narrower and taller, its right edge over the palm. */
+  /* Hero: the painting is the screen. The plate is centred (Josh, 26 Oct). */
   .a { position: relative; isolation: isolate; min-height: 100svh; padding: 116px var(--margin) 40px; display: grid; grid-template-rows: 1fr auto; }
   .a__art { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; object-position: 50% 70%; -webkit-mask-image: linear-gradient(to bottom, #000 74%, transparent); mask-image: linear-gradient(to bottom, #000 74%, transparent); }
-  .a__plate { align-self: center; justify-self: start; margin-left: 31vw; width: min(640px, 46vw); padding: 44px 44px 40px; display: grid; gap: 22px; }
+  .a__plate { align-self: center; justify-self: center; width: min(640px, 46vw); padding: 44px 44px 40px; display: grid; gap: 22px; }
   .a__h { font-family: var(--display); font-weight: 500; font-size: clamp(34px, 2.9vw, 42px); line-height: 1.06; letter-spacing: -0.02em; text-wrap: balance; }
   .a__p { font-size: 18px; line-height: 1.5; }
   .a__plate :global(.avail) { --fill: color-mix(in srgb, var(--paper) 55%, transparent); }
@@ -117,7 +117,7 @@ const links = [['Work', '#work'], ['Services', '#'], ['About', '#'], ['Contact',
 
   @media (max-width: 1099.98px) {
     .nav__links li:not(:first-child) { display: none; }
-    .a__plate { margin-left: 18vw; width: min(600px, 64vw); }
+    .a__plate { width: min(600px, 72vw); }
   }
   @media (max-width: 759.98px) {
     .nav { top: 10px; height: 54px; padding: 0 8px 0 18px; }
