@@ -74,6 +74,10 @@ Museum model:
 - "Colleges" is used once in my own copy, in the "Who I work with"
   line. No universities, academy trusts or charities until there's
   work to show for them. (proposed)
+- "Who I work with" lists colleges, adult learning, a language
+  school, a Tokyo tech startup and corporate clients (New York
+  General Group). No "musicians and artists": there's one, and she
+  belongs under 3D and motion (music videos). (Josh)
 - How I work: call and brief, design and feedback, revisions and
   finishing, handover. (Josh)
 - Keep "View project" from the Framer site. Primary action is

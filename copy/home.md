@@ -1,4 +1,4 @@
-# Home page copy (draft 2)
+# Home page copy (draft 3)
 
 Rules applied: DECISIONS.md, brief sections 1, 3 and 6.1. Plain British English, "I", no em dashes, none of the banned words. No personal name anywhere on the page: the studio is "Conceptual Studio" and the voice is "I".
 
@@ -10,7 +10,7 @@ Headline:
 Brand identity and data visualisation for education and public institutions
 
 Sentence under it:
-Conceptual Studio is my design practice in London. Most of my work is in education, and I also take on commercial projects and work for artists.
+Conceptual Studio is my design practice in London. Most of my work is in education. I also design for companies, and make 3D and motion work for campaigns and music videos.
 
 The headline is long, so it needs a smaller display size to stay within two lines.
 
@@ -22,7 +22,7 @@ Availability pill: Taking new projects
 
 Sits near the hero.
 
-I work with further education colleges and adult learning services, a language school in Oxford, a tech startup in Tokyo, corporate clients, and artists who need 3D and motion.
+I work with further education colleges and adult learning services, a language school in Oxford, a tech startup in Tokyo and corporate clients.
 
 ## Trusted by
 
