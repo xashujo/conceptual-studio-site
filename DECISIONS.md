@@ -130,3 +130,63 @@ Museum model:
 - Glass is built on dashersw/liquid-glass-js and should match Apple's
   iOS 27 Liquid Glass as closely as the web allows. Full spec in TASTE.md.
 - TASTE.md holds the taste rules; this file wins where they disagree.
+
+## /system/ page (26 Oct 2026, branch system-page)
+- /system/ shows the design system at real size. It is not in the nav
+  and is hidden from search engines.
+- Night ground is #14110D, not #000 (the rebuild token was wrong).
+  Paper 2 at night is #221D17. Secondary text is 62% ink mixed into
+  paper (#5C554C on paper, 5.6:1), never a neutral grey.
+- Threshold art is chinoiserie, not the Lairesse (Josh, 26 Oct: his
+  favourites). Boucher on paper, a London chinoiserie at night:
+  - Opening and light glass: La Chasse Chinoise (The Chinese Hunt),
+    etching by Gabriel and Jacques Gabriel Huquier after Boucher, after
+    1743. The Met 53.600.1009, public domain. Crops: the open sky and
+    palm (page word sits on the sky), and the far pavilion and hills.
+  - Night glass and dock: the Chinese building and Rotunda, Ranelagh
+    Gardens, Chelsea, 1752. Hand-coloured etching by Charles Grignion
+    after Canaletto. Rijksmuseum RP-P-1932-457, public domain. Tones are
+    inverted so the etched lines glow gold on warm black.
+  - Boucher's original paintings (Besançon) have no free-to-use files,
+    so the prints made from them at the time are used instead.
+  - Other free options found for later: Huquier's Le Jardin Chinois
+    (The Met 53.600.1008); William Marlow's View of the Wilderness at
+    Kew with Chambers's pagoda, 1763 (The Met 25.19.43).
+- Gold duotone on paper runs #6E5024 to #F1DFC8 (#8A6A38 behind the
+  page word, so the word stays the darkest thing). Both fade out top and
+  bottom like the footer engraving.
+- No hairline under the big page word: the descender of the "y" hangs
+  below it and the rule looked detached. This overrides TASTE rule 3's
+  "standing on a hairline". The credits row sits directly under the word.
+- On phones the night etching is 860px tall so both the dock and the
+  plate sit over the etching, never over plain black.
+- Refraction must be visible, like iOS 27 and macOS Tahoe (Josh,
+  26 Oct). This replaces TASTE.md's "library defaults, kept", which bent
+  only the outer few pixels.
+  - Plates (WebGL, every browser): a convex lens bezel 20% of the short
+    side (14 to 48px) bends the art behind outward, up to 1.1× the
+    bezel width at the rim. Red and blue split by 8% at the rim. Blur
+    and tint drop on the rim (tint to a quarter) so the bend reads; the
+    middle keeps the full blur and tint so text stays legible.
+  - Dock and bars (CSS, over live content): SVG bend at -70, band up to
+    half the short side, blur 5px, tint 42% while bending. Chromium
+    only; Safari and Firefox show plain frosted glass.
+- Plate glass as built: light tint 0.48; dark tint #14110D at 0.62;
+  top-rim highlight 0.30 light and 0.20 dark, strongest at the top
+  left; a 1px darkened inner edge at 10% light and 35% dark.
+- The gold flourish on warm black gets one cast shadow, down and to
+  the right, because the light comes from the top left. No glow and no
+  pool of light behind it.
+- Primary button: hover only swaps the label ("Book a call" to "Contact
+  me ↗"). One change per hover. Pill: the arrow turns and the fill
+  deepens, as on Framer. Pressed: the fill deepens and the button
+  shrinks to 97%. Focus: a 2px ink ring, 3px out.
+- Project card: image 16:9 on desktop (4:5 on phones) so the whole
+  exhibit fits one screen at 1440. Corners 25px image, 16px inset,
+  41px card; on phones 22px, 10px, 32px.
+- Plate captions are 12px (the brief's minimum; TASTE allows 11 to 12).
+- The Oxford shopfront photo is the old sign ("Before"), so it is not an
+  exhibit. The card uses the bus shelter poster instead. [TBC: is there
+  a photo of the new sign in place on the shopfront?]
+- Copy email uses joshuamcdonald099@gmail.com, as on the Framer contact
+  page. [TBC: a studio address instead?]
