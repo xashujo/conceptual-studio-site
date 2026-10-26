@@ -99,7 +99,8 @@ a { color: inherit; }
     inset 0 0 0 1px rgb(0 0 0 / 0.35),
     0 12px 32px -14px rgb(0 0 0 / 0.6);
 }
-.glass.is-refracting { -webkit-backdrop-filter: var(--refract) blur(14px) saturate(1.7); backdrop-filter: var(--refract) blur(14px) saturate(1.7); }
+/* A light blur so the bent rim stays readable as a bend (Josh wants visible refraction). */
+.glass.is-refracting { background: color-mix(in srgb, var(--paper) 42%, transparent); -webkit-backdrop-filter: var(--refract) blur(5px) saturate(1.7); backdrop-filter: var(--refract) blur(5px) saturate(1.7); }
 
 /* Tier A, plate glass: the WebGL canvas replaces the backdrop once it has drawn. */
 .plate-glass { position: relative; border-radius: 28px; }

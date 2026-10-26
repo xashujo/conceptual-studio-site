@@ -27,9 +27,7 @@ uniform float u_radius;     // CSS px
 uniform float u_dpr;
 uniform vec2 u_uvOrigin;    // image UV under the panel's top-left corner
 uniform vec2 u_pxToUv;      // image UV per CSS px
-uniform float u_scale;      // refraction px per unit (grows with panel size)
-uniform float u_dscale;     // falloff distance scale (shrinks with panel size)
-uniform float u_blurPx;     // blur tap spacing, CSS px
+uniform float u_blurPx;     // blur tap spacing in the middle, CSS px
 uniform float u_lodBias;
 uniform float u_brightness;
 uniform float u_saturate;
@@ -38,15 +36,11 @@ uniform float u_tintOpacity;
 uniform float u_dark;
 varying vec2 v_uv;
 
-// Original liquid-glass-js defaults (warp off, so base intensity is 0).
-const float EDGE_I = 0.01;
-const float RIM_I = 0.05;
-const float BASE_I = 0.0;
-const float EDGE_D = 0.15;
-const float RIM_D = 0.8;
-const float BASE_D = 0.1;
-const float CORNER = 0.02;
-const float RIPPLE = 0.1;
+// iOS 27 / Tahoe-style lens (Josh, 26 Oct): a convex bezel round the edge bends the
+// picture behind it outward, with a slight colour split; the middle stays flat and diffused.
+const float BEZEL = 0.2;     // bezel width, share of the short side (clamped 14-48px)
+const float BEND = 1.1;      // displacement at the rim, share of the bezel width
+const float SPLIT = 0.08;    // red/blue split, share of the displacement
 
 void main() {
   vec2 p = v_uv * u_size;
@@ -54,37 +48,38 @@ void main() {
   float minDim = min(u_size.x, u_size.y);
 
   // Rounded-rect SDF (covers pill and circle too): < 0 inside.
-  vec2 k = abs(p - c) - (c - u_radius);
+  vec2 q = p - c;
+  vec2 k = abs(q) - (c - u_radius);
   float sdf = length(max(k, 0.0)) + min(max(k.x, k.y), 0.0) - u_radius;
   float inside = max(-sdf, 0.0);
-  float d = inside * u_dscale;
 
-  // Normal: the original radial normal, bent toward the true edge normal near the rim.
-  vec2 radial = normalize(v_uv - 0.5 + 1e-5);
-  vec2 e = p - clamp(p, vec2(u_radius), u_size - u_radius);
-  vec2 edgeN = dot(e, e) > 1e-4 ? normalize(e) : radial;
-  vec2 n = normalize(mix(radial, edgeN, clamp(1.0 - inside / max(u_radius, 1.0), 0.0, 1.0)));
+  // Outward normal = the SDF's gradient.
+  vec2 g = (k.x > 0.0 && k.y > 0.0) ? normalize(k) : (k.x > k.y ? vec2(1.0, 0.0) : vec2(0.0, 1.0));
+  vec2 n = g * sign(q + 1e-5);
 
-  float baseI = 1.0 - exp(-d * BASE_D);
-  float edgeI = exp(-d * EDGE_D);
-  float rimI = exp(-d * RIM_D);
-  float total = baseI * BASE_I + edgeI * EDGE_I + rimI * RIM_I;
-  vec2 prox = min(p, u_size - p);
-  float cornerI = exp(-max(prox.x, prox.y) * u_dscale * 0.3) * CORNER;
-  float ripple = sin(inside / minDim * 25.0) * RIPPLE * rimI;
-  vec2 refr = n * (total + cornerI) + vec2(-n.y, n.x) * ripple;
-  vec2 uv = u_uvOrigin + (p + refr * u_scale) * u_pxToUv;
+  // Convex squircle bezel: steepest at the rim, flat by the inner edge of the band.
+  float bez = clamp(minDim * BEZEL, 14.0, 48.0);
+  float x = clamp(inside / bez, 0.0, 1.0);
+  float lens = pow(1.0 - x, 2.2);
+  vec2 off = n * lens * bez * BEND;
+  vec2 uvG = u_uvOrigin + (p + off) * u_pxToUv;
+  vec2 uvR = u_uvOrigin + (p + off * (1.0 + SPLIT)) * u_pxToUv;
+  vec2 uvB = u_uvOrigin + (p + off * (1.0 - SPLIT)) * u_pxToUv;
 
   // Gaussian blur, radius 4 taps, checkerboard-thinned (mipmaps prefilter the gaps).
+  // Sharper in the bezel so the bend reads; full diffusion in the middle for the text.
+  float spread = mix(0.06, 1.0, smoothstep(0.15, 1.0, x));
+  vec2 stepUv = u_blurPx * spread * u_pxToUv;
+  float lod = u_lodBias * spread;
   vec3 acc = vec3(0.0);
   float wsum = 0.0;
-  vec2 stepUv = u_blurPx * u_pxToUv;
   for (int i = -4; i <= 4; i++) {
     for (int j = -4; j <= 4; j++) {
       float r2 = float(i * i + j * j);
       if (r2 > 16.0 || mod(float(i + j), 2.0) > 0.5) continue;
       float w = exp(-r2 / 8.0);
-      acc += texture2D(u_image, uv + vec2(float(i), float(j)) * stepUv, u_lodBias).rgb * w;
+      vec2 o = vec2(float(i), float(j)) * stepUv;
+      acc += vec3(texture2D(u_image, uvR + o, lod).r, texture2D(u_image, uvG + o, lod).g, texture2D(u_image, uvB + o, lod).b) * w;
       wsum += w;
     }
   }
@@ -93,7 +88,7 @@ void main() {
   // Match the CSS filter on the painting, then tint toward paper or ink.
   col *= u_brightness;
   col = mix(vec3(dot(col, vec3(0.2126, 0.7152, 0.0722))), col, u_saturate);
-  col = mix(col, u_tint, u_tintOpacity);
+  col = mix(col, u_tint, u_tintOpacity * mix(0.25, 1.0, smoothstep(0.0, 1.0, x))); // clearer in the bezel
 
   // Specular on the top rim, rgb(255 250 240), brighter for iOS 27 (TASTE.md glass spec).
   // The light comes from the top left (TASTE 4), so the rim is strongest there.
@@ -109,7 +104,7 @@ void main() {
   gl_FragColor = vec4(col * mask, mask);
 }`;
 
-const UNIFORMS = ['u_image', 'u_size', 'u_radius', 'u_dpr', 'u_uvOrigin', 'u_pxToUv', 'u_scale', 'u_dscale',
+const UNIFORMS = ['u_image', 'u_size', 'u_radius', 'u_dpr', 'u_uvOrigin', 'u_pxToUv',
   'u_blurPx', 'u_lodBias', 'u_brightness', 'u_saturate', 'u_tint', 'u_tintOpacity', 'u_dark'];
 
 const TONES = {
@@ -245,8 +240,6 @@ export async function mountLiquidGlass(panel, { image, tone = 'light', opacity }
     gl.uniform1f(u.u_dpr, dpr);
     gl.uniform2f(u.u_uvOrigin, (pr.left - ox) / rw, (pr.top - oy) / rh);
     gl.uniform2f(u.u_pxToUv, 1 / rw, 1 / rh);
-    gl.uniform1f(u.u_scale, minDim * 2.4);
-    gl.uniform1f(u.u_dscale, Math.min(1, Math.max(0.25, 120 / minDim)));
     gl.uniform1f(u.u_blurPx, BLUR_PX);
     gl.uniform1f(u.u_lodBias, Math.max(0, Math.log2(BLUR_PX * 1.4 * dpr) - 0.5));
     gl.uniform1f(u.u_brightness, filterValue(ics.filter, 'brightness', 1));

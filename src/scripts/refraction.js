@@ -20,7 +20,7 @@ function displacementMap(w, h, r) {
   const mw = Math.max(1, Math.round(w * f));
   const mh = Math.max(1, Math.round(h * f));
   const rr = r * f;
-  const band = Math.min(Math.max(rr, 16 * f), Math.min(mw, mh) / 3);
+  const band = Math.min(Math.max(rr, 16 * f), Math.min(mw, mh) / 2);
   const hx = mw / 2;
   const hy = mh / 2;
   const canvas = document.createElement('canvas');
@@ -80,7 +80,7 @@ export function mountRefraction(el) {
   const disp = document.createElementNS(SVG_NS, 'feDisplacementMap');
   disp.setAttribute('in', 'SourceGraphic');
   disp.setAttribute('in2', 'map');
-  disp.setAttribute('scale', '-45');
+  disp.setAttribute('scale', '-70'); // stronger bend to match the plates (Josh, 26 Oct)
   disp.setAttribute('xChannelSelector', 'R');
   disp.setAttribute('yChannelSelector', 'G');
   filter.append(map, disp);
