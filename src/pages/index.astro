@@ -1,19 +1,437 @@
 ---
+// Home (brief 6.1), built on the chosen direction: Prototype A, the quiet etching (DECISIONS, 26 Oct).
+// Still for now: no motion and no WebGL glass. Glass is the static CSS tier, on the nav and the hero plate only.
 import '../styles/tokens.css';
-import FooterEngraving from '../components/FooterEngraving.astro';
+import '../styles/components.css';
+import { Image } from 'astro:assets';
+import ProjectCard from '../components/ProjectCard.astro';
+import PlateCaption from '../components/PlateCaption.astro';
+import { email, startHref, quoteHref, sentence, clients, clientGroups } from '../data/site';
+import heroArt from '../assets/art/engraved/jardin-quiet.jpg';
+import workArt from '../assets/art/engraved/jardin-panes.jpg';
+import nightArt from '../assets/art/engraved/ranelagh-night.jpg';
+import footerArt from '../assets/art/engraved/garden-night.webp';
+import oxford from '../assets/work/oxford-school-of-english/bus-shelter.webp';
+import pandora from '../assets/work/sherman-poon-pandora-forever/06.webp';
+import kut from '../assets/work/kut-magazine/04.webp';
+import idCards from '../assets/work/oxford-school-of-english/id-cards.webp';
+import siMap from '../assets/work/new-city-college-strategic-intent/02.webp';
+import siForecast from '../assets/work/new-city-college-strategic-intent/03.webp';
+import siJobs from '../assets/work/new-city-college-strategic-intent/04.webp';
+import siLevels from '../assets/work/new-city-college-strategic-intent/05.webp';
+
+const headline = 'Brands & Data, Made Clear'; // option 3 (Josh, 26 Oct)
+const links = [['Work', '#work'], ['Services', '#services'], ['About', '#about'], ['Contact', '#contact']];
+
+const services = [
+  { name: 'Brand identity', price: 'From £4,900', time: 'from 4 weeks', href: '/services/brand-identity/', link: 'Brand identity prices',
+    text: 'A logo, colours, type, mockups and the rules for using them, so your own team can make new material without coming back to me every time.' },
+  { name: 'Data visualisation and reports', price: 'From £700', time: 'from 1 week', href: '/services/data-visualisation/', link: 'Data visualisation prices',
+    text: 'Charts, maps and infographics, and the reports they sit in, from annual reports to sustainability reports, drawn from your own figures.' },
+  { name: 'Social media editing', price: 'From £200 per video', time: 'or from £1,200 a month', href: '/services/social-media-editing/', link: 'Social media editing prices',
+    text: 'Short videos cut from your footage, with captions and versions sized for each platform. Single edits, monthly packs or a monthly retainer.' },
+];
+
+const steps = [
+  ['Call and brief', 'We talk through what you need, your budget, the formats, and what you want the work to achieve, so we both know what to expect before I start.'],
+  ['Design and feedback', 'I share work in progress and we go back and forth on it, so nothing reaches the final round as a surprise.'],
+  ['Revisions and finishing', 'I make your changes and finish every detail before anything is signed off.'],
+  ['Handover', 'You get the final files in whatever format and by whatever method suits your team.'],
+];
+
+const credits = {
+  hero: { title: 'Le Jardin Chinois (The Chinese Garden), after François Boucher, after 1743', medium: 'Etching by Jacques Gabriel Huquier. The Met 53.600.1008, public domain. Duotoned' },
+  night: { title: 'The Chinese building and Rotunda, Ranelagh Gardens, Chelsea, 1752', medium: 'Etching by Charles Grignion after Canaletto. Rijksmuseum RP-P-1932-457, public domain. Tones reworked' },
+};
 ---
 <!doctype html>
 <html lang="en-GB">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Conceptual Studio</title>
+    <title>Conceptual Studio: brand identity and data visualisation, London</title>
+    <meta name="description" content={sentence} />
     <link rel="preload" href="/fonts/agatho-medium-subset.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter-4-variable.woff2" as="font" type="font/woff2" crossorigin />
   </head>
-  <body style="margin:0">
-    <main style="min-height:80vh;display:grid;place-items:center">
-      <h1 style="font-family:var(--display);font-weight:500">Conceptual Studio</h1>
+  <body>
+    <main>
+      <!-- Opening: the etching fills the screen; the nav and the plate are the page's two pieces of glass. -->
+      <header class="hero">
+        <nav class="nav glass" aria-label="Main">
+          <a class="nav__mark" href="/">Conceptual Studio</a>
+          <ul class="nav__links">
+            <li><a href="/" aria-current="page">[Home]</a></li>
+            {links.map(([l, h]) => <li><a href={h}>{l}</a></li>)}
+          </ul>
+          <a class="nav__menu" href="#site-links">Menu</a>
+        </nav>
+        <Image class="hero__art" src={heroArt} alt="" widths={[640, 1024, 1600, 2400]} sizes="100vw" loading="eager" fetchpriority="high" />
+        <div class="hero__plate glass">
+          <h1 class="hero__h">{headline}</h1>
+          <p class="hero__p">{sentence}</p>
+          <div class="acts">
+            <a class="btn btn--solid" href={startHref}><span class="swap"><span>Start a project</span><span aria-hidden="true">Contact me ↗</span></span></a>
+            <a class="avail" href={`mailto:${email}`}><span class="avail__dot" aria-hidden="true"></span><span class="swap"><span>Taking new projects</span><span aria-hidden="true">↗ Email me</span></span></a>
+            <a class="link" href="#work">See the work<span class="arrow" aria-hidden="true">→</span></a>
+          </div>
+        </div>
+        <div class="hero__with">
+          <p class="hero__with-h">Worked with</p>
+          <p class="hero__names">{clients.join(', ')}</p>
+        </div>
+      </header>
+      <div class="wrap hero__credit"><PlateCaption {...credits.hero} /></div>
+
+      <!-- Featured work on paper: the etching returns faded at the chapter opening, then the Framer cards, solid. -->
+      <section class="fw" id="work" aria-labelledby="fw-h">
+        <div class="fw__art" aria-hidden="true"><Image src={workArt} alt="" widths={[800, 1600, 2400]} sizes="100vw" /></div>
+        <header class="fw__head wrap">
+          <h2 class="fw__h big" id="fw-h">Featured work</h2>
+          <p class="fw__p">Recent projects, each with a line on where it was used.</p>
+        </header>
+        <div class="fw__cards wrap">
+          <ProjectCard
+            title="Oxford School of English" year={2023} href="/work/oxford-school-of-english/"
+            disciplines={['Visual identity', 'Branding']}
+            summary="A new identity for a private English school in Oxford, now a UK-registered trademark."
+            image={oxford} alt="Oxford School of English poster in a bus shelter on an Oxford street, beside a red double-decker bus"
+            caption={{ title: 'Oxford School of English, 2023', medium: 'Visual identity, on a bus shelter poster' }}
+            position="50% 46%" />
+          <div class="fw__pair">
+            <ProjectCard size="half"
+              title="Pandora Forever" year={2023} href="/work/sherman-poon-pandora-forever/"
+              disciplines={['CGI', '3D animation']}
+              summary="CGI worlds for Sherman Poon's music video, shown on billboards including Times Square in Hong Kong."
+              image={pandora} alt="Sherman Poon waving in front of the video on the Times Square screen in Hong Kong"
+              caption={{ title: 'Pandora Forever, Sherman Poon, 2023', medium: 'CGI, on the Times Square screen, Hong Kong' }}
+              position="50% 42%" />
+            <ProjectCard size="half"
+              title="KUT Magazine" year={2023} href="/work/kut-magazine/"
+              disciplines={['Visual identity', 'Editorial design']}
+              summary="An arts magazine about emerging creatives, from the identity to the interviews to the printed copy."
+              image={kut} alt="Two spreads from KUT Magazine: a portrait of an artist and an interview with Kit Sivers"
+              caption={{ title: 'KUT Magazine, independent project, 2023', medium: 'Identity and editorial design, printed spreads' }}
+              position="50% 50%" />
+          </div>
+        </div>
+      </section>
+
+      <!-- The night chapter: one case study on warm black, the Ranelagh etching glowing at its threshold. -->
+      <section class="night chapter" aria-labelledby="night-h">
+        <div class="chapter__art" aria-hidden="true"><Image src={nightArt} alt="" widths={[800, 1600]} sizes="100vw" /></div>
+        <div class="wrap chapter__body">
+          <ProjectCard heading="h2" headingId="night-h"
+            title="Strategic Intent" year={2025} href="/work/new-city-college-strategic-intent/"
+            disciplines={['Data visualisation', 'Graphic design']}
+            summary="Infographics for New City College's strategic intent briefing, used in its executive communications around mergers."
+            image={siMap} alt="Black map of east London boroughs showing the colleges that merged to form New City College, with a timeline from 1990 to 2024"
+            caption={{ title: 'Strategic Intent, New City College London, 2025', medium: 'Map and timeline of the college mergers, 1990 to 2024' }}
+            position="50% 8%" />
+          <div class="charts">
+            <figure class="charts__big">
+              <Image src={siForecast} alt="Bar chart forecasting 16 to 18 population growth by borough, 2024 to 2030" widths={[600, 900, 1300, 1800]} sizes="(min-width: 760px) calc((95vw - 24px) * 2 / 3), calc(100vw - 32px)" />
+              <PlateCaption title="Demographic forecast, 2024 to 2030" medium="Bar chart, 16 to 18 population by borough" />
+            </figure>
+            <figure>
+              <Image src={siJobs} alt="Bar chart of minimum growth rates across key employment sectors" widths={[400, 600, 900]} sizes="(min-width: 760px) calc((95vw - 24px) / 3), calc(100vw - 32px)" />
+              <PlateCaption title="Key employment growth" medium="Bar chart, minimum growth rate by sector" />
+            </figure>
+            <figure>
+              <Image src={siLevels} alt="Pie chart of 16 to 18 students by level in 2024/25" widths={[400, 600, 900]} sizes="(min-width: 760px) calc((95vw - 24px) / 3), calc(100vw - 32px)" />
+              <PlateCaption title="16 to 18 students by level, 2024/25" medium="Pie chart, 10,404 students" />
+            </figure>
+          </div>
+          <p class="chapter__all"><a class="link" href="/work/">All projects<span class="arrow" aria-hidden="true">→</span></a></p>
+          <div class="chapter__credit"><PlateCaption {...credits.night} /></div>
+        </div>
+      </section>
+
+      <!-- Services, set like a menu: the name and its starting price on one line, the description under it. -->
+      <section class="services wrap" id="services" aria-labelledby="services-h">
+        <div class="services__head">
+          <h2 class="h2 services__h" id="services-h">Services</h2>
+          <p class="services__intro">Every project is priced on its scope, so these are starting points. You'll get a fixed quote after our first call.</p>
+          <figure class="services__fig">
+            <Image src={idCards} alt="Two Oxford School of English student ID cards on lanyards, in black on Oxford Gold" widths={[300, 500, 800]} sizes="(min-width: 1100px) calc((95vw - 264px) / 3), (min-width: 760px) 48vw, 72vw" />
+            <PlateCaption title="Oxford School of English, 2023" medium="Student ID cards, from the identity" />
+          </figure>
+        </div>
+        <ul class="menu">
+          {services.map((s) => (
+            <li class="menu__item">
+              <div class="menu__row"><h3 class="menu__name">{s.name}</h3><p class="menu__price">{s.price}</p></div>
+              <p class="menu__time">{s.time}</p>
+              <p class="menu__text">{s.text}</p>
+              <a class="link" href={s.href}>{s.link}<span class="arrow" aria-hidden="true">→</span></a>
+            </li>
+          ))}
+          <li class="menu__item menu__item--quote">
+            <p class="menu__text">Need something else, or a mix of these? I'll send a fixed quote within three working days.</p>
+            <a class="btn" href={quoteHref}>Ask for a custom quote <span class="arrow" aria-hidden="true">→</span></a>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Proof: who I work with, in plain names, and one client's words set large. -->
+      <section class="proof wrap" aria-labelledby="proof-h">
+        <div class="proof__who">
+          <h2 class="h2" id="proof-h">Who I work with</h2>
+          <p class="proof__line">I work with further education colleges and adult learning services, a language school in Oxford, a tech startup in Tokyo and corporate clients.</p>
+          <div class="proof__names">
+            {clientGroups.map((g) => (
+              <ul><li class="proof__kind">{g.kind}</li>{g.names.map((n) => <li>{n}</li>)}</ul>
+            ))}
+          </div>
+        </div>
+        <figure class="proof__quote">
+          <blockquote><p>"The campaign was one of the biggest I've worked on - your logo appeared across buses, tubes, and stations in central and east London for months. Your design is now formally trademarked and integral to our brand. I'm hugely grateful you helped us avoid legal issues and added real value to the college"</p></blockquote>
+          <figcaption><b>Alison Arnaud</b>Principal, Tower Hamlets College, New City College</figcaption>
+        </figure>
+      </section>
+
+      <!-- How I work: a real ordered list, the order carried by position, not numerals. -->
+      <section class="how wrap" aria-labelledby="how-h">
+        <div class="how__head">
+          <h2 class="h2" id="how-h">How I work</h2>
+          <p>How a project runs, from the first call to the files you keep.</p>
+        </div>
+        <ol class="how__list">
+          {steps.map(([t, d]) => <li><h3 class="how__t">{t}</h3><p>{d}</p></li>)}
+        </ol>
+      </section>
+
+      <!-- About: the plain facts. TBC: a photograph of me (brief 6.1). -->
+      <section class="about wrap" id="about" aria-labelledby="about-h">
+        <div class="about__text">
+          <h2 class="h2" id="about-h">About</h2>
+          <p class="about__lead">I trained at Kingston School of Art, led design at a tech startup in Tokyo, and have run Conceptual Studio full time since January 2026.</p>
+          <a class="link" href="/about/">More about me<span class="arrow" aria-hidden="true">→</span></a>
+        </div>
+        <dl class="about__facts">
+          <div><dt>Studio</dt><dd>Conceptual Studio Limited, London</dd></div>
+          <div><dt>Trained</dt><dd>Kingston School of Art</dd></div>
+          <div><dt>Before</dt><dd>Design lead at a tech startup in Tokyo</dd></div>
+          <div><dt>Full time since</dt><dd>January 2026</dd></div>
+        </dl>
+      </section>
     </main>
-    <footer><FooterEngraving /></footer>
+
+    <!-- Close and footer: one night chapter to the end of the page, the garden engraving rising from the bottom. -->
+    <div class="night end">
+      <section class="close wrap" id="contact" aria-labelledby="close-h">
+        <h2 class="close__h big" id="close-h">Start a project</h2>
+        <div class="close__body">
+          <p class="close__p">If you're collecting quotes for a project, I'd be glad to be one of them. Send me a short note and I'll reply within three working days.</p>
+          <div class="acts">
+            <a class="btn btn--solid" href={startHref}><span class="swap"><span>Start a project</span><span aria-hidden="true">Email me ↗</span></span></a>
+            <button class="btn" type="button" data-copy={email}><span data-label>Copy email</span></button>
+            <span class="sr-only" aria-live="polite" data-status></span>
+          </div>
+        </div>
+      </section>
+      <footer class="footer">
+        <div class="footer__text wrap">
+          <p class="footer__name">Conceptual Studio Limited, London</p>
+          <ul class="footer__links" id="site-links">
+            {links.map(([l, h]) => <li><a href={h}>{l}</a></li>)}
+          </ul>
+          <p class="footer__small">© 2026 Conceptual Studio Limited</p>
+        </div>
+        <div class="footer__land" aria-hidden="true"><Image src={footerArt} alt="" widths={[800, 1600, 2400]} sizes="100vw" /></div>
+        <div class="wrap footer__credit"><PlateCaption title="The Chinese Garden, after François Boucher" medium="Engraving, public domain. Tones reworked for night" /></div>
+      </footer>
+    </div>
+
+    <script>
+      // Copy email: the label confirms, a polite live region announces it, then it reverts.
+      const btn = document.querySelector<HTMLButtonElement>('[data-copy]');
+      const label = btn?.querySelector<HTMLElement>('[data-label]');
+      const status = document.querySelector<HTMLElement>('[data-status]');
+      btn?.addEventListener('click', async () => {
+        try { await navigator.clipboard.writeText(btn.dataset.copy!); } catch { location.href = `mailto:${btn.dataset.copy}`; return; }
+        label!.textContent = 'Copied'; status!.textContent = 'Email address copied';
+        setTimeout(() => { label!.textContent = 'Copy email'; status!.textContent = ''; }, 1550);
+      });
+    </script>
   </body>
 </html>
+
+<style>
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .big { font-family: var(--display); font-weight: 500; letter-spacing: -0.03em; line-height: 0.92; }
+  .acts { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 14px; }
+  .acts .link { margin-left: 6px; }
+
+  /* Nav: CSS glass over the etching, part of the opening, so it scrolls away and never sits over a headline. */
+  .nav { position: absolute; z-index: 10; top: 14px; left: var(--margin); right: var(--margin); height: 60px; border-radius: 28px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 12px 0 24px; }
+  .nav__mark { font-family: var(--display); font-size: 24px; letter-spacing: -0.02em; text-decoration: none; }
+  .nav__links { list-style: none; display: flex; gap: 4px; margin: 0; padding: 0; }
+  .nav__links a { display: block; padding: 10px 14px; font-size: 18px; font-weight: 500; text-decoration: none; border-radius: var(--pill); transition: background-color 200ms ease-out; }
+  .nav__links a:hover { background: color-mix(in srgb, var(--ink) 6%, transparent); }
+  .nav__menu { display: none; }
+
+  /* Opening: the quiet etching fills the screen, the plate centred over the trees and sky. */
+  .hero { position: relative; isolation: isolate; min-height: 100svh; padding: 116px var(--margin) 40px; display: grid; grid-template-rows: 1fr auto; }
+  .hero__art { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 92%); mask-image: linear-gradient(to bottom, #000 58%, transparent 92%); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
+  .hero__plate { align-self: center; justify-self: center; width: min(640px, 46vw); padding: 44px 44px 40px; display: grid; gap: 22px; border-radius: 28px; }
+  .hero__h { font-family: var(--display); font-weight: 500; font-size: clamp(34px, 2.8vw, 40px); line-height: 1.06; letter-spacing: -0.02em; text-wrap: balance; }
+  .hero__p { font-size: 18px; line-height: 1.5; }
+  .hero__plate .avail { --fill: color-mix(in srgb, var(--paper) 55%, transparent); }
+  .hero__with { display: grid; grid-template-columns: 140px 1fr; gap: 24px; align-items: baseline; padding-top: 32px; font-size: 18px; line-height: 1.5; }
+  .hero__with-h { font-weight: 600; }
+  .hero__names { text-wrap: balance; }
+  .hero__credit { margin-top: 8px; }
+
+  /* Featured work: art at the chapter opening only, faded to paper before the first card ends. */
+  .fw { position: relative; isolation: isolate; padding-block: 200px 0; }
+  .fw__art { position: absolute; inset: 0 0 auto; height: min(1100px, 90vw); z-index: -1; overflow: hidden; }
+  .fw__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 0%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 40%, transparent); mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 40%, transparent); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
+  .fw__head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; margin-bottom: 48px; }
+  .fw__h { grid-column: 1 / span 8; font-size: clamp(56px, 7.8vw, 120px); }
+  .fw__p { grid-column: 1 / span 5; margin-top: 20px; font-size: 20px; line-height: 1.45; }
+  .fw__cards { display: grid; gap: 24px; }
+  .fw__pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+
+  /* Night chapter: warm black, the Ranelagh etching glowing at its top, the work lit in full colour. */
+  .chapter { position: relative; isolation: isolate; margin-top: 200px; padding-block: min(580px, 40vw) 120px; }
+  .chapter__art { position: absolute; inset: 0 0 auto; height: min(680px, 47vw); z-index: -1; overflow: hidden; }
+  .chapter__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 92%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 74%, transparent); mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 74%, transparent); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
+  .chapter__body { display: grid; gap: 24px; }
+  .charts { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: auto auto; gap: 24px; align-items: start; }
+  .charts__big { grid-row: span 2; }
+  .charts img { width: 100%; height: auto; border-radius: 25px; }
+  .chapter__all { font-size: 20px; }
+  .chapter__credit { padding-top: 24px; }
+
+  /* Services: heading and intro on the left third, the menu on the right. */
+  .services { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-block: 200px 0; }
+  .services__head { grid-column: 1 / span 4; display: grid; align-content: start; gap: 16px; }
+  .services__fig { margin-top: 40px; }
+  .services__fig img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 25px; }
+  .services__intro { font-size: 20px; line-height: 1.45; }
+  .menu { grid-column: 6 / -1; list-style: none; margin: 0; padding: 0; display: grid; gap: 56px; }
+  .menu__item { display: grid; gap: 6px; }
+  .menu__row { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; }
+  .menu__name, .menu__price { font-size: 24px; line-height: 1.25; font-weight: 600; letter-spacing: -0.02em; }
+  .menu__price { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .menu__time { font-size: 20px; color: var(--ink-2); text-align: right; margin-top: -2px; }
+  .menu__text { font-size: 20px; line-height: 1.5; max-width: 52ch; margin-top: 8px; }
+  .menu__item--quote { gap: 18px; justify-items: start; padding: 28px; border-radius: 28px; background: var(--paper-2); }
+
+  /* Proof: names on the left, the quotation offset lower on the right. */
+  .proof { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-block: 160px 0; }
+  .proof__who { grid-column: 1 / span 4; display: grid; align-content: start; gap: 16px; }
+  .proof__line { font-size: 20px; line-height: 1.45; }
+  .proof__names { display: grid; gap: 28px; margin-top: 16px; }
+  .proof__names ul { list-style: none; margin: 0; padding: 0; font-size: 20px; line-height: 1.5; }
+  .proof__kind { color: var(--ink-2); }
+  .proof__quote { grid-column: 6 / -1; margin-top: 80px; }
+  .proof__quote blockquote { margin: 0; }
+  .proof__quote p { font-size: 24px; line-height: 1.4; letter-spacing: -0.015em; font-weight: 450; max-width: 48ch; text-wrap: pretty; }
+  .proof__quote figcaption { margin-top: 32px; font-size: 20px; line-height: 1.45; }
+  .proof__quote figcaption b { display: block; font-weight: 600; }
+
+  /* How I work: four steps across, stepping down like a staircase. */
+  .how { padding-block: 160px 0; display: grid; gap: 48px; }
+  .how__head { display: grid; gap: 12px; max-width: 40ch; }
+  .how__head p { font-size: 20px; line-height: 1.45; }
+  .how__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; padding-bottom: 8px; }
+  .how__list li { display: grid; align-content: start; gap: 10px; padding-right: 16px; }
+  .how__list li:nth-child(2) { margin-top: 56px; }
+  .how__list li:nth-child(3) { margin-top: 112px; }
+  .how__list li:nth-child(4) { margin-top: 168px; }
+  .how__t { font-size: 24px; line-height: 1.2; font-weight: 600; letter-spacing: -0.02em; }
+  .how__list p { font-size: 18px; line-height: 1.5; }
+
+  /* About: the sentence on the left, the facts on the right. */
+  .about { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-block: 160px 160px; }
+  .about__text { grid-column: 1 / span 6; display: grid; justify-items: start; gap: 16px; }
+  .about__lead { font-size: 24px; line-height: 1.4; letter-spacing: -0.015em; max-width: 36ch; }
+  .about__facts { grid-column: 8 / -1; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 32px 24px; align-content: start; padding-top: 56px; }
+  .about__facts dt { font-size: 18px; color: var(--ink-2); }
+  .about__facts dd { margin: 4px 0 0; font-size: 20px; line-height: 1.4; font-weight: 500; }
+
+  /* Close and footer, on warm black. */
+  .end { background: var(--paper); }
+  .close { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-block: 200px 120px; align-items: end; }
+  .close__h { grid-column: 1 / span 7; font-size: clamp(56px, 7.8vw, 120px); }
+  .close__body { grid-column: 8 / -1; display: grid; gap: 24px; }
+  .close__p { font-size: 20px; line-height: 1.5; }
+  .footer { position: relative; isolation: isolate; color: var(--gold-ink); }
+  .footer__text { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-block: 48px 0; font-size: 18px; }
+  .footer__name { grid-column: 1 / span 4; font-weight: 600; }
+  .footer__links { grid-column: 5 / span 5; list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 28px; }
+  .footer__links a { text-decoration: none; }
+  .footer__links a:hover { text-decoration: underline; text-underline-offset: 5px; }
+  .footer__small { grid-column: 10 / -1; text-align: right; }
+  .footer__land { height: clamp(280px, 30vw, 460px); margin-top: -8px; pointer-events: none; }
+  .footer__land img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 72%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 55%); mask-image: linear-gradient(to bottom, transparent, #000 55%); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
+  .footer__credit { position: absolute; left: 0; right: 0; bottom: 16px; }
+  .footer__credit :global(.plate span) { color: var(--gold-ink); }
+  .end { --gold-ink: #D9BE91; }
+
+  @media (max-width: 1099.98px) {
+    .nav__links li:not(:first-child) { display: none; }
+    .hero__plate { width: min(600px, 72vw); }
+    .services__head, .proof__who, .about__text { grid-column: 1 / -1; }
+    .services__fig { width: 50%; }
+    .menu, .proof__quote, .about__facts { grid-column: 1 / -1; }
+    .menu { margin-top: 56px; }
+    .proof__quote { margin-top: 64px; }
+    .how__list { grid-template-columns: 1fr 1fr; }
+    .how__list li:nth-child(3) { margin-top: 0; }
+    .how__list li:nth-child(4) { margin-top: 56px; }
+    .close__h, .close__body { grid-column: 1 / -1; }
+    .close__body { margin-top: 32px; }
+    .footer__name, .footer__links, .footer__small { grid-column: 1 / -1; text-align: left; }
+    .footer__text { row-gap: 12px; }
+  }
+  @media (max-width: 759.98px) {
+    .nav { top: 10px; height: 54px; padding: 0 8px 0 18px; }
+    .nav__mark { font-size: 21px; }
+    .nav__links { display: none; }
+    .nav__menu { display: block; padding: 9px 16px; font-weight: 500; font-size: 16px; text-decoration: none; border-radius: var(--pill); background: color-mix(in srgb, var(--ink) 6%, transparent); }
+    .hero { padding: 84px var(--margin) 24px; }
+    .hero__art { object-position: 30% 50%; }
+    .hero__plate { width: 100%; align-self: start; padding: 24px 22px 22px; gap: 16px; border-radius: 26px; }
+    .hero__h { font-size: 34px; }
+    .hero__p { font-size: 16px; line-height: 1.45; }
+    .hero__with { grid-template-columns: 1fr; gap: 6px; padding-top: 24px; font-size: 16px; }
+    .fw { padding-top: 120px; }
+    .fw__h, .fw__p { grid-column: 1 / -1; }
+    .fw__h { font-size: 56px; }
+    .fw__p { font-size: 17px; }
+    .fw__cards, .fw__pair, .chapter__body { gap: 48px; }
+    .fw__pair { grid-template-columns: 1fr; }
+    .chapter { margin-top: 120px; padding-block: 160px 96px; }
+    .chapter { padding-top: 360px; }
+    .chapter__art { height: 440px; }
+    .chapter__art img { object-position: 44% 92%; }
+    .charts { grid-template-columns: 1fr; gap: 16px; }
+    .charts__big { grid-row: auto; }
+    .charts img { border-radius: 22px; }
+    .services, .proof, .how { padding-top: 120px; }
+    /* The ID cards close the section on a phone, so their caption never sits over a service name. */
+    .services__head { display: contents; }
+    .services__head > * { grid-column: 1 / -1; }
+    .services__intro { margin-top: 16px; }
+    .services__fig { width: 72%; order: 1; margin-top: 72px; }
+    .menu { gap: 44px; margin-top: 72px; }
+    .menu__row { flex-direction: column; gap: 2px; }
+    .menu__time { text-align: left; margin-top: 0; }
+    .menu__text, .services__intro, .proof__line, .how__head p, .close__p { font-size: 17px; }
+    .menu__item--quote { padding: 22px; }
+    .proof__names ul { font-size: 17px; }
+    .proof__quote p { font-size: 20px; }
+    .how__list { grid-template-columns: 1fr; gap: 32px; }
+    .how__list li, .how__list li:nth-child(n) { margin-top: 0; }
+    .about { padding-block: 120px; }
+    .about__lead { font-size: 20px; }
+    .about__facts { grid-template-columns: 1fr; gap: 20px; padding-top: 40px; }
+    .close { padding-block: 120px 80px; }
+    .close__h { font-size: 56px; }
+    .footer__text { font-size: 16px; }
+    .footer__land { height: 300px; }
+  }
+</style>

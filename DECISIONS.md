@@ -255,3 +255,40 @@ Museum model:
   the trees and sky sit behind the card (Josh chose this "quiet" version
   over full strength and a half-page layout, 26 Oct). Featured work uses
   the same strength, fading to a soft tone behind the lower panes.
+
+## Homepage build (26 Oct 2026, branch home)
+- Built at / from Prototype A (the quiet etching). Still for now: no motion,
+  and the glass is the static CSS tier on the nav and the hero plate only (no
+  WebGL). The "Worked with" line is static until the motion pass.
+- The nav sits inside the opening and scrolls away with it, so it can never
+  cover a headline. The scroll dock comes with the motion pass.
+- Featured work on paper: Oxford School of English (full card), then Pandora
+  Forever and KUT Magazine as a pair. The cards are solid paper 2, never glass
+  (brief section 4). The Jardin etching shows only at the chapter opening and
+  fades out behind the first card.
+- The warm black chapter is Strategic Intent (NCC, 2025): the black merger map
+  suits the night ground and it is the core data service. The Ranelagh etching
+  shows the Rotunda above the card, then three charts in a 2:1 grid.
+  [TBC: Josh to confirm this is the case study for the night chapter.]
+- Close and footer are one night chapter. The footer keeps the garden
+  engraving and its fade, re-toned as a lamplit positive (dark lines on dim
+  gold, #14110D to #6B5436). A straight inversion was tried and dropped: it
+  turns the faces black. Footer text in #D9BE91. [TBC: source of the garden
+  engraving for its credit line.]
+- Services are set like a menu (taste skill blueprint): name and "from" price
+  on one line, the time under it. Times follow copy/pricing.md (brand identity
+  from 4 weeks, calendar time), not the 14 working days above. The Oxford
+  student ID card mockup sits under the heading.
+- Proof: client names grouped Education, then Companies and international,
+  beside Alison Arnaud's quote verbatim. "Read the project" is left off until
+  it is clear which project the quote is about. [TBC]
+- How I work: a real <ol> stepping down in four columns, no boxes (no rows of
+  identical cards).
+- About: the sentence and four facts. [TBC: a photograph, brief 6.1.]
+- The email address is not shown as text on the page because it carries a
+  personal name; the copy button and mailto links use it.
+- Plate captions stay 12px. The inspector runs with --allow glass, pill-nav,
+  shadow, gradient, micro-label, hairline, palette-cream (brief section 4),
+  plus small-text (the 12px plate captions section 4 allows) and still-page
+  (no motion yet, by request). Art fades carry taste-skill-ignore.
+- Links to pages not built yet: /work/*, /services/*, /about/.

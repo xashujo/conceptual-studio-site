@@ -14,12 +14,19 @@ interface Props {
   size?: 'full' | 'half';
   /** glass tint opacity, when the default reads too flat */
   tint?: number;
+  /** h2 when the card opens its own section (a night chapter). */
+  heading?: 'h2' | 'h3';
+  headingId?: string;
 }
-const { title, year, href, disciplines, summary, image, alt, caption, position = '50% 50%', glass, size = 'full', tint } = Astro.props;
+const { title, year, href, disciplines, summary, image, alt, caption, position = '50% 50%', glass, size = 'full', tint, heading: H = 'h3', headingId } = Astro.props;
+// Rendered width: content width (100vw less two 2.5vw margins) less the card insets; a half card is one of two with a 24px gap.
+const sizes = size === 'half'
+  ? '(min-width: 760px) calc((95vw - 24px) / 2 - 32px), calc(100vw - 52px)'
+  : '(min-width: 760px) calc(95vw - 32px), calc(100vw - 52px)';
 ---
 <article class:list={['card', { 'plate-glass': glass, 'card--half': size === 'half' }]} data-liquid={glass} data-tone={glass && 'light'} data-opacity={glass && tint}>
   <header class="card__head">
-    <h3 class="card__title">{title}</h3>
+    <H class="card__title" id={headingId}>{title}</H>
     <p class="card__year">{year}</p>
   </header>
   <hr class="rule card__rule" />
@@ -31,7 +38,7 @@ const { title, year, href, disciplines, summary, image, alt, caption, position =
     <a class="btn" href={href}>View project <span class="arrow" aria-hidden="true">→</span></a>
   </div>
   <figure class="card__fig">
-    <Image class="card__img" src={image} alt={alt} widths={[700, 1100, 1400, 2000]} sizes="(min-width: 760px) calc(100vw - 5vw - 32px), calc(100vw - 64px)" style={`object-position:${position}`} />
+    <Image class="card__img" src={image} alt={alt} widths={[400, 700, 1100, 1400, 2000, 2700]} sizes={sizes} style={`object-position:${position}`} />
     <PlateCaption {...caption} />
   </figure>
 </article>
