@@ -255,3 +255,43 @@ Museum model:
   the trees and sky sit behind the card (Josh chose this "quiet" version
   over full strength and a half-page layout, 26 Oct). Featured work uses
   the same strength, fading to a soft tone behind the lower panes.
+
+## Content editing (26 Oct 2026, branch cms)
+- Pages CMS, configured in `.pages.yml`, with the five collections from
+  brief section 10. Content lives in `src/content/` as YAML, one file per
+  entry. The schemas in `src/content.config.ts` must match `.pages.yml`
+  field for field.
+- Images upload to `src/assets/` and are written as `@assets/…` (an alias
+  in tsconfig.json) so Astro optimises them. Short videos go to
+  `public/media/video/`, served as they are.
+- Commit identity is set to "user", so Pages CMS sends Josh's name and
+  email with each commit. [TBC: Josh's test commit shows whose name
+  GitHub displays. If it's a bot, propose Sveltia CMS.]
+- References (client, testimonial, next project, related projects) are
+  stored as the other entry's file path; the schema keeps only the file
+  name.
+- Plate captions are required on every block that shows an image or
+  video, and optional on text, big number and quote blocks (DECISIONS:
+  "plate caption under every image").
+- Disciplines list: the six already used on the cards, plus Reports and
+  Social media editing. Sectors: Education, Public sector, Commercial,
+  Arts. (proposed)
+- Prototype A (the chosen home) now reads featured work, "Worked with"
+  and the availability pill from the CMS, so edits show on the preview.
+  The layout is unchanged. Featured work shows the first three by home
+  page position. Image crops for the current three covers are set in
+  code; new covers are centred. [TBC: add a crop field if needed.]
+- "Worked with" is now alphabetical (ACL Essex first), because clients
+  have no order field. [TBC: Josh to say if New City College must lead.]
+- Fou Answer's client name is "Fou Answer, Tokyo", as the line showed it.
+- Starting content is only text already in the repo: three projects from
+  the prototype cards, three services from copy/pricing.md, the Alison
+  Arnaud testimonial, the six nameable clients plus Sherman Poon (not in
+  "Worked with"). The TBC notes in copy/pricing.md were left out of the
+  content because they would show on the site: [TBC: number of templates
+  in Full identity; how long the heat maps took; maximum length of a
+  single edit.] Social links and company number are empty. [TBC: both.]
+- Editing guide: docs/editing-guide.md. Drafts go on a branch other than
+  main and are checked on its Cloudflare preview. [TBC: Cloudflare
+  project name for the preview address; PDF version with screenshots
+  once Pages CMS is connected.]

@@ -1,0 +1,17 @@
+title: Oxford School of English
+slug: oxford-school-of-english
+client: src/content/clients/oxford-school-of-english.yml
+year: 2023
+disciplines: [Visual identity, Branding]
+sector: Education
+outcome: A new identity for a private English school in Oxford, now a UK-registered trademark.
+featured: true
+featuredOrder: 1
+archive: false
+cover:
+  src: "@assets/work/oxford-school-of-english/bus-shelter.webp"
+  alt: Oxford School of English poster in a bus shelter on an Oxford street, beside a red double-decker bus
+coverCaption:
+  title: Oxford School of English, 2023
+  medium: Visual identity, on a bus shelter poster
+blocks: []

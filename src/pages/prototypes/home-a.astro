@@ -7,12 +7,26 @@ import Proto from '../../components/prototypes/Proto.astro';
 import Actions from '../../components/prototypes/Actions.astro';
 import PlateCaption from '../../components/PlateCaption.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
-import { sentence, clients } from '../../components/prototypes/home';
+import { getCollection } from 'astro:content';
+import { sentence } from '../../components/prototypes/home';
 import quietArt from '../../assets/art/engraved/jardin-quiet.jpg';
 import panes from '../../assets/art/engraved/jardin-panes.jpg';
-import oxford from '../../assets/work/oxford-school-of-english/bus-shelter.webp';
-import ncc from '../../assets/work/new-city-college-strategic-intent/02.webp';
-import pandora from '../../assets/work/sherman-poon-pandora-forever/06.webp';
+
+// Hand-set crops for the current covers. shortcut: new covers centre by default; add a crop field to the CMS if that isn't enough.
+const crops: Record<string, string> = {
+  'oxford-school-of-english': '50% 46%',
+  'new-city-college-strategic-intent': '0% 50%',
+  'sherman-poon-pandora-forever': '50% 42%',
+};
+// From the CMS: clients ticked "Show in Trusted by", and projects ticked "Show on the home page", by position.
+const clients = (await getCollection('clients', (c) => c.data.trustedBy)).map((c) => c.data.name);
+const [lead, ...pair] = (await getCollection('projects', (p) => p.data.featured && !p.data.archive))
+  .sort((a, b) => (a.data.featuredOrder ?? 99) - (b.data.featuredOrder ?? 99))
+  .slice(0, 3) // the layout is one large card and a pair
+  .map(({ data: p }) => ({
+    title: p.title, year: p.year, href: `/work/${p.slug}/`, disciplines: p.disciplines, summary: p.outcome,
+    image: p.cover.src, alt: p.cover.alt, caption: p.coverCaption, position: crops[p.slug],
+  }));
 
 // Josh, 26 Oct: "&" for "and", first letter of each word capitalised. Wording still open.
 const headline = 'Brands & Data, Made Clear'; // option 3 (Josh, 26 Oct)
@@ -57,29 +71,12 @@ const links = [['Work', '#work'], ['Services', '#'], ['About', '#'], ['Contact',
         <p class="fw__p">Recent projects, each with a line on where it was used.</p>
       </header>
       <div class="fw__cards wrap">
-        <ProjectCard glass="fw-art"
-          title="Oxford School of English" year={2023} href="/work/oxford-school-of-english/"
-          disciplines={['Visual identity', 'Branding']}
-          summary="A new identity for a private English school in Oxford, now a UK-registered trademark."
-          image={oxford} alt="Oxford School of English poster in a bus shelter on an Oxford street, beside a red double-decker bus"
-          caption={{ title: 'Oxford School of English, 2023', medium: 'Visual identity, on a bus shelter poster' }}
-          position="50% 46%" />
-        <div class="fw__pair">
-          <ProjectCard glass="fw-art" size="half"
-            title="Strategic Intent" year={2025} href="/work/new-city-college-strategic-intent/"
-            disciplines={['Data visualisation', 'Graphic design']}
-            summary="Infographics for New City College's strategic intent briefing, used in its executive merger communications."
-            image={ncc} alt="Black map of east London boroughs showing the colleges that merged to form New City College, with a timeline from 1990 to 2024"
-            caption={{ title: 'Strategic Intent, New City College London, 2025', medium: 'Map and timeline of the college mergers, 1990 to 2024' }}
-            position="0% 50%" />
-          <ProjectCard glass="fw-art" size="half"
-            title="Pandora Forever" year={2023} href="/work/sherman-poon-pandora-forever/"
-            disciplines={['CGI', '3D animation']}
-            summary="CGI worlds for Sherman Poon's music video, shown on billboards including Times Square in Hong Kong."
-            image={pandora} alt="Sherman Poon waving in front of the video on the Times Square screen in Hong Kong"
-            caption={{ title: 'Pandora Forever, Sherman Poon, 2023', medium: 'CGI, on the Times Square screen, Hong Kong' }}
-            position="50% 42%" />
-        </div>
+        {lead && <ProjectCard glass="fw-art" {...lead} />}
+        {pair.length > 0 && (
+          <div class="fw__pair">
+            {pair.map((p) => <ProjectCard glass="fw-art" size="half" {...p} />)}
+          </div>
+        )}
         <p class="fw__all"><a class="link" href="/work/">All projects<span class="arrow" aria-hidden="true">→</span></a></p>
       </div>
     </section>

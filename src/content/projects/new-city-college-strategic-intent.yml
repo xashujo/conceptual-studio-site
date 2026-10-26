@@ -1,0 +1,17 @@
+title: Strategic Intent
+slug: new-city-college-strategic-intent
+client: src/content/clients/new-city-college-london.yml
+year: 2025
+disciplines: [Data visualisation, Graphic design]
+sector: Education
+outcome: Infographics for New City College's strategic intent briefing, used in its executive merger communications.
+featured: true
+featuredOrder: 2
+archive: false
+cover:
+  src: "@assets/work/new-city-college-strategic-intent/02.webp"
+  alt: Black map of east London boroughs showing the colleges that merged to form New City College, with a timeline from 1990 to 2024
+coverCaption:
+  title: Strategic Intent, New City College London, 2025
+  medium: Map and timeline of the college mergers, 1990 to 2024
+blocks: []
