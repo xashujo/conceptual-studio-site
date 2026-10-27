@@ -104,6 +104,8 @@ void main() {
   // The light comes from the top left (TASTE 4), so the rim is strongest there.
   float top = max(-n.y, 0.0) * (0.75 + 0.25 * max(-n.x, 0.0));
   col += vec3(1.0, 0.98, 0.94) * exp(-inside * 0.45) * top * mix(0.30, 0.20, u_dark) * u_shine;
+  // Above Shine 100, a soft lit band all round the inside of the edge (iOS's glowing rim).
+  col += vec3(1.0, 0.99, 0.96) * exp(-inside * 0.12) * 0.35 * max(u_shine - 1.0, 0.0) * (1.0 - 0.6 * u_dark);
   col += vec3(1.0, 0.97, 0.92) * exp(-inside * 0.7) * 0.08 * u_dark * u_shine;
   // iOS 27's darkened edge: a 1px inner ring, black at 10% (light) or 35% (dark).
   col = mix(col, vec3(0.0), (1.0 - smoothstep(0.0, 1.0, inside)) * mix(0.10, 0.35, u_dark));
