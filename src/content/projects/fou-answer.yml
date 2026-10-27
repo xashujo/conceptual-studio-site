@@ -1,0 +1,19 @@
+title: Fou Answer
+slug: fou-answer
+client: Fou Answer, Tokyo
+year: 2025
+disciplines:
+- Branding
+- UX and UI
+- 3D
+filters:
+- Brand identity
+- 3D and motion
+order: 40
+summary: Brand, product and 3D design for a tech startup in Tokyo, where I was design lead.
+cover:
+  src: '@assets/work/fou-answer/01.webp'
+  alt: Fou Answer eye symbol drawn in black pixels over rows of binary digits
+  caption: Brand symbol
+featured: false
+hasPage: false

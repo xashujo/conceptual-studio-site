@@ -1,17 +1,19 @@
 title: Pandora Forever
 slug: sherman-poon-pandora-forever
-client: src/content/clients/sherman-poon.yml
+client: Sherman Poon
 year: 2023
-disciplines: [CGI, 3D animation]
-sector: Arts
-outcome: CGI worlds for Sherman Poon's music video, shown on billboards including Times Square in Hong Kong.
+disciplines:
+- CGI
+- 3D animation
+filters:
+- 3D and motion
+order: 70
+summary: CGI worlds for Sherman Poon's music video, shown on billboards including Times Square in Hong Kong.
+cover:
+  src: '@assets/work/sherman-poon-pandora-forever/06.webp'
+  alt: Sherman Poon waving in front of the video on the Times Square screen in Hong Kong
+  caption: CGI, on the Times Square screen, Hong Kong
+coverFocus: 50% 42%
 featured: true
 featuredOrder: 3
-archive: false
-cover:
-  src: "@assets/work/sherman-poon-pandora-forever/06.webp"
-  alt: Sherman Poon waving in front of the video on the Times Square screen in Hong Kong
-coverCaption:
-  title: Pandora Forever, Sherman Poon, 2023
-  medium: CGI, on the Times Square screen, Hong Kong
-blocks: []
+hasPage: false

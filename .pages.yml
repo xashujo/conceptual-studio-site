@@ -28,25 +28,19 @@ components:
         label: Image file
         type: image
         required: true
+        description: "Upload a large file. The site makes the smaller sizes itself."
         options:
           media: images
       - name: alt
-        label: Alt text
+        label: Description (alt text)
         type: string
         required: true
-        description: What the image shows, for people who can't see it.
-  caption:
-    type: object
-    label: Plate caption
-    fields:
-      - name: title
-        label: Line 1 (title, client, year)
+        description: "What the image shows, in plain words, for people who can't see it."
+      - name: caption
+        label: Caption
         type: string
         required: true
-      - name: medium
-        label: Line 2 (medium or what it is)
-        type: string
-        required: true
+        description: "The small line under the image, e.g. \"Student lanyards and ID cards\"."
 
 content:
   - name: projects
@@ -59,184 +53,189 @@ content:
       field: false
     view:
       primary: title
-      sort: featuredOrder
-      order: asc
+      fields: [title, client, year]
+      sort: [order, title]
     fields:
       - { name: title, label: Title, type: string, required: true }
       - name: slug
         label: Web address
         type: string
         required: true
-        description: "The end of the page address, e.g. oxford-school-of-english. Lowercase, hyphens, no spaces. Don't change it once the project is live."
-      - name: client
-        label: Client
-        type: reference
-        required: true
-        options: { collection: clients, value: "{path}", label: "{primary}" }
+        description: "The end of the page address, e.g. oxford-school-of-english. Lowercase letters and hyphens, no spaces. Don't change it once the project is live."
+      - { name: client, label: Client, type: string, required: true }
       - { name: year, label: Year, type: number, required: true }
       - name: disciplines
         label: Disciplines
-        type: select
+        type: string
+        list: true
         required: true
+        description: "Shown on the card, e.g. Visual identity, Branding. One per line."
+      - name: filters
+        label: Work page filters
+        type: select
+        description: "Which filter buttons on the Work page show this project."
         options:
           multiple: true
-          values: [Visual identity, Branding, Data visualisation, Graphic design, Reports, Social media editing, CGI, 3D animation]
-      - name: sector
-        label: Sector
-        type: select
+          values: [Brand identity, Data visualisation, 3D and motion]
+      - name: studentWork
+        label: Student work
+        type: boolean
+        description: "Tick for university work. It then only shows under \"Archive: student work\"."
+      - name: order
+        label: Position on the Work page
+        type: number
+        description: "Lower numbers come first. The current projects go up in tens (10, 20, 30...), so a new one can go in between, e.g. 15."
+      - name: summary
+        label: One-line description
+        type: text
         required: true
-        options:
-          values: [Education, Public sector, Commercial, Arts]
-      - name: outcome
-        label: Outcome line
+        description: "Shown on the project card. Say where the work was used."
+      - { name: cover, label: Cover image, component: picture, required: true }
+      - name: coverFocus
+        label: Cover crop (optional)
         type: string
-        required: true
-        description: One line on where the work was used. Shown on the project card.
-      - { name: featured, label: Show on the home page, type: boolean }
+        description: "Which part of the cover stays in view when it's cropped. Leave empty for the centre. Left-right then top-bottom, e.g. 50% 0% keeps the top."
+
+      - name: featured
+        label: Show on the home page
+        type: boolean
       - name: featuredOrder
         label: Home page position
         type: number
-        description: 1 shows first. Only used when "Show on the home page" is on.
-      - { name: archive, label: Archive (hide from All work), type: boolean }
-      - { name: cover, label: Cover image, component: picture, required: true }
-      - { name: coverCaption, label: Cover plate caption, component: caption, required: true }
-      - { name: problem, label: The problem, type: text }
-      - { name: whatIDid, label: What I did, type: text }
-      - { name: whatHappened, label: What happened, type: text }
-      - name: testimonial
-        label: Testimonial
-        type: reference
-        options: { collection: testimonials, value: "{path}", label: "{primary}" }
-      - name: next
-        label: Next project
-        type: reference
-        options: { collection: projects, value: "{path}", label: "{primary}" }
-      - name: blocks
-        label: Page sections
-        type: block
+        description: "1 and 2 are the large cards, 3 and 4 the pair side by side."
+      - name: homeFocus
+        label: Home page crop (optional)
+        type: string
+        description: "Only if the home page card needs a different crop from the cover crop."
+      - name: homeCharts
+        label: Charts under the card on the home page (optional)
+        type: object
+        list: { max: 3 }
+        description: "Up to three images shown in a row under this project's home page card. The first is the big one."
+        fields:
+          - { name: src, label: Image file, type: image, required: true, options: { media: images } }
+          - { name: alt, label: Description (alt text), type: string, required: true }
+          - { name: title, label: Caption line 1, type: string, required: true }
+          - { name: caption, label: Caption line 2, type: string, required: true }
+
+      - name: hasPage
+        label: Has its own case study page
+        type: boolean
+        description: "Tick when the fields below are filled in. Without it the card shows on the Work page but doesn't open a page."
+      - name: outcome
+        label: Outcome
+        type: string
+        description: "One short line, e.g. \"Now a UK-registered trademark.\""
+      - name: problem
+        label: The problem
+        type: text
+        description: "Leave an empty line between paragraphs."
+      - name: whatIDid
+        label: What I did
+        type: text
+        description: "Leave an empty line between paragraphs."
+      - name: gallery
+        label: The work (image rows)
+        type: object
         list: true
-        blockKey: type
-        blocks:
-          - name: text
-            label: Text
-            fields:
-              - { name: body, label: Text, type: text, required: true }
-              - { name: caption, component: caption }
-          - name: image
-            label: Full-width image
-            fields:
-              - { name: image, component: picture, required: true }
-              - { name: caption, component: caption, required: true }
-          - name: imagePair
-            label: Two images side by side
-            fields:
-              - { name: left, label: Left image, component: picture, required: true }
-              - { name: right, label: Right image, component: picture, required: true }
-              - { name: caption, component: caption, required: true }
-          - name: video
-            label: Video
-            fields:
-              - name: file
-                label: Short video file (under 25 MB)
-                type: file
-                options: { media: videos }
-              - name: url
-                label: Or a link to a longer film
-                type: string
-                description: For films stored on media.conceptualstudio.co.uk. Fill in this or the file, not both.
-              - { name: poster, label: Still shown before it plays, component: picture }
-              - { name: caption, component: caption, required: true }
-          - name: stat
-            label: Big number
-            fields:
-              - { name: value, label: Number, type: string, required: true }
-              - { name: label, label: What it counts, type: string, required: true }
-              - { name: caption, component: caption }
-          - name: quote
-            label: Quote
-            fields:
-              - name: testimonial
-                label: Testimonial
-                type: reference
-                required: true
-                options: { collection: testimonials, value: "{path}", label: "{primary}" }
-              - { name: caption, component: caption }
-          - name: chartImage
-            label: Chart image
-            fields:
-              - { name: image, component: picture, required: true }
-              - { name: caption, component: caption, required: true }
-          - name: beforeAfter
-            label: Before and after
-            fields:
-              - { name: before, label: Before, component: picture, required: true }
-              - { name: after, label: After, component: picture, required: true }
-              - { name: caption, component: caption, required: true }
+        description: "Each row is one line of images on the page, top to bottom."
+        fields:
+          - name: layout
+            label: Layout
+            type: select
+            required: true
+            options:
+              values: [One large, Two side by side, Three in a row, Four in a grid]
+          - name: images
+            label: Images
+            component: picture
+            list: { min: 1, max: 4 }
+            required: true
+      - { name: before, label: Before (optional), component: picture }
+      - { name: after, label: After (optional), component: picture }
+      - name: whatHappened
+        label: What happened
+        type: text
+        description: "Leave an empty line between paragraphs."
+      - name: next
+        label: Next project (optional)
+        type: reference
+        description: "The case study linked at the bottom of the page. Leave empty to use the next one in Work page order."
+        options: { collection: projects, value: "{path}", label: "{title}", search: title }
 
   - name: services
-    label: Services
+    label: Services and prices
     type: collection
     path: src/content/services
     format: yaml
-    filename:
-      template: "{fields.slug}.yml"
-      field: false
-    view: { primary: name }
+    view:
+      primary: name
+      sort: [order]
     fields:
       - { name: name, label: Name, type: string, required: true }
-      - { name: slug, label: Web address, type: string, required: true }
-      - { name: summary, label: Summary, type: text, required: true }
-      - { name: includes, label: What's included, type: string, list: true }
+      - { name: order, label: Order, type: number, description: "Lower numbers come first." }
+      - { name: page, label: Page address, type: string, description: "The service's own page, e.g. /services/brand-identity/. Leave empty if it doesn't have one." }
+      - { name: summary, label: Description, type: text, required: true }
       - name: tiers
         label: Pricing ladder
         type: object
         list:
+          min: 1
           collapsible:
-            summary: "{name}"
+            summary: "{fields.name}: {fields.price}"
+        description: "The rungs, cheapest first. The first rung's price and time also show on the Services page and home page."
         fields:
           - { name: name, label: Rung name, type: string, required: true }
-          - { name: fromPrice, label: From price, type: string, required: true, description: "e.g. £4,900 or £1,200 a month" }
-          - { name: timeline, label: From time, type: string, description: "Calendar time, e.g. from 4 weeks" }
+          - { name: price, label: Price, type: string, required: true, description: "Written exactly as it should appear, e.g. From £4,900 or From £1,200 a month" }
+          - { name: time, label: Time, type: string, description: "Calendar time, e.g. from 4 weeks" }
           - { name: includes, label: What it includes, type: text, required: true }
-      - name: faqs
-        label: Questions
-        type: object
-        list: true
-        fields:
-          - { name: question, label: Question, type: string, required: true }
-          - { name: answer, label: Answer, type: text, required: true }
-      - name: related
-        label: Related projects
-        type: reference
-        options: { collection: projects, multiple: true, value: "{path}", label: "{primary}" }
+          - { name: note, label: Small note (optional), type: string, description: "e.g. Quoted per project." }
+      - name: homePrice
+        label: Home page price (optional)
+        type: string
+        description: "Leave empty to use the first rung's price. Only fill in if the home page should say something different, e.g. From £200 per video."
+      - name: homeTime
+        label: Home page time (optional)
+        type: string
+        description: "Leave empty to use the first rung's time."
+      - { name: homeLink, label: Home page link text, type: string, description: "e.g. Brand identity prices" }
 
   - name: testimonials
     label: Testimonials
     type: collection
     path: src/content/testimonials
     format: yaml
-    filename: "{name}.yml"
+    filename: "{fields.name}.yml"
     view: { primary: name }
     fields:
       - { name: quote, label: Quote (word for word), type: text, required: true }
       - { name: name, label: Name, type: string, required: true }
       - { name: role, label: Role, type: string, required: true }
       - { name: organisation, label: Organisation, type: string, required: true }
+      - { name: onHomePage, label: Show on the home page, type: boolean, description: "Tick one quote only." }
 
   - name: clients
     label: Clients
     type: collection
     path: src/content/clients
     format: yaml
-    filename: "{name}.yml"
-    view: { primary: name }
+    filename: "{fields.name}.yml"
+    view:
+      primary: name
+      sort: [order, name]
     fields:
       - { name: name, label: Name, type: string, required: true }
+      - { name: trustedBy, label: Show in "Worked with", type: boolean, description: "Shows the name on the home page and About page." }
+      - name: group
+        label: Group
+        type: select
+        options:
+          values: [Education, Companies and international]
+      - { name: order, label: Order, type: number, description: "Lower numbers come first." }
       - name: logo
-        label: Logo (SVG)
+        label: Logo (SVG, not used yet)
         type: image
         options: { media: images, extensions: [svg] }
-      - { name: trustedBy, label: Show in "Trusted by", type: boolean }
 
   - name: settings
     label: Site settings
@@ -244,10 +243,10 @@ content:
     path: src/content/settings/site.yml
     format: yaml
     fields:
-      - { name: availability, label: Taking new projects, type: boolean }
+      - { name: availability, label: Taking new projects, type: boolean, description: "Shows or hides the green dot on the home page." }
       - { name: availabilityText, label: Availability text, type: string, required: true }
       - { name: email, label: Email, type: string, required: true }
-      - { name: responseTime, label: Reply time, type: string, required: true }
+      - { name: responseTime, label: Reply time, type: string, required: true, description: "Finishes the sentence \"I reply...\", e.g. within three working days" }
       - name: socialLinks
         label: Social links
         type: object

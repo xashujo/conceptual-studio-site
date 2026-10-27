@@ -16,7 +16,7 @@ const preset = service ? `${service}:unsure` : '';
     <p><a class="link" href={calUrl}>Book a 20-minute call<span class="arrow" aria-hidden="true">→</span></a></p>
   </div>
 
-  <form class="enq__form" action="https://api.web3forms.com/submit" method="POST" novalidate data-enquiry>
+  <form class="enq__form" action="https://api.web3forms.com/submit" method="POST" novalidate data-enquiry data-email={email}>
     <input type="hidden" name="access_key" value={web3formsKey} />
     <input type="hidden" name="subject" value="New enquiry from conceptualstudio.co.uk" />
     <input type="hidden" name="from_name" value="Conceptual Studio website" />
@@ -86,9 +86,9 @@ const preset = service ? `${service}:unsure` : '';
 </section>
 
 <script>
-  import { email } from '../site';
   const form = document.querySelector<HTMLFormElement>('[data-enquiry]');
   if (form) {
+    const email = form.dataset.email!;
     const done = document.querySelector<HTMLElement>('[data-done]')!;
     const status = form.querySelector<HTMLElement>('[data-status]')!;
     const send = form.querySelector<HTMLElement>('[data-send]')!;

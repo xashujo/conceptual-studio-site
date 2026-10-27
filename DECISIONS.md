@@ -605,3 +605,30 @@ Museum model:
   main and are checked on its Cloudflare preview. [TBC: Cloudflare
   project name for the preview address; PDF version with screenshots
   once Pages CMS is connected.]
+
+## Editing wired to the live pages (27 Oct 2026, branch cms-live)
+- Josh, 26 Oct: he can't code and wants to edit projects, images, featured
+  work and prices himself. Pages CMS now drives the live home, Work, case
+  study and Services pages, not only the old home prototype.
+- All content moved into src/content/: twelve projects (with both case
+  studies), three services with their ladders, clients, the home page quote
+  and site settings. src/data/work.ts, src/data/services.ts and
+  src/lib/site.ts now only shape that content for the pages; src/site.ts and
+  src/data/site.ts re-export the shared values, so email and reply time come
+  from Site settings everywhere.
+- Prices: the ladders use the copy/pricing.md draft 3 figures, which the home
+  page already showed live. The Services pages had shown "From £[TBC]".
+  [TBC: Josh to confirm the figures before this goes live.]
+- Home page: positions 1 and 2 are large cards, 3 and 4 the pair. A project
+  can carry up to three charts under its home card (Strategic Intent does).
+  Its card text now matches the Work page's for each project.
+- Cards for projects without a case study link to /work/ instead of a
+  missing page (Pandora Forever, KUT Magazine). Social media editing links to
+  /services/ until it has a page.
+- KUT Magazine is still featured on the home page, now captioned as Kingston
+  School of Art student work, as on /work/. [TBC: keep it featured, or swap in
+  a client project.]
+- Rung ids for ?need= links now come from rung names (brand:full-identity).
+- The enquiry form's script gets the email from a data attribute, so no
+  content code is bundled into the browser.
+- docs/editing-guide.md rewritten as plain steps.

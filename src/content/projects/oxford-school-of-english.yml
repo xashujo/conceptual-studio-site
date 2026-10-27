@@ -1,17 +1,70 @@
 title: Oxford School of English
 slug: oxford-school-of-english
-client: src/content/clients/oxford-school-of-english.yml
+client: Oxford School of English
 year: 2023
-disciplines: [Visual identity, Branding]
-sector: Education
-outcome: A new identity for a private English school in Oxford, now a UK-registered trademark.
+disciplines:
+- Visual identity
+- Branding
+filters:
+- Brand identity
+order: 20
+summary: A new identity for a private English school in Oxford, now a UK-registered trademark.
+cover:
+  src: '@assets/work/oxford-school-of-english/bus-shelter.webp'
+  alt: Oxford School of English poster in a bus shelter on an Oxford street, beside a red double-decker bus
+  caption: Visual identity, on a bus shelter poster
+coverFocus: 50% 46%
 featured: true
 featuredOrder: 1
-archive: false
-cover:
-  src: "@assets/work/oxford-school-of-english/bus-shelter.webp"
-  alt: Oxford School of English poster in a bus shelter on an Oxford street, beside a red double-decker bus
-coverCaption:
-  title: Oxford School of English, 2023
-  medium: Visual identity, on a bus shelter poster
-blocks: []
+hasPage: true
+outcome: Now a UK-registered trademark.
+problem: |
+  The Oxford School of English teaches English to students from abroad, and wanted to win more of them. Its old logo had no clear structure, said little to an international market, and copied the Oxford Dictionary logo.
+
+  The school wanted to look modern and prestigious without losing its historic roots.
+whatIDid: |
+  This was a solo project: logo, type and colour.
+
+  I put an English lion inside a shield, after the traditional English crest. It nods to the England football crest and the house crests in the Harry Potter films, both of which students from abroad are likely to know.
+
+  The two colours, Oxford Gold and Oxford White, come from the stone of the city's buildings. The type pairs a classic serif with a modern sans to keep the prestige without looking dated.
+
+  [TBC: a decision or trade-off you made, for example a direction the school turned down]
+gallery:
+- layout: One large
+  images:
+  - src: '@assets/work/oxford-school-of-english/10.webp'
+    alt: Oxford School of English poster with a photograph of an Oxford college, in a station frame
+    caption: Poster in a station
+- layout: Two side by side
+  images:
+  - src: '@assets/work/oxford-school-of-english/06.webp'
+    alt: Two gold Oxford School of English lanyards with student ID cards
+    caption: Student lanyards and ID cards
+  - src: '@assets/work/oxford-school-of-english/07.webp'
+    alt: The lion shield beside a black football kit with the crest on the chest
+    caption: Crest and kit
+- layout: Three in a row
+  images:
+  - src: '@assets/work/oxford-school-of-english/01.webp'
+    alt: Lion shield beside the word Oxford and School of English, in black on gold
+    caption: Primary logo
+  - src: '@assets/work/oxford-school-of-english/04.webp'
+    alt: Lion shield above the Oxford wordmark, in black on gold
+    caption: Stacked logo
+  - src: '@assets/work/oxford-school-of-english/05.webp'
+    alt: Lion shield beside the letters OSE, in black on gold
+    caption: Short logo
+before:
+  src: '@assets/work/oxford-school-of-english/02.webp'
+  alt: The school's shopfront with its old sign above the door
+  caption: 'Before: the old sign on the shopfront'
+after:
+  src: '@assets/work/oxford-school-of-english/sign.webp'
+  alt: A square gold sign with the lion shield and Oxford wordmark on a white wall
+  caption: 'After: the new sign'
+whatHappened: |
+  The new identity is now a UK-registered trademark.
+
+  [TBC: anything else that followed, for example enquiries from abroad or where the identity has been used]
+next: src/content/projects/new-city-college-strategic-intent.yml

@@ -1,0 +1,20 @@
+name: Brand identity
+order: 1
+page: /services/brand-identity/
+summary: A logo, colours, type, mockups and the rules for using them, so your own team can make new material without coming back to me every time.
+homeLink: Brand identity prices
+tiers:
+  - name: Logo and essentials
+    price: From £4,900
+    time: from 4 weeks
+    includes: A logo, colour palette and typefaces, a one-page sheet on how to use them, and mockups showing the identity in use.
+  - name: Full identity
+    price: From £8,750
+    time: from 8 weeks
+    includes: Everything in Logo and essentials, plus a brand guidelines document and templates your team can use, such as social posts, letterheads and presentations.
+    note: "[TBC: how many templates are included]"
+  - name: Identity and rollout
+    price: From £14,000
+    time: from 12 weeks
+    includes: A full identity applied across the things people actually see, such as signage, prospectuses and campaigns, with print handled through my print partners.
+    note: Quoted per project.

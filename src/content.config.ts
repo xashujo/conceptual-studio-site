@@ -1,56 +1,48 @@
-// Content the CMS edits (brief section 10). Field names match .pages.yml exactly.
+// Content Josh edits in Pages CMS (brief section 10). Field names match .pages.yml exactly.
+// The pages read this through src/data/work.ts, src/data/services.ts and src/lib/site.ts.
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
 // Pages CMS stores a reference as the other entry's file path; keep just its id (the file name).
 const ref = z.string().transform((p) => p.split('/').pop()!.replace(/\.ya?ml$/, ''));
-
 const yml = (folder: string) => glob({ pattern: '*.{yml,yaml}', base: `./src/content/${folder}` });
-
-const caption = z.object({ title: z.string().min(1), medium: z.string().min(1) });
+const text = z.string().nullish().transform((s) => s ?? '');
 
 export const collections = {
   projects: defineCollection({
     loader: yml('projects'),
     schema: ({ image }) => {
       // Alt text is required on every image (brief section 10).
-      const pic = z.object({ src: image(), alt: z.string().min(1) });
-      const block = z.discriminatedUnion('type', [
-        z.object({ type: z.literal('text'), body: z.string(), caption: caption.optional() }),
-        z.object({ type: z.literal('image'), image: pic, caption }),
-        z.object({ type: z.literal('imagePair'), left: pic, right: pic, caption }),
-        z.object({
-          type: z.literal('video'),
-          file: z.string().optional(), // short loop in the repo
-          url: z.string().url().optional(), // longer film on R2
-          poster: pic.optional(),
-          caption,
-        }).refine((v) => v.file || v.url, 'A video block needs a file or a URL'),
-        z.object({ type: z.literal('stat'), value: z.string(), label: z.string(), caption: caption.optional() }),
-        z.object({ type: z.literal('quote'), testimonial: ref, caption: caption.optional() }),
-        z.object({ type: z.literal('chartImage'), image: pic, caption }),
-        z.object({ type: z.literal('beforeAfter'), before: pic, after: pic, caption }),
-      ]);
+      const pic = z.object({ src: image(), alt: z.string().min(1), caption: z.string().min(1) });
       return z.object({
         title: z.string(),
         slug: z.string().regex(/^[a-z0-9-]+$/, 'Lowercase letters, numbers and hyphens only'),
-        client: ref,
+        client: z.string(),
         year: z.number().int(),
         disciplines: z.array(z.string()).min(1),
-        sector: z.string(),
-        outcome: z.string(),
-        featured: z.boolean().default(false),
-        featuredOrder: z.number().optional(),
-        archive: z.boolean().default(false),
+        filters: z.array(z.enum(['Brand identity', 'Data visualisation', '3D and motion'])).nullish().transform((v) => v ?? []),
+        studentWork: z.boolean().nullish().transform((v) => !!v),
+        order: z.number().nullish(),
+        summary: z.string(),
         cover: pic,
-        coverCaption: caption,
-        problem: z.string().optional(),
-        whatIDid: z.string().optional(),
-        whatHappened: z.string().optional(),
-        testimonial: ref.optional(),
-        next: ref.optional(),
-        blocks: z.array(block).default([]),
+        coverFocus: z.string().nullish(),
+        featured: z.boolean().nullish().transform((v) => !!v),
+        featuredOrder: z.number().nullish(),
+        homeFocus: z.string().nullish(),
+        homeCharts: z.array(z.object({ src: image(), alt: z.string().min(1), title: z.string(), caption: z.string() })).nullish().transform((v) => v ?? []),
+        hasPage: z.boolean().nullish().transform((v) => !!v),
+        outcome: text,
+        problem: text,
+        whatIDid: text,
+        whatHappened: text,
+        gallery: z.array(z.object({
+          layout: z.enum(['One large', 'Two side by side', 'Three in a row', 'Four in a grid']),
+          images: z.array(pic).min(1),
+        })).nullish().transform((v) => v ?? []),
+        before: pic.nullish(),
+        after: pic.nullish(),
+        next: ref.nullish(),
       });
     },
   }),
@@ -58,29 +50,36 @@ export const collections = {
     loader: yml('services'),
     schema: z.object({
       name: z.string(),
-      slug: z.string().regex(/^[a-z0-9-]+$/),
+      order: z.number().nullish(),
+      page: z.string().nullish(),
       summary: z.string(),
-      includes: z.array(z.string()).default([]),
+      homePrice: z.string().nullish(),
+      homeTime: z.string().nullish(),
+      homeLink: z.string().nullish(),
       tiers: z.array(z.object({
         name: z.string(),
-        fromPrice: z.string(),
-        timeline: z.string().optional(),
+        price: z.string(),
+        time: z.string().nullish(),
         includes: z.string(),
-      })),
-      faqs: z.array(z.object({ question: z.string(), answer: z.string() })).default([]),
-      related: z.array(ref).default([]),
+        note: z.string().nullish(),
+      })).min(1),
     }),
   }),
   testimonials: defineCollection({
     loader: yml('testimonials'),
-    schema: z.object({ quote: z.string(), name: z.string(), role: z.string(), organisation: z.string() }),
+    schema: z.object({
+      quote: z.string(), name: z.string(), role: z.string(), organisation: z.string(),
+      onHomePage: z.boolean().nullish().transform((v) => !!v),
+    }),
   }),
   clients: defineCollection({
     loader: yml('clients'),
     schema: ({ image }) => z.object({
       name: z.string(),
-      logo: image().optional(),
-      trustedBy: z.boolean().default(false),
+      logo: image().nullish(),
+      trustedBy: z.boolean().nullish().transform((v) => !!v),
+      group: z.enum(['Education', 'Companies and international']).nullish(),
+      order: z.number().nullish(),
     }),
   }),
   settings: defineCollection({
@@ -90,9 +89,9 @@ export const collections = {
       availabilityText: z.string(),
       email: z.string().email(),
       responseTime: z.string(),
-      socialLinks: z.array(z.object({ label: z.string(), url: z.string().url() })).default([]),
+      socialLinks: z.array(z.object({ label: z.string(), url: z.string().url() })).nullish().transform((v) => v ?? []),
       companyName: z.string(),
-      companyNumber: z.string().optional(),
+      companyNumber: z.string().nullish(),
     }),
   }),
 };

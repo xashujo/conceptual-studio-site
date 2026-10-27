@@ -1,0 +1,17 @@
+title: Internal video
+slug: new-york-general-group
+client: New York General Group
+year: 2025
+disciplines:
+- CGI
+- 3D animation
+filters:
+- 3D and motion
+order: 50
+summary: A 30-second animation for internal briefings.
+cover:
+  src: '@assets/work/new-york-general-group/01.webp'
+  alt: NYGG lettering in white on a black starfield
+  caption: Title frame from the video
+featured: false
+hasPage: false

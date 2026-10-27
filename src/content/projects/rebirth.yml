@@ -1,0 +1,16 @@
+title: Rebirth
+slug: rebirth
+client: Kingston School of Art
+year: 2022
+disciplines:
+- 3D modelling
+- Art direction
+studentWork: true
+order: 110
+summary: A glass hand reaching for a star.
+cover:
+  src: '@assets/work/rebirth/01.webp'
+  alt: A translucent glass hand reaching up towards a bright star in purple haze
+  caption: Student work. 3D render
+featured: false
+hasPage: false

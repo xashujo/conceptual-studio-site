@@ -1,19 +1,24 @@
 // Facts shown on more than one page. Sources are noted; anything unconfirmed is [TBC].
-export const email = 'joshuamcdonald099@gmail.com'; // Framer /contact (DECISIONS: TBC if a studio address replaces it)
-export const startHref = `mailto:${email}?subject=New%20project`; // shortcut: email until the enquiry form exists
-export const replyTime = 'I reply within three working days.'; // DECISIONS, Josh
-export const hours = 'I answer email on weekdays, 9:00 to 17:00 London time.'; // Framer /contact
+// Email, reply time, social links, company details and the client list are edited in Pages CMS
+// (Site settings and Clients); they're read here so every page uses the same values.
+import { getCollection, getEntry } from 'astro:content';
 
-export const social = [
-  { label: 'Instagram', href: 'https://www.instagram.com/conceptual.pdf/' }, // Framer /contact
-  { label: 'TikTok', href: 'https://www.tiktok.com/@conceptual.studio' }, // Josh
-  { label: 'LinkedIn', href: 'https://uk.linkedin.com/in/joshua-mcdonald-9268a2260' }, // Framer /contact
-];
+const settings = (await getEntry('settings', 'site'))!.data;
+
+export const email = settings.email;
+export const startHref = `mailto:${email}?subject=New%20project`; // shortcut: email until the enquiry form exists
+export const quoteHref = `mailto:${email}?subject=Custom%20quote`;
+export const replyTime = `I reply ${settings.responseTime}.`;
+export const responseTime = settings.responseTime;
+export const hours = 'I answer email on weekdays, 9:00 to 17:00 London time.'; // Framer /contact
+export const availability = { on: settings.availability, text: settings.availabilityText };
+
+export const social = settings.socialLinks.map((l) => ({ label: l.label, href: l.url }));
 
 export const company = {
-  name: 'Conceptual Studio Limited',
+  name: settings.companyName,
   registeredIn: 'England and Wales',
-  number: '15410582', // Companies House, checked 26 Oct 2026
+  number: settings.companyNumber ?? '[TBC]',
   office: '[TBC: registered office address]', // the law asks for it; Josh to decide which address
 };
 
@@ -24,8 +29,16 @@ export const nav = [
   { label: 'Contact', href: '/contact/' },
 ];
 
-// The six clients brief section 3 says can be named (same list as the home prototypes).
-export const clients = ['New City College London', 'Southbank College Group', 'ACL Essex', 'Oxford School of English', 'Fou Answer, Tokyo', 'New York General Group'];
+// Clients ticked "Show in Worked with" in Pages CMS, in their set order, education first.
+const shown = (await getCollection('clients', (c) => c.data.trustedBy))
+  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99) || a.data.name.localeCompare(b.data.name));
+export const clients = shown.map((c) => c.data.name);
+export const clientGroups = (['Education', 'Companies and international'] as const)
+  .map((kind) => ({ kind, names: shown.filter((c) => (c.data.group ?? 'Companies and international') === kind).map((c) => c.data.name) }))
+  .filter((g) => g.names.length);
+
+// The quote shown on the home page (ticked "Show on the home page" in Testimonials).
+export const homeQuote = (await getCollection('testimonials', (t) => t.data.onHomePage))[0]?.data;
 
 // Every artwork on the site, with the credit the colophon and the plate captions use.
 export const art = {

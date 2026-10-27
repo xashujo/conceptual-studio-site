@@ -1,0 +1,18 @@
+title: Learner data
+slug: acl-essex-infographics
+client: ACL Essex
+year: 2025
+disciplines:
+- Data visualisation
+- Graphic design
+filters:
+- Data visualisation
+order: 30
+summary: Infographics and regional maps of learner data across seven delivery centres.
+cover:
+  src: '@assets/work/acl-essex-infographics/03.webp'
+  alt: Heat map of Essex showing ACL enrolments by local authority in 2024, in five shades of blue
+  caption: Heat map of enrolments by local authority, 2024
+coverFocus: 50% 0%
+featured: false
+hasPage: false

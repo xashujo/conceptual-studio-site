@@ -7,30 +7,28 @@ import { Image } from 'astro:assets';
 import ProjectCard from '../components/ProjectCard.astro';
 import PlateCaption from '../components/PlateCaption.astro';
 import { email, startHref, quoteHref, sentence, clients, clientGroups } from '../data/site';
+import { availability, homeQuote, responseTime } from '../lib/site';
+import { featured, projectHref, type Project } from '../data/work';
+import { services } from '../data/services';
 import heroArt from '../assets/art/engraved/jardin-quiet.jpg';
 import workArt from '../assets/art/engraved/jardin-panes.jpg';
 import footerArt from '../assets/art/engraved/garden-night.webp';
 import closeArt from '../assets/art/engraved/lemoyne-night.jpg';
-import oxford from '../assets/work/oxford-school-of-english/bus-shelter.webp';
-import pandora from '../assets/work/sherman-poon-pandora-forever/06.webp';
-import kut from '../assets/work/kut-magazine/04.webp';
 import idCards from '../assets/work/oxford-school-of-english/id-cards.webp';
-import siMap from '../assets/work/new-city-college-strategic-intent/02.webp';
-import siForecast from '../assets/work/new-city-college-strategic-intent/03.webp';
-import siJobs from '../assets/work/new-city-college-strategic-intent/04.webp';
-import siLevels from '../assets/work/new-city-college-strategic-intent/05.webp';
 
 const headline = 'Brands & Data, Made Clear'; // option 3 (Josh, 26 Oct)
 const links = [['Work', '#work'], ['Services', '#services'], ['About', '#about'], ['Contact', '#contact']];
 
-const services = [
-  { name: 'Brand identity', price: 'From £4,900', time: 'from 4 weeks', href: '/services/brand-identity/', link: 'Brand identity prices',
-    text: 'A logo, colours, type, mockups and the rules for using them, so your own team can make new material without coming back to me every time.' },
-  { name: 'Data visualisation and reports', price: 'From £700', time: 'from 1 week', href: '/services/data-visualisation/', link: 'Data visualisation prices',
-    text: 'Charts, maps and infographics, and the reports they sit in, from annual reports to sustainability reports, drawn from your own figures.' },
-  { name: 'Social media editing', price: 'From £200 per video', time: 'or from £1,200 a month', href: '/services/social-media-editing/', link: 'Social media editing prices',
-    text: 'Short videos cut from your footage, with captions and versions sized for each platform. Single edits, monthly packs or a monthly retainer.' },
-];
+// Featured work and the services menu come from Pages CMS (Projects and Services).
+// Home page positions 1 and 2 are large cards, 3 and 4 a pair.
+const card = (p: Project) => ({
+  title: p.title, year: p.year, href: projectHref(p), disciplines: p.disciplines, summary: p.summary,
+  image: p.image, alt: p.alt, position: p.homePosition ?? p.position,
+  caption: { title: p.client.startsWith(p.title) ? `${p.title}, ${p.year}` : `${p.title}, ${p.client}, ${p.year}`, medium: p.medium },
+});
+const large = featured.slice(0, 2);
+const pair = featured.slice(2, 4);
+const menu = services.map((s) => ({ name: s.name, price: s.home.price, time: s.home.time, href: s.href ?? '/services/', link: s.home.link, text: s.line }));
 
 const steps = [
   ['Call and brief', 'We talk through what you need, your budget, the formats, and what you want the work to achieve, so we both know what to expect before I start.'],
@@ -68,7 +66,7 @@ const steps = [
           <p class="hero__p">{sentence}</p>
           <div class="acts">
             <a class="btn btn--solid" href={startHref}><span class="swap"><span>Start a project</span><span aria-hidden="true">Contact me ↗</span></span></a>
-            <a class="avail" href={`mailto:${email}`}><span class="avail__dot" aria-hidden="true"></span><span class="swap"><span>Taking new projects</span><span aria-hidden="true">↗ Email me</span></span></a>
+            {availability.on && <a class="avail" href={`mailto:${email}`}><span class="avail__dot" aria-hidden="true"></span><span class="swap"><span>{availability.text}</span><span aria-hidden="true">↗ Email me</span></span></a>}
             <a class="link" href="#work">See the work<span class="arrow" aria-hidden="true">→</span></a>
           </div>
         </div>
@@ -86,50 +84,26 @@ const steps = [
           <p class="fw__p">Recent projects, each with a line on where it was used.</p>
         </header>
         <div class="fw__cards wrap">
-          <ProjectCard
-            title="Oxford School of English" year={2023} href="/work/oxford-school-of-english/"
-            disciplines={['Visual identity', 'Branding']}
-            summary="A new identity for a private English school in Oxford, now a UK-registered trademark."
-            image={oxford} alt="Oxford School of English poster in a bus shelter on an Oxford street, beside a red double-decker bus"
-            caption={{ title: 'Oxford School of English, 2023', medium: 'Visual identity, on a bus shelter poster' }}
-            position="50% 46%" />
-          <ProjectCard
-            title="Strategic Intent" year={2025} href="/work/new-city-college-strategic-intent/"
-            disciplines={['Data visualisation', 'Graphic design']}
-            summary="Infographics for New City College's strategic intent briefing, used in its executive communications around mergers."
-            image={siMap} alt="Black map of east London boroughs showing the colleges that merged to form New City College, with a timeline from 1990 to 2024"
-            caption={{ title: 'Strategic Intent, New City College London, 2025', medium: 'Map and timeline of the college mergers, 1990 to 2024' }}
-            position="50% 8%" />
-          <div class="charts">
-            <figure class="charts__big">
-              <Image src={siForecast} alt="Bar chart forecasting 16 to 18 population growth by borough, 2024 to 2030" widths={[600, 900, 1300, 1800]} sizes="(min-width: 760px) calc((95vw - 24px) * 2 / 3), calc(100vw - 32px)" />
-              <PlateCaption title="Demographic forecast, 2024 to 2030" medium="Bar chart, 16 to 18 population by borough" />
-            </figure>
-            <figure>
-              <Image src={siJobs} alt="Bar chart of minimum growth rates across key employment sectors" widths={[400, 600, 900]} sizes="(min-width: 760px) calc((95vw - 24px) / 3), calc(100vw - 32px)" />
-              <PlateCaption title="Key employment growth" medium="Bar chart, minimum growth rate by sector" />
-            </figure>
-            <figure>
-              <Image src={siLevels} alt="Pie chart of 16 to 18 students by level in 2024/25" widths={[400, 600, 900]} sizes="(min-width: 760px) calc((95vw - 24px) / 3), calc(100vw - 32px)" />
-              <PlateCaption title="16 to 18 students by level, 2024/25" medium="Pie chart, 10,404 students" />
-            </figure>
-          </div>
-          <div class="fw__pair">
-            <ProjectCard size="half"
-              title="Pandora Forever" year={2023} href="/work/sherman-poon-pandora-forever/"
-              disciplines={['CGI', '3D animation']}
-              summary="CGI worlds for Sherman Poon's music video, shown on billboards including Times Square in Hong Kong."
-              image={pandora} alt="Sherman Poon waving in front of the video on the Times Square screen in Hong Kong"
-              caption={{ title: 'Pandora Forever, Sherman Poon, 2023', medium: 'CGI, on the Times Square screen, Hong Kong' }}
-              position="50% 42%" />
-            <ProjectCard size="half"
-              title="KUT Magazine" year={2023} href="/work/kut-magazine/"
-              disciplines={['Visual identity', 'Editorial design']}
-              summary="An arts magazine about emerging creatives, from the identity to the interviews to the printed copy."
-              image={kut} alt="Two spreads from KUT Magazine: a portrait of an artist and an interview with Kit Sivers"
-              caption={{ title: 'KUT Magazine, independent project, 2023', medium: 'Identity and editorial design, printed spreads' }}
-              position="50% 50%" />
-          </div>
+          {large.map((p) => (
+            <Fragment>
+              <ProjectCard {...card(p)} />
+              {p.homeCharts.length > 0 && (
+                <div class="charts">
+                  {p.homeCharts.slice(0, 3).map((c, i) => (
+                    <figure class:list={{ charts__big: i === 0 }}>
+                      <Image src={c.image} alt={c.alt} widths={i === 0 ? [600, 900, 1300, 1800] : [400, 600, 900]} sizes={i === 0 ? '(min-width: 760px) calc((95vw - 24px) * 2 / 3), calc(100vw - 32px)' : '(min-width: 760px) calc((95vw - 24px) / 3), calc(100vw - 32px)'} />
+                      <PlateCaption title={c.title} medium={c.medium} />
+                    </figure>
+                  ))}
+                </div>
+              )}
+            </Fragment>
+          ))}
+          {pair.length > 0 && (
+            <div class="fw__pair">
+              {pair.map((p) => <ProjectCard size="half" {...card(p)} />)}
+            </div>
+          )}
           <p class="fw__all"><a class="link" href="/work/">All projects<span class="arrow" aria-hidden="true">→</span></a></p>
         </div>
       </section>
@@ -145,16 +119,16 @@ const steps = [
           </figure>
         </div>
         <ul class="menu">
-          {services.map((s) => (
+          {menu.map((s) => (
             <li class="menu__item">
               <div class="menu__row"><h3 class="menu__name">{s.name}</h3><p class="menu__price">{s.price}</p></div>
-              <p class="menu__time">{s.time}</p>
+              {s.time && <p class="menu__time">{s.time}</p>}
               <p class="menu__text">{s.text}</p>
               <a class="link" href={s.href}>{s.link}<span class="arrow" aria-hidden="true">→</span></a>
             </li>
           ))}
           <li class="menu__item menu__item--quote">
-            <p class="menu__text">Need something else, or a mix of these? I'll send a fixed quote within three working days.</p>
+            <p class="menu__text">Need something else, or a mix of these? I'll send a fixed quote {responseTime}.</p>
             <a class="btn" href={quoteHref}>Ask for a custom quote <span class="arrow" aria-hidden="true">→</span></a>
           </li>
         </ul>
@@ -171,10 +145,12 @@ const steps = [
             ))}
           </div>
         </div>
-        <figure class="proof__quote">
-          <blockquote><p>"The campaign was one of the biggest I've worked on - your logo appeared across buses, tubes, and stations in central and east London for months. Your design is now formally trademarked and integral to our brand. I'm hugely grateful you helped us avoid legal issues and added real value to the college"</p></blockquote>
-          <figcaption><b>Alison Arnaud</b>Principal, Tower Hamlets College, New City College</figcaption>
-        </figure>
+        {homeQuote && (
+          <figure class="proof__quote">
+            <blockquote><p>"{homeQuote.quote}"</p></blockquote>
+            <figcaption><b>{homeQuote.name}</b>{homeQuote.role}, {homeQuote.organisation}</figcaption>
+          </figure>
+        )}
       </section>
 
       <!-- How I work: a real ordered list, the order carried by position, not numerals. -->
@@ -211,7 +187,7 @@ const steps = [
         <div class="close__art" aria-hidden="true"><Image src={closeArt} alt="" widths={[800, 1400, 1900]} sizes="100vw" /></div>
         <h2 class="close__h big" id="close-h">Start a project</h2>
         <div class="close__body">
-          <p class="close__p">If you're collecting quotes for a project, I'd be glad to be one of them. Send me a short note and I'll reply within three working days.</p>
+          <p class="close__p">If you're collecting quotes for a project, I'd be glad to be one of them. Send me a short note and I'll reply {responseTime}.</p>
           <div class="acts">
             <a class="btn btn--solid" href={startHref}><span class="swap"><span>Start a project</span><span aria-hidden="true">Email me ↗</span></span></a>
             <button class="btn" type="button" data-copy={email}><span data-label>Copy email</span></button>

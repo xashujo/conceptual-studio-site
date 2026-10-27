@@ -1,0 +1,18 @@
+title: KUT Magazine
+slug: kut-magazine
+client: Kingston School of Art
+year: 2023
+disciplines:
+- Visual identity
+- Art direction
+- Photography
+studentWork: true
+order: 80
+summary: 'An arts magazine on emerging creatives: identity, interviews, layout and print.'
+cover:
+  src: '@assets/work/kut-magazine/04.webp'
+  alt: 'Two spreads from KUT Magazine: a portrait of an artist and an interview with Kit Sivers'
+  caption: Student work. Magazine
+featured: true
+featuredOrder: 4
+hasPage: false
