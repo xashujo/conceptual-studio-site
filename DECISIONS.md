@@ -490,8 +490,8 @@ Museum model:
 - Browsers without backdrop-filter get a 92% tint.
 - /glass/ is a review specimen (painting, paper, black). Hidden from search
   engines and not in the nav. The paper panel only exists for comparison:
-  the site still never puts glass on flat paper. Delete /glass/ once the nav
-  is built.
+  the site still never puts glass on flat paper. Keep /glass/ permanently:
+  it's Josh's glass tuning page with the dial sliders (Josh, 27 Oct).
 - The layer 2 refraction tint (42%) is below AA and gets fixed in step 3.
 - Lens glass (Josh, 26 Oct, from Apple's Liquid Glass "New, universal
   design" image): nearly clear, the art bends and magnifies through a rim
