@@ -14,5 +14,5 @@ companyNumber: "15410582"
 glass:
   bend: 200
   frost: 10
-  blur: 180
+  blur: 200
   shine: 100
