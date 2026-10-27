@@ -233,9 +233,9 @@ const steps = [
 
     <script>
       import { mountLens } from '../scripts/lens.js';
-      // Lens glass on the nav and the hero plate, over the etching (it fades out below 58%).
+      // Lens glass on the nav and the hero plate, over the etching (its mask fades it out from 58% to 92%).
       const heroArt = document.querySelector<HTMLImageElement>('.hero__art');
-      document.querySelectorAll<HTMLElement>('.hero [data-lens]').forEach((el) => mountLens(el, heroArt, 0.58));
+      document.querySelectorAll<HTMLElement>('.hero [data-lens]').forEach((el) => mountLens(el, heroArt, [0.58, 0.92]));
 
       // Copy email: the label confirms, a polite live region announces it, then it reverts.
       const btn = document.querySelector<HTMLButtonElement>('[data-copy]');
