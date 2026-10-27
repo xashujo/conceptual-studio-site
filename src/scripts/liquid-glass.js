@@ -154,7 +154,7 @@ function compile(gl) {
   return gl.getProgramParameter(prog, gl.LINK_STATUS) ? prog : null;
 }
 
-export async function mountLiquidGlass(panel, { image, tone = 'light', opacity, blur = BLUR_PX, fade = [2, 3] } = {}) {
+export async function mountLiquidGlass(panel, { image, tone = 'light', opacity, blur = BLUR_PX, fade = [2, 3], lens = false } = {}) {
   if (!panel || !image) return null;
   if (media('(prefers-contrast: more)') || media('(prefers-reduced-transparency: reduce)')) return null;
   try {
@@ -253,10 +253,12 @@ export async function mountLiquidGlass(panel, { image, tone = 'light', opacity, 
     gl.uniform3f(u.u_fade, fade[0], fade[1], pr.top - ir.top);
     gl.uniform1f(u.u_imgH, ir.height);
     // Josh's dials (Site settings > Glass): 1 = as designed.
-    const b = blur * dial('blur');
+    // The clear lens goes much further above 100, toward Apple's frosted panels (as components.css).
+    const up = (d) => Math.max(0, d - 1);
+    const b = blur * dial('blur') + (lens ? 11 * up(dial('blur')) : 0);
     gl.uniform1f(u.u_blurPx, b);
     gl.uniform1f(u.u_lodBias, Math.max(0, Math.log2(Math.max(b, 0.01) * 1.4 * dpr) - 0.5));
-    gl.uniform1f(u.u_tintOpacity, Math.min(0.96, tint * dial('frost')));
+    gl.uniform1f(u.u_tintOpacity, Math.min(0.96, tint * dial('frost') + (lens ? 0.34 * up(dial('frost')) : 0)));
     gl.uniform1f(u.u_bend, dial('bend'));
     gl.uniform1f(u.u_shine, dial('shine'));
     gl.uniform1f(u.u_rim, 0.06 + 0.8 * Math.min(1, Math.max(0, dial('blur') - 1)));
