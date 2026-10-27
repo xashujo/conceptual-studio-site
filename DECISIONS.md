@@ -632,3 +632,15 @@ Museum model:
 - The enquiry form's script gets the email from a data attribute, so no
   content code is bundled into the browser.
 - docs/editing-guide.md rewritten as plain steps.
+- Homepage (Josh, 26 Oct): the nav and the hero plate are lens glass. Shared
+  helper src/scripts/lens.js mounts it on /glass/ and the home page. In
+  Firefox and Safari the nav bends the etching with WebGL; the hero plate
+  reaches into the etching's fade at desktop sizes, so there it keeps the
+  clear glass without the bend.
+- Kept the current lens glass over the borrowed "lighting" version (Josh,
+  27 Oct: prefers it before).
+- Firefox and Safari now bend the hero plate too (27 Oct): the WebGL glass
+  follows the painting's mask fade into the page, so a piece that reaches
+  into the fade bends paper there instead of hidden art. Glass over live
+  content (the scrolling nav over work photos) still can't bend in those
+  browsers; over plain paper or black a bend shows nothing anyway.

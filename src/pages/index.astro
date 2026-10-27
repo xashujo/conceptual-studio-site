@@ -52,7 +52,7 @@ const steps = [
     <main>
       <!-- Opening: the etching fills the screen; the nav and the plate are the page's two pieces of glass. -->
       <header class="hero">
-        <nav class="nav glass" aria-label="Main">
+        <nav class="nav glass" aria-label="Main" data-lens>
           <a class="nav__mark" href="/">Conceptual Studio</a>
           <ul class="nav__links">
             <li><a href="/" aria-current="page">[Home]</a></li>
@@ -61,7 +61,7 @@ const steps = [
           <a class="nav__menu" href="#site-links">Menu</a>
         </nav>
         <Image class="hero__art" src={heroArt} alt="" widths={[640, 1024, 1600, 2400]} sizes="100vw" loading="eager" fetchpriority="high" />
-        <div class="hero__plate glass">
+        <div class="hero__plate glass" data-lens>
           <h1 class="hero__h">{headline}</h1>
           <p class="hero__p">{sentence}</p>
           <div class="acts">
@@ -208,6 +208,11 @@ const steps = [
     </div>
 
     <script>
+      import { mountLens } from '../scripts/lens.js';
+      // Lens glass on the nav and the hero plate, over the etching (its mask fades it out from 58% to 92%).
+      const heroArt = document.querySelector<HTMLImageElement>('.hero__art');
+      document.querySelectorAll<HTMLElement>('.hero [data-lens]').forEach((el) => mountLens(el, heroArt, [0.58, 0.92]));
+
       // Copy email: the label confirms, a polite live region announces it, then it reverts.
       const btn = document.querySelector<HTMLButtonElement>('[data-copy]');
       const label = btn?.querySelector<HTMLElement>('[data-label]');
@@ -238,7 +243,7 @@ const steps = [
   /* Opening: the quiet etching fills the screen, the plate centred over the trees and sky. */
   .hero { position: relative; isolation: isolate; min-height: 100svh; padding: 116px var(--margin) 40px; display: grid; grid-template-rows: 1fr auto; }
   .hero__art { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 92%); mask-image: linear-gradient(to bottom, #000 58%, transparent 92%); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
-  .hero__plate { align-self: center; justify-self: center; width: min(640px, 46vw); padding: 44px 44px 40px; display: grid; gap: 22px; border-radius: 28px; }
+  .hero__plate { position: relative; align-self: center; justify-self: center; width: min(640px, 46vw); padding: 44px 44px 40px; display: grid; gap: 22px; border-radius: 28px; }
   .hero__h { font-family: var(--display); font-weight: 500; font-size: clamp(34px, 2.8vw, 40px); line-height: 1.06; letter-spacing: -0.02em; text-wrap: balance; }
   .hero__p { font-size: 18px; line-height: 1.5; }
   .hero__plate .avail { --fill: color-mix(in srgb, var(--paper) 55%, transparent); }

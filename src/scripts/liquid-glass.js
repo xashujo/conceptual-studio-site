@@ -8,7 +8,8 @@
  * is capped at a radius of 4 taps on a mipmapped texture; paper/ink tint with a
  * rim highlight; premultiplied output; renders on demand, never in a loop.
  *
- * mountLiquidGlass(panel, { image, tone, opacity, blur }) -> Promise<{ render, destroy } | null>
+ * mountLiquidGlass(panel, { image, tone, opacity, blur, fade })
+ * fade: [start, end] of the image's mask fade to the page, as shares of its height (default: none). -> Promise<{ render, destroy } | null>
  * Resolves null (CSS glass untouched) when WebGL, the shader or the image fail,
  * or under prefers-contrast: more / prefers-reduced-transparency: reduce.
  */
@@ -34,6 +35,8 @@ uniform float u_saturate;
 uniform vec3 u_tint;
 uniform float u_tintOpacity;
 uniform float u_dark;
+uniform vec3 u_fade;       // x,y: where the painting's mask fades out (share of the image box); z: panel top in that box, px
+uniform float u_imgH;      // image box height, CSS px
 varying vec2 v_uv;
 
 // iOS 27 / Tahoe-style lens (Josh, 26 Oct): a convex bezel round the edge bends the
@@ -84,6 +87,9 @@ void main() {
     }
   }
   vec3 col = acc / wsum;
+  // Follow the painting's own fade into the page, so glass over the fade bends paper, not hidden art.
+  float yImg = (u_fade.z + p.y + off.y) / u_imgH;
+  col = mix(col, u_tint, smoothstep(u_fade.x, u_fade.y, yImg));
 
   // Match the CSS filter on the painting, then tint toward paper or ink.
   col *= u_brightness;
@@ -105,7 +111,7 @@ void main() {
 }`;
 
 const UNIFORMS = ['u_image', 'u_size', 'u_radius', 'u_dpr', 'u_uvOrigin', 'u_pxToUv',
-  'u_blurPx', 'u_lodBias', 'u_brightness', 'u_saturate', 'u_tint', 'u_tintOpacity', 'u_dark'];
+  'u_blurPx', 'u_lodBias', 'u_brightness', 'u_saturate', 'u_tint', 'u_tintOpacity', 'u_dark', 'u_fade', 'u_imgH'];
 
 const TONES = {
   light: { tint: [241 / 255, 223 / 255, 200 / 255], opacity: 0.48, dark: 0 }, // #F1DFC8, clearer for iOS 27 (tuned)
@@ -144,7 +150,7 @@ function compile(gl) {
   return gl.getProgramParameter(prog, gl.LINK_STATUS) ? prog : null;
 }
 
-export async function mountLiquidGlass(panel, { image, tone = 'light', opacity, blur = BLUR_PX } = {}) {
+export async function mountLiquidGlass(panel, { image, tone = 'light', opacity, blur = BLUR_PX, fade = [2, 3] } = {}) {
   if (!panel || !image) return null;
   if (media('(prefers-contrast: more)') || media('(prefers-reduced-transparency: reduce)')) return null;
   try {
@@ -240,6 +246,8 @@ export async function mountLiquidGlass(panel, { image, tone = 'light', opacity, 
     gl.uniform1f(u.u_dpr, dpr);
     gl.uniform2f(u.u_uvOrigin, (pr.left - ox) / rw, (pr.top - oy) / rh);
     gl.uniform2f(u.u_pxToUv, 1 / rw, 1 / rh);
+    gl.uniform3f(u.u_fade, fade[0], fade[1], pr.top - ir.top);
+    gl.uniform1f(u.u_imgH, ir.height);
     gl.uniform1f(u.u_blurPx, blur);
     gl.uniform1f(u.u_lodBias, Math.max(0, Math.log2(blur * 1.4 * dpr) - 0.5));
     gl.uniform1f(u.u_brightness, filterValue(ics.filter, 'brightness', 1));
