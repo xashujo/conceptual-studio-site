@@ -59,8 +59,9 @@ function displacementMap(w, h, r, bandPx, up = 0) {
         const wx = Math.exp(-Math.max(hx - Math.abs(dx), 0) / Math.max(len * 0.35, 1));
         const wy = Math.exp(-Math.max(hy - Math.abs(dy), 0) / Math.max(len * 0.35, 1));
         const l = Math.hypot(wx, wy) || 1;
-        ox += (Math.sign(dx) * wx / l) * tail;
-        oy += (Math.sign(dy) * wy / l) * tail;
+        // Negative: the tail stretches what's under the glass outward (a magnifying drag), as liquid-glass.js.
+        ox -= (Math.sign(dx) * wx / l) * tail;
+        oy -= (Math.sign(dy) * wy / l) * tail;
       }
       const i = (y * mw + x) * 4;
       px[i] = 128 + Math.max(-1, Math.min(1, ox)) * 127;

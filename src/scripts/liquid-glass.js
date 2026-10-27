@@ -40,6 +40,7 @@ uniform vec3 u_fade;       // x,y: where the painting's mask fades out (share of
 uniform float u_imgH;      // image box height, CSS px
 uniform float u_bend;      // BEND times Josh's bend dial
 uniform float u_reach;     // Josh's reach dial: widens the bent bezel
+uniform float u_frostRim;  // share of the tint kept in the bezel: 0.25 as designed, rising to 1 with the frost dial above 100
 uniform float u_rim;       // blur share kept at the rim: 0.06 as designed, rising with the blur dial above 100
 uniform float u_shine;     // Josh's shine dial, scales the rim highlight
 varying vec2 v_uv;
@@ -48,6 +49,7 @@ varying vec2 v_uv;
 // picture behind it outward, with a slight colour split; the middle stays flat and diffused.
 const float BEZEL = 0.2;     // bezel width, share of the short side (clamped 14-48px)
 const float BEND = 1.1;      // displacement at the rim, share of the bezel width (scaled by u_bend)
+const float TAIL_SIGN = -1.0; // the tail stretches what's under the glass outward (a magnifying drag), the rim still pulls the outside in
 const float SPLIT = 0.08;    // red/blue split, share of the displacement
 
 void main() {
@@ -80,7 +82,7 @@ void main() {
     vec2 toEdge = max(c - abs(q), 0.0);
     vec2 w = exp(-toEdge / max(len * 0.35, 1.0));
     vec2 v = vec2(sign(q.x) * w.x, sign(q.y) * w.y);
-    off += v / max(length(v), 1e-4) * tail * bez * BEND * u_bend;
+    off += v / max(length(v), 1e-4) * tail * bez * BEND * u_bend * TAIL_SIGN;
   }
   vec2 uvG = u_uvOrigin + (p + off) * u_pxToUv;
   vec2 uvR = u_uvOrigin + (p + off * (1.0 + SPLIT)) * u_pxToUv;
@@ -111,7 +113,7 @@ void main() {
   // Match the CSS filter on the painting, then tint toward paper or ink.
   col *= u_brightness;
   col = mix(vec3(dot(col, vec3(0.2126, 0.7152, 0.0722))), col, u_saturate);
-  col = mix(col, u_tint, u_tintOpacity * mix(0.25, 1.0, smoothstep(0.0, 1.0, x))); // clearer in the bezel
+  col = mix(col, u_tint, u_tintOpacity * mix(u_frostRim, 1.0, smoothstep(0.0, 1.0, x))); // clearer in the bezel, evener as Frost rises
 
   // Specular on the top rim, rgb(255 250 240), brighter for iOS 27 (TASTE.md glass spec).
   // The light comes from the top left (TASTE 4), so the rim is strongest there.
@@ -130,7 +132,7 @@ void main() {
 }`;
 
 const UNIFORMS = ['u_image', 'u_size', 'u_radius', 'u_dpr', 'u_uvOrigin', 'u_pxToUv',
-  'u_blurPx', 'u_lodBias', 'u_brightness', 'u_saturate', 'u_tint', 'u_tintOpacity', 'u_dark', 'u_fade', 'u_imgH', 'u_bend', 'u_shine', 'u_rim', 'u_reach'];
+  'u_blurPx', 'u_lodBias', 'u_brightness', 'u_saturate', 'u_tint', 'u_tintOpacity', 'u_dark', 'u_fade', 'u_imgH', 'u_bend', 'u_shine', 'u_rim', 'u_reach', 'u_frostRim'];
 
 const TONES = {
   light: { tint: [241 / 255, 223 / 255, 200 / 255], opacity: 0.48, dark: 0 }, // #F1DFC8, clearer for iOS 27 (tuned)
@@ -277,6 +279,7 @@ export async function mountLiquidGlass(panel, { image, tone = 'light', opacity, 
     gl.uniform1f(u.u_bend, dial('bend'));
     gl.uniform1f(u.u_shine, dial('shine'));
     gl.uniform1f(u.u_reach, dial('reach'));
+    gl.uniform1f(u.u_frostRim, 0.25 + 0.75 * Math.min(1, up(dial('frost')) * 1.5));
     gl.uniform1f(u.u_rim, 0.06 + 0.8 * Math.min(1, Math.max(0, dial('blur') - 1)));
     gl.uniform1f(u.u_brightness, filterValue(ics.filter, 'brightness', 1));
     gl.uniform1f(u.u_saturate, filterValue(ics.filter, 'saturate', 1));
