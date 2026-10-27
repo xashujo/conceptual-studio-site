@@ -2,6 +2,7 @@
 // /glass/: the glass over the three grounds it has to survive, with live sliders for Josh's glass
 // dials. Not in the nav, not indexed. The sliders only preview: the saved values live in Pages CMS,
 // Site settings > Glass.
+import Tune from '../components/Tune.astro';
 import { glassStyle } from '../lib/site';
 import '../styles/tokens.css';
 import '../styles/components.css';
@@ -107,6 +108,7 @@ const grounds = [
         mountLens(el, image, image?.classList.contains('ground__art--top') ? [0.7, 1] : undefined); // the night art fades out from 70%
       });
     </script>
+    <Tune />
   </body>
 </html>
 

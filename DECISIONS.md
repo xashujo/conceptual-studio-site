@@ -658,3 +658,18 @@ Museum model:
   backdrop-filter) ignore the dials, so the glass still turns solid there.
 - /glass/ has live sliders to try values before typing them into the editor,
   with "Reset to the original look" (all 100) and "Back to the saved values".
+
+## Tune mode (27 Oct 2026, branch tune-mode)
+- Josh wants to try type and layout changes visually, then have Claude build
+  them in properly (he chose this over saving tweaks himself: tweaks saved
+  straight to the site pile up, break when content changes, and ignore other
+  screen sizes).
+- ?tune on any page (remembered across pages until "Turn off") loads
+  src/scripts/tune.js via components/Tune.astro. Visitors never download it.
+- The panel edits the clicked element live: size, letter-spacing, line
+  height, weight (Inter only), line length, word spacing, space above and
+  below, padding, gaps, width, corner radius, image crop focus and shape, and
+  kerning between any two letters (arrow keys, 5/1000 em, Shift 25).
+- Nothing reaches the site. Changes are kept in the browser per page, can be
+  undone one by one, and "Copy my changes" gives a list (page, element, screen
+  width, before and after, selector) for Claude to apply to the right styles.

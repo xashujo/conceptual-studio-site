@@ -1,6 +1,7 @@
 ---
 // Shell for the site's pages: head, the page, the footer, and the three small scripts
 // (plate glass, copy email, London clock).
+import Tune from '../components/Tune.astro';
 import { glassStyle } from '../lib/site';
 import '../styles/tokens.css';
 import '../styles/components.css';
@@ -56,6 +57,7 @@ const { title, description, night = false } = Astro.props;
         setInterval(tick, 15000);
       }
     </script>
+    <Tune />
   </body>
 </html>
 

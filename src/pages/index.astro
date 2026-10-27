@@ -1,6 +1,7 @@
 ---
 // Home (brief 6.1), built on the chosen direction: Prototype A, the quiet etching (DECISIONS, 26 Oct).
 // Still for now: no motion and no WebGL glass. Glass is the static CSS tier, on the nav and the hero plate only.
+import Tune from '../components/Tune.astro';
 import { glassStyle } from '../lib/site';
 import '../styles/tokens.css';
 import '../styles/components.css';
@@ -224,6 +225,7 @@ const steps = [
         setTimeout(() => { label!.textContent = 'Copy email'; status!.textContent = ''; }, 1550);
       });
     </script>
+    <Tune />
   </body>
 </html>
 

@@ -1,6 +1,7 @@
 ---
 // Shell for real pages: head, a small top line, and the footer landscape (TASTE 15).
 // The dock (TASTE 24) replaces the top line once it's built.
+import Tune from '../components/Tune.astro';
 import { glassStyle } from '../lib/site';
 import '../styles/tokens.css';
 import '../styles/components.css';
@@ -37,6 +38,7 @@ const { title, description, current, turnstile = false, noindex = false } = Astr
       </div>
       <FooterEngraving />
     </footer>
+    <Tune />
   </body>
 </html>
 

@@ -1,0 +1,9 @@
+---
+// Loads tune mode (src/scripts/tune.js) only when it's switched on: ?tune in the address, or
+// left on from an earlier page. Visitors never download it.
+---
+<script>
+  let on = new URLSearchParams(location.search).has('tune');
+  try { on ||= localStorage.getItem('cs-tune') === '1'; } catch { /* storage blocked */ }
+  if (on) import('../scripts/tune.js');
+</script>
