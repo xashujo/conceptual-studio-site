@@ -66,10 +66,22 @@ void main() {
   vec2 n = g * sign(q + 1e-5);
 
   // Convex squircle bezel: steepest at the rim, flat by the inner edge of the band.
-  float bez = min(clamp(minDim * BEZEL * u_reach, 14.0, 48.0 * max(u_reach, 1.0)), minDim * 0.5);
+  float bez = clamp(minDim * BEZEL, 14.0, 48.0) * min(u_reach, 1.0);
   float x = clamp(inside / bez, 0.0, 1.0);
   float lens = pow(1.0 - x, 2.2);
   vec2 off = n * lens * bez * BEND * u_bend;
+  // Reach above 100 (Josh, 27 Oct, after the macOS menu): the rim stays as sharp, and a long, soft
+  // tail carries a gentler bend on toward the centre. Its direction blends smoothly between the
+  // nearest edges, so it swirls round the corners instead of creasing along the diagonals.
+  float up = max(u_reach - 1.0, 0.0);
+  if (up > 0.0) {
+    float len = min(bez * (1.0 + 5.0 * up), minDim * 0.5);
+    float tail = pow(1.0 - clamp(inside / len, 0.0, 1.0), 2.0) * 0.55 * min(up, 1.5);
+    vec2 toEdge = max(c - abs(q), 0.0);
+    vec2 w = exp(-toEdge / max(len * 0.35, 1.0));
+    vec2 v = vec2(sign(q.x) * w.x, sign(q.y) * w.y);
+    off += v / max(length(v), 1e-4) * tail * bez * BEND * u_bend;
+  }
   vec2 uvG = u_uvOrigin + (p + off) * u_pxToUv;
   vec2 uvR = u_uvOrigin + (p + off * (1.0 + SPLIT)) * u_pxToUv;
   vec2 uvB = u_uvOrigin + (p + off * (1.0 - SPLIT)) * u_pxToUv;

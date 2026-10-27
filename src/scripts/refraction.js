@@ -17,7 +17,7 @@ const radiusPx = (value, width) => (value?.endsWith('%') ? (parseFloat(value) / 
 
 // Edge normal in R/G around 128, strongest at the edge, zero from `band` inward.
 // bandPx widens the bent rim (the lens); by default it follows the corner radius.
-function displacementMap(w, h, r, bandPx) {
+function displacementMap(w, h, r, bandPx, up = 0) {
   const f = Math.min(1, MAX_MAP / Math.max(w, h));
   const mw = Math.max(1, Math.round(w * f));
   const mh = Math.max(1, Math.round(h * f));
@@ -48,9 +48,23 @@ function displacementMap(w, h, r, bandPx) {
       const sdf = Math.hypot(Math.max(kx, 0), Math.max(ky, 0)) + Math.min(Math.max(kx, ky), 0) - rr;
       const t = Math.min(1, Math.max(0, 1 + sdf / band));
       const s = t * t;
+      let ox = Math.sign(dx) * nx * s;
+      let oy = Math.sign(dy) * ny * s;
+      // Reach above 100: a long, soft tail of gentler bend toward the centre, its direction blended
+      // between the nearest edges so it swirls round the corners (as liquid-glass.js).
+      if (up > 0) {
+        const len = Math.min(band * (1 + 5 * up), Math.min(mw, mh) / 2);
+        const inside = Math.max(-sdf, 0);
+        const tail = (1 - Math.min(1, inside / len)) ** 2 * 0.55 * Math.min(up, 1.5);
+        const wx = Math.exp(-Math.max(hx - Math.abs(dx), 0) / Math.max(len * 0.35, 1));
+        const wy = Math.exp(-Math.max(hy - Math.abs(dy), 0) / Math.max(len * 0.35, 1));
+        const l = Math.hypot(wx, wy) || 1;
+        ox += (Math.sign(dx) * wx / l) * tail;
+        oy += (Math.sign(dy) * wy / l) * tail;
+      }
       const i = (y * mw + x) * 4;
-      px[i] = 128 + Math.sign(dx) * nx * s * 127;
-      px[i + 1] = 128 + Math.sign(dy) * ny * s * 127;
+      px[i] = 128 + Math.max(-1, Math.min(1, ox)) * 127;
+      px[i + 1] = 128 + Math.max(-1, Math.min(1, oy)) * 127;
       px[i + 2] = 128;
       px[i + 3] = 255;
     }
@@ -134,13 +148,14 @@ export function mountRefraction(el, opts = {}) {
     const r = Math.min(radiusPx(getComputedStyle(el).borderTopLeftRadius, w), w / 2, h / 2);
     const band = lens ? Math.max(14, Math.min(w, h) * 0.3) : 0; // lens rim: 30% of the short side, 14px minimum
     // Reach (Josh's dial) widens only the bent band, so the drag travels further in; the middle blur keeps --lens-band.
-    const reach = lens ? Math.min(Math.min(w, h) / 2, band * dial('reach')) : 0;
-    const next = `${w}x${h}r${r}b${reach}`;
+    const reach = lens ? band * Math.min(1, dial('reach')) : 0; // below 100 the bent rim narrows; above it, a soft tail (in the map)
+    const up = lens ? Math.max(0, dial('reach') - 1) : 0;
+    const next = `${w}x${h}r${r}b${reach}u${up}`;
     if (next === key) return;
     key = next;
     map.setAttribute('width', String(w));
     map.setAttribute('height', String(h));
-    map.setAttribute('href', displacementMap(w, h, r, reach));
+    map.setAttribute('href', displacementMap(w, h, r, reach, up));
     el.style.setProperty('--refract', `url(#${id})`);
     if (lens) el.style.setProperty('--lens-band', `${band}px`);
     el.classList.add(lens ? 'is-lens' : 'is-refracting');
