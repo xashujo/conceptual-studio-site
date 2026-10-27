@@ -51,21 +51,10 @@ const grounds = [
       ))}
     </main>
     <script>
-      import { mountRefraction } from '../scripts/refraction.js';
-      import { mountLiquidGlass } from '../scripts/liquid-glass.js';
-      // Lens glass: Chromium bends the live page (SVG). Firefox and Safari can't, so where the
-      // piece sits wholly over a known painting, the WebGL glass bends that painting instead.
-      // Anywhere else they stay frosted layer 1 glass.
+      import { mountLens } from '../scripts/lens.js';
       document.querySelectorAll<HTMLElement>('[data-lens]').forEach((el) => {
-        if (mountRefraction(el, { lens: true })) return;
         const image = el.closest('.ground')?.querySelector<HTMLImageElement>('.ground__art');
-        if (!image) return;
-        const a = el.getBoundingClientRect();
-        const b = image.getBoundingClientRect();
-        const solid = image.classList.contains('ground__art--top') ? 0.7 : 1; // the night art fades out below 70%
-        if (a.top < b.top || a.bottom > b.top + b.height * solid || a.left < b.left || a.right > b.right) return;
-        // Clear like the CSS lens: a whisper of tint and a slight blur (tap spacing 1.5px, about 3px sigma).
-        mountLiquidGlass(el, { image, tone: el.closest('.night') ? 'dark' : 'light', opacity: el.closest('.night') ? 0.25 : 0.1, blur: 1.5 });
+        mountLens(el, image, image?.classList.contains('ground__art--top') ? 0.7 : 1); // the night art fades out below 70%
       });
     </script>
   </body>

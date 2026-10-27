@@ -113,7 +113,7 @@ a { color: inherit; }
    with a weaker catch bottom right. ::before carries the lens so the element itself stays free of
    filters. Firefox and Safari: the WebGL glass over a known painting, else the clear fallback below. */
 .glass.is-lens {
-  position: relative; z-index: 0;
+  /* The element must be positioned (relative, absolute or fixed) to hold ::before. */
   background: none; -webkit-backdrop-filter: none; backdrop-filter: none;
   box-shadow:
     inset 1.5px 1.5px 0 -0.5px rgb(255 250 240 / 0.95),

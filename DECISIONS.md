@@ -605,3 +605,8 @@ Museum model:
   main and are checked on its Cloudflare preview. [TBC: Cloudflare
   project name for the preview address; PDF version with screenshots
   once Pages CMS is connected.]
+- Homepage (Josh, 26 Oct): the nav and the hero plate are lens glass. Shared
+  helper src/scripts/lens.js mounts it on /glass/ and the home page. In
+  Firefox and Safari the nav bends the etching with WebGL; the hero plate
+  reaches into the etching's fade at desktop sizes, so there it keeps the
+  clear glass without the bend.
