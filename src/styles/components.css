@@ -82,8 +82,8 @@ a { color: inherit; }
 /* ---------- Glass ---------- */
 /* Josh's glass dials (Pages CMS, Site settings > Glass), set on <html> as multipliers: 1 = as designed.
    --g-frost scales the paper tint, --g-blur the blur, --g-shine the rim highlights, --g-bend the lens
-   bend (read by refraction.js and liquid-glass.js). The accessibility fallbacks below ignore them. */
-:root { --g-bend: 1; --g-frost: 1; --g-blur: 1; --g-shine: 1; }
+   bend and --g-reach how far in from the edge it travels (both read by refraction.js and liquid-glass.js). The accessibility fallbacks below ignore them. */
+:root { --g-bend: 1; --g-frost: 1; --g-blur: 1; --g-shine: 1; --g-reach: 1; }
 /* Layer 1 (brief 7.2), every browser: blur and saturate over a paper tint, a fine rim, a soft lift.
    Based on 2a7589f's phone menu sheet. Also the fallback for Tier A.
    Tint is 66%: AA for ink text even over pure black or white underneath (brief 7.2 asks 55% or more). */

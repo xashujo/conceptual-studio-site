@@ -259,7 +259,7 @@ content:
       - name: glass
         label: Glass
         type: object
-        description: "100 is the glass as it was designed. To go back to the original look, set all four to 100. Lower means less, higher means more (0 to 200). Try values first with the sliders on the /glass/ page, then type them in here."
+        description: "100 is the glass as it was designed. To go back to the original look, set all five to 100. Lower means less, higher means more (0 to 200). Try values first with the sliders on the /glass/ page, then type them in here."
         fields:
           - name: bend
             label: Bend
@@ -284,4 +284,10 @@ content:
             type: number
             default: 100
             description: "How bright the light catches on the rim."
+            options: { min: 0, max: 200, step: 5 }
+          - name: reach
+            label: Reach
+            type: number
+            default: 100
+            description: "How far in from the edge the bend travels. Higher drags the bend further into the glass."
             options: { min: 0, max: 200, step: 5 }

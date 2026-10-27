@@ -98,7 +98,8 @@ export const collections = {
         frost: z.number().min(0).max(300).default(100),
         blur: z.number().min(0).max(300).default(100),
         shine: z.number().min(0).max(300).default(100),
-      }).nullish().transform((g) => g ?? { bend: 100, frost: 100, blur: 100, shine: 100 }),
+        reach: z.number().min(0).max(300).default(100),
+      }).nullish().transform((g) => g ?? { bend: 100, frost: 100, blur: 100, shine: 100, reach: 100 }),
     }),
   }),
 };

@@ -14,6 +14,7 @@ const dials = [
   ['frost', 'Frost', 'How much paper colour fills the glass'],
   ['blur', 'Blur', 'How soft things look through the glass'],
   ['shine', 'Shine', 'How bright the light catches on the rim'],
+  ['reach', 'Reach', 'How far in from the edge the bend travels'],
 ];
 const grounds = [
   { id: 'painting', title: 'Over a painting', note: 'Le Jardin Chinois, as on the home page.' },
@@ -78,7 +79,7 @@ const grounds = [
     <script>
       // Live preview of the dials: set the CSS variables on <html> and tell the glass scripts.
       const root = document.documentElement;
-      const saved = Object.fromEntries(['bend', 'frost', 'blur', 'shine'].map((k) => [k, root.style.getPropertyValue(`--g-${k}`)]));
+      const saved = Object.fromEntries(['bend', 'frost', 'blur', 'shine', 'reach'].map((k) => [k, root.style.getPropertyValue(`--g-${k}`)]));
       const inputs = [...document.querySelectorAll<HTMLInputElement>('[data-dial]')];
       const show = (input: HTMLInputElement) => { document.querySelector(`[data-out="${input.dataset.dial}"]`)!.textContent = input.value; };
       const apply = (input: HTMLInputElement) => {

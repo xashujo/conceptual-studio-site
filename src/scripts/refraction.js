@@ -133,12 +133,14 @@ export function mountRefraction(el, opts = {}) {
     if (!w || !h) return;
     const r = Math.min(radiusPx(getComputedStyle(el).borderTopLeftRadius, w), w / 2, h / 2);
     const band = lens ? Math.max(14, Math.min(w, h) * 0.3) : 0; // lens rim: 30% of the short side, 14px minimum
-    const next = `${w}x${h}r${r}`;
+    // Reach (Josh's dial) widens only the bent band, so the drag travels further in; the middle blur keeps --lens-band.
+    const reach = lens ? Math.min(Math.min(w, h) / 2, band * dial('reach')) : 0;
+    const next = `${w}x${h}r${r}b${reach}`;
     if (next === key) return;
     key = next;
     map.setAttribute('width', String(w));
     map.setAttribute('height', String(h));
-    map.setAttribute('href', displacementMap(w, h, r, band));
+    map.setAttribute('href', displacementMap(w, h, r, reach));
     el.style.setProperty('--refract', `url(#${id})`);
     if (lens) el.style.setProperty('--lens-band', `${band}px`);
     el.classList.add(lens ? 'is-lens' : 'is-refracting');
@@ -149,7 +151,10 @@ export function mountRefraction(el, opts = {}) {
     timer = setTimeout(update, 150);
   });
   ro.observe(el);
-  onDialChange(() => maps.forEach(([d, k]) => d.setAttribute('scale', String(scale * k * dial('bend')))));
+  onDialChange(() => {
+    maps.forEach(([d, k]) => d.setAttribute('scale', String(scale * k * dial('bend'))));
+    update();
+  });
 
   return () => {
     clearTimeout(timer);

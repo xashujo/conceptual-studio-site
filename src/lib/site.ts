@@ -15,7 +15,7 @@ export const availability = { on: settings.availability, text: settings.availabi
 
 // The glass dials, as CSS variables for <html> (1 = as designed). Read by components.css and the glass scripts.
 const g = settings.glass;
-export const glassStyle = `--g-bend:${g.bend / 100};--g-frost:${g.frost / 100};--g-blur:${g.blur / 100};--g-shine:${g.shine / 100}`;
+export const glassStyle = `--g-bend:${g.bend / 100};--g-frost:${g.frost / 100};--g-blur:${g.blur / 100};--g-shine:${g.shine / 100};--g-reach:${g.reach / 100}`;
 
 export const social = settings.socialLinks.map((l) => ({ label: l.label, href: l.url }));
 
