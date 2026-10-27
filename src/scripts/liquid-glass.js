@@ -39,6 +39,7 @@ uniform float u_dark;
 uniform vec3 u_fade;       // x,y: where the painting's mask fades out (share of the image box); z: panel top in that box, px
 uniform float u_imgH;      // image box height, CSS px
 uniform float u_bend;      // BEND times Josh's bend dial
+uniform float u_rim;       // blur share kept at the rim: 0.06 as designed, rising with the blur dial above 100
 uniform float u_shine;     // Josh's shine dial, scales the rim highlight
 varying vec2 v_uv;
 
@@ -74,7 +75,7 @@ void main() {
 
   // Gaussian blur, radius 4 taps, checkerboard-thinned (mipmaps prefilter the gaps).
   // Sharper in the bezel so the bend reads; full diffusion in the middle for the text.
-  float spread = mix(0.06, 1.0, smoothstep(0.15, 1.0, x));
+  float spread = mix(u_rim, 1.0, smoothstep(0.15, 1.0, x));
   vec2 stepUv = u_blurPx * spread * u_pxToUv;
   float lod = u_lodBias * spread;
   vec3 acc = vec3(0.0);
@@ -114,7 +115,7 @@ void main() {
 }`;
 
 const UNIFORMS = ['u_image', 'u_size', 'u_radius', 'u_dpr', 'u_uvOrigin', 'u_pxToUv',
-  'u_blurPx', 'u_lodBias', 'u_brightness', 'u_saturate', 'u_tint', 'u_tintOpacity', 'u_dark', 'u_fade', 'u_imgH', 'u_bend', 'u_shine'];
+  'u_blurPx', 'u_lodBias', 'u_brightness', 'u_saturate', 'u_tint', 'u_tintOpacity', 'u_dark', 'u_fade', 'u_imgH', 'u_bend', 'u_shine', 'u_rim'];
 
 const TONES = {
   light: { tint: [241 / 255, 223 / 255, 200 / 255], opacity: 0.48, dark: 0 }, // #F1DFC8, clearer for iOS 27 (tuned)
@@ -258,6 +259,7 @@ export async function mountLiquidGlass(panel, { image, tone = 'light', opacity, 
     gl.uniform1f(u.u_tintOpacity, Math.min(0.96, tint * dial('frost')));
     gl.uniform1f(u.u_bend, dial('bend'));
     gl.uniform1f(u.u_shine, dial('shine'));
+    gl.uniform1f(u.u_rim, 0.06 + 0.8 * Math.min(1, Math.max(0, dial('blur') - 1)));
     gl.uniform1f(u.u_brightness, filterValue(ics.filter, 'brightness', 1));
     gl.uniform1f(u.u_saturate, filterValue(ics.filter, 'saturate', 1));
     gl.clear(gl.COLOR_BUFFER_BIT);

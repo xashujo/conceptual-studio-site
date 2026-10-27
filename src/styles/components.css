@@ -129,8 +129,11 @@ a { color: inherit; }
 .glass.is-lens::before {
   content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
   background: color-mix(in srgb, var(--paper) min(96%, calc(8% * var(--g-frost))), transparent);
-  -webkit-backdrop-filter: var(--refract) blur(calc(1px * var(--g-blur))) saturate(1.15);
-  backdrop-filter: var(--refract) blur(calc(1px * var(--g-blur))) saturate(1.15);
+  /* The rim stays sharp at Blur 100 so the bend reads; above 100 it softens too, nearly matching the
+     middle at 200 (Josh, 27 Oct: an unblurred edge round a blurred middle looked odd). */
+  --rim-blur: calc(1px * var(--g-blur) + 5px * max(0, var(--g-blur) - 1));
+  -webkit-backdrop-filter: var(--refract) blur(var(--rim-blur)) saturate(1.15);
+  backdrop-filter: var(--refract) blur(var(--rim-blur)) saturate(1.15);
 }
 /* A slight blur behind the middle, no tint (no frosted centre: Josh, 26 Oct), feathered into the sharp
    bent rim like the WebGL glass. It samples ::before's output, so blur only: a second saturate showed seams. */
