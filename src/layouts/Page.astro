@@ -1,6 +1,7 @@
 ---
 // Shell for the site's pages: head, the page, the footer, and the three small scripts
 // (plate glass, copy email, London clock).
+import { glassStyle } from '../lib/site';
 import '../styles/tokens.css';
 import '../styles/components.css';
 import Footer from '../components/Footer.astro';
@@ -8,7 +9,7 @@ interface Props { title: string; description: string; night?: boolean; }
 const { title, description, night = false } = Astro.props;
 ---
 <!doctype html>
-<html lang="en-GB">
+<html lang="en-GB" style={glassStyle}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

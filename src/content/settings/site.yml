@@ -11,3 +11,8 @@ socialLinks:
     url: https://uk.linkedin.com/in/joshua-mcdonald-9268a2260
 companyName: Conceptual Studio Limited
 companyNumber: "15410582"
+glass:
+  bend: 100
+  frost: 100
+  blur: 100
+  shine: 100

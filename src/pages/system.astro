@@ -1,5 +1,6 @@
 ---
 // /system/: the design system at real size. Not in the nav, not indexed.
+import { glassStyle } from '../lib/site';
 import '../styles/tokens.css';
 import '../styles/components.css';
 import { Image } from 'astro:assets';
@@ -33,7 +34,7 @@ const rows = [{ label: 'Primary', kind: 'primary' }, { label: 'Pill', kind: 'pil
 const nightRows = [{ label: 'Primary on night', kind: 'primary' }, { label: 'Pill on night', kind: 'pill' }] as const;
 ---
 <!doctype html>
-<html lang="en-GB">
+<html lang="en-GB" style={glassStyle}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

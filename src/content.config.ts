@@ -92,6 +92,13 @@ export const collections = {
       socialLinks: z.array(z.object({ label: z.string(), url: z.string().url() })).nullish().transform((v) => v ?? []),
       companyName: z.string(),
       companyNumber: z.string().nullish(),
+      // Glass dials, as percentages of the designed look (100 = as designed).
+      glass: z.object({
+        bend: z.number().min(0).max(300).default(100),
+        frost: z.number().min(0).max(300).default(100),
+        blur: z.number().min(0).max(300).default(100),
+        shine: z.number().min(0).max(300).default(100),
+      }).nullish().transform((g) => g ?? { bend: 100, frost: 100, blur: 100, shine: 100 }),
     }),
   }),
 };

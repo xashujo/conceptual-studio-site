@@ -1,12 +1,20 @@
 ---
-// /glass/: Layer 1 glass (brief 7.2) over the three grounds it has to survive. A review specimen:
-// not in the nav, not indexed. Delete once the nav is built.
+// /glass/: the glass over the three grounds it has to survive, with live sliders for Josh's glass
+// dials. Not in the nav, not indexed. The sliders only preview: the saved values live in Pages CMS,
+// Site settings > Glass.
+import { glassStyle } from '../lib/site';
 import '../styles/tokens.css';
 import '../styles/components.css';
 import { Image } from 'astro:assets';
 import etching from '../assets/art/engraved/jardin-quiet.jpg';
 import lemoyne from '../assets/art/engraved/lemoyne-night.jpg';
 
+const dials = [
+  ['bend', 'Bend', 'How strongly the edges bend what is behind'],
+  ['frost', 'Frost', 'How much paper colour fills the glass'],
+  ['blur', 'Blur', 'How soft things look through the glass'],
+  ['shine', 'Shine', 'How bright the light catches on the rim'],
+];
 const grounds = [
   { id: 'painting', title: 'Over a painting', note: 'Le Jardin Chinois, as on the home page.' },
   { id: 'paper', title: 'Over paper', note: 'Specimen only: the site never puts glass on flat paper' },
@@ -14,7 +22,7 @@ const grounds = [
 ];
 ---
 <!doctype html>
-<html lang="en-GB">
+<html lang="en-GB" style={glassStyle}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -50,6 +58,47 @@ const grounds = [
         </section>
       ))}
     </main>
+
+    <aside class="dials" aria-labelledby="dials-h">
+      <h2 class="dials__h" id="dials-h">Glass dials</h2>
+      <p class="dials__p">Drag to try. 100 is as designed. Nothing is saved here: put the numbers you like into Pages CMS, Site settings, Glass.</p>
+      {dials.map(([key, label, hint]) => (
+        <label class="dial">
+          <span class="dial__top"><span>{label}</span><output data-out={key}>100</output></span>
+          <input type="range" min="0" max="200" step="5" value="100" data-dial={key} aria-describedby={`hint-${key}`} />
+          <span class="dial__hint" id={`hint-${key}`}>{hint}</span>
+        </label>
+      ))}
+      <div class="dials__btns">
+        <button class="btn dials__reset" type="button" data-default>Reset to the original look</button>
+        <button class="btn dials__reset" type="button" data-reset>Back to the saved values</button>
+      </div>
+    </aside>
+
+    <script>
+      // Live preview of the dials: set the CSS variables on <html> and tell the glass scripts.
+      const root = document.documentElement;
+      const saved = Object.fromEntries(['bend', 'frost', 'blur', 'shine'].map((k) => [k, root.style.getPropertyValue(`--g-${k}`)]));
+      const inputs = [...document.querySelectorAll<HTMLInputElement>('[data-dial]')];
+      const show = (input: HTMLInputElement) => { document.querySelector(`[data-out="${input.dataset.dial}"]`)!.textContent = input.value; };
+      const apply = (input: HTMLInputElement) => {
+        root.style.setProperty(`--g-${input.dataset.dial}`, String(Number(input.value) / 100));
+        show(input);
+        window.dispatchEvent(new Event('glass-dials'));
+      };
+      inputs.forEach((input) => {
+        const v = parseFloat(saved[input.dataset.dial!]);
+        input.value = String(Math.round((Number.isFinite(v) ? v : 1) * 100));
+        show(input);
+        input.addEventListener('input', () => apply(input));
+      });
+      document.querySelector('[data-default]')!.addEventListener('click', () => {
+        inputs.forEach((input) => { input.value = '100'; apply(input); });
+      });
+      document.querySelector('[data-reset]')!.addEventListener('click', () => {
+        inputs.forEach((input) => { const v = parseFloat(saved[input.dataset.dial!]); input.value = String(Math.round((Number.isFinite(v) ? v : 1) * 100)); apply(input); });
+      });
+    </script>
     <script>
       import { mountLens } from '../scripts/lens.js';
       document.querySelectorAll<HTMLElement>('[data-lens]').forEach((el) => {
@@ -77,6 +126,17 @@ const grounds = [
   .dock ul { list-style: none; display: flex; margin: 0; padding: 0; font-size: 16px; font-weight: 500; }
   .dock li { display: grid; place-items: center; min-height: 44px; padding: 0 12px; }
   .ground__label { margin: 0; }
+  /* The dials: a plain paper panel (not glass, so it never changes while you tune), pinned bottom right. */
+  .dials { position: fixed; z-index: 20; right: 16px; bottom: 16px; width: min(320px, calc(100vw - 32px)); max-height: calc(100svh - 32px); overflow: auto; padding: 20px; border-radius: 24px; background: var(--paper); color: var(--ink); box-shadow: 0 0 0 1px rgb(110 80 36 / 0.2), 4px 14px 36px -12px rgb(40 24 8 / 0.4); display: grid; gap: 14px; }
+  .dials__h { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; }
+  .dials__p { font-size: 14px; line-height: 1.45; color: var(--ink-2); }
+  .dial { display: grid; gap: 6px; }
+  .dial__top { display: flex; justify-content: space-between; font-size: 16px; font-weight: 600; }
+  .dial__top output { font-variant-numeric: tabular-nums; }
+  .dial input { width: 100%; accent-color: var(--ink); }
+  .dial__hint { font-size: 13px; color: var(--ink-2); }
+  .dials__btns { display: flex; flex-wrap: wrap; gap: 8px; }
+  .dials__reset { justify-self: start; min-height: 40px; padding: 0 16px; font-size: 15px; }
   .row { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; }
   .round { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; font-size: 22px; }
   .round--wide { width: auto; padding: 0 20px; border-radius: var(--pill); font-size: 16px; font-weight: 500; }

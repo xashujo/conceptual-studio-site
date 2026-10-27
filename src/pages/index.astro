@@ -1,6 +1,7 @@
 ---
 // Home (brief 6.1), built on the chosen direction: Prototype A, the quiet etching (DECISIONS, 26 Oct).
 // Still for now: no motion and no WebGL glass. Glass is the static CSS tier, on the nav and the hero plate only.
+import { glassStyle } from '../lib/site';
 import '../styles/tokens.css';
 import '../styles/components.css';
 import { Image } from 'astro:assets';
@@ -39,7 +40,7 @@ const steps = [
 
 ---
 <!doctype html>
-<html lang="en-GB">
+<html lang="en-GB" style={glassStyle}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

@@ -13,6 +13,7 @@
  * Resolves null (CSS glass untouched) when WebGL, the shader or the image fail,
  * or under prefers-contrast: more / prefers-reduced-transparency: reduce.
  */
+import { dial, onDialChange } from './glass-dials.js';
 
 const VS = `attribute vec2 a_pos;
 varying vec2 v_uv;
@@ -37,12 +38,14 @@ uniform float u_tintOpacity;
 uniform float u_dark;
 uniform vec3 u_fade;       // x,y: where the painting's mask fades out (share of the image box); z: panel top in that box, px
 uniform float u_imgH;      // image box height, CSS px
+uniform float u_bend;      // BEND times Josh's bend dial
+uniform float u_shine;     // Josh's shine dial, scales the rim highlight
 varying vec2 v_uv;
 
 // iOS 27 / Tahoe-style lens (Josh, 26 Oct): a convex bezel round the edge bends the
 // picture behind it outward, with a slight colour split; the middle stays flat and diffused.
 const float BEZEL = 0.2;     // bezel width, share of the short side (clamped 14-48px)
-const float BEND = 1.1;      // displacement at the rim, share of the bezel width
+const float BEND = 1.1;      // displacement at the rim, share of the bezel width (scaled by u_bend)
 const float SPLIT = 0.08;    // red/blue split, share of the displacement
 
 void main() {
@@ -64,7 +67,7 @@ void main() {
   float bez = clamp(minDim * BEZEL, 14.0, 48.0);
   float x = clamp(inside / bez, 0.0, 1.0);
   float lens = pow(1.0 - x, 2.2);
-  vec2 off = n * lens * bez * BEND;
+  vec2 off = n * lens * bez * BEND * u_bend;
   vec2 uvG = u_uvOrigin + (p + off) * u_pxToUv;
   vec2 uvR = u_uvOrigin + (p + off * (1.0 + SPLIT)) * u_pxToUv;
   vec2 uvB = u_uvOrigin + (p + off * (1.0 - SPLIT)) * u_pxToUv;
@@ -99,8 +102,8 @@ void main() {
   // Specular on the top rim, rgb(255 250 240), brighter for iOS 27 (TASTE.md glass spec).
   // The light comes from the top left (TASTE 4), so the rim is strongest there.
   float top = max(-n.y, 0.0) * (0.75 + 0.25 * max(-n.x, 0.0));
-  col += vec3(1.0, 0.98, 0.94) * exp(-inside * 0.45) * top * mix(0.30, 0.20, u_dark);
-  col += vec3(1.0, 0.97, 0.92) * exp(-inside * 0.7) * 0.08 * u_dark;
+  col += vec3(1.0, 0.98, 0.94) * exp(-inside * 0.45) * top * mix(0.30, 0.20, u_dark) * u_shine;
+  col += vec3(1.0, 0.97, 0.92) * exp(-inside * 0.7) * 0.08 * u_dark * u_shine;
   // iOS 27's darkened edge: a 1px inner ring, black at 10% (light) or 35% (dark).
   col = mix(col, vec3(0.0), (1.0 - smoothstep(0.0, 1.0, inside)) * mix(0.10, 0.35, u_dark));
   col = clamp(col, 0.0, 1.0);
@@ -111,7 +114,7 @@ void main() {
 }`;
 
 const UNIFORMS = ['u_image', 'u_size', 'u_radius', 'u_dpr', 'u_uvOrigin', 'u_pxToUv',
-  'u_blurPx', 'u_lodBias', 'u_brightness', 'u_saturate', 'u_tint', 'u_tintOpacity', 'u_dark', 'u_fade', 'u_imgH'];
+  'u_blurPx', 'u_lodBias', 'u_brightness', 'u_saturate', 'u_tint', 'u_tintOpacity', 'u_dark', 'u_fade', 'u_imgH', 'u_bend', 'u_shine'];
 
 const TONES = {
   light: { tint: [241 / 255, 223 / 255, 200 / 255], opacity: 0.48, dark: 0 }, // #F1DFC8, clearer for iOS 27 (tuned)
@@ -203,7 +206,7 @@ export async function mountLiquidGlass(panel, { image, tone = 'light', opacity, 
   gl.uniform1i(u.u_image, 0);
   const t = TONES[tone] || TONES.light;
   gl.uniform3fv(u.u_tint, t.tint);
-  gl.uniform1f(u.u_tintOpacity, opacity ?? t.opacity); // a plate raises its tint until its text reads
+  const tint = opacity ?? t.opacity; // a plate raises its tint until its text reads
   gl.uniform1f(u.u_dark, t.dark);
   gl.clearColor(0, 0, 0, 0);
 
@@ -248,8 +251,13 @@ export async function mountLiquidGlass(panel, { image, tone = 'light', opacity, 
     gl.uniform2f(u.u_pxToUv, 1 / rw, 1 / rh);
     gl.uniform3f(u.u_fade, fade[0], fade[1], pr.top - ir.top);
     gl.uniform1f(u.u_imgH, ir.height);
-    gl.uniform1f(u.u_blurPx, blur);
-    gl.uniform1f(u.u_lodBias, Math.max(0, Math.log2(blur * 1.4 * dpr) - 0.5));
+    // Josh's dials (Site settings > Glass): 1 = as designed.
+    const b = blur * dial('blur');
+    gl.uniform1f(u.u_blurPx, b);
+    gl.uniform1f(u.u_lodBias, Math.max(0, Math.log2(Math.max(b, 0.01) * 1.4 * dpr) - 0.5));
+    gl.uniform1f(u.u_tintOpacity, Math.min(0.96, tint * dial('frost')));
+    gl.uniform1f(u.u_bend, dial('bend'));
+    gl.uniform1f(u.u_shine, dial('shine'));
     gl.uniform1f(u.u_brightness, filterValue(ics.filter, 'brightness', 1));
     gl.uniform1f(u.u_saturate, filterValue(ics.filter, 'saturate', 1));
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -273,6 +281,7 @@ export async function mountLiquidGlass(panel, { image, tone = 'light', opacity, 
   ro.observe(image);
   window.addEventListener('scroll', schedule, { passive: true });
   window.addEventListener('resize', schedule);
+  onDialChange(schedule);
 
   function destroy() {
     if (dead) return;

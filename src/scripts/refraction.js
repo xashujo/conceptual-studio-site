@@ -6,6 +6,7 @@
  * Builds a per-element SVG filter (displacement map sized to the element's box
  * and border radius), points --refract at it and adds .is-refracting.
  */
+import { dial, onDialChange } from './glass-dials.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const MAX_MAP = 600; // longest side of the generated map, px
@@ -84,11 +85,13 @@ export function mountRefraction(el, opts = {}) {
   map.setAttribute('result', 'map');
   // One displacement per channel. With the lens, red bends most and blue least, so the
   // rim splits colour the way a real lens edge does; then the three are added back up.
+  const maps = []; // [node, k]: rescaled when the bend dial changes
   const bend = (k, result) => {
     const d = document.createElementNS(SVG_NS, 'feDisplacementMap');
     d.setAttribute('in', 'SourceGraphic');
     d.setAttribute('in2', 'map');
-    d.setAttribute('scale', String(scale * k)); // -70: stronger bend to match the plates (Josh, 26 Oct)
+    d.setAttribute('scale', String(scale * k * dial('bend'))); // -70: stronger bend to match the plates (Josh, 26 Oct)
+    maps.push([d, k]);
     d.setAttribute('xChannelSelector', 'R');
     d.setAttribute('yChannelSelector', 'G');
     if (result) d.setAttribute('result', result);
@@ -146,6 +149,7 @@ export function mountRefraction(el, opts = {}) {
     timer = setTimeout(update, 150);
   });
   ro.observe(el);
+  onDialChange(() => maps.forEach(([d, k]) => d.setAttribute('scale', String(scale * k * dial('bend')))));
 
   return () => {
     clearTimeout(timer);

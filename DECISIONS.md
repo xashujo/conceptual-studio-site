@@ -644,3 +644,17 @@ Museum model:
   into the fade bends paper there instead of hidden art. Glass over live
   content (the scrolling nav over work photos) still can't bend in those
   browsers; over plain paper or black a bend shows nothing anyway.
+
+## Glass dials (27 Oct 2026, branch glass-dials)
+- Josh wants to tune the glass himself. Pages CMS > Site settings > Glass has
+  four numbers: Bend, Frost (paper tint), Blur and Shine (rim highlight),
+  each a percentage of the designed look, 0 to 200. 100 everywhere is the
+  glass as designed, which is how he resets it.
+- They are set on <html> as --g-bend, --g-frost, --g-blur and --g-shine
+  (1 = as designed). components.css multiplies every glass tint, blur and rim
+  by them (tints capped at 96%); refraction.js scales the Chromium bend and
+  liquid-glass.js the WebGL bend, tint, blur and highlight.
+- The accessibility fallbacks (reduce transparency, increase contrast, no
+  backdrop-filter) ignore the dials, so the glass still turns solid there.
+- /glass/ has live sliders to try values before typing them into the editor,
+  with "Reset to the original look" (all 100) and "Back to the saved values".

@@ -1,6 +1,7 @@
 ---
 // Shell for real pages: head, a small top line, and the footer landscape (TASTE 15).
 // The dock (TASTE 24) replaces the top line once it's built.
+import { glassStyle } from '../lib/site';
 import '../styles/tokens.css';
 import '../styles/components.css';
 import FooterEngraving from '../components/FooterEngraving.astro';
@@ -9,7 +10,7 @@ interface Props { title: string; description: string; current?: 'services' | 'wo
 const { title, description, current, turnstile = false, noindex = false } = Astro.props;
 ---
 <!doctype html>
-<html lang="en-GB">
+<html lang="en-GB" style={glassStyle}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

@@ -13,6 +13,10 @@ export const responseTime = settings.responseTime;
 export const hours = 'I answer email on weekdays, 9:00 to 17:00 London time.'; // Framer /contact
 export const availability = { on: settings.availability, text: settings.availabilityText };
 
+// The glass dials, as CSS variables for <html> (1 = as designed). Read by components.css and the glass scripts.
+const g = settings.glass;
+export const glassStyle = `--g-bend:${g.bend / 100};--g-frost:${g.frost / 100};--g-blur:${g.blur / 100};--g-shine:${g.shine / 100}`;
+
 export const social = settings.socialLinks.map((l) => ({ label: l.label, href: l.url }));
 
 export const company = {
