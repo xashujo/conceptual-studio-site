@@ -84,7 +84,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
           <div class="acts">
             <a class="btn btn--solid" href={startHref}><span class="swap"><span>Start a Project</span><span aria-hidden="true">Contact Us ↗</span></span></a>
             {availability.on && <a class="avail" href={`mailto:${email}`}><span class="avail__dot" aria-hidden="true"></span><span class="swap"><span>{titleCase(availability.text)}</span><span aria-hidden="true">↗ Email Us</span></span></a>}
-            <a class="btn hero__work" href="#work">{home.workButton} <span aria-hidden="true">↓</span></a>
+            <a class="btn hero__work" href="#work">{home.workButton} <span class="hero__down" aria-hidden="true">↓</span></a>
           </div>
         </div>
         <section class="stats" aria-label="The studio in numbers">
@@ -410,9 +410,13 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .hero__h { font-family: var(--display); font-weight: 500; font-size: clamp(34px, 2.8vw, 40px); line-height: 1.06; letter-spacing: -0.02em; text-wrap: balance; }
   .hero__p { font-size: 18px; line-height: 1.5; }
   /* The three hero buttons share one shape: the .btn's height, padding and type (Josh, 28 Oct). */
-  .hero__plate .avail { --fill: color-mix(in srgb, var(--paper) 55%, transparent); }
+  .hero__plate { --hero-fill: color-mix(in srgb, var(--paper) 55%, transparent); --hero-hover: color-mix(in srgb, color-mix(in srgb, var(--ink) 12%, var(--paper)) 80%, transparent); }
+  .hero__plate .avail { --fill: var(--hero-fill); transition: color 150ms ease-out, background-color 300ms ease-out; }
   .hero__plate .btn { min-height: 44px; padding: 0 18px; font-size: 16px; } /* the availability pill's size, so all three fit one row */
-  .hero__work { --fill: color-mix(in srgb, var(--paper) 55%, transparent); --fill-hover: color-mix(in srgb, var(--ink) 8%, var(--paper) 55%); gap: 8px; }
+  .hero__work { --fill: var(--hero-fill); --fill-hover: var(--hero-hover); gap: 8px; }
+  .hero__down { display: inline-block; transition: transform 180ms ease-out; }
+  /* Hover: the availability pill darkens like Selected Work, and Selected Work's arrow drops toward the work (Josh, 28 Oct). */
+  @media (hover: hover) { .hero__plate .avail:hover { background: var(--hero-hover); } .hero__work:hover .hero__down { transform: translateY(3px); } }
   /* Trusted By: one centred line, a single space between the label and the names (Josh, 28 Oct). */
   .hero__with { justify-self: center; width: min(1140px, 100%); padding-top: 32px; font-size: 18px; line-height: 1.5; text-align: center; text-wrap: balance; }
   .hero__with b { font-weight: 600; }
