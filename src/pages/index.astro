@@ -608,9 +608,8 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .how__head p { max-width: 46ch; font-size: 20px; line-height: 1.45; }
   /* Bento (Josh, 26 Oct): two rows of unequal tiles, wide then narrow, then narrow then wide. Title at the top, text at the foot. */
   .how__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; }
-  .how__list li { position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 48px; min-height: 280px; padding: 32px 32px 36px; border-radius: 28px; }
-  .how__list li:nth-child(1), .how__list li:nth-child(4) { grid-column: span 7; }
-  .how__list li:nth-child(2), .how__list li:nth-child(3) { grid-column: span 5; }
+  .how__list li { position: relative; display: flex; flex-direction: column; gap: 14px; padding: 30px 32px 32px; border-radius: 28px; } /* title straight over its text, no empty middle (Josh, 28 Oct) */
+  .how__list li { grid-column: span 6; } /* even 2×2 (Josh, 28 Oct) */
   .how__t { font-family: var(--display); font-size: 30px; line-height: 1.1; font-weight: 500; letter-spacing: -0.01em; } /* Agatho, like the headings (Josh, 28 Oct) */
   .how__list p { font-size: 20px; line-height: 1.5; max-width: 40ch; }
 
@@ -651,9 +650,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
     .proof__grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
     .proof__quote { grid-column: 1 / -1; grid-row: auto; }
     .proof__quote p { font-size: 24px; }
-    .how__list li:nth-child(1), .how__list li:nth-child(4) { grid-column: span 7; }
-    .how__list li:nth-child(2), .how__list li:nth-child(3) { grid-column: span 5; }
-    .how__list li { min-height: 240px; padding: 28px; }
+    .how__list li { padding: 28px; }
     .close__h, .close__body { grid-column: 1 / -1; }
     .close__body { margin-top: 32px; }
   }
@@ -714,7 +711,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
     .proof__go { margin-top: 24px; }
     .how__head p, .close__p { font-size: 17px; }
     .how__list { grid-template-columns: 1fr; gap: 12px; }
-    .how__list li:nth-child(n) { grid-column: auto; min-height: 0; gap: 20px; padding: 24px 22px 26px; border-radius: 26px; }
+    .how__list li:nth-child(n) { grid-column: auto; gap: 12px; padding: 24px 22px 26px; border-radius: 26px; }
     .how__list p { font-size: 17px; }
     .how__t { font-size: 25px; }
     .about { padding-block: 120px; }

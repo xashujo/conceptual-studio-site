@@ -902,3 +902,4 @@ Museum model:
 - Project cards have one fixed shape: title on one line (ellipsis), badges
   left and year right on one row, outcome held to two lines with the space
   kept when empty, so every card in a row is the same height.
+- 28 Oct: How We Work is an even 2×2; title sits straight over its text, no min-height.
