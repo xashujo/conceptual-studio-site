@@ -194,6 +194,14 @@ a { color: inherit; }
   -webkit-backdrop-filter: blur(calc(5px * var(--g-blur) + 24px * var(--up-blur))) saturate(1.3);
   backdrop-filter: blur(calc(5px * var(--g-blur) + 24px * var(--up-blur))) saturate(1.3);
 }
+/* A pane (big glass, or past the page's three bends): no bend, more blur, so it reads as soft glass
+   and costs only one CSS backdrop blur (Josh, 28 Oct: lighter to render). Follows the blur and frost dials. */
+.glass[data-lens].is-pane {
+  background: color-mix(in srgb, var(--paper) min(96%, calc(22% * var(--g-frost) + 30% * var(--up-frost))), transparent);
+  -webkit-backdrop-filter: blur(calc(16px * var(--g-blur) + 24px * var(--up-blur))) saturate(1.3);
+  backdrop-filter: blur(calc(16px * var(--g-blur) + 24px * var(--up-blur))) saturate(1.3);
+}
+.night .glass[data-lens].is-pane, .glass[data-lens].is-pane.is-dark { background: color-mix(in srgb, var(--paper-2) min(96%, calc(34% * var(--g-frost))), transparent); }
 .glass[data-lens].has-liquid { box-shadow: inset 0 0 0 1px rgb(110 80 36 / 0.14), 3px 10px 28px -16px rgb(40 24 8 / 0.32); } /* the shader draws its own rim */
 :is(.night .glass, .glass.is-dark)[data-lens]:not(.is-lens):not(.has-liquid) { background: color-mix(in srgb, var(--paper-2) min(96%, calc(30% * var(--g-frost))), transparent); }
 

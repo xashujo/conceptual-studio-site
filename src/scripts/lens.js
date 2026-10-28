@@ -7,7 +7,20 @@ import { mountLiquidGlass } from './liquid-glass.js';
 // Otherwise the clear CSS fallback in components.css stays.
 // `held`: the painting is held behind everything the element can scroll over (a sticky field, as on
 // the home page), so skip the check that the element sits inside it right now.
+//
+// Light to render (Josh, 28 Oct: "14 is a lot, drop it to like 3"): at most BENDS pieces bend per page,
+// in every browser, and only small chrome (the nav, pills, bars: 72px tall or less), first come first
+// served in page order. Everything else is a pane: plain blurred glass, CSS only, no filter or canvas.
+const BENDS = 3;
+let bends = 0;
+
 export function mountLens(el, image, fade, held = false) {
+  const h = el.offsetHeight;
+  if (!h || h > 72 || bends >= BENDS) {
+    el.classList.add('is-pane');
+    return;
+  }
+  bends++;
   if (mountRefraction(el, { lens: true }) || !image) return;
   const a = el.getBoundingClientRect();
   const b = image.getBoundingClientRect();
