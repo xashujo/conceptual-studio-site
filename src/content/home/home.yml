@@ -3,10 +3,10 @@ intro: Conceptual Studio is a design studio in London. Most of our work is in
   education. We also design for companies and edit video for social media.
 stats:
   - number: 25
-    after: " +"
+    after: +
     label: Projects Delivered
   - number: 20000
-    after: " +"
+    after: +
     label: Data Points Visualised
   - number: 48
     after: hr
