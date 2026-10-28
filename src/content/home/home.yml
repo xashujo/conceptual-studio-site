@@ -12,7 +12,7 @@ stats:
     after: hr
     label: First-Concept Turnaround
   - number: 69
-    after: " %"
+    after: "%"
     label: of Clients Return for More Work
 results:
   - src/content/projects/oxford-school-of-english.yml
