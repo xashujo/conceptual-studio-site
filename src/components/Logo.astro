@@ -2,7 +2,7 @@
 // The nav wordmark: Josh's gold flow, played once on load (28 Oct). Transparent video needs two files:
 // VP9 WebM with alpha for Chrome, Firefox and Android, HEVC with alpha for Safari and iOS (any app's browser).
 // The stills are its last frame (ink, and cream for the night chapters), shown without script, with reduced
-// motion, if playback fails, and once it ends. The video only says "Conceptual", so "Studio" is live text in
+// motion and if playback fails. Once it ends the video itself holds its last frame (swapping to the still flickered). The video only says "Conceptual", so "Studio" is live text in
 // the same face and size, set on its baseline (Josh, 28 Oct: the logo reads Conceptual Studio).
 ---
 <a class="logo nav__mark" href="/" aria-label="Conceptual Studio">
@@ -22,7 +22,6 @@
     document.querySelectorAll<HTMLElement>('.logo').forEach((logo) => {
       const v = logo.querySelector('video')!;
       const still = () => logo.classList.remove('is-playing');
-      v.addEventListener('ended', still);
       v.addEventListener('error', still);
       v.src = (apple ? v.dataset.hevc : v.dataset.webm)!;
       logo.classList.add('is-playing');
