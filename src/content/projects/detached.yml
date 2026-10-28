@@ -1,0 +1,16 @@
+title: Detached
+slug: detached
+client: Kingston School of Art
+year: 2022
+disciplines:
+- 3D modelling
+- Art direction
+studentWork: true
+order: 100
+summary: Two figures, one glass and one metal, drifting in a violet void.
+cover:
+  src: '@assets/work/detached/02.webp'
+  alt: Two transparent figures floating on a violet and orange background
+  caption: Student work. 3D render
+featured: false
+hasPage: false

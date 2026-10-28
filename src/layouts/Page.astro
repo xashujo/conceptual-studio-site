@@ -1,6 +1,8 @@
 ---
 // Shell for the site's pages: head, the page, the footer, and the three small scripts
-// (plate glass, copy email, London clock).
+// (lens glass, copy email, London clock).
+import Tune from '../components/Tune.astro';
+import { glassStyle } from '../lib/site';
 import '../styles/tokens.css';
 import '../styles/components.css';
 import Footer from '../components/Footer.astro';
@@ -8,7 +10,7 @@ interface Props { title: string; description: string; night?: boolean; }
 const { title, description, night = false } = Astro.props;
 ---
 <!doctype html>
-<html lang="en-GB">
+<html lang="en-GB" style={glassStyle}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -22,12 +24,11 @@ const { title, description, night = false } = Astro.props;
     <Footer />
     <p class="sr" aria-live="polite" data-copy-status></p>
     <script>
-      import { mountLiquidGlass } from '../scripts/liquid-glass.js';
-      // Plate glass samples the art behind it: data-liquid names the element holding that <img>.
-      document.querySelectorAll<HTMLElement>('[data-liquid]').forEach((panel) => {
-        const image = document.getElementById(panel.dataset.liquid!)?.querySelector('img');
-        const opacity = panel.dataset.opacity ? Number(panel.dataset.opacity) : undefined;
-        mountLiquidGlass(panel, { image, tone: panel.dataset.tone, opacity });
+      import { mountLens } from '../scripts/lens.js';
+      // Lens glass everywhere (Josh, 28 Oct). data-liquid names the element holding the <img> behind it,
+      // which Firefox and Safari bend with WebGL; Chromium bends the live page.
+      document.querySelectorAll<HTMLElement>('[data-lens]').forEach((el) => {
+        mountLens(el, el.dataset.liquid ? document.getElementById(el.dataset.liquid)?.querySelector('img') : null);
       });
 
       // Copy email (TASTE micro-interactions): the label swaps, reverts after 1.55s, announced politely.
@@ -55,6 +56,7 @@ const { title, description, night = false } = Astro.props;
         setInterval(tick, 15000);
       }
     </script>
+    <Tune />
   </body>
 </html>
 

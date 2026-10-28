@@ -1,18 +1,18 @@
 ---
-// The glass nav from home prototype A (Josh's choice): plate glass over the page's opening art,
+// The glass nav from home prototype A (Josh's choice): lens glass over the page's opening art,
 // the current page in brackets (TASTE 23). On phones, Menu opens a glass sheet (2a7589f).
 import { nav } from '../lib/site';
 interface Props { current?: string; art: string; tone?: 'light' | 'dark'; }
 const { current, art, tone = 'light' } = Astro.props;
 ---
-<nav class="nav plate-glass" aria-label="Main" data-liquid={art} data-tone={tone} data-opacity={tone === 'light' ? '0.52' : undefined}>
+<nav class:list={['nav glass', { 'is-dark': tone === 'dark' }]} aria-label="Main" data-lens data-liquid={art}>
   <a class="nav__mark" href="/">Conceptual Studio</a>
   <ul class="nav__links">
     {nav.map((l) => <li><a href={l.href} aria-current={l.label === current ? 'page' : undefined}>{l.label === current ? `[${l.label}]` : l.label}</a></li>)}
   </ul>
   <button class="nav__menu" type="button" popovertarget="menu">Menu</button>
 </nav>
-<div class="sheet glass" id="menu" popover>
+<div class="sheet glass" id="menu" popover data-lens data-liquid={art}>
   <ul>
     {nav.map((l) => <li><a href={l.href} aria-current={l.label === current ? 'page' : undefined}>{l.label}</a></li>)}
   </ul>

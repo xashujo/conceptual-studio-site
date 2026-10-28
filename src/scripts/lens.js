@@ -10,7 +10,7 @@ export function mountLens(el, image, fade) {
   const a = el.getBoundingClientRect();
   const b = image.getBoundingClientRect();
   if (a.top < b.top || a.bottom > b.bottom || a.left < b.left || a.right > b.right) return;
-  const night = !!el.closest('.night');
+  const night = !!el.closest('.night') || el.classList.contains('is-dark');
   // Clear like the CSS lens: a whisper of tint and a slight blur (tap spacing 1.5px, about 3px sigma).
-  mountLiquidGlass(el, { image, tone: night ? 'dark' : 'light', opacity: night ? 0.25 : 0.1, blur: 1.5, fade });
+  mountLiquidGlass(el, { image, tone: night ? 'dark' : 'light', opacity: night ? 0.25 : 0.1, blur: 1.5, fade, lens: true });
 }

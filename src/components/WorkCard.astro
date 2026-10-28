@@ -10,7 +10,7 @@ const { p } = Astro.props;
 const href = p.caseStudy ? `/work/${p.slug}/` : undefined;
 const Title = href ? 'a' : 'span';
 ---
-<li class="wc glass" data-flip-id={p.slug} data-tags={p.tags.join(' ')} hidden={p.student}>
+<li class="wc glass" data-lens data-flip-id={p.slug} data-tags={p.tags.join(' ')} hidden={p.student}>
   <header class="wc__head">
     <h2 class="wc__title"><Title href={href} class="wc__link">{p.title}</Title>{href && <span class="arrow wc__arrow" aria-hidden="true">→</span>}</h2>
     <p class="wc__year">{p.year}</p>

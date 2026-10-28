@@ -1,2 +1,4 @@
 name: ACL Essex
 trustedBy: true
+group: Education
+order: 3

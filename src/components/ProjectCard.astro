@@ -24,7 +24,7 @@ const sizes = size === 'half'
   ? '(min-width: 760px) calc((95vw - 24px) / 2 - 32px), calc(100vw - 52px)'
   : '(min-width: 760px) calc(95vw - 32px), calc(100vw - 52px)';
 ---
-<article class:list={['card', { 'plate-glass': glass, 'card--half': size === 'half' }]} data-liquid={glass} data-tone={glass && 'light'} data-opacity={glass && tint}>
+<article class:list={['card', { glass, 'card--half': size === 'half' }]} data-lens={glass ? '' : undefined} data-liquid={glass}>
   <header class="card__head">
     <H class="card__title" id={headingId}>{title}</H>
     <p class="card__year">{year}</p>
@@ -56,7 +56,7 @@ const sizes = size === 'half'
   .card__img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 25px; }
   .card__fig :global(.plate) { padding-inline: 12px; }
   /* As glass (prototypes): CSS frost until the WebGL plate has drawn. */
-  .card.plate-glass:not(.has-liquid) { background: color-mix(in srgb, var(--paper) 62%, transparent); -webkit-backdrop-filter: blur(24px) saturate(1.3); backdrop-filter: blur(24px) saturate(1.3); }
+  .card.glass:not(.is-lens):not(.has-liquid) { background: color-mix(in srgb, var(--paper) 62%, transparent); -webkit-backdrop-filter: blur(24px) saturate(1.3); backdrop-filter: blur(24px) saturate(1.3); }
   .card--half .card__meta { flex-direction: column; align-items: flex-start; }
   .card--half .card__img { aspect-ratio: 5 / 4; }
   @media (max-width: 1099.98px) {

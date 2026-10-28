@@ -1,0 +1,16 @@
+title: The Other Side
+slug: the-other-side
+client: Kingston School of Art
+year: 2021
+disciplines:
+- 3D modelling
+- Art direction
+studentWork: true
+order: 120
+summary: 'My first work in Blender: chrome forms over liquid.'
+cover:
+  src: '@assets/work/the-other-side/01.webp'
+  alt: Floating chrome shapes above a pink liquid surface
+  caption: Student work. 3D render
+featured: false
+hasPage: false

@@ -1,6 +1,8 @@
 ---
 // Shell for real pages: head, a small top line, and the footer landscape (TASTE 15).
 // The dock (TASTE 24) replaces the top line once it's built.
+import Tune from '../components/Tune.astro';
+import { glassStyle } from '../lib/site';
 import '../styles/tokens.css';
 import '../styles/components.css';
 import FooterEngraving from '../components/FooterEngraving.astro';
@@ -9,7 +11,7 @@ interface Props { title: string; description: string; current?: 'services' | 'wo
 const { title, description, current, turnstile = false, noindex = false } = Astro.props;
 ---
 <!doctype html>
-<html lang="en-GB">
+<html lang="en-GB" style={glassStyle}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -36,6 +38,12 @@ const { title, description, current, turnstile = false, noindex = false } = Astr
       </div>
       <FooterEngraving />
     </footer>
+    <script>
+      import { mountLens } from '../scripts/lens.js';
+      // Lens glass everywhere (Josh, 28 Oct): the /work/ cards. Chromium bends the live page; elsewhere clear glass.
+      document.querySelectorAll<HTMLElement>('[data-lens]').forEach((el) => mountLens(el, null));
+    </script>
+    <Tune />
   </body>
 </html>
 

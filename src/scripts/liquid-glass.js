@@ -13,6 +13,7 @@
  * Resolves null (CSS glass untouched) when WebGL, the shader or the image fail,
  * or under prefers-contrast: more / prefers-reduced-transparency: reduce.
  */
+import { dial, onDialChange } from './glass-dials.js';
 
 const VS = `attribute vec2 a_pos;
 varying vec2 v_uv;
@@ -37,12 +38,18 @@ uniform float u_tintOpacity;
 uniform float u_dark;
 uniform vec3 u_fade;       // x,y: where the painting's mask fades out (share of the image box); z: panel top in that box, px
 uniform float u_imgH;      // image box height, CSS px
+uniform float u_bend;      // BEND times Josh's bend dial
+uniform float u_reach;     // Josh's reach dial: widens the bent bezel
+uniform float u_frostRim;  // share of the tint kept in the bezel: 0.25 as designed, rising to 1 with the frost dial above 100
+uniform float u_rim;       // blur share kept at the rim: 0.06 as designed, rising with the blur dial above 100
+uniform float u_shine;     // Josh's shine dial, scales the rim highlight
 varying vec2 v_uv;
 
 // iOS 27 / Tahoe-style lens (Josh, 26 Oct): a convex bezel round the edge bends the
 // picture behind it outward, with a slight colour split; the middle stays flat and diffused.
 const float BEZEL = 0.2;     // bezel width, share of the short side (clamped 14-48px)
-const float BEND = 1.1;      // displacement at the rim, share of the bezel width
+const float BEND = 1.1;      // displacement at the rim, share of the bezel width (scaled by u_bend)
+const float TAIL_SIGN = -1.0; // the tail stretches what's under the glass outward (a magnifying drag), the rim still pulls the outside in
 const float SPLIT = 0.22;    // red/blue split, share of the displacement (stronger chromatic aberration: Josh, 28 Oct)
 
 void main() {
@@ -61,17 +68,29 @@ void main() {
   vec2 n = g * sign(q + 1e-5);
 
   // Convex squircle bezel: steepest at the rim, flat by the inner edge of the band.
-  float bez = clamp(minDim * BEZEL, 14.0, 48.0);
+  float bez = clamp(minDim * BEZEL, 14.0, 48.0) * min(u_reach, 1.0);
   float x = clamp(inside / bez, 0.0, 1.0);
   float lens = pow(1.0 - x, 2.2);
-  vec2 off = n * lens * bez * BEND;
+  vec2 off = n * lens * bez * BEND * u_bend;
+  // Reach above 100 (Josh, 27 Oct, after the macOS menu): the rim stays as sharp, and a long, soft
+  // tail carries a gentler bend on toward the centre. Its direction blends smoothly between the
+  // nearest edges, so it swirls round the corners instead of creasing along the diagonals.
+  float up = max(u_reach - 1.0, 0.0);
+  if (up > 0.0) {
+    float len = min(bez * (1.0 + 5.0 * up), minDim * 0.5);
+    float tail = pow(1.0 - clamp(inside / len, 0.0, 1.0), 2.0) * 0.55 * min(up, 1.5);
+    vec2 toEdge = max(c - abs(q), 0.0);
+    vec2 w = exp(-toEdge / max(len * 0.35, 1.0));
+    vec2 v = vec2(sign(q.x) * w.x, sign(q.y) * w.y);
+    off += v / max(length(v), 1e-4) * tail * bez * BEND * u_bend * TAIL_SIGN;
+  }
   vec2 uvG = u_uvOrigin + (p + off) * u_pxToUv;
   vec2 uvR = u_uvOrigin + (p + off * (1.0 + SPLIT)) * u_pxToUv;
   vec2 uvB = u_uvOrigin + (p + off * (1.0 - SPLIT)) * u_pxToUv;
 
   // Gaussian blur, radius 4 taps, checkerboard-thinned (mipmaps prefilter the gaps).
   // Sharper in the bezel so the bend reads; full diffusion in the middle for the text.
-  float spread = mix(0.06, 1.0, smoothstep(0.15, 1.0, x));
+  float spread = mix(u_rim, 1.0, smoothstep(0.15, 1.0, x));
   vec2 stepUv = u_blurPx * spread * u_pxToUv;
   float lod = u_lodBias * spread;
   vec3 acc = vec3(0.0);
@@ -94,13 +113,15 @@ void main() {
   // Match the CSS filter on the painting, then tint toward paper or ink.
   col *= u_brightness;
   col = mix(vec3(dot(col, vec3(0.2126, 0.7152, 0.0722))), col, u_saturate);
-  col = mix(col, u_tint, u_tintOpacity * mix(0.25, 1.0, smoothstep(0.0, 1.0, x))); // clearer in the bezel
+  col = mix(col, u_tint, u_tintOpacity * mix(u_frostRim, 1.0, smoothstep(0.0, 1.0, x))); // clearer in the bezel, evener as Frost rises
 
   // Specular on the top rim, rgb(255 250 240), brighter for iOS 27 (TASTE.md glass spec).
   // The light comes from the top left (TASTE 4), so the rim is strongest there.
   float top = max(-n.y, 0.0) * (0.75 + 0.25 * max(-n.x, 0.0));
-  col += vec3(1.0, 0.98, 0.94) * exp(-inside * 0.45) * top * mix(0.30, 0.20, u_dark);
-  col += vec3(1.0, 0.97, 0.92) * exp(-inside * 0.7) * 0.08 * u_dark;
+  col += vec3(1.0, 0.98, 0.94) * exp(-inside * 0.45) * top * mix(0.30, 0.20, u_dark) * u_shine;
+  // Above Shine 100, a soft lit band all round the inside of the edge (iOS's glowing rim).
+  col += vec3(1.0, 0.99, 0.96) * exp(-inside * 0.12) * 0.35 * max(u_shine - 1.0, 0.0) * (1.0 - 0.6 * u_dark);
+  col += vec3(1.0, 0.97, 0.92) * exp(-inside * 0.7) * 0.08 * u_dark * u_shine;
   // iOS 27's darkened edge: a 1px inner ring, black at 10% (light) or 35% (dark).
   col = mix(col, vec3(0.0), (1.0 - smoothstep(0.0, 1.0, inside)) * mix(0.10, 0.35, u_dark));
   col = clamp(col, 0.0, 1.0);
@@ -111,7 +132,7 @@ void main() {
 }`;
 
 const UNIFORMS = ['u_image', 'u_size', 'u_radius', 'u_dpr', 'u_uvOrigin', 'u_pxToUv',
-  'u_blurPx', 'u_lodBias', 'u_brightness', 'u_saturate', 'u_tint', 'u_tintOpacity', 'u_dark', 'u_fade', 'u_imgH'];
+  'u_blurPx', 'u_lodBias', 'u_brightness', 'u_saturate', 'u_tint', 'u_tintOpacity', 'u_dark', 'u_fade', 'u_imgH', 'u_bend', 'u_shine', 'u_rim', 'u_reach', 'u_frostRim'];
 
 const TONES = {
   light: { tint: [241 / 255, 223 / 255, 200 / 255], opacity: 0.48, dark: 0 }, // #F1DFC8, clearer for iOS 27 (tuned)
@@ -150,7 +171,7 @@ function compile(gl) {
   return gl.getProgramParameter(prog, gl.LINK_STATUS) ? prog : null;
 }
 
-export async function mountLiquidGlass(panel, { image, tone = 'light', opacity, blur = BLUR_PX, fade = [2, 3] } = {}) {
+export async function mountLiquidGlass(panel, { image, tone = 'light', opacity, blur = BLUR_PX, fade = [2, 3], lens = false } = {}) {
   if (!panel || !image) return null;
   if (media('(prefers-contrast: more)') || media('(prefers-reduced-transparency: reduce)')) return null;
   try {
@@ -203,7 +224,7 @@ export async function mountLiquidGlass(panel, { image, tone = 'light', opacity, 
   gl.uniform1i(u.u_image, 0);
   const t = TONES[tone] || TONES.light;
   gl.uniform3fv(u.u_tint, t.tint);
-  gl.uniform1f(u.u_tintOpacity, opacity ?? t.opacity); // a plate raises its tint until its text reads
+  const tint = opacity ?? t.opacity; // a plate raises its tint until its text reads
   gl.uniform1f(u.u_dark, t.dark);
   gl.clearColor(0, 0, 0, 0);
 
@@ -248,8 +269,18 @@ export async function mountLiquidGlass(panel, { image, tone = 'light', opacity, 
     gl.uniform2f(u.u_pxToUv, 1 / rw, 1 / rh);
     gl.uniform3f(u.u_fade, fade[0], fade[1], pr.top - ir.top);
     gl.uniform1f(u.u_imgH, ir.height);
-    gl.uniform1f(u.u_blurPx, blur);
-    gl.uniform1f(u.u_lodBias, Math.max(0, Math.log2(blur * 1.4 * dpr) - 0.5));
+    // Josh's dials (Site settings > Glass): 1 = as designed.
+    // The clear lens goes much further above 100, toward Apple's frosted panels (as components.css).
+    const up = (d) => Math.max(0, d - 1);
+    const b = blur * dial('blur') + (lens ? 11 * up(dial('blur')) : 0);
+    gl.uniform1f(u.u_blurPx, b);
+    gl.uniform1f(u.u_lodBias, Math.max(0, Math.log2(Math.max(b, 0.01) * 1.4 * dpr) - 0.5));
+    gl.uniform1f(u.u_tintOpacity, Math.min(0.96, tint * dial('frost') + (lens ? 0.34 * up(dial('frost')) : 0)));
+    gl.uniform1f(u.u_bend, dial('bend'));
+    gl.uniform1f(u.u_shine, dial('shine'));
+    gl.uniform1f(u.u_reach, dial('reach'));
+    gl.uniform1f(u.u_frostRim, 0.25 + 0.75 * Math.min(1, up(dial('frost')) * 1.5));
+    gl.uniform1f(u.u_rim, 0.06 + 0.8 * Math.min(1, Math.max(0, dial('blur') - 1)));
     gl.uniform1f(u.u_brightness, filterValue(ics.filter, 'brightness', 1));
     gl.uniform1f(u.u_saturate, filterValue(ics.filter, 'saturate', 1));
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -273,6 +304,7 @@ export async function mountLiquidGlass(panel, { image, tone = 'light', opacity, 
   ro.observe(image);
   window.addEventListener('scroll', schedule, { passive: true });
   window.addEventListener('resize', schedule);
+  onDialChange(schedule);
 
   function destroy() {
     if (dead) return;

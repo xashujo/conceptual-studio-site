@@ -6,6 +6,7 @@
  * Builds a per-element SVG filter (displacement map sized to the element's box
  * and border radius), points --refract at it and adds .is-refracting.
  */
+import { dial, onDialChange } from './glass-dials.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const MAX_MAP = 600; // longest side of the generated map, px
@@ -16,7 +17,7 @@ const radiusPx = (value, width) => (value?.endsWith('%') ? (parseFloat(value) / 
 
 // Edge normal in R/G around 128, strongest at the edge, zero from `band` inward.
 // bandPx widens the bent rim (the lens); by default it follows the corner radius.
-function displacementMap(w, h, r, bandPx) {
+function displacementMap(w, h, r, bandPx, up = 0) {
   const f = Math.min(1, MAX_MAP / Math.max(w, h));
   const mw = Math.max(1, Math.round(w * f));
   const mh = Math.max(1, Math.round(h * f));
@@ -47,9 +48,24 @@ function displacementMap(w, h, r, bandPx) {
       const sdf = Math.hypot(Math.max(kx, 0), Math.max(ky, 0)) + Math.min(Math.max(kx, ky), 0) - rr;
       const t = Math.min(1, Math.max(0, 1 + sdf / band));
       const s = t * t;
+      let ox = Math.sign(dx) * nx * s;
+      let oy = Math.sign(dy) * ny * s;
+      // Reach above 100: a long, soft tail of gentler bend toward the centre, its direction blended
+      // between the nearest edges so it swirls round the corners (as liquid-glass.js).
+      if (up > 0) {
+        const len = Math.min(band * (1 + 5 * up), Math.min(mw, mh) / 2);
+        const inside = Math.max(-sdf, 0);
+        const tail = (1 - Math.min(1, inside / len)) ** 2 * 0.55 * Math.min(up, 1.5);
+        const wx = Math.exp(-Math.max(hx - Math.abs(dx), 0) / Math.max(len * 0.35, 1));
+        const wy = Math.exp(-Math.max(hy - Math.abs(dy), 0) / Math.max(len * 0.35, 1));
+        const l = Math.hypot(wx, wy) || 1;
+        // Negative: the tail stretches what's under the glass outward (a magnifying drag), as liquid-glass.js.
+        ox -= (Math.sign(dx) * wx / l) * tail;
+        oy -= (Math.sign(dy) * wy / l) * tail;
+      }
       const i = (y * mw + x) * 4;
-      px[i] = 128 + Math.sign(dx) * nx * s * 127;
-      px[i + 1] = 128 + Math.sign(dy) * ny * s * 127;
+      px[i] = 128 + Math.max(-1, Math.min(1, ox)) * 127;
+      px[i + 1] = 128 + Math.max(-1, Math.min(1, oy)) * 127;
       px[i + 2] = 128;
       px[i + 3] = 255;
     }
@@ -84,11 +100,13 @@ export function mountRefraction(el, opts = {}) {
   map.setAttribute('result', 'map');
   // One displacement per channel. With the lens, red bends most and blue least, so the
   // rim splits colour the way a real lens edge does; then the three are added back up.
+  const maps = []; // [node, k]: rescaled when the bend dial changes
   const bend = (k, result) => {
     const d = document.createElementNS(SVG_NS, 'feDisplacementMap');
     d.setAttribute('in', 'SourceGraphic');
     d.setAttribute('in2', 'map');
-    d.setAttribute('scale', String(scale * k)); // -70: stronger bend to match the plates (Josh, 26 Oct)
+    d.setAttribute('scale', String(scale * k * dial('bend'))); // -70: stronger bend to match the plates (Josh, 26 Oct)
+    maps.push([d, k]);
     d.setAttribute('xChannelSelector', 'R');
     d.setAttribute('yChannelSelector', 'G');
     if (result) d.setAttribute('result', result);
@@ -134,18 +152,24 @@ export function mountRefraction(el, opts = {}) {
     const r = Math.min(radiusPx(getComputedStyle(el).borderTopLeftRadius, w), w / 2, h / 2);
     // Lens rim: 30% of the short side, 14 to 40px. The cap keeps big plates' fringe a rim, not a rainbow band (Josh, 28 Oct).
     const band = lens ? Math.min(40, Math.max(14, Math.min(w, h) * 0.3)) : 0;
-    const next = `${w}x${h}r${r}`;
+    // Reach (Josh's dial) widens only the bent band, so the drag travels further in; the middle blur keeps --lens-band.
+    const reach = lens ? band * Math.min(1, dial('reach')) : 0; // below 100 the bent rim narrows; above it, a soft tail (in the map)
+    const up = lens ? Math.max(0, dial('reach') - 1) : 0;
+    const next = `${w}x${h}r${r}b${reach}u${up}`;
     if (next === key) return;
     key = next;
     map.setAttribute('width', String(w));
     map.setAttribute('height', String(h));
-    map.setAttribute('href', displacementMap(w, h, r, band));
+    map.setAttribute('href', displacementMap(w, h, r, reach, up));
     el.style.setProperty('--refract', `url(#${id})`);
     if (lens) {
-      // 22% split on buttons, pills and bars; 10% on big plates, where 22% read as a rainbow band (Josh, 28 Oct).
-      const split = Math.min(w, h) > 120 ? 0.1 : 0.22;
-      red.setAttribute('scale', String(scale * (1 + split)));
-      blue.setAttribute('scale', String(scale * (1 - split)));
+      // Chrome's colour split, gentler than WebGL's 22% (Josh, 28 Oct: "a bit too strong"): 15% on buttons,
+      // pills and bars, 7% on big plates. Stored as k so the bend dial keeps it when rescaling.
+      const split = Math.min(w, h) > 120 ? 0.07 : 0.15;
+      maps.find((x) => x[0] === red)[1] = 1 + split;
+      maps.find((x) => x[0] === blue)[1] = 1 - split;
+      red.setAttribute('scale', String(scale * (1 + split) * dial('bend')));
+      blue.setAttribute('scale', String(scale * (1 - split) * dial('bend')));
       el.style.setProperty('--lens-band', `${band}px`);
     }
     el.classList.add(lens ? 'is-lens' : 'is-refracting');
@@ -156,6 +180,10 @@ export function mountRefraction(el, opts = {}) {
     timer = setTimeout(update, 150);
   });
   ro.observe(el);
+  onDialChange(() => {
+    maps.forEach(([d, k]) => d.setAttribute('scale', String(scale * k * dial('bend'))));
+    update();
+  });
 
   return () => {
     clearTimeout(timer);

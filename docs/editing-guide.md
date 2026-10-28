@@ -1,106 +1,89 @@
 # Editing the site
 
-You edit the site's content in Pages CMS. The design can't be changed there, so nothing you do in it can break the layout. When you save, Pages CMS commits the change to GitHub, and Cloudflare rebuilds the site. This usually takes a minute or two.
+You change the site's words, images, projects and prices in **Pages CMS**, a free editor that works like filling in a form. You don't touch any code, and the design is locked, so nothing you do there can break the layout.
 
-[TBC: screenshots of each step, added once Pages CMS is connected]
+When you press **Save**, the change goes to GitHub and the site rebuilds itself. It's live a minute or two later.
 
-## Before you start
+## Set it up (once)
 
-1. Go to app.pagescms.org and sign in with your GitHub account.
-2. Open **xashujo/conceptual-studio-site**.
-3. Check which branch you're on. The branch name is shown in Pages CMS. Two branches matter:
-   - **main** is the live site. Anything you save on main goes live.
-   - **Any other branch** is a draft. Cloudflare gives it its own preview address and the live site doesn't change (see "Check a preview before it goes live" below).
+1. Go to **app.pagescms.org**.
+2. Click **Sign in with GitHub** and allow it.
+3. Pick **xashujo/conceptual-studio-site**.
+4. At the top, check the branch says **main**. That's the live site.
 
-What's in the CMS:
+In the menu on the left you'll see:
 
-- **Projects**: your case studies.
-- **Services**: the three services and their pricing ladders.
-- **Testimonials**: quotes from clients, word for word.
-- **Clients**: client names, and whether each one appears in "Worked with".
-- **Site settings**: availability, your email, reply time and company details.
+- **Projects**: everything on the Work page, the case studies, and what's featured on the home page.
+- **Services and prices**: the three services and their pricing ladders.
+- **Testimonials**: client quotes.
+- **Clients**: the names under "Worked with".
+- **Site settings**: the green availability dot, your email, reply time, social links and company number.
 
-Never upload unpublished work or anything under an NDA. Everything you save is stored on GitHub. [TBC: confirm the repo is private. If it's public, anyone can see drafts there too.]
+Never upload unpublished work or anything under an NDA. Everything you save is kept on GitHub.
 
-## Add a case study
+## Change a price
 
-1. If the client is new, add them first. Go to **Clients**, add a new entry and fill in the name. Tick "Show in Trusted by" only if you want them in the "Worked with" line.
-2. Go to **Projects** and add a new entry.
-3. Fill in the top fields:
-   - **Title**: the project name, e.g. Strategic Intent.
-   - **Web address**: the end of the page's address, in lowercase with hyphens, e.g. `new-city-college-strategic-intent`. Don't change it once the project is live, or old links will break.
-   - **Client**, **Year**, **Disciplines** and **Sector**: pick from the lists.
-   - **Outcome line**: one sentence on where the work was used. It appears on the project card.
-4. **Cover image**: upload the photo and fill in **Alt text**. Alt text is a plain description of what the photo shows, written for people who can't see it. You can't save without it.
-   - Use a photo of the work in use (signage, print, a screen), not a logo on a flat colour.
-   - Upload a large file. The site makes the smaller sizes itself.
-5. **Cover plate caption**: the two lines under the image.
-   - Line 1 is the title, client and year, e.g. "Strategic Intent, New City College London, 2025".
-   - Line 2 is the medium or what it is, e.g. "Map and timeline of the college mergers, 1990 to 2024".
-6. **The problem**, **What I did** and **What happened**: a short paragraph each.
-7. **Page sections**: build the rest of the page from these blocks, in the order you want:
-   - Text
-   - Full-width image
-   - Two images side by side
-   - Video
-   - Big number
-   - Quote
-   - Chart image
-   - Before and after
+1. Open **Services and prices** and pick the service.
+2. Open the rung under **Pricing ladder**.
+3. Change **Price**. Type it exactly as it should appear, e.g. `From £4,900`.
+4. Save.
 
-   Every image needs alt text and a plate caption.
-8. For video:
-   - A short loop under 25 MB can be uploaded directly.
-   - A longer film goes on media.conceptualstudio.co.uk, and you paste its link instead. [TBC: that storage isn't set up yet]
-9. Optional fields:
-   - **Testimonial** links a quote you've already added under Testimonials.
-   - **Next project** picks the case study linked at the bottom of the page.
-10. Leave **Show on the home page** off unless you want the project featured. To hide a project from All work without deleting it, tick **Archive**.
-11. Save.
+The first rung's price also shows on the Services page and the home page, so those update by themselves. The one exception is Social media editing, which has its own **Home page price** line ("From £200 per video"), so change that too if the single-edit price changes.
 
-## Change availability
+## Add a new project
 
-1. Go to **Site settings**.
-2. Choose what to change:
-   - **Taking new projects** on or off shows or hides the green availability pill.
-   - **Availability text** is the words in the pill. It currently says "Taking new projects".
-3. Save.
+1. Open **Projects** and click **Add an entry**.
+2. Fill in:
+   - **Title**, **Client** and **Year**.
+   - **Web address**: the end of the page address, in lowercase with hyphens, e.g. `southbank-heat-maps`.
+   - **Disciplines**: one per line, e.g. Data visualisation.
+   - **Work page filters**: which filter buttons it shows under.
+   - **Position on the Work page**: lower comes first. Projects go up in tens, so 15 puts it between the first and second.
+   - **One-line description**: shown on the card.
+3. **Cover image**: upload the photo, then fill in the description (what the image shows, in plain words) and the caption (the small line under it). Upload the biggest file you have; the site makes smaller sizes itself.
+4. Save. It's now on the Work page as a card.
 
-## Reorder featured work
+### Give it its own page (a case study)
 
-The home page shows up to three projects: one large card, then a pair.
+On the same project:
 
-1. Go to **Projects** and open each project you want on the home page.
-2. Turn on **Show on the home page**.
-3. Set **Home page position**: 1 is the large card, 2 and 3 are the pair.
-4. To take a project off the home page, turn **Show on the home page** off.
-5. Save each project.
+1. Tick **Has its own case study page**.
+2. Fill in **Outcome**, **The problem**, **What I did** and **What happened**. Leave an empty line between paragraphs.
+3. Under **The work (image rows)**, add a row for each line of images. Choose the layout (one large, two, three or four), then add the images to it.
+4. Add **Before** and **After** images if you have them.
+5. Save. The page appears at conceptualstudio.co.uk/work/ followed by the web address.
 
-If two projects share a number, they go in alphabetical order. Only the first three are shown, so turn off "Show on the home page" for any project that drops out.
+## Change the selected work on the home page
 
-## Check a preview before it goes live
+1. Open **Projects** and open a project.
+2. Tick **Show on the home page** and set **Home page position**:
+   - 1 and 2 are the large cards.
+   - 3 and 4 are the pair side by side.
+3. Untick **Show on the home page** on any project you're replacing.
+4. Save each project.
 
-To see a change before anyone else does, save it on a draft branch instead of main.
+The New City College card also has **Charts under the card on the home page**. Any project can have up to three, and you can remove them there.
 
-1. Create a draft branch on GitHub:
-   - Open the repo.
-   - Click the branch menu (it says **main**).
-   - Type a name, e.g. `draft`.
-   - Choose **Create branch: draft from main**.
-2. In Pages CMS, switch to the `draft` branch and make your edits there.
-3. Wait a minute or two, then open the preview at `https://draft.[TBC: Cloudflare project name].pages.dev`. Cloudflare also lists every preview address under the project's **Deployments** page.
-4. If it looks right, put it live:
-   - On GitHub, open **Pull requests** and choose **New pull request**, from `draft` into `main`.
-   - Click **Merge**.
+## Swap an image
 
-   The live site updates a minute or two later.
-5. If it doesn't look right, fix it on the draft branch, or just never merge it.
+Open the project, click the image, and upload a new one. Update its description and caption to match. If the crop looks wrong, fill in **Cover crop**: `50% 0%` keeps the top, `50% 100%` the bottom, `0% 50%` the left.
 
-Saving straight on main is fine for small things, like a typo or the availability pill.
+## Turn availability on or off
+
+**Site settings** → **Taking new projects**. Off hides the green dot on the home page. **Availability text** changes its words.
+
+## Check a change before it goes live
+
+For bigger changes, edit a draft copy first.
+
+1. On GitHub, open the repo, click the branch menu (it says **main**), type `draft`, and choose **Create branch: draft from main**.
+2. In Pages CMS, switch the branch at the top to `draft` and make your edits.
+3. In Cloudflare, open the site's **Deployments** page and click the `draft` preview.
+4. If it looks right, on GitHub go to **Pull requests** → **New pull request**, choose `draft` into `main`, and click **Merge**. It goes live a minute or two later.
 
 ## If something goes wrong
 
-- **Pages CMS won't save.** A required field is empty. Fields marked as required must be filled before it will save.
-- **The site hasn't changed after a few minutes.** Check the latest deployment in Cloudflare. If the build failed, its log names the file and field, usually a missing image or alt text.
-- **You want to undo a change.** Every save is a commit on GitHub. Ask Claude to revert it, or find it in the repo's commit history.
-- **You want to change the design.** That's not editable here on purpose. Ask Claude.
+- **It won't save.** A required field is empty, often an image description.
+- **The site hasn't changed after five minutes.** The rebuild failed. In Cloudflare, open the latest deployment; the log names the file and the field. Or ask Claude.
+- **You want to undo something.** Every save is kept on GitHub, so it can always be put back. Ask Claude.
+- **You want to change the design, or add a new service page.** That's code, so ask Claude.

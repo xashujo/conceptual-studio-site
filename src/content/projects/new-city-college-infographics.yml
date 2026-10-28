@@ -1,0 +1,18 @@
+title: BSix merger
+slug: new-city-college-infographics
+client: New City College London
+year: 2024
+disciplines:
+- Data visualisation
+- Graphic design
+filters:
+- Data visualisation
+order: 60
+summary: Infographics for the merger of BSix Sixth Form College into New City College.
+cover:
+  src: '@assets/work/new-city-college-infographics/02.webp'
+  alt: Map of London boroughs marking the BSix and New City College campuses
+  caption: Campus map, BSix and New City College
+coverFocus: 0% 0%
+featured: false
+hasPage: false

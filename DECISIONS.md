@@ -490,8 +490,8 @@ Museum model:
 - Browsers without backdrop-filter get a 92% tint.
 - /glass/ is a review specimen (painting, paper, black). Hidden from search
   engines and not in the nav. The paper panel only exists for comparison:
-  the site still never puts glass on flat paper. Delete /glass/ once the nav
-  is built.
+  the site still never puts glass on flat paper. Keep /glass/ permanently:
+  it's Josh's glass tuning page with the dial sliders (Josh, 27 Oct).
 - The layer 2 refraction tint (42%) is below AA and gets fixed in step 3.
 - Lens glass (Josh, 26 Oct, from Apple's Liquid Glass "New, universal
   design" image): nearly clear, the art bends and magnifies through a rim
@@ -605,6 +605,33 @@ Museum model:
   main and are checked on its Cloudflare preview. [TBC: Cloudflare
   project name for the preview address; PDF version with screenshots
   once Pages CMS is connected.]
+
+## Editing wired to the live pages (27 Oct 2026, branch cms-live)
+- Josh, 26 Oct: he can't code and wants to edit projects, images, featured
+  work and prices himself. Pages CMS now drives the live home, Work, case
+  study and Services pages, not only the old home prototype.
+- All content moved into src/content/: twelve projects (with both case
+  studies), three services with their ladders, clients, the home page quote
+  and site settings. src/data/work.ts, src/data/services.ts and
+  src/lib/site.ts now only shape that content for the pages; src/site.ts and
+  src/data/site.ts re-export the shared values, so email and reply time come
+  from Site settings everywhere.
+- Prices: the ladders use the copy/pricing.md draft 3 figures, which the home
+  page already showed live. The Services pages had shown "From £[TBC]".
+  [TBC: Josh to confirm the figures before this goes live.]
+- Home page: positions 1 and 2 are large cards, 3 and 4 the pair. A project
+  can carry up to three charts under its home card (Strategic Intent does).
+  Its card text now matches the Work page's for each project.
+- Cards for projects without a case study link to /work/ instead of a
+  missing page (Pandora Forever, KUT Magazine). Social media editing links to
+  /services/ until it has a page.
+- KUT Magazine is still featured on the home page, now captioned as Kingston
+  School of Art student work, as on /work/. [TBC: keep it featured, or swap in
+  a client project.]
+- Rung ids for ?need= links now come from rung names (brand:full-identity).
+- The enquiry form's script gets the email from a data attribute, so no
+  content code is bundled into the browser.
+- docs/editing-guide.md rewritten as plain steps.
 - Homepage (Josh, 26 Oct): the nav and the hero plate are lens glass. Shared
   helper src/scripts/lens.js mounts it on /glass/ and the home page. In
   Firefox and Safari the nav bends the etching with WebGL; the hero plate
@@ -624,3 +651,46 @@ Museum model:
   the Chrome buttons and the Firefox/Safari hero). Chromium lens: the rim is
   capped at 40px, and big plates (short side over 120px) split at 10%;
   buttons, pills and bars keep 22%. WebGL keeps 22% everywhere.
+
+## Glass dials (27 Oct 2026, branch glass-dials)
+- Josh wants to tune the glass himself. Pages CMS > Site settings > Glass has
+  four numbers: Bend, Frost (paper tint), Blur and Shine (rim highlight),
+  each a percentage of the designed look, 0 to 200. 100 everywhere is the
+  glass as designed, which is how he resets it.
+- They are set on <html> as --g-bend, --g-frost, --g-blur and --g-shine
+  (1 = as designed). components.css multiplies every glass tint, blur and rim
+  by them (tints capped at 96%); refraction.js scales the Chromium bend and
+  liquid-glass.js the WebGL bend, tint, blur and highlight.
+- The accessibility fallbacks (reduce transparency, increase contrast, no
+  backdrop-filter) ignore the dials, so the glass still turns solid there.
+- /glass/ has live sliders to try values before typing them into the editor,
+  with "Reset to the original look" (all 100) and "Back to the saved values".
+
+## Tune mode (27 Oct 2026, branch tune-mode)
+- Josh wants to try type and layout changes visually, then have Claude build
+  them in properly (he chose this over saving tweaks himself: tweaks saved
+  straight to the site pile up, break when content changes, and ignore other
+  screen sizes).
+- ?tune on any page (remembered across pages until "Turn off") loads
+  src/scripts/tune.js via components/Tune.astro. Visitors never download it.
+- The panel edits the clicked element live: size, letter-spacing, line
+  height, weight (Inter only), line length, word spacing, space above and
+  below, padding, gaps, width, corner radius, image crop focus and shape, and
+  kerning between any two letters (arrow keys, 5/1000 em, Shift 25).
+- Nothing reaches the site. Changes are kept in the browser per page, can be
+  undone one by one, and "Copy my changes" gives a list (page, element, screen
+  width, before and after, selector) for Claude to apply to the right styles.
+
+## Lens glass everywhere (28 Oct 2026, Josh)
+- Every piece of glass on the site is lens glass: the shared nav and its phone
+  menu sheet, the contact desk, the /work/ cards, the /system/ plates and dock,
+  and the home page (already). The layouts mount it from data-lens;
+  data-liquid still names the painting behind, which Firefox and Safari bend
+  with WebGL. The frosted plate glass (WebGL at 52% tint) is gone from the site;
+  only the hidden /prototypes/ keep it, as records of past options.
+- Chrome's colour fringe is gentler than WebGL's (Josh: "a bit too strong" in
+  Chrome): 15% on buttons, pills and bars, 7% on big plates. Firefox and Safari
+  keep 22%. The split follows the bend dial.
+- Firefox and Safari: the /work/ cards sit over live content, so they stay
+  clear glass without the bend. The /system/ plates don't bend there yet either
+  (they overhang their painting's box).

@@ -1,17 +1,72 @@
 title: Strategic Intent
 slug: new-city-college-strategic-intent
-client: src/content/clients/new-city-college-london.yml
+client: New City College London
 year: 2025
-disciplines: [Data visualisation, Graphic design]
-sector: Education
-outcome: Infographics for New City College's strategic intent briefing, used in its executive merger communications.
+disciplines:
+- Data visualisation
+- Graphic design
+filters:
+- Data visualisation
+order: 10
+summary: Infographics for the college's strategic intent briefing, used in its executive merger communications.
+cover:
+  src: '@assets/work/new-city-college-strategic-intent/02.webp'
+  alt: Black map of east London boroughs showing the colleges that merged to form New City College, with a timeline from 1990 to 2024
+  caption: Map and timeline of the college mergers, 1990 to 2024
+coverFocus: 0% 0%
 featured: true
 featuredOrder: 2
-archive: false
-cover:
-  src: "@assets/work/new-city-college-strategic-intent/02.webp"
-  alt: Black map of east London boroughs showing the colleges that merged to form New City College, with a timeline from 1990 to 2024
-coverCaption:
-  title: Strategic Intent, New City College London, 2025
-  medium: Map and timeline of the college mergers, 1990 to 2024
-blocks: []
+homeFocus: 50% 8%
+homeCharts:
+- src: '@assets/work/new-city-college-strategic-intent/03.webp'
+  alt: Bar chart forecasting 16 to 18 population growth by borough, 2024 to 2030
+  title: Demographic forecast, 2024 to 2030
+  caption: Bar chart, 16 to 18 population by borough
+- src: '@assets/work/new-city-college-strategic-intent/04.webp'
+  alt: Bar chart of minimum growth rates across key employment sectors
+  title: Key employment growth
+  caption: Bar chart, minimum growth rate by sector
+- src: '@assets/work/new-city-college-strategic-intent/05.webp'
+  alt: Pie chart of 16 to 18 students by level in 2024/25
+  title: 16 to 18 students by level, 2024/25
+  caption: Pie chart, 10,404 students
+hasPage: true
+outcome: Used in the college's executive merger communications.
+problem: |
+  New City College needed a strategic intent briefing that senior leaders and institutional stakeholders could read quickly. The material was policy-heavy and the data behind it was complex: demographic forecasts for its boroughs, student numbers split by age, level and support need, and growth across employment sectors.
+
+  The college has also grown through a long run of mergers, and the briefing needed to show where it came from. [TBC: the brief in NCC's own words, if you have it]
+whatIDid: |
+  I sorted the data first, then built one visual language for the whole suite, so a forecast, a sector chart and a set of student splits all read as parts of one document.
+
+  For the history I drew a map and timeline of the college mergers from 1990 to 2024, setting each merger on the borough where it happened. Student numbers by level became a set of matching pie charts with the totals printed beside them, so each group can be compared at a glance.
+
+  [TBC: a decision or trade-off you made, for example a chart type you ruled out or data you left out]
+gallery:
+- layout: Two side by side
+  images:
+  - src: '@assets/work/new-city-college-strategic-intent/03.webp'
+    alt: Bar chart of borough populations from 2024 to 2030, with a line for total population
+    caption: Demographic forecast, 2024 to 2030
+  - src: '@assets/work/new-city-college-strategic-intent/04.webp'
+    alt: Bar chart of minimum growth rate across seven employment sectors
+    caption: Key employment growth by sector
+- layout: Four in a grid
+  images:
+  - src: '@assets/work/new-city-college-strategic-intent/05.webp'
+    alt: Pie chart of 10,404 students aged 16 to 18 by level, 2024/25
+    caption: Students aged 16 to 18 by level, 2024/25
+  - src: '@assets/work/new-city-college-strategic-intent/06.webp'
+    alt: Pie chart of 655 discrete SEND students aged 16 to 24 by level, 2024/25
+    caption: Discrete SEND students aged 16 to 24 by level, 2024/25
+  - src: '@assets/work/new-city-college-strategic-intent/07.webp'
+    alt: Pie chart of 500 mainstream SEND students aged 16 to 24 by level, 2024/25
+    caption: Mainstream SEND students aged 16 to 24 by level, 2024/25
+  - src: '@assets/work/new-city-college-strategic-intent/08.webp'
+    alt: Pie chart of 8,900 adult students by level, 2024/25
+    caption: Adult students by level, 2024/25
+whatHappened: |
+  The infographics were used in the college's executive merger communications.
+
+  [TBC: anything else that followed, for example where the briefing was published or who it went to]
+next: src/content/projects/oxford-school-of-english.yml

@@ -8,6 +8,7 @@ import Actions from '../../components/prototypes/Actions.astro';
 import PlateCaption from '../../components/PlateCaption.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 import { getCollection } from 'astro:content';
+import { featured, projectHref } from '../../data/work';
 import { sentence } from '../../components/prototypes/home';
 import quietArt from '../../assets/art/engraved/jardin-quiet.jpg';
 import panes from '../../assets/art/engraved/jardin-panes.jpg';
@@ -20,12 +21,12 @@ const crops: Record<string, string> = {
 };
 // From the CMS: clients ticked "Show in Trusted by", and projects ticked "Show on the home page", by position.
 const clients = (await getCollection('clients', (c) => c.data.trustedBy)).map((c) => c.data.name);
-const [lead, ...pair] = (await getCollection('projects', (p) => p.data.featured && !p.data.archive))
-  .sort((a, b) => (a.data.featuredOrder ?? 99) - (b.data.featuredOrder ?? 99) || a.data.title.localeCompare(b.data.title))
+const [lead, ...pair] = featured
   .slice(0, 3) // the layout is one large card and a pair
-  .map(({ data: p }) => ({
-    title: p.title, year: p.year, href: `/work/${p.slug}/`, disciplines: p.disciplines, summary: p.outcome,
-    image: p.cover.src, alt: p.cover.alt, caption: p.coverCaption, position: crops[p.slug],
+  .map((p) => ({
+    title: p.title, year: p.year, href: projectHref(p), disciplines: p.disciplines, summary: p.summary,
+    image: p.image, alt: p.alt, position: crops[p.slug],
+    caption: { title: p.client.startsWith(p.title) ? `${p.title}, ${p.year}` : `${p.title}, ${p.client}, ${p.year}`, medium: p.medium },
   }));
 
 // Josh, 26 Oct: "&" for "and", first letter of each word capitalised. Wording still open.

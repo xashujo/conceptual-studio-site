@@ -1,5 +1,5 @@
 // Studio settings used across pages. Anything marked TBC needs Josh before launch.
-export const email = 'joshuamcdonald099@gmail.com'; // as on the Framer contact page; TBC if a studio address replaces it
+export { email } from './lib/site'; // edited in Pages CMS, Site settings
 
 // TBC: Josh's Cal.com booking link for a 20-minute call.
 export const calUrl = 'https://cal.com/';
