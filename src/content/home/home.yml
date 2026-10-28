@@ -18,6 +18,27 @@ stats:
     label: of Clients Return for More Work
 workHeading: Selected Work
 allProjects: All Projects
+socialVideos:
+  - title: Mongolia Blob Tracking
+    year: 2026
+    video: /media/video/mongolia-blob-tracking.mp4
+    poster: "@assets/work/social/mongolia-blob-tracking.jpg"
+    alt: Black and white footage from Mongolia with blob tracking boxes and lines following the movement.
+  - title: Blob Tracking Tutorial
+    year: 2026
+    video: /media/video/blob-tracking-tutorial.mp4
+    poster: "@assets/work/social/blob-tracking-tutorial.jpg"
+    alt: A short tutorial showing how to add the blob tracking effect to footage.
+  - title: ASCII Tutorial
+    year: 2026
+    video: /media/video/ascii-tutorial.mp4
+    poster: "@assets/work/social/ascii-tutorial.jpg"
+    alt: A short tutorial showing how to turn footage into moving ASCII characters.
+  - title: Font Archive
+    year: 2026
+    video: /media/video/font-archive.mp4
+    poster: "@assets/work/social/font-archive.jpg"
+    alt: Goldfish swim over the words my font archive as a design studio, then a run through the typefaces in it.
 results:
   - src/content/projects/oxford-school-of-english.yml
   - src/content/projects/new-city-college-strategic-intent.yml

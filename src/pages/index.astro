@@ -7,7 +7,7 @@ import Logo from '../components/Logo.astro';
 import { glassStyle } from '../lib/site';
 import '../styles/tokens.css';
 import '../styles/components.css';
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import { email, startHref, quoteHref, sentence, trustedBy } from '../data/site';
 import { availability, homeQuote, heroQuote, responseTime, nextSteps, home } from '../lib/site';
 import { featured, projectHref, homeFilters, bySlug } from '../data/work';
@@ -35,6 +35,8 @@ const cards = featured.map((p) => ({
   title: p.title, year: p.year, href: projectHref(p), image: p.image, alt: p.alt,
   position: p.homePosition ?? p.position, filter: p.homeFilter, student: p.student, outcome: p.outcome,
 }));
+// Social media videos (Pages CMS: Home page > Social media videos), after the projects under Social Media.
+const videos = await Promise.all(home.socialVideos.map(async (v) => ({ ...v, poster: (await getImage({ src: v.poster, width: 720, format: 'webp' })).src })));
 // Why clients choose us (pass 2): the two case studies' own summaries from the CMS, beside the quote.
 const results = home.results.map(bySlug) // Pages CMS: Home page > Why Clients Choose Us
   .map((p) => ({ client: p.client, title: p.title, line: p.summary, href: projectHref(p) }));
@@ -138,6 +140,20 @@ const menu = services.flatMap((s) => s.href?.includes('#')
                   </span>
                   {c.outcome && <span class="card__out">{c.outcome}</span>}
                 </a>
+              </li>
+            ))}
+            {videos.map((v) => (
+              <li class="fw__vid" data-filter="Social Media" data-more="">
+                <div class="card glass" data-lens>
+                  <div class="vid">
+                    <video class="card__img vid__v" src={v.video} poster={v.poster} preload="none" playsinline aria-label={v.alt}></video>
+                    <button class="vid__play" type="button" aria-label={`Play ${v.title}`} data-play><span class="vid__icon glass-button" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z" fill="currentColor"/></svg></span></button>
+                  </div>
+                  <span class="card__row">
+                    <span class="card__t">{v.title}</span>
+                    <span class="card__y">{v.year}</span>
+                  </span>
+                </div>
               </li>
             ))}
           </ul>
@@ -349,6 +365,16 @@ const menu = services.flatMap((s) => s.href?.includes('#')
       more.addEventListener('click', () => { all = true; show(); });
       show();
 
+      // Social media videos play in their card on click, with controls from then on; one plays at a time.
+      const vids = [...grid.querySelectorAll('video')];
+      grid.querySelectorAll<HTMLButtonElement>('[data-play]').forEach((btn) => btn.addEventListener('click', () => {
+        const v = btn.previousElementSibling as HTMLVideoElement;
+        btn.remove();
+        v.controls = true;
+        v.play();
+      }));
+      vids.forEach((v) => v.addEventListener('play', () => vids.forEach((o) => o !== v && o.pause())));
+
       // Services accordion: one row open at a time; closed rows are inert so focus skips them.
       const rows = [...document.querySelectorAll<HTMLElement>('[data-acc] .acc__row')];
       const setRow = (row: HTMLElement, open: boolean) => {
@@ -470,8 +496,17 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .fw { padding-top: 120px; }
   .filterbar { position: relative; display: inline-flex; gap: 2px; margin-top: 28px; padding: 6px; border-radius: var(--pill); max-width: 100%; overflow-x: auto; scrollbar-width: none; }
   .filterbar[hidden] { display: none; }
-  .fw__grid { list-style: none; margin: 32px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+  .fw__grid { list-style: none; margin: 32px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
   .fw__grid > [hidden] { display: none; }
+  /* Projects span two columns; videos are vertical, so they take one: four to a row (two on phones). */
+  .fw__grid > li { grid-column: span 2; }
+  .fw__grid > .fw__vid { grid-column: span 1; }
+  .vid { position: relative; }
+  .card .vid__v { display: block; aspect-ratio: 9 / 16; background: #000; }
+  .vid__play { position: absolute; inset: 0; display: grid; place-items: center; border: 0; padding: 0; border-radius: 16px; background: none; cursor: pointer; }
+  .vid__icon { display: grid; place-items: center; width: 64px; height: 64px; padding-left: 3px; border-radius: 50%; transition: transform 300ms ease-out; }
+  @media (hover: hover) { .vid__play:hover .vid__icon { transform: scale(1.08); } }
+  .vid__play:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
   .card { position: relative; display: grid; align-content: start; gap: 14px; height: 100%; padding: 12px 12px 16px; border-radius: 28px; text-decoration: none; transition: background-color 300ms ease-out, color 300ms ease-out; }
   .card__img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 16px; } /* concentric: 28px card, 12px inset */
   .card__row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 0 8px 2px; }
@@ -611,7 +646,8 @@ const menu = services.flatMap((s) => s.href?.includes('#')
     .filterbar { margin-top: 20px; }
     .filterbar { gap: 0; padding: 4px; }
     .filterbar .glass-pill { min-height: 40px; padding: 0 9px; font-size: 14px; letter-spacing: -0.02em; }
-    .fw__grid { grid-template-columns: 1fr; gap: 16px; margin-top: 24px; }
+    .fw__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 24px; }
+    .vid__icon { width: 52px; height: 52px; }
     .card { padding: 10px 10px 14px; gap: 12px; border-radius: 26px; }
     .fw__grid { gap: 20px; }
     .card__img { border-radius: 16px; }

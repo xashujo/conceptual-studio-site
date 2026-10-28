@@ -274,6 +274,17 @@ content:
           - { name: label, label: Label, type: string, required: true }
       - { name: workHeading, label: Work heading, type: string, required: true, description: "The big heading over the work grid, e.g. Selected Work." }
       - { name: allProjects, label: All projects button, type: string, required: true, description: "The glass button under the work grid. It opens the Work page." }
+      - name: socialVideos
+        label: Social media videos
+        type: object
+        list: true
+        description: "Vertical videos shown as cards under the Social Media filter in Selected Work. Visitors click a card to play it. Upload 9:16 MP4s, ideally 720 x 1280 and under 10 MB."
+        fields:
+          - { name: title, label: Title, type: string, required: true }
+          - { name: year, label: Year, type: number, required: true }
+          - { name: video, label: Video file (MP4), type: file, required: true, options: { media: videos } }
+          - { name: poster, label: Still shown before it plays, type: image, required: true, options: { media: images } }
+          - { name: alt, label: Description (alt text), type: string, required: true, description: "What the video shows, for people who can't see it." }
       - name: results
         label: Why Clients Choose Us
         type: reference

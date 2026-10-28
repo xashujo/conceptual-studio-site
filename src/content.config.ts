@@ -100,6 +100,9 @@ export const collections = {
       stats: z.array(z.object({ number: z.number(), after: z.string().nullish().transform((s) => s ?? ''), label: z.string().min(1) })),
       workHeading: z.string().min(1),
       allProjects: z.string().min(1),
+      // Vertical videos under the Social Media filter; the file path is under public/ (Pages CMS: Short videos).
+      socialVideos: z.array(z.object({ title: z.string().min(1), year: z.number().int(), video: z.string().min(1), poster: image(), alt: z.string().min(1) }))
+        .nullish().transform((v) => v ?? []),
       results: z.array(ref),
       howHeading: z.string().min(1),
       howIntro: z.string().min(1),
