@@ -19,16 +19,16 @@ stats:
 workHeading: Selected Work
 allProjects: All Projects
 socialVideos:
-  - title: Blob Tracking
-    year: 2026
-    video: /media/video/mongolia-blob-tracking.mp4
-    poster: "@assets/work/social/mongolia-blob-tracking.jpg"
-    alt: Black and white footage of a Mongolian warrior, with blob tracking boxes and lines following the movement.
   - title: Blob Tracking Tutorial
     year: 2026
     video: /media/video/blob-tracking-tutorial.mp4
     poster: "@assets/work/social/blob-tracking-tutorial.jpg"
     alt: A short tutorial showing how to add the blob tracking effect to footage.
+  - title: Blob Tracking
+    year: 2026
+    video: /media/video/mongolia-blob-tracking.mp4
+    poster: "@assets/work/social/mongolia-blob-tracking.jpg"
+    alt: Black and white footage of a Mongolian warrior, with blob tracking boxes and lines following the movement.
   - title: ASCII Tutorial
     year: 2026
     video: /media/video/ascii-tutorial.mp4
