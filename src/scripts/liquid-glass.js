@@ -43,7 +43,7 @@ varying vec2 v_uv;
 // picture behind it outward, with a slight colour split; the middle stays flat and diffused.
 const float BEZEL = 0.2;     // bezel width, share of the short side (clamped 14-48px)
 const float BEND = 1.1;      // displacement at the rim, share of the bezel width
-const float SPLIT = 0.08;    // red/blue split, share of the displacement
+const float SPLIT = 0.22;    // red/blue split, share of the displacement (stronger chromatic aberration: Josh, 28 Oct)
 
 void main() {
   vec2 p = v_uv * u_size;

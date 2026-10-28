@@ -617,3 +617,6 @@ Museum model:
   into the fade bends paper there instead of hidden art. Glass over live
   content (the scrolling nav over work photos) still can't bend in those
   browsers; over plain paper or black a bend shows nothing anyway.
+- Chromatic aberration (Josh, 28 Oct): the red/blue split at the lens rim is
+  22% of the bend (was 8%), in both the Chromium SVG lens and the WebGL glass,
+  so the colour fringe shows round the sides.

@@ -114,9 +114,10 @@ export function mountRefraction(el, opts = {}) {
   };
   if (lens) {
     filter.append(map,
-      bend(1.08, 'dr'), keep('dr', 0, 'r'),
+      // Red bends 22% more and blue 22% less than green: visible chromatic aberration at the rim (Josh, 28 Oct).
+      bend(1.22, 'dr'), keep('dr', 0, 'r'),
       bend(1, 'dg'), keep('dg', 1, 'g'),
-      bend(0.92, 'db'), keep('db', 2, 'b'),
+      bend(0.78, 'db'), keep('db', 2, 'b'),
       add('r', 'g', 'rg'), add('rg', 'b'));
   } else filter.append(map, bend(1));
   svg.append(filter);
