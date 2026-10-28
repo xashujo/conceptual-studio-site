@@ -4,6 +4,7 @@
 // inline thank-you, no reload. Without JavaScript it still posts straight to Web3Forms.
 import { services, budgets } from '../data/services';
 import { email, calUrl, web3formsKey, turnstileSiteKey } from '../site';
+import { nextSteps } from '../lib/site';
 interface Props { service?: string; heading?: string }
 const { service, heading = 'Start a project' } = Astro.props;
 const preset = service ? `${service}:unsure` : '';
@@ -76,6 +77,7 @@ const preset = service ? `${service}:unsure` : '';
       <button class="btn btn--solid" type="submit"><span data-send>Send enquiry</span><span class="arrow" aria-hidden="true">→</span></button>
       <p class="enq__status" role="status" aria-live="polite" data-status></p>
     </div>
+    {nextSteps && <p class="f__help f--wide">{nextSteps}</p>}
   </form>
 
   <div class="enq__done" tabindex="-1" hidden data-done>

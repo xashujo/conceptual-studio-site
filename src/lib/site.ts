@@ -12,6 +12,7 @@ export const startHref = `mailto:${email}?subject=New%20project`; // shortcut: e
 export const quoteHref = `mailto:${email}?subject=Custom%20quote`;
 export const replyTime = `I reply ${settings.responseTime}.`;
 export const responseTime = settings.responseTime;
+export const nextSteps = settings.nextSteps.replaceAll('{reply time}', settings.responseTime);
 export const hours = 'I answer email on weekdays, 9:00 to 17:00 London time.'; // Framer /contact
 export const availability = { on: settings.availability, text: settings.availabilityText };
 
@@ -49,6 +50,7 @@ export const clientGroups = (['Education', 'Companies and international'] as con
 
 // The quote shown on the home page (ticked "Show on the home page" in Testimonials).
 export const homeQuote = (await getCollection('testimonials', (t) => t.data.onHomePage))[0]?.data;
+export const heroQuote = (await getCollection('testimonials', (t) => t.data.inHero))[0]?.data;
 
 // Every artwork on the site, with the credit the colophon and the plate captions use.
 export const art = {

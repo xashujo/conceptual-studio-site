@@ -74,6 +74,8 @@ export const collections = {
     schema: z.object({
       quote: z.string(), name: z.string(), role: z.string(), organisation: z.string(),
       onHomePage: z.boolean().nullish().transform((v) => !!v),
+      inHero: z.boolean().nullish().transform((v) => !!v),
+      short: text,
     }),
   }),
   clients: defineCollection({
@@ -115,6 +117,7 @@ export const collections = {
       availabilityText: z.string(),
       email: z.string().email(),
       responseTime: z.string(),
+      nextSteps: text,
       socialLinks: z.array(z.object({ label: z.string(), url: z.string().url() })).nullish().transform((v) => v ?? []),
       companyName: z.string(),
       companyNumber: z.string().nullish(),

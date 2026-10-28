@@ -131,7 +131,7 @@ content:
       - name: outcome
         label: Outcome
         type: string
-        description: "One short line, e.g. \"Now a UK-registered trademark.\""
+        description: "One short line, e.g. \"Now a UK-registered trademark.\" Also shows on the home page work card."
       - name: problem
         label: The problem
         type: text
@@ -225,6 +225,8 @@ content:
       - { name: role, label: Role, type: string, required: true }
       - { name: organisation, label: Organisation, type: string, required: true }
       - { name: onHomePage, label: Show on the home page, type: boolean, description: "Tick one quote only." }
+      - { name: inHero, label: Show under the home page stats, type: boolean, description: "Tick one quote only. Pick a different client from the one above, so the two don't look the same." }
+      - { name: short, label: Short version, type: text, description: "Optional. A few words cut from the quote, word for word, for under the stats. Empty shows the whole quote." }
 
   - name: clients
     label: Clients
@@ -324,6 +326,7 @@ content:
       - { name: availabilityText, label: Availability text, type: string, required: true }
       - { name: email, label: Email, type: string, required: true }
       - { name: responseTime, label: Reply time, type: string, required: true, description: "Finishes the sentence \"I reply...\", e.g. within three working days" }
+      - { name: nextSteps, label: What happens next, type: text, description: "One line under the enquiry buttons and the form. {reply time} becomes the Reply time above. Empty hides it." }
       - name: socialLinks
         label: Social links
         type: object

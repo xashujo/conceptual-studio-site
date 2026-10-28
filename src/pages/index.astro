@@ -9,7 +9,7 @@ import '../styles/tokens.css';
 import '../styles/components.css';
 import { Image } from 'astro:assets';
 import { email, startHref, quoteHref, sentence, trustedBy } from '../data/site';
-import { availability, homeQuote, responseTime, home } from '../lib/site';
+import { availability, homeQuote, heroQuote, responseTime, nextSteps, home } from '../lib/site';
 import { featured, projectHref, homeFilters, bySlug } from '../data/work';
 import { services } from '../data/services';
 import heroArt from '../assets/art/engraved/jardin-quiet.jpg';
@@ -33,7 +33,7 @@ const stats = home.stats.map((s) => ({ n: s.number, after: s.after, label: s.lab
 const SHOWN = 4;
 const cards = featured.map((p) => ({
   title: p.title, year: p.year, href: projectHref(p), image: p.image, alt: p.alt,
-  position: p.homePosition ?? p.position, filter: p.homeFilter, student: p.student,
+  position: p.homePosition ?? p.position, filter: p.homeFilter, student: p.student, outcome: p.outcome,
 }));
 // Why clients choose us (pass 2): the two case studies' own summaries from the CMS, beside the quote.
 const results = home.results.map(bySlug) // Pages CMS: Home page > Why Clients Choose Us
@@ -97,6 +97,13 @@ const menu = services.flatMap((s) => s.href?.includes('#')
             ))}
           </ul>
         </section>
+        <!-- One client's words straight under the stats, so trust lands before the scroll (Josh, 28 Oct). Not the quote further down. -->
+        {heroQuote && (
+          <figure class="hero__quote">
+            <blockquote><p>“{heroQuote.short || heroQuote.quote}”</p></blockquote>
+            <figcaption><b>{heroQuote.name}</b>, {heroQuote.role}, {heroQuote.organisation}</figcaption>
+          </figure>
+        )}
         {trustedBy.length > 0 && (
           <p class="hero__with"><b>{home.trustedByLabel}</b> {trustedBy.join(', ')} &amp; More</p>
         )}
@@ -129,6 +136,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
                     </span>
                     <span class="card__y">{c.year}</span>
                   </span>
+                  {c.outcome && <span class="card__out">{c.outcome}</span>}
                 </a>
               </li>
             ))}
@@ -245,6 +253,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
             <button class="btn" type="button" data-copy={email}><span data-label>Copy Email</span></button>
             <span class="sr-only" aria-live="polite" data-status></span>
           </div>
+          {nextSteps && <p class="close__next">{nextSteps}</p>}
         </div>
       </section>
       <!-- Footer links and the garden engraving removed (Josh, 28 Oct): only the copyright stays, centred under the close. -->
@@ -428,6 +437,11 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   /* Trusted By: one centred line, a single space between the label and the names (Josh, 28 Oct). */
   .hero__with { justify-self: center; width: min(1140px, 100%); padding-top: 32px; font-size: 18px; line-height: 1.5; text-align: center; text-wrap: balance; }
   .hero__with b { font-weight: 600; }
+  .hero__quote { justify-self: center; width: min(760px, 100%); margin: 0; padding-top: 40px; text-align: center; }
+  .hero__quote blockquote { margin: 0; }
+  .hero__quote p { font-size: 22px; line-height: 1.4; letter-spacing: -0.01em; text-wrap: balance; }
+  .hero__quote figcaption { margin-top: 10px; font-size: 16px; line-height: 1.45; color: var(--ink-2); }
+  .hero__quote figcaption b { font-weight: 600; color: var(--ink); }
 
   /* The field: an etching behind each band of glass, scrolling with it. Each fades in at the top and out at
      the foot, like the other art on the site. */
@@ -465,6 +479,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .card__t { font-size: 22px; line-height: 1.2; font-weight: 600; letter-spacing: -0.02em; }
   .card__y { font-size: 17px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
   .card__tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .card__out { display: block; margin-top: -8px; padding: 0 8px 2px; font-size: 17px; line-height: 1.4; color: var(--ink-2); }
   .tag { padding: 5px 11px; border-radius: var(--pill); background: color-mix(in srgb, var(--ink) 7%, transparent); font-size: 14px; font-weight: 500; line-height: 1.2; }
   /* Hover (Josh, 28 Oct): no rise; the card turns to its day glass, like the buttons in the night bands. */
   @media (hover: hover) { .fw .card.glass:hover { color-scheme: light; background: color-mix(in srgb, var(--paper) 90%, transparent); } } /* beats the night pane glass */
@@ -548,6 +563,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .close__h { grid-column: 1 / span 7; }
   .close__body { grid-column: 8 / -1; display: grid; gap: 24px; }
   .close__p { font-size: 20px; line-height: 1.5; }
+  .close__next { font-size: 16px; line-height: 1.5; opacity: 0.85; }
   .footer { padding: 0 var(--margin) 40px; text-align: center; font-size: 16px; color: var(--gold-ink); }
   .end { --gold-ink: #D9BE91; }
 
@@ -583,6 +599,8 @@ const menu = services.flatMap((s) => s.href?.includes('#')
     .hero__h { font-size: 34px; }
     .hero__p { font-size: 16px; line-height: 1.45; }
     .hero__with { padding-top: 24px; font-size: 16px; }
+    .hero__quote { padding-top: 28px; }
+    .hero__quote p { font-size: 18px; }
     .band { padding-bottom: 120px; }
     .stats { padding-top: 32px; }
     .stats__list { gap: 12px; }

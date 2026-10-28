@@ -29,6 +29,8 @@ export interface Project {
   /** true when /work/<slug>/ exists */
   caseStudy?: boolean;
   featured: boolean; featuredOrder?: number; homePosition?: string;
+  /** One result line, shown on the home page card. */
+  outcome?: string;
   /** The home page filter it shows under; empty for none (it still shows under All). */
   homeFilter?: HomeFilter;
   homeCharts: (Plate & { title: string })[];
@@ -59,6 +61,7 @@ export const projects: Project[] = entries.map(({ data: d }) => ({
   student: d.studentWork || undefined,
   caseStudy: d.hasPage || undefined,
   featured: d.featured, featuredOrder: d.featuredOrder ?? undefined, homePosition: d.homeFocus ?? undefined,
+  outcome: d.outcome || undefined,
   homeFilter: d.homeFilter ?? d.filters.map((f) => homeFromWork[f]).find(Boolean),
   homeCharts: d.homeCharts.map((c) => ({ image: c.src, alt: c.alt, title: c.title, medium: c.caption })),
 }));
