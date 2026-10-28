@@ -737,3 +737,47 @@ Museum model:
 - Custom quote: its own centred glass panel under the services, set like the
   hero plate: "Need Something Else?", one sentence, "Ask for a Custom Quote".
 - The hero plate is 680px wide (was 640) so its three buttons sit on one line.
+
+## Home page, pass 2 of 2 (28 Oct 2026, branch home-pass-2)
+- Built on home-pass-1 (not yet on main). Voice is "we / our" across the whole home page now, including
+  the close. Other pages still say "I". [TBC: other pages]
+- Who I work with is replaced by "Why Clients Choose Us": Alison Arnaud's quote verbatim in one large glass
+  pane, with two smaller glass panes stacked beside it (7 + 5), each a case study's own CMS summary
+  (Oxford School of English; Strategic Intent) and "Read the Case Study". Then a glass "Start a Project".
+  The client lists are gone from the home page; Trusted By near the top already names the clients.
+  The quote's opening mark hangs into the margin.
+- How We Work keeps the bento, now under a big heading like the sections above. Steps: Call & Brief,
+  Design & Feedback, Revisions & Finishing, Handover, rewritten to "we".
+- About: no training or career history and no facts grid (Josh). Two short paragraphs on what the studio
+  does for clients, and three principles under one hairline (Clarity First, Made to Be Used, Straight
+  Answers), each resting on something the site already promises (fixed quote, reply time, guidelines
+  your own team can use). Link: "More About the Studio".
+- Six big Agatho headings on the home page now (Featured Work, Services, Why Clients Choose Us, How We Work,
+  About, Start a Project). Pass 1 set this pattern and pass 2 follows it. This goes past DECISIONS' "big
+  Agatho in one or two moments per page". [TBC: Josh to accept, or keep big type for Featured Work and the
+  close only]
+- End of page (Josh's mockup, 28 Oct): footer links, the footer text and the garden engraving are removed.
+  Lemoyne's ceiling now fills the whole close down to the bottom of the page, and "© 2026 Conceptual Studio
+  Limited" sits centred on it under the Start a Project and Copy Email buttons. The garden engraving file
+  stays in the repo (other pages use the shared footer).
+- Phone menu: the nav's Menu button opens a glass sheet with the five links (native popover: Escape and
+  tapping outside close it). It used to jump to the footer links, which no longer exist.
+- Nav current pill: a lifted piece of the same glass, lighter than the bar, lit from the top left, instead
+  of a darker pill with a dark outline (Josh: "something about it feels off"; it read as pressed in and
+  greyish). On the dark nav it is a warm gold tint. The filters share it. It now follows the section in view
+  (Home, Work, Services, About, Contact) instead of staying on Home.
+- Nav glass: plain frosted shared .glass, no lens bend (Josh, 28 Oct). Bent, with Reach at 200, the whole
+  bar smeared the page scrolling under it into streaks, and in Firefox it stayed cream with cream text over
+  the night chapters. Its scroll-edge colour and dark colour are now set outright, so every browser turns
+  it dark over the close. This replaces "the nav and the hero plate are lens glass" (27 Oct) for the nav.
+  The hero plate and the panes keep the lens.
+- Background art scrolls with the page now (Josh: the held image made it feel as if the page wasn't moving).
+  Two bands, each fading in at the top and out at the foot, at the home page's 60% strength:
+  - Stats and Featured Work: La Chasse Chinoise (Huquier after Boucher, The Met 53.600.1009, public domain),
+    the hills crop (hunt-hills-gold), so Featured Work has its own image (Josh).
+  - Services and Why Clients Choose Us: the Jardin etching as before, now scrolling.
+  This replaces pass 1's held field. [TBC: the hunt file is 1600px wide, so it is enlarged about 1.8x at
+  1440; a larger scan from The Met would sharpen it]
+- Not changed, for Josh to edit in Pages CMS: the Brand Identity summary ends "without coming back to me
+  every time". It is shared with the Services pages, which still say "I". [TBC]
+- The stat label "of Clients Return for More Work" starts lowercase on purpose: it reads on from "90%".

@@ -114,17 +114,21 @@ a { color: inherit; }
 /* Glass button: a .btn made of the glass. Hover and press deepen the glass rather than replace it. */
 .btn.glass-button { --fill: var(--glass-bg); --fill-hover: color-mix(in srgb, var(--ink) 7%, var(--glass-bg)); --fill-pressed: color-mix(in srgb, var(--ink) 13%, var(--glass-bg)); text-decoration: none; }
 /* The current page in the nav and the chosen filter (Josh, 28 Oct; replaces TASTE 23's brackets).
-   Plain text at rest, a faint tint on hover; the current one is a darker tinted pill with a fine edge.
-   Built from --ink, so it inverts with the nav over dark sections. */
+   Plain text at rest, a faint tint on hover. The current one is a lifted piece of the same glass, lighter
+   than the bar, lit from the top left (pass 2: the old darker, outlined pill read as pressed-in and greyish). */
 .glass-pill {
   display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: 0; border-radius: var(--pill);
   background: transparent; color: inherit; font: 500 17px/1 var(--text); letter-spacing: -0.01em; text-decoration: none; white-space: nowrap; cursor: pointer;
   transition: background-color 200ms ease-out, box-shadow 200ms ease-out, color 300ms ease-out;
 }
 @media (hover: hover) { .glass-pill:hover { background: color-mix(in srgb, var(--ink) 6%, transparent); } }
-.glass-pill:is([aria-current='page'], [aria-pressed='true']) {
-  background: color-mix(in srgb, var(--ink) 11%, transparent);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 16%, transparent), inset 1px 1px 0 rgb(255 250 240 / calc(0.4 * var(--g-shine)));
+.glass-pill:is([aria-current], [aria-pressed='true']) {
+  background: color-mix(in srgb, #FFFAF0 62%, transparent);
+  box-shadow: inset 1px 1px 0 rgb(255 250 240 / calc(0.9 * var(--g-shine))), 0 0 0 0.5px rgb(110 80 36 / 0.14), 2px 4px 12px -6px rgb(40 24 8 / 0.28);
+}
+:is(.night, .is-dark) .glass-pill:is([aria-current], [aria-pressed='true']) {
+  background: color-mix(in srgb, #D9BE91 22%, transparent); /* warm gold lift, not grey */
+  box-shadow: inset 1px 1px 0 rgb(237 220 180 / calc(0.35 * var(--g-shine))), 2px 4px 12px -6px rgb(0 0 0 / 0.5);
 }
 .glass-pill:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
