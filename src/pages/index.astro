@@ -3,6 +3,7 @@
 // Pass 1 of 2 (Josh, 28 Oct): sticky nav, stats, filtered compact work grid, services accordion,
 // all in the shared glass, over the etching carried down behind them.
 import Tune from '../components/Tune.astro';
+import Logo from '../components/Logo.astro';
 import { glassStyle } from '../lib/site';
 import '../styles/tokens.css';
 import '../styles/components.css';
@@ -12,7 +13,6 @@ import { availability, homeQuote, responseTime, home } from '../lib/site';
 import { featured, projectHref, homeFilters, bySlug } from '../data/work';
 import { services } from '../data/services';
 import heroArt from '../assets/art/engraved/jardin-quiet.jpg';
-import workArt from '../assets/art/engraved/hunt-hills-gold.jpg'; // La Chasse Chinoise, Huquier after Boucher, The Met 53.600.1009, public domain
 import closeArt from '../assets/art/engraved/lemoyne-night.jpg';
 
 const headline = home.headline; // Pages CMS: Home page (option 3, Josh, 26 Oct)
@@ -60,7 +60,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   <body>
     <!-- Sticky glass nav. It turns light over the night chapters (script below). -->
     <nav class="nav glass" aria-label="Main" data-lens data-nav>
-      <a class="nav__mark" href="/">Conceptual Studio</a>
+      <Logo />
       <ul class="nav__links">
         <li><a class="glass-pill" href="#top" aria-current="true">Home</a></li>
         {links.map(([l, h]) => <li><a class="glass-pill" href={h}>{l}</a></li>)}
@@ -105,8 +105,10 @@ const menu = services.flatMap((s) => s.href?.includes('#')
       <!-- Art behind the glass, so every pane has something to bend (Josh, 28 Oct). Two bands that scroll with
            the page, each its own etching (pass 2, Josh: the held image made the page feel like it wasn't moving). -->
       <div class="field">
-        <div class="band" style="--art-h: 1800px">
-        <div class="band__art" aria-hidden="true"><Image src={workArt} alt="" widths={[800, 1600]} sizes="100vw" /></div>
+        <!-- The sections alternate night and day (Josh, 28 Oct): Work night, Services day, Why Clients night,
+             How We Work and About day, then the close at night to the end. Each night band has its own night engraving. -->
+        <div class="band night" style="--art-h: 1100px">
+        <div class="band__art" aria-hidden="true"><Image src={home.workImage} alt="" widths={[800, 1600]} sizes="100vw" /></div>
 
         <section class="fw wrap" id="work" aria-labelledby="fw-h">
           <h2 class="fw__h big" id="fw-h">{home.workHeading}</h2>
@@ -172,6 +174,10 @@ const menu = services.flatMap((s) => s.href?.includes('#')
           </div>
         </section>
 
+        </div>
+
+        <div class="band night" style="--art-h: 1100px">
+        <div class="band__art" aria-hidden="true"><Image src={home.proofImage} alt="" widths={[800, 1600]} sizes="100vw" /></div>
         <!-- Why clients choose us (pass 2): one client's words in the large pane, two results stacked beside it.
              Inside the field so the glass has the etching behind it. -->
         <section class="proof wrap" aria-labelledby="proof-h">

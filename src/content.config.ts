@@ -102,6 +102,8 @@ export const collections = {
       howHeading: z.string().min(1),
       howIntro: z.string().min(1),
       howImage: image(),
+      workImage: image(),
+      proofImage: image(),
       steps: z.array(z.object({ title: z.string().min(1), text: z.string().min(1) })),
       values: z.array(z.object({ title: z.string().min(1), text: z.string().min(1) })),
     }),

@@ -278,6 +278,18 @@ content:
         list: true
         description: "The projects shown beside the quote, with their summaries."
         options: { collection: projects, value: "{path}", label: "{title}", search: title }
+      - name: workImage
+        label: Selected Work background
+        type: image
+        required: true
+        description: "The night engraving behind the work cards (a dark section). Use a gold-on-black file; it's shown faded behind the glass."
+        options: { media: images }
+      - name: proofImage
+        label: Why Clients Choose Us background
+        type: image
+        required: true
+        description: "The night engraving behind the quote and results (a dark section). Use a gold-on-black file."
+        options: { media: images }
       - { name: howHeading, label: How We Work heading, type: string, required: true }
       - { name: howIntro, label: How We Work intro, type: text, required: true }
       - name: howImage
