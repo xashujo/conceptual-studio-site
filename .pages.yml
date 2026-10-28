@@ -303,6 +303,12 @@ content:
         required: true
         description: "The night engraving behind the quote and results (a dark section). Use a gold-on-black file."
         options: { media: images }
+      - name: servicesImage
+        label: Services background
+        type: image
+        required: true
+        description: "The painting behind the Services list (a light section). Use a gold-toned file; it's shown faded behind the glass."
+        options: { media: images }
       - { name: howHeading, label: How We Work heading, type: string, required: true }
       - { name: howIntro, label: How We Work intro, type: text, required: true }
       - name: howImage

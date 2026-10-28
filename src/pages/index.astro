@@ -116,7 +116,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
       <div class="field">
         <!-- The sections alternate night and day (Josh, 28 Oct): Work night, Services day, Why Clients night,
              How We Work and About day, then the close at night to the end. Each night band has its own night engraving. -->
-        <div class="band night" style="--art-h: 1100px">
+        <div class="band night">
         <div class="band__art" aria-hidden="true"><Image src={home.workImage} alt="" widths={[800, 1600]} sizes="100vw" /></div>
 
         <section class="fw wrap" id="work" aria-labelledby="fw-h">
@@ -165,8 +165,8 @@ const menu = services.flatMap((s) => s.href?.includes('#')
         </section>
         </div>
 
-        <div class="band" style="--art-h: 2400px">
-        <div class="band__art" aria-hidden="true"><Image src={heroArt} alt="" widths={[800, 1600, 2400]} sizes="100vw" /></div>
+        <div class="band">
+        <div class="band__art" aria-hidden="true"><Image src={home.servicesImage} alt="" widths={[800, 1600, 2400]} sizes="100vw" /></div>
         <section class="services wrap" id="services" aria-labelledby="services-h">
           <h2 class="big services__h" id="services-h">Services</h2>
           <p class="services__intro">Every project is priced on its scope, so these are starting points. You'll get a fixed quote after our first call.</p>
@@ -200,7 +200,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
 
         </div>
 
-        <div class="band night" style="--art-h: 1100px">
+        <div class="band night">
         <div class="band__art" aria-hidden="true"><Image src={home.proofImage} alt="" widths={[800, 1600]} sizes="100vw" /></div>
         <!-- Why clients choose us (pass 2): one client's words in the large pane, two results stacked beside it.
              Inside the field so the glass has the etching behind it. -->
@@ -227,7 +227,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
 
         <!-- How we work: a real ordered list, the order carried by position, not numerals. Its own painting behind
              the glass tiles, so they have something to bend (Josh, 28 Oct). -->
-        <div class="band" style="--art-h: 1200px">
+        <div class="band">
         <div class="band__art" aria-hidden="true"><Image src={home.howImage} alt="" widths={[800, 1600, 2400]} sizes="100vw" /></div>
         <section class="how wrap" aria-labelledby="how-h">
           <div class="how__head">
@@ -477,12 +477,8 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   /* The art's size is fixed by the page width, never by the band's height, so filtering the work or opening a
      service doesn't zoom it (Josh, 28 Oct). The band crops it; the fade sits on the band's edges. */
   .band__art { -webkit-mask-image: linear-gradient(transparent, #000 180px, #000 calc(100% - 140px), transparent); mask-image: linear-gradient(transparent, #000 180px, #000 calc(100% - 140px), transparent); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
-  .band__art img { width: 100%; height: var(--art-h); /* each band sets it a little above its tallest state */ object-fit: cover; object-position: 50% 20%; opacity: 0.6; -webkit-mask-image: linear-gradient(#000 calc(100% - 240px), transparent); mask-image: linear-gradient(#000 calc(100% - 240px), transparent); } /* 60% is the home page's "quiet" strength */
-  .band:first-child .band__art img { object-position: 50% 0%; }
-  /* Calm the art to the close's Lemoyne (Josh, 28 Oct: the rest felt busy): flatter tone and softened hatching,
-     so the engravings read as soft masses, not fine line. In CSS, so any image swapped in through the CMS calms too. */
-  .band__art img { filter: contrast(0.62) blur(1.5px); }
-  .band.night .band__art img { filter: contrast(0.8) blur(1.5px); opacity: 0.5; } /* less contrast here would grey the black */
+  .band__art img { width: 100%; height: auto; /* its own shape, so it is never zoomed past the page width */ opacity: 0.6; -webkit-mask-image: linear-gradient(#000 calc(100% - 240px), transparent); mask-image: linear-gradient(#000 calc(100% - 240px), transparent); } /* 60% is the home page's "quiet" strength */
+  .band.night .band__art img { opacity: 0.9; } /* the night art is toned dark already, like the close */
 
   /* One centred column for everything under the opening (Josh, 28 Oct: "centred to the page").
      Headings stay left-aligned inside it. 1140px lets both rows of work fit one screen at 1440. */

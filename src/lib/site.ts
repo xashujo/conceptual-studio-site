@@ -77,4 +77,8 @@ export const art = {
     title: 'La Pêche Chinoise (The Chinese Fishing Party), François Boucher, 1742',
     medium: 'Oil on canvas, Musée des Beaux-Arts et d’Archéologie, Besançon. Public domain. Toned in gold. [TBC: where the scan came from]',
   },
+  apotheosis: {
+    title: 'The Apotheosis of Hercules, François Lemoyne, 1731–1736',
+    medium: 'Ceiling painting, Salon d’Hercule, Château de Versailles. Public domain. Toned in gold. [TBC: where the scan came from]',
+  },
 };
