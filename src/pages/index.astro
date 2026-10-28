@@ -152,7 +152,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
               <div class="acc__row">
                 <h3 class="acc__h">
                   <button class="acc__btn" type="button" id={`svc-${s.id}-btn`} aria-controls={`svc-${s.id}`} aria-expanded="true">
-                    <span>{s.name}{s.badge && <span class="acc__badge">{s.badge}</span>}</span><span class="acc__icon" aria-hidden="true"></span>
+                    <span>{s.name}{s.badge && <span class="acc__badge badge">{s.badge}</span>}</span><span class="acc__icon" aria-hidden="true"></span>
                   </button>
                 </h3>
                 <div class="acc__panel" id={`svc-${s.id}`} role="region" aria-labelledby={`svc-${s.id}-btn`}>
@@ -487,7 +487,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .acc__body { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px 48px; align-items: end; padding-bottom: 30px; }
   .acc__text { grid-row: span 2; align-self: start; max-width: 54ch; font-size: 20px; line-height: 1.5; }
   .acc__price { text-align: right; font-size: 24px; line-height: 1.25; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
-  .acc__badge { display: inline-block; margin-left: 12px; padding: 6px 12px; border-radius: var(--pill); background: var(--ink); color: var(--paper); font-size: 14px; font-weight: 600; line-height: 1; letter-spacing: 0; vertical-align: 0.25em; }
+  .acc__badge { margin-left: 12px; vertical-align: 0.2em; }
   .acc__price span { display: block; font-size: 17px; font-weight: 400; letter-spacing: 0; color: var(--ink-2); }
   .acc__go { justify-self: end; }
 

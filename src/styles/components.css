@@ -131,6 +131,12 @@ a { color: inherit; }
   box-shadow: inset 1px 1px 0 rgb(237 220 180 / calc(0.35 * var(--g-shine))), 2px 4px 12px -6px rgb(0 0 0 / 0.5);
 }
 .glass-pill:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+/* A small tag such as "Most Popular": the chosen dark-nav pill (gold lift on the nav's warm black, cream text), so it reads as the same system on any ground. */
+.badge {
+  display: inline-block; padding: 7px 13px; border-radius: var(--pill); font: 600 14px/1 var(--text); letter-spacing: 0; color: #F1DFC8;
+  background: linear-gradient(color-mix(in srgb, #D9BE91 22%, transparent) 0 0), rgb(34 29 23 / 0.88);
+  box-shadow: inset 1px 1px 0 rgb(237 220 180 / calc(0.35 * var(--g-shine))), 2px 4px 12px -6px rgb(0 0 0 / 0.5);
+}
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .glass, .glass-button { background: color-mix(in srgb, var(--paper) 92%, transparent); }
 }
