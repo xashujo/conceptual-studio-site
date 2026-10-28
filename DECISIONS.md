@@ -843,8 +843,9 @@ Museum model:
   replaced by pass 2) at 83302d0.
 
 ## Home page conversion pass (28 Oct 2026, Josh)
-- Hero: "See the Work" swaps to "Selected Work ↓" on hover, like the other
-  buttons; phones keep "See the Work". It scrolls (smoothly) to the work.
+- Hero: the third button is a plain "Selected Work ↓" (no label swap), the
+  same height, padding and type as Start a Project and the availability
+  pill, with the same faint hover. It scrolls (smoothly) to the work.
 - The stats moved up into the opening, straight under the hero plate, then
   Trusted By as one centred line with a single space after the label. Stat
   figures are set looser (0.01em) with the + or % nudged off them, and a

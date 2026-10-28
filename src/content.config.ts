@@ -94,7 +94,6 @@ export const collections = {
       headline: z.string().min(1),
       intro: z.string().min(1),
       workButton: z.string().min(1),
-      workButtonHover: z.string().min(1),
       trustedByLabel: z.string().min(1),
       stats: z.array(z.object({ number: z.number(), after: z.string().nullish().transform((s) => s ?? ''), label: z.string().min(1) })),
       workHeading: z.string().min(1),
