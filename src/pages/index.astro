@@ -628,10 +628,10 @@ const menu = services.flatMap((s) => s.href?.includes('#')
 
   /* Close and footer, on warm black. */
   .end { position: relative; isolation: isolate; background: var(--paper); }
-  .close { position: relative; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-block: min(560px, 40vw) 96px; align-items: end; }
+  .close { position: relative; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-block: min(560px, 40vw) 96px; align-items: start; } /* heading top level with the glass panel (Josh, 28 Oct) */
   .close__art { position: absolute; inset: 0; z-index: -1; overflow: hidden; }
   .close__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%); mask-image: linear-gradient(to bottom, transparent, #000 14%); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
-  .close__h { grid-column: 1 / span 7; }
+  .close__h { grid-column: 1 / span 6; margin-top: -0.18em; } /* cap tops, not the line box, level with the panel */
   .close__body { grid-column: 7 / -1; justify-self: end; width: min(680px, 100%); box-sizing: border-box; display: grid; gap: 24px; padding: var(--sp-card); border-radius: 28px; } /* dark glass so it reads over the Lemoyne (Josh, 28 Oct) */
   .close__p { font-size: 20px; line-height: 1.5; }
   .close__next { font-size: 16px; line-height: 1.5; opacity: 0.85; }
