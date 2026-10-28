@@ -828,3 +828,7 @@ Museum model:
   were already in the CMS. The built home page is identical before and after.
 - The stats are still placeholders from the brief. [TBC: Josh to confirm the
   four figures before launch.]
+- CMS fixes (28 Oct): Services showed empty because Pages CMS assumes .md
+  files when a collection names no file type; it now says yml. Laura De Vos
+  and Mark Silverman added as testimonials, word for word from brief
+  Appendix A, not on the home page.
