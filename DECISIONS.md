@@ -814,3 +814,7 @@ Museum model:
 - Not changed, for Josh to edit in Pages CMS: the Brand Identity summary ends "without coming back to me
   every time". It is shared with the Services pages, which still say "I". [TBC]
 - The stat label "of Clients Return for More Work" starts lowercase on purpose: it reads on from "90%".
+- Tried and reverted (Josh, 28 Oct: "it was better before"): a red and blue chromatic fringe and lit inner
+  edge on every glass piece in every browser, with 12px blur on unbent chrome (commit de157e0). The glass
+  stays as glass-light set it.
+- Home pass 2 merged to main with Josh's OK (28 Oct).
