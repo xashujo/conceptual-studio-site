@@ -317,6 +317,12 @@ content:
         required: true
         description: "The painting behind the How We Work tiles. Upload a large, wide file. Any picture works: the site tones it gold and fades it behind the glass."
         options: { media: images }
+      - name: aboutImage
+        label: About background
+        type: image
+        required: true
+        description: "The painting behind About. Upload a large, wide file. Any picture works: the site tones it gold and fades it behind the text."
+        options: { media: images }
       - name: steps
         label: How We Work
         type: object

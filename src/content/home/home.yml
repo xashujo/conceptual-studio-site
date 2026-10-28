@@ -48,6 +48,7 @@ howHeading: How We Work
 howIntro: How a project runs, from the first call to the files you keep.
 servicesImage: "@assets/art/engraved/apotheosis-services.jpg"
 howImage: "@assets/art/engraved/apotheosis-how.jpg"
+aboutImage: "@assets/art/engraved/apotheosis-about.jpg"
 steps:
   - title: Call & Brief
     text: We talk through what you need, your budget, the formats and what the work

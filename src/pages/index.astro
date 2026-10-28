@@ -255,20 +255,23 @@ const menu = services.flatMap((s) => s.href?.includes('#')
           </ol>
         </section>
         </div>
-      </div>
 
-      <!-- About (pass 2): what we do for clients, not a CV. -->
-      <section class="about wrap" id="about" aria-labelledby="about-h">
-        <h2 class="big about__h" id="about-h">About</h2>
-        <div class="about__text">
-          <p class="about__lead">We make complex ideas clear. Strategies, mergers and annual figures become charts, maps and pages that people take in at a glance and remember.</p>
-          <p>We build brands that get recognised before anyone reads the name, with a system clear enough to hold together from a bus shelter poster to a student ID card.</p>
-          <a class="btn glass-button" href="/about/">More About the Studio <span class="arrow" aria-hidden="true">→</span></a>
+        <div class="band">
+        <div class="band__art" aria-hidden="true"><Image src={home.aboutImage} alt="" widths={[800, 1600, 2400]} sizes="100vw" /></div>
+        <!-- About (pass 2): what we do for clients, not a CV. -->
+        <section class="about wrap" id="about" aria-labelledby="about-h">
+          <h2 class="big about__h" id="about-h">About</h2>
+          <div class="about__text">
+            <p class="about__lead">We make complex ideas clear. Strategies, mergers and annual figures become charts, maps and pages that people take in at a glance and remember.</p>
+            <p>We build brands that get recognised before anyone reads the name, with a system clear enough to hold together from a bus shelter poster to a student ID card.</p>
+            <a class="btn glass-button" href="/about/">More About the Studio <span class="arrow" aria-hidden="true">→</span></a>
+          </div>
+          <ul class="about__values">
+            {values.map(([t, d]) => <li><h3>{t}</h3><p>{d}</p></li>)}
+          </ul>
+        </section>
         </div>
-        <ul class="about__values">
-          {values.map(([t, d]) => <li><h3>{t}</h3><p>{d}</p></li>)}
-        </ul>
-      </section>
+      </div>
     </main>
 
     <!-- Close and footer: one night chapter to the end of the page, the garden engraving rising from the bottom. -->
