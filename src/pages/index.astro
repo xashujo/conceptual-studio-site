@@ -152,7 +152,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
               <div class="acc__row">
                 <h3 class="acc__h">
                   <button class="acc__btn" type="button" id={`svc-${s.id}-btn`} aria-controls={`svc-${s.id}`} aria-expanded="true">
-                    <span>{s.name}{s.badge && <span class="acc__badge badge">{s.badge}</span>}</span><span class="acc__icon" aria-hidden="true"></span>
+                    <span>{s.name}{s.badge && <span class="acc__badge badge">{s.badge}</span>}</span><span class="acc__from">{s.price}</span><span class="acc__icon" aria-hidden="true"></span>
                   </button>
                 </h3>
                 <div class="acc__panel" id={`svc-${s.id}`} role="region" aria-labelledby={`svc-${s.id}-btn`}>
@@ -480,6 +480,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .acc__row + .acc__row { border-top: 1px solid color-mix(in srgb, var(--ink) 16%, transparent); }
   .acc__btn { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 24px; padding: 26px 0; border: 0; background: none; color: inherit; font: 600 28px/1.2 var(--text); letter-spacing: -0.02em; text-align: left; cursor: pointer; }
   .acc__btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 8px; }
+  .acc__from { margin-left: auto; font-size: 17px; font-weight: 400; letter-spacing: 0; color: var(--ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; } /* starting price, seen before the row opens */
   .acc__icon { position: relative; flex: none; width: 20px; height: 20px; transition: transform 320ms var(--ease-out); }
   .acc__icon::before, .acc__icon::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 2px; margin-top: -1px; border-radius: 1px; background: currentColor; }
   .acc__icon::after { transform: rotate(90deg); }
@@ -598,7 +599,8 @@ const menu = services.flatMap((s) => s.href?.includes('#')
     .card__y { font-size: 15px; }
     .services__intro { font-size: 17px; }
     .acc { padding: 2px 20px; border-radius: 26px; }
-    .acc__btn { font-size: 21px; padding: 20px 0; }
+    .acc__btn { font-size: 21px; padding: 20px 0; gap: 14px; }
+    .acc__from { font-size: 14px; }
     .acc__body { grid-template-columns: 1fr; gap: 14px; padding-bottom: 24px; }
     .acc__text { grid-row: auto; font-size: 17px; }
     .acc__price { text-align: left; font-size: 21px; }
