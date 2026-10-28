@@ -673,3 +673,67 @@ Museum model:
 - Nothing reaches the site. Changes are kept in the browser per page, can be
   undone one by one, and "Copy my changes" gives a list (page, element, screen
   width, before and after, selector) for Claude to apply to the right styles.
+
+## Home page, pass 1 of 2 (28 Oct 2026, branch home-pass-1)
+- Brief: "Update the HOME PAGE", pass 1. Goal: convert visitors into clients; read
+  as an established studio, not a freelancer's CV.
+- Voice on the home page is "we / our" (Josh, 28 Oct). This replaces "the voice
+  stays I" for the sections pass 1 touches. Who I work with, How I work, About and
+  the close still say "I" until pass 2. [TBC: other pages]
+- Title Case for headings, nav, buttons, card titles and labels, with "&" for
+  "and" (Josh). Body text stays in sentence case. A small titleCase() on the home
+  page applies it to CMS text (service names, availability), so the CMS entries
+  themselves don't change.
+- Glass is shared: .glass (panels and cards), .glass-button (a .btn made of the
+  same glass), .is-dark (the dark version, switched by script), and .glass-pill
+  (nav items and filters). The values are defined once as --glass-bg,
+  --glass-filter and --glass-shadow on .glass and .glass-button. Panels and cards
+  on the home page also get the lens (data-lens), like the hero plate and nav.
+- Glass over flat paper: the Jardin etching now runs behind stats, featured work
+  and services as a held field (as on /work/), fading in at the top and out at the
+  foot, so every pane has art behind it (Josh, 28 Oct). Keeps "never glass on
+  flat paper".
+- The nav is sticky at the top on every scroll position (Josh). This replaces
+  "the nav scrolls away with the opening" and TASTE 24's bottom dock for the home
+  page. It turns light over night chapters (IntersectionObserver), and once page
+  content passes under it, paper fills in behind it (the scroll edge in TASTE's
+  glass spec) so labels never sit on bent text.
+- The current page is a filled tinted pill with aria-current, not brackets (Josh,
+  28 Oct). This replaces TASTE 23 on the home page.
+- Firefox and Safari: the nav and the field panes keep the clear CSS glass, not the
+  WebGL bend, because they move over live content (a captured painting would go
+  stale). The hero plate keeps the WebGL bend there.
+- Under the opening, stats, featured work, services and the quote panel sit in one
+  centred 1140px column; headings stay left-aligned inside it (Josh, 28 Oct:
+  "centred to the page"). Trusted By sits in the same column.
+- Trusted By replaces Worked with. Its names come from a new optional CMS field on
+  Clients, "Show in Trusted By on the home page", in their Order, then "& More":
+  New City College London, Southbank College Group, Oxford School of English,
+  New York General Group (Josh). Static line, no loop.
+- Stats: 50+ Projects Delivered, 1M+ Data Points Visualised, 48hr First-Concept
+  Turnaround, 90% of Clients Return for More Work. Josh's placeholders, marked
+  CONFIRM in the code. [TBC: Josh to confirm or replace each. 48hr needs checking
+  against "brand identity from 4 weeks" and "reply within three working days".]
+  They count up once when they come into view; with reduced motion they don't.
+- Featured work: compact glass cards, two to a row, every image 16:10, title,
+  category tag and year on one line, a 4px hover lift. Replaces the large cards,
+  the pair, and Strategic Intent's charts on the home page (TASTE 6 "one exhibit
+  per screen" no longer applies here). The plate captions under home cards are
+  dropped (the card line does the job). Both rows fit one screen at 1440.
+- Home filters: All, Branding, Data Visualisation, Social Media. New optional CMS
+  field on Projects, "Home page filter"; when empty it follows the Work page
+  filter (Brand identity to Branding, Data visualisation to Data Visualisation).
+  Set: Oxford, Pandora Forever (CGI), KUT: Branding; Strategic Intent: Data
+  Visualisation. There is no social media project yet, so that filter says "No
+  projects under this filter yet." [TBC: add social media work in the CMS]
+- More than four featured projects: the rest wait behind a Show More glass
+  button. The CMS "Home page position" help text now says this.
+- KUT Magazine keeps a "Student Work" tag on its card (honesty, as before).
+- Services: full-width accordion rows in one glass panel, one open at a time
+  (Brand Identity open first), plus icon turning to a cross. Name, then the
+  description, "from" price and time from the CMS, and a View Prices glass button.
+  Brand identity stays From £4,900 (Josh, 28 Oct; the brief's £4,800 was a typo).
+  The Oxford ID card image beside services is removed.
+- Custom quote: its own centred glass panel under the services, set like the
+  hero plate: "Need Something Else?", one sentence, "Ask for a Custom Quote".
+- The hero plate is 680px wide (was 640) so its three buttons sit on one line.

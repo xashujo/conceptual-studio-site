@@ -16,6 +16,7 @@ cover:
 coverFocus: 0% 0%
 featured: true
 featuredOrder: 2
+homeFilter: Data Visualisation
 homeFocus: 50% 8%
 homeCharts:
 - src: '@assets/work/new-city-college-strategic-intent/03.webp'

@@ -37,6 +37,10 @@ export const nav = [
 const shown = (await getCollection('clients', (c) => c.data.trustedBy))
   .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99) || a.data.name.localeCompare(b.data.name));
 export const clients = shown.map((c) => c.data.name);
+// Clients ticked "Show in Trusted By" in Pages CMS, in their set order, for the home page's line.
+export const trustedBy = (await getCollection('clients', (c) => c.data.homeTrusted))
+  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99) || a.data.name.localeCompare(b.data.name))
+  .map((c) => c.data.name);
 export const clientGroups = (['Education', 'Companies and international'] as const)
   .map((kind) => ({ kind, names: shown.filter((c) => (c.data.group ?? 'Companies and international') === kind).map((c) => c.data.name) }))
   .filter((g) => g.names.length);

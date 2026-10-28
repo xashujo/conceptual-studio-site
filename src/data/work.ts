@@ -12,6 +12,10 @@ export const filters = [
   ['archive', 'Archive: student work'],
 ] as const;
 export type Filter = (typeof filters)[number][0];
+// The home page's own filters (Josh, 28 Oct). A project without a Home page filter in the CMS follows its Work page filter.
+export const homeFilters = ['Branding', 'Data Visualisation', 'Social Media'] as const;
+export type HomeFilter = (typeof homeFilters)[number];
+const homeFromWork: Partial<Record<string, HomeFilter>> = { 'Brand identity': 'Branding', 'Data visualisation': 'Data Visualisation' };
 const filterKey: Record<string, Filter> = { 'Brand identity': 'brand', 'Data visualisation': 'data', '3D and motion': 'motion' };
 
 export interface Plate { image: ImageMetadata; alt: string; medium: string; }
@@ -25,6 +29,8 @@ export interface Project {
   /** true when /work/<slug>/ exists */
   caseStudy?: boolean;
   featured: boolean; featuredOrder?: number; homePosition?: string;
+  /** The home page filter it shows under; empty for none (it still shows under All). */
+  homeFilter?: HomeFilter;
   homeCharts: (Plate & { title: string })[];
 }
 export interface CaseStudy {
@@ -53,6 +59,7 @@ export const projects: Project[] = entries.map(({ data: d }) => ({
   student: d.studentWork || undefined,
   caseStudy: d.hasPage || undefined,
   featured: d.featured, featuredOrder: d.featuredOrder ?? undefined, homePosition: d.homeFocus ?? undefined,
+  homeFilter: d.homeFilter ?? d.filters.map((f) => homeFromWork[f]).find(Boolean),
   homeCharts: d.homeCharts.map((c) => ({ image: c.src, alt: c.alt, title: c.title, medium: c.caption })),
 }));
 

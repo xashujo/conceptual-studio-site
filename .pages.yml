@@ -102,7 +102,13 @@ content:
       - name: featuredOrder
         label: Home page position
         type: number
-        description: "1 and 2 are the large cards, 3 and 4 the pair side by side."
+        description: "Lower numbers come first. The first four show on the home page; any more appear under \"Show More\"."
+      - name: homeFilter
+        label: Home page filter (optional)
+        type: select
+        description: "Which filter button on the home page shows this project. Leave empty to follow the Work page filters (Brand identity shows under Branding, Data visualisation under Data Visualisation)."
+        options:
+          values: [Branding, Data Visualisation, Social Media]
       - name: homeFocus
         label: Home page crop (optional)
         type: string
@@ -225,7 +231,8 @@ content:
       sort: [order, name]
     fields:
       - { name: name, label: Name, type: string, required: true }
-      - { name: trustedBy, label: Show in "Worked with", type: boolean, description: "Shows the name on the home page and About page." }
+      - { name: trustedBy, label: Show in "Worked with", type: boolean, description: "Shows the name in the client lists on the About and Services pages and in \"Who I work with\" on the home page." }
+      - { name: homeTrusted, label: Show in "Trusted By" on the home page, type: boolean, description: "The line under the home page opening. Names follow the Order field, then \"& More\" is added." }
       - name: group
         label: Group
         type: select

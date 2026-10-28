@@ -2,3 +2,4 @@ name: New City College London
 trustedBy: true
 group: Education
 order: 1
+homeTrusted: true

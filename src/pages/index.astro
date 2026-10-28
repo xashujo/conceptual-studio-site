@@ -1,44 +1,53 @@
 ---
 // Home (brief 6.1), built on the chosen direction: Prototype A, the quiet etching (DECISIONS, 26 Oct).
-// Still for now: no motion and no WebGL glass. Glass is the static CSS tier, on the nav and the hero plate only.
+// Pass 1 of 2 (Josh, 28 Oct): sticky nav, stats, filtered compact work grid, services accordion,
+// all in the shared glass, over the etching carried down behind them.
 import Tune from '../components/Tune.astro';
 import { glassStyle } from '../lib/site';
 import '../styles/tokens.css';
 import '../styles/components.css';
 import { Image } from 'astro:assets';
-import ProjectCard from '../components/ProjectCard.astro';
-import PlateCaption from '../components/PlateCaption.astro';
-import { email, startHref, quoteHref, sentence, clients, clientGroups } from '../data/site';
+import { email, startHref, quoteHref, sentence, clientGroups, trustedBy } from '../data/site';
 import { availability, homeQuote, responseTime } from '../lib/site';
-import { featured, projectHref, type Project } from '../data/work';
+import { featured, projectHref, homeFilters } from '../data/work';
 import { services } from '../data/services';
 import heroArt from '../assets/art/engraved/jardin-quiet.jpg';
-import workArt from '../assets/art/engraved/jardin-panes.jpg';
 import footerArt from '../assets/art/engraved/garden-night.webp';
 import closeArt from '../assets/art/engraved/lemoyne-night.jpg';
-import idCards from '../assets/work/oxford-school-of-english/id-cards.webp';
 
 const headline = 'Brands & Data, Made Clear'; // option 3 (Josh, 26 Oct)
 const links = [['Work', '#work'], ['Services', '#services'], ['About', '#about'], ['Contact', '#contact']];
 
-// Featured work and the services menu come from Pages CMS (Projects and Services).
-// Home page positions 1 and 2 are large cards, 3 and 4 a pair.
-const card = (p: Project) => ({
-  title: p.title, year: p.year, href: projectHref(p), disciplines: p.disciplines, summary: p.summary,
-  image: p.image, alt: p.alt, position: p.homePosition ?? p.position,
-  caption: { title: p.client.startsWith(p.title) ? `${p.title}, ${p.year}` : `${p.title}, ${p.client}, ${p.year}`, medium: p.medium },
-});
-const large = featured.slice(0, 2);
-const pair = featured.slice(2, 4);
-const menu = services.map((s) => ({ name: s.name, price: s.home.price, time: s.home.time, href: s.href ?? '/services/', link: s.home.link, text: s.line }));
+// Title Case for headings, buttons and labels (Josh, 28 Oct): every word capitalised except the small
+// ones, never the first or last; "and" becomes "&". Capitals already there (KUT) are kept.
+const small = new Set(['a', 'an', 'the', 'of', 'to', 'in', 'on', 'for', 'at', 'by', 'or', 'but', 'with', 'as']);
+const titleCase = (s: string) => s.replace(/\band\b/gi, '&').split(' ')
+  .map((w, i, all) => (i > 0 && i < all.length - 1 && small.has(w.toLowerCase()) ? w.toLowerCase() : w.charAt(0).toUpperCase() + w.slice(1)))
+  .join(' ');
 
+// Placeholder figures from Josh's brief (28 Oct), not yet confirmed. Replace each before launch.
+const stats = [
+  { n: 50, after: '+', label: 'Projects Delivered' }, // CONFIRM
+  { n: 1, after: 'M+', label: 'Data Points Visualised' }, // CONFIRM
+  { n: 48, after: 'hr', label: 'First-Concept Turnaround' }, // CONFIRM
+  { n: 90, after: '%', label: 'of Clients Return for More Work' }, // CONFIRM
+];
+
+// Featured work and the services come from Pages CMS (Projects and Services).
+// The first four by home page position show; any more wait behind "Show More".
+const SHOWN = 4;
+const cards = featured.map((p) => ({
+  title: p.title, year: p.year, href: projectHref(p), image: p.image, alt: p.alt,
+  position: p.homePosition ?? p.position, filter: p.homeFilter, student: p.student,
+}));
+// How I work (outside pass 1, unchanged).
 const steps = [
   ['Call and brief', 'We talk through what you need, your budget, the formats, and what you want the work to achieve, so we both know what to expect before I start.'],
   ['Design and feedback', 'I share work in progress and we go back and forth on it, so nothing reaches the final round as a surprise.'],
   ['Revisions and finishing', 'I make your changes and finish every detail before anything is signed off.'],
   ['Handover', 'You get the final files in whatever format and by whatever method suits your team.'],
 ];
-
+const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.home.price, time: s.home.time, href: s.href ?? '/services/', link: titleCase(s.home.link), text: s.line }));
 ---
 <!doctype html>
 <html lang="en-GB" style={glassStyle}>
@@ -51,92 +60,114 @@ const steps = [
     <link rel="preload" href="/fonts/inter-4-variable.woff2" as="font" type="font/woff2" crossorigin />
   </head>
   <body>
+    <!-- Sticky glass nav. It turns light over the night chapters (script below). -->
+    <nav class="nav glass" aria-label="Main" data-lens data-nav>
+      <a class="nav__mark" href="/">Conceptual Studio</a>
+      <ul class="nav__links">
+        <li><a class="glass-pill" href="/" aria-current="page">Home</a></li>
+        {links.map(([l, h]) => <li><a class="glass-pill" href={h}>{l}</a></li>)}
+      </ul>
+      <a class="nav__menu glass-pill" href="#site-links">Menu</a>
+    </nav>
     <main>
-      <!-- Opening: the etching fills the screen; the nav and the plate are the page's two pieces of glass. -->
+      <!-- Opening: the etching fills the screen; the hero plate is glass over it. -->
       <header class="hero">
-        <nav class="nav glass" aria-label="Main" data-lens>
-          <a class="nav__mark" href="/">Conceptual Studio</a>
-          <ul class="nav__links">
-            <li><a href="/" aria-current="page">[Home]</a></li>
-            {links.map(([l, h]) => <li><a href={h}>{l}</a></li>)}
-          </ul>
-          <a class="nav__menu" href="#site-links">Menu</a>
-        </nav>
         <Image class="hero__art" src={heroArt} alt="" widths={[640, 1024, 1600, 2400]} sizes="100vw" loading="eager" fetchpriority="high" />
         <div class="hero__plate glass" data-lens>
           <h1 class="hero__h">{headline}</h1>
           <p class="hero__p">{sentence}</p>
           <div class="acts">
-            <a class="btn btn--solid" href={startHref}><span class="swap"><span>Start a project</span><span aria-hidden="true">Contact me ↗</span></span></a>
-            {availability.on && <a class="avail" href={`mailto:${email}`}><span class="avail__dot" aria-hidden="true"></span><span class="swap"><span>{availability.text}</span><span aria-hidden="true">↗ Email me</span></span></a>}
-            <a class="link" href="#work">See the work<span class="arrow" aria-hidden="true">→</span></a>
+            <a class="btn btn--solid" href={startHref}><span class="swap"><span>Start a Project</span><span aria-hidden="true">Contact Me ↗</span></span></a>
+            {availability.on && <a class="avail" href={`mailto:${email}`}><span class="avail__dot" aria-hidden="true"></span><span class="swap"><span>{titleCase(availability.text)}</span><span aria-hidden="true">↗ Email Me</span></span></a>}
+            <a class="btn glass-button" href="#work">See the Work</a>
           </div>
         </div>
-        <div class="hero__with">
-          <p class="hero__with-h">Worked with</p>
-          <p class="hero__names">{clients.join(', ')}</p>
-        </div>
+        {trustedBy.length > 0 && (
+          <div class="hero__with">
+            <p class="hero__with-h">Trusted By</p>
+            <p class="hero__names">{trustedBy.join(', ')} &amp; More</p>
+          </div>
+        )}
       </header>
 
-      <!-- Featured work on paper: the etching returns faded at the chapter opening, then the Framer cards, solid. -->
-      <section class="fw" id="work" aria-labelledby="fw-h">
-        <div class="fw__art" aria-hidden="true"><Image src={workArt} alt="" widths={[800, 1600, 2400]} sizes="100vw" /></div>
-        <header class="fw__head wrap">
-          <h2 class="fw__h big" id="fw-h">Featured work</h2>
-          <p class="fw__p">Recent projects, each with a line on where it was used.</p>
-        </header>
-        <div class="fw__cards wrap">
-          {large.map((p) => (
-            <Fragment>
-              <ProjectCard {...card(p)} />
-              {p.homeCharts.length > 0 && (
-                <div class="charts">
-                  {p.homeCharts.slice(0, 3).map((c, i) => (
-                    <figure class:list={{ charts__big: i === 0 }}>
-                      <Image src={c.image} alt={c.alt} widths={i === 0 ? [600, 900, 1300, 1800] : [400, 600, 900]} sizes={i === 0 ? '(min-width: 760px) calc((95vw - 24px) * 2 / 3), calc(100vw - 32px)' : '(min-width: 760px) calc((95vw - 24px) / 3), calc(100vw - 32px)'} />
-                      <PlateCaption title={c.title} medium={c.medium} />
-                    </figure>
-                  ))}
-                </div>
-              )}
-            </Fragment>
-          ))}
-          {pair.length > 0 && (
-            <div class="fw__pair">
-              {pair.map((p) => <ProjectCard size="half" {...card(p)} />)}
-            </div>
-          )}
-          <p class="fw__all"><a class="link" href="/work/">All projects<span class="arrow" aria-hidden="true">→</span></a></p>
-        </div>
-      </section>
+      <!-- The etching carries on behind the glass, so every pane has art to bend (Josh, 28 Oct). -->
+      <div class="field">
+        <div class="field__track" aria-hidden="true"><div class="field__art"><Image src={heroArt} alt="" widths={[800, 1600, 2400]} sizes="100vw" /></div></div>
 
-      <!-- Services, set like a menu: the name and its starting price on one line, the description under it. -->
-      <section class="services wrap" id="services" aria-labelledby="services-h">
-        <div class="services__head">
-          <h2 class="h2 services__h" id="services-h">Services</h2>
+        <section class="stats wrap" aria-label="The studio in numbers">
+          <ul class="stats__list">
+            {stats.map((s) => (
+              <li class="stat glass" data-lens>
+                <p class="stat__n"><span aria-hidden="true"><span data-count={s.n}>{s.n}</span>{s.after}</span><span class="sr-only">{s.n}{s.after}</span></p>
+                <p class="stat__l">{s.label}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section class="fw wrap" id="work" aria-labelledby="fw-h">
+          <h2 class="fw__h big" id="fw-h">Featured Work</h2>
+          <div class="filterbar glass" role="group" aria-label="Filter featured work" data-lens data-filters hidden>
+            <button class="glass-pill" type="button" data-filter="all" aria-pressed="true">All</button>
+            {homeFilters.map((f) => <button class="glass-pill" type="button" data-filter={f} aria-pressed="false">{f}</button>)}
+          </div>
+          <ul class="fw__grid" data-grid>
+            {cards.map((c, i) => (
+              <li data-filter={c.filter ?? ''} data-more={i >= SHOWN ? '' : undefined}>
+                <a class="card glass" href={c.href} data-lens>
+                  <Image class="card__img" src={c.image} alt={c.alt} widths={[400, 700, 1100]} sizes="(min-width: 760px) min(580px, 47vw), calc(100vw - 32px)" style={c.position ? `object-position: ${c.position}` : undefined} />
+                  <span class="card__row">
+                    <span class="card__t">{c.title}</span>
+                    <span class="card__tags">
+                      {c.filter && <span class="tag">{c.filter}</span>}
+                      {c.student && <span class="tag">Student Work</span>}
+                    </span>
+                    <span class="card__y">{c.year}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          <p class="fw__empty" data-empty hidden>No projects under this filter yet.</p>
+          <div class="fw__foot">
+            <button class="btn glass-button" type="button" data-show-more hidden>Show More</button>
+            <a class="link" href="/work/">All Projects<span class="arrow" aria-hidden="true">→</span></a>
+          </div>
+        </section>
+
+        <section class="services wrap" id="services" aria-labelledby="services-h">
+          <h2 class="big services__h" id="services-h">Services</h2>
           <p class="services__intro">Every project is priced on its scope, so these are starting points. You'll get a fixed quote after our first call.</p>
-          <figure class="services__fig">
-            <Image src={idCards} alt="Two Oxford School of English student ID cards on lanyards, in black on Oxford Gold" widths={[300, 500, 800]} sizes="(min-width: 1100px) calc((95vw - 264px) / 3), (min-width: 760px) 48vw, 72vw" />
-            <PlateCaption title="Oxford School of English, 2023" medium="Student ID cards, from the identity" />
-          </figure>
-        </div>
-        <ul class="menu">
-          {menu.map((s) => (
-            <li class="menu__item">
-              <div class="menu__row"><h3 class="menu__name">{s.name}</h3><p class="menu__price">{s.price}</p></div>
-              {s.time && <p class="menu__time">{s.time}</p>}
-              <p class="menu__text">{s.text}</p>
-              <a class="link" href={s.href}>{s.link}<span class="arrow" aria-hidden="true">→</span></a>
-            </li>
-          ))}
-          <li class="menu__item menu__item--quote">
-            <p class="menu__text">Need something else, or a mix of these? I'll send a fixed quote {responseTime}.</p>
-            <a class="btn" href={quoteHref}>Ask for a custom quote <span class="arrow" aria-hidden="true">→</span></a>
-          </li>
-        </ul>
-      </section>
+          <!-- One open at a time. Without script every row stays open. -->
+          <div class="acc glass" data-lens data-acc>
+            {menu.map((s) => (
+              <div class="acc__row">
+                <h3 class="acc__h">
+                  <button class="acc__btn" type="button" id={`svc-${s.id}-btn`} aria-controls={`svc-${s.id}`} aria-expanded="true">
+                    <span>{s.name}</span><span class="acc__icon" aria-hidden="true"></span>
+                  </button>
+                </h3>
+                <div class="acc__panel" id={`svc-${s.id}`} role="region" aria-labelledby={`svc-${s.id}-btn`}>
+                  <div class="acc__inner">
+                    <div class="acc__body">
+                      <p class="acc__text">{s.text}</p>
+                      <p class="acc__price">{s.price}{s.time && <span>{s.time}</span>}</p>
+                      <a class="btn glass-button acc__go" href={s.href} aria-label={s.link}>View Prices <span class="arrow" aria-hidden="true">→</span></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div class="quote glass" data-lens>
+            <h3 class="quote__h">Need Something Else?</h3>
+            <p class="quote__p">A mix of these, or something we haven't listed? Tell us what you need and we'll send a fixed quote {responseTime}.</p>
+            <a class="btn glass-button" href={quoteHref}>Ask for a Custom Quote <span class="arrow" aria-hidden="true">→</span></a>
+          </div>
+        </section>
+      </div>
 
-      <!-- Proof: who I work with, in plain names, and one client's words set large. -->
+<!-- Proof: who I work with, in plain names, and one client's words set large. -->
       <section class="proof wrap" aria-labelledby="proof-h">
         <div class="proof__who">
           <h2 class="h2" id="proof-h">Who I work with</h2>
@@ -209,11 +240,106 @@ const steps = [
       </footer>
     </div>
 
-    <script>
+        <script>
       import { mountLens } from '../scripts/lens.js';
-      // Lens glass on the nav and the hero plate, over the etching (its mask fades it out from 58% to 92%).
+      const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const ease = 'cubic-bezier(0.16, 1, 0.3, 1)';
+
+      // Lens glass. The hero plate can use the WebGL glass over its painting in Firefox and Safari;
+      // the nav and the field panes move over live content, so there they keep the clear CSS glass.
       const heroArt = document.querySelector<HTMLImageElement>('.hero__art');
-      document.querySelectorAll<HTMLElement>('.hero [data-lens]').forEach((el) => mountLens(el, heroArt, [0.58, 0.92]));
+      mountLens(document.querySelector('.hero__plate'), heroArt, [0.58, 0.92]);
+      document.querySelectorAll<HTMLElement>('[data-nav], .field [data-lens]').forEach((el) => mountLens(el, null));
+
+      // Nav: light over the night chapters, dark over paper. Watches a 1px line across the nav's middle.
+      const nav = document.querySelector<HTMLElement>('[data-nav]')!;
+      const nights = [...document.querySelectorAll('.night')];
+      const under = new Set<Element>();
+      let watch: IntersectionObserver | undefined;
+      const watchNav = () => {
+        watch?.disconnect(); under.clear();
+        const r = nav.getBoundingClientRect();
+        const y = Math.round(r.top + r.height / 2);
+        watch = new IntersectionObserver((entries) => {
+          entries.forEach((e) => (e.isIntersecting ? under.add(e.target) : under.delete(e.target)));
+          nav.classList.toggle('is-dark', under.size > 0);
+        }, { rootMargin: `-${y}px 0px -${Math.max(0, innerHeight - y - 1)}px 0px` });
+        nights.forEach((n) => watch!.observe(n));
+      };
+      watchNav();
+      addEventListener('resize', watchNav);
+      // Scroll edge: true once content (past the opening's art) is under the nav.
+      const field = document.querySelector<HTMLElement>('.field')!;
+      const edge = () => nav.classList.toggle('is-over', field.getBoundingClientRect().top < nav.getBoundingClientRect().bottom);
+      edge();
+      addEventListener('scroll', edge, { passive: true });
+
+      // Stats count up once, when they come into view. The final figure is in the page for screen readers.
+      if (!still) {
+        const counter = new IntersectionObserver((entries) => entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          counter.unobserve(e.target);
+          const el = e.target as HTMLElement;
+          const to = Number(el.dataset.count);
+          const t0 = performance.now();
+          const step = (t: number) => {
+            const k = Math.min(1, (t - t0) / 1400);
+            el.textContent = String(Math.round(to * (1 - (1 - k) ** 3)));
+            if (k < 1) requestAnimationFrame(step);
+          };
+          requestAnimationFrame(step);
+        }), { threshold: 0.6 });
+        document.querySelectorAll<HTMLElement>('[data-count]').forEach((el) => { el.textContent = '0'; counter.observe(el); });
+      }
+
+      // Featured work filters: the grid updates in place with a short fade and scale.
+      const bar = document.querySelector<HTMLElement>('[data-filters]')!;
+      const grid = document.querySelector<HTMLElement>('[data-grid]')!;
+      const items = [...grid.children] as HTMLElement[];
+      const more = document.querySelector<HTMLButtonElement>('[data-show-more]')!;
+      const empty = document.querySelector<HTMLElement>('[data-empty]')!;
+      let current = 'all';
+      let all = false;
+      const show = () => {
+        const match = items.filter((li) => current === 'all' || li.dataset.filter === current);
+        const shown = all ? match : match.slice(0, 4);
+        items.forEach((li) => { li.hidden = !shown.includes(li); });
+        more.hidden = all || match.length <= 4;
+        empty.hidden = match.length > 0;
+      };
+      const swap = async () => {
+        if (still) return show();
+        await grid.animate([{ opacity: 1 }, { opacity: 0, transform: 'scale(0.98)' }], { duration: 140, easing: 'ease-in' }).finished;
+        show();
+        grid.animate([{ opacity: 0, transform: 'scale(0.98)' }, { opacity: 1, transform: 'none' }], { duration: 320, easing: ease });
+      };
+      bar.hidden = false;
+      bar.addEventListener('click', (e) => {
+        const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-filter]');
+        if (!btn || btn.dataset.filter === current) return;
+        current = btn.dataset.filter!;
+        all = false;
+        bar.querySelectorAll('[data-filter]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+        swap();
+      });
+      more.addEventListener('click', () => { all = true; show(); });
+      show();
+
+      // Services accordion: one row open at a time; closed rows are inert so focus skips them.
+      const rows = [...document.querySelectorAll<HTMLElement>('[data-acc] .acc__row')];
+      const setRow = (row: HTMLElement, open: boolean) => {
+        row.querySelector('.acc__btn')!.setAttribute('aria-expanded', String(open));
+        const panel = row.querySelector<HTMLElement>('.acc__panel')!;
+        panel.toggleAttribute('data-closed', !open);
+        panel.inert = !open;
+      };
+      rows.forEach((row, i) => {
+        setRow(row, i === 0);
+        row.querySelector('.acc__btn')!.addEventListener('click', () => {
+          const open = row.querySelector('.acc__btn')!.getAttribute('aria-expanded') !== 'true';
+          rows.forEach((r) => setRow(r, r === row && open));
+        });
+      });
 
       // Copy email: the label confirms, a polite live region announces it, then it reverts.
       const btn = document.querySelector<HTMLButtonElement>('[data-copy]');
@@ -233,60 +359,103 @@ const steps = [
   .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   .big { font-family: var(--display); font-weight: 500; letter-spacing: -0.03em; line-height: 0.92; }
   .acts { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 14px; }
-  .acts .link { margin-left: 6px; }
+  [id] { scroll-margin-top: 96px; } /* anchors land below the sticky nav */
 
-  /* Nav: CSS glass over the etching, part of the opening, so it scrolls away and never sits over a headline. */
-  .nav { position: absolute; z-index: 10; top: 14px; left: var(--margin); right: var(--margin); height: 60px; border-radius: 28px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 12px 0 24px; }
+  /* Nav: sticky glass for the whole page (Josh, 28 Oct; replaces "scrolls away with the opening").
+     It sits at the top, and .is-dark turns it light over the night chapters. */
+  .nav { position: fixed; z-index: 50; top: 14px; left: var(--margin); right: var(--margin); height: 60px; border-radius: 28px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 8px 0 24px; transition: color 300ms ease-out, background-color 300ms ease-out, box-shadow 300ms ease-out; }
+  .nav::before { transition: background-color 300ms ease-out; }
+  /* Scroll edge (TASTE glass spec, iOS 27): once the page passes under the nav, paper fills in behind it so the
+     labels never sit on bent text or busy photos. Over the opening it stays clear. */
+  .nav.is-over { background-color: color-mix(in srgb, var(--paper) 78%, transparent); }
+  .nav.is-over.is-lens::before, .nav.is-over[data-lens]:not(.is-lens) { background-color: color-mix(in srgb, var(--paper) 78%, transparent); }
   .nav__mark { font-family: var(--display); font-size: 24px; letter-spacing: -0.02em; text-decoration: none; }
-  .nav__links { list-style: none; display: flex; gap: 4px; margin: 0; padding: 0; }
-  .nav__links a { display: block; padding: 10px 14px; font-size: 18px; font-weight: 500; text-decoration: none; border-radius: var(--pill); transition: background-color 200ms ease-out; }
-  .nav__links a:hover { background: color-mix(in srgb, var(--ink) 6%, transparent); }
+  .nav__links { list-style: none; display: flex; gap: 2px; margin: 0; padding: 0; }
   .nav__menu { display: none; }
 
   /* Opening: the quiet etching fills the screen, the plate centred over the trees and sky. */
   .hero { position: relative; isolation: isolate; min-height: 100svh; padding: 116px var(--margin) 40px; display: grid; grid-template-rows: 1fr auto; }
   .hero__art { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 92%); mask-image: linear-gradient(to bottom, #000 58%, transparent 92%); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
-  .hero__plate { position: relative; align-self: center; justify-self: center; width: min(640px, 46vw); padding: 44px 44px 40px; display: grid; gap: 22px; border-radius: 28px; }
+  .hero__plate { position: relative; align-self: center; justify-self: center; width: min(680px, 50vw); padding: 44px 44px 40px; display: grid; gap: 22px; border-radius: 28px; }
   .hero__h { font-family: var(--display); font-weight: 500; font-size: clamp(34px, 2.8vw, 40px); line-height: 1.06; letter-spacing: -0.02em; text-wrap: balance; }
   .hero__p { font-size: 18px; line-height: 1.5; }
   .hero__plate .avail { --fill: color-mix(in srgb, var(--paper) 55%, transparent); }
-  .hero__with { display: grid; grid-template-columns: 140px 1fr; gap: 24px; align-items: baseline; padding-top: 32px; font-size: 18px; line-height: 1.5; }
-  .hero__with-h { font-weight: 600; }
+  /* Trusted By: the label sits right against the names (Josh, 28 Oct). */
+  .hero__with { justify-self: center; width: min(1140px, 100%); display: flex; flex-wrap: wrap; column-gap: 12px; align-items: baseline; padding-top: 32px; font-size: 18px; line-height: 1.5; }
+  .hero__with-h { font-weight: 600; white-space: nowrap; }
   .hero__names { text-wrap: balance; }
 
-  /* Featured work: art at the chapter opening only, faded to paper before the first card ends. */
-  .fw { position: relative; isolation: isolate; padding-block: 200px 0; }
-  .fw__art { position: absolute; inset: 0 0 auto; height: min(1100px, 90vw); z-index: -1; overflow: hidden; }
-  .fw__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 0%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 40%, transparent); mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 40%, transparent); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
-  .fw__head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; margin-bottom: 48px; }
-  .fw__h { grid-column: 1 / span 8; font-size: clamp(56px, 7.8vw, 120px); }
-  .fw__p { grid-column: 1 / span 5; margin-top: 20px; font-size: 20px; line-height: 1.45; }
-  .fw__cards { display: grid; gap: 24px; }
-  .fw__pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
-  .fw__all { font-size: 20px; padding-top: 8px; }
+  /* The field: the etching held behind stats, featured work and services, so the glass always has art
+     under it. It fades in at the top and out at the foot, like the other art on the site. */
+  .field { position: relative; isolation: isolate; padding-bottom: 96px; }
+  .field__track { position: absolute; inset: 0; z-index: -2; } /* keeps the sticky art inside the field */
+  .field__art { position: sticky; top: 0; height: 100svh; overflow: hidden; }
+  .field__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; }
+  .field::before, .field::after { content: ''; position: absolute; left: 0; right: 0; z-index: -1; pointer-events: none; }
+  .field::before { top: 0; height: 30svh; background: linear-gradient(var(--paper), transparent); }
+  .field::after { bottom: 0; height: 50svh; background: linear-gradient(transparent, var(--paper) 85%); }
 
-  /* Strategic Intent's charts: one large, two stacked beside it. */
-  .charts { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: auto auto; gap: 24px; align-items: start; }
-  .charts { margin-bottom: 64px; } /* room so the last caption never reads as a label over the next card */
-  .charts__big { grid-row: span 2; }
-  .charts img { width: 100%; height: auto; border-radius: 25px; }
+  /* One centred column for everything under the opening (Josh, 28 Oct: "centred to the page").
+     Headings stay left-aligned inside it. 1140px lets both rows of work fit one screen at 1440. */
+  .field > section { box-sizing: content-box; max-width: 1140px; margin-inline: auto; }
 
-  /* Services: heading and intro on the left third, the menu on the right. */
-  .services { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-block: 200px 0; }
-  .services__head { grid-column: 1 / span 4; display: grid; align-content: start; gap: 16px; }
-  .services__fig { margin-top: 40px; }
-  .services__fig img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 25px; }
-  .services__intro { font-size: 20px; line-height: 1.45; }
-  .menu { grid-column: 6 / -1; list-style: none; margin: 0; padding: 0; display: grid; gap: 56px; }
-  .menu__item { display: grid; gap: 6px; }
-  .menu__row { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; }
-  .menu__name, .menu__price { font-size: 24px; line-height: 1.25; font-weight: 600; letter-spacing: -0.02em; }
-  .menu__price { font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .menu__time { font-size: 20px; color: var(--ink-2); text-align: right; margin-top: -2px; }
-  .menu__text { font-size: 20px; line-height: 1.5; max-width: 52ch; margin-top: 8px; }
-  .menu__item--quote { gap: 18px; justify-items: start; padding: 28px; border-radius: 28px; background: var(--paper-2); }
+  /* Stats: four glass cards, a large number over a short label. */
+  .stats { padding-top: 40px; }
+  .stats__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+  .stat { position: relative; display: grid; align-content: space-between; gap: 28px; min-height: 196px; padding: 28px 28px 26px; border-radius: 28px; }
+  .stat__n { font-family: var(--display); font-weight: 500; font-size: clamp(56px, 5vw, 76px); line-height: 0.9; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  .stat__l { font-size: 18px; line-height: 1.35; font-weight: 500; text-wrap: balance; }
+
+  /* Featured work: heading, the filter bar, then compact cards two to a row, all the same shape. */
+  .fw { padding-top: 120px; }
+  .fw__h { font-size: clamp(56px, 7.8vw, 120px); }
+  .filterbar { position: relative; display: inline-flex; gap: 2px; margin-top: 28px; padding: 6px; border-radius: var(--pill); max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+  .filterbar[hidden] { display: none; }
+  .fw__grid { list-style: none; margin: 32px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+  .fw__grid > [hidden] { display: none; }
+  .card { position: relative; display: grid; align-content: start; gap: 14px; height: 100%; padding: 12px 12px 16px; border-radius: 28px; text-decoration: none; transition: transform 260ms var(--ease-out); }
+  .card__img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 16px; } /* concentric: 28px card, 12px inset */
+  .card__row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 0 8px 2px; }
+  .card__y { margin-left: auto; }
+  .card__t { font-size: 22px; line-height: 1.2; font-weight: 600; letter-spacing: -0.02em; }
+  .card__y { font-size: 17px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .card__tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { padding: 5px 11px; border-radius: var(--pill); background: color-mix(in srgb, var(--ink) 7%, transparent); font-size: 14px; font-weight: 500; line-height: 1.2; }
+  @media (hover: hover) { .card:hover { transform: translateY(-4px); } }
+  .card:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .fw__empty { margin-top: 32px; font-size: 20px; }
+  .fw__foot [hidden] { display: none; }
+  .fw__foot { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; margin-top: 28px; font-size: 20px; }
+
+  /* Services: the same heading as Featured Work, then full-width rows that open one at a time. */
+  .services { padding-top: 140px; }
+  .services__h { font-size: clamp(56px, 7.8vw, 120px); }
+  .services__intro { margin-top: 20px; max-width: 46ch; font-size: 20px; line-height: 1.45; }
+  .acc { position: relative; margin-top: 40px; padding: 4px 32px; border-radius: 28px; }
+  .acc__row + .acc__row { border-top: 1px solid color-mix(in srgb, var(--ink) 16%, transparent); }
+  .acc__btn { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 24px; padding: 26px 0; border: 0; background: none; color: inherit; font: 600 28px/1.2 var(--text); letter-spacing: -0.02em; text-align: left; cursor: pointer; }
+  .acc__btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 8px; }
+  .acc__icon { position: relative; flex: none; width: 20px; height: 20px; transition: transform 320ms var(--ease-out); }
+  .acc__icon::before, .acc__icon::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 2px; margin-top: -1px; border-radius: 1px; background: currentColor; }
+  .acc__icon::after { transform: rotate(90deg); }
+  [aria-expanded='true'] > .acc__icon { transform: rotate(45deg); }
+  .acc__panel { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 420ms var(--ease-out); }
+  .acc__panel[data-closed] { grid-template-rows: 0fr; }
+  .acc__inner { min-height: 0; overflow: hidden; }
+  .acc__body { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px 48px; align-items: end; padding-bottom: 30px; }
+  .acc__text { grid-row: span 2; align-self: start; max-width: 54ch; font-size: 20px; line-height: 1.5; }
+  .acc__price { text-align: right; font-size: 24px; line-height: 1.25; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .acc__price span { display: block; font-size: 17px; font-weight: 400; letter-spacing: 0; color: var(--ink-2); }
+  .acc__go { justify-self: end; }
+
+  /* Custom quote: centred, set like the hero plate. */
+  .quote { position: relative; display: grid; justify-items: center; gap: 18px; width: min(640px, 100%); margin: 56px auto 0; padding: 40px 44px; border-radius: 28px; text-align: center; }
+  .field > .services .quote { margin-inline: auto; }
+  .quote__h { font-family: var(--display); font-weight: 500; font-size: clamp(30px, 2.8vw, 40px); line-height: 1.06; letter-spacing: -0.02em; }
+  .quote__p { max-width: 44ch; font-size: 18px; line-height: 1.5; text-wrap: pretty; }
 
   /* Proof: names on the left, the quotation offset lower on the right. */
+  .field + .proof { padding-top: 48px; }
   .proof { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-block: 160px 0; }
   .proof__who { grid-column: 1 / span 4; display: grid; align-content: start; gap: 16px; }
   .proof__line { font-size: 20px; line-height: 1.45; }
@@ -339,12 +508,12 @@ const steps = [
   .end { --gold-ink: #D9BE91; }
 
   @media (max-width: 1099.98px) {
-    .nav__links li:not(:first-child) { display: none; }
+    .nav { padding-left: 20px; }
+    .nav__links .glass-pill { padding: 0 12px; font-size: 16px; }
     .hero__plate { width: min(600px, 72vw); }
-    .services__head, .proof__who, .about__text { grid-column: 1 / -1; }
-    .services__fig { width: 50%; }
-    .menu, .proof__quote, .about__facts { grid-column: 1 / -1; }
-    .menu { margin-top: 56px; }
+    .proof__who, .about__text { grid-column: 1 / -1; }
+    .proof__quote, .about__facts { grid-column: 1 / -1; }
+    .stats__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .proof__quote { margin-top: 64px; }
     .how__list li:nth-child(1), .how__list li:nth-child(4) { grid-column: span 7; }
     .how__list li:nth-child(2), .how__list li:nth-child(3) { grid-column: span 5; }
@@ -355,36 +524,46 @@ const steps = [
     .footer__text { row-gap: 12px; }
   }
   @media (max-width: 759.98px) {
-    .nav { top: 10px; height: 54px; padding: 0 8px 0 18px; }
+    .nav { top: 10px; height: 54px; padding: 0 6px 0 18px; }
     .nav__mark { font-size: 21px; }
     .nav__links { display: none; }
-    .nav__menu { display: block; padding: 9px 16px; font-weight: 500; font-size: 16px; text-decoration: none; border-radius: var(--pill); background: color-mix(in srgb, var(--ink) 6%, transparent); }
+    .nav__menu { display: inline-flex; min-height: 42px; font-size: 16px; background: color-mix(in srgb, var(--ink) 6%, transparent); }
+    [id] { scroll-margin-top: 80px; }
     .hero { padding: 84px var(--margin) 24px; }
     .hero__art { object-position: 30% 50%; }
     .hero__plate { width: 100%; align-self: start; padding: 24px 22px 22px; gap: 16px; border-radius: 26px; }
     .hero__h { font-size: 34px; }
     .hero__p { font-size: 16px; line-height: 1.45; }
-    .hero__with { grid-template-columns: 1fr; gap: 6px; padding-top: 24px; font-size: 16px; }
-    .fw { padding-top: 120px; }
-    .fw__h, .fw__p { grid-column: 1 / -1; }
-    .fw__h { font-size: 56px; }
-    .fw__p { font-size: 17px; }
-    .fw__cards, .fw__pair { gap: 48px; }
-    .fw__pair { grid-template-columns: 1fr; }
-    .charts { grid-template-columns: 1fr; gap: 16px; }
-    .charts__big { grid-row: auto; }
-    .charts img { border-radius: 22px; }
-    .services, .proof, .how { padding-top: 120px; }
-    /* The ID cards close the section on a phone, so their caption never sits over a service name. */
-    .services__head { display: contents; }
-    .services__head > * { grid-column: 1 / -1; }
-    .services__intro { margin-top: 16px; }
-    .services__fig { width: 72%; order: 1; margin-top: 72px; }
-    .menu { gap: 44px; margin-top: 72px; }
-    .menu__row { flex-direction: column; gap: 2px; }
-    .menu__time { text-align: left; margin-top: 0; }
-    .menu__text, .services__intro, .proof__line, .how__head p, .close__p { font-size: 17px; }
-    .menu__item--quote { padding: 22px; }
+    .hero__with { padding-top: 24px; font-size: 16px; }
+    .field { padding-bottom: 72px; }
+    .stats { padding-top: 32px; }
+    .stats__list { gap: 12px; }
+    .stat { min-height: 150px; padding: 20px 18px; gap: 20px; border-radius: 26px; }
+    .stat__n { font-size: 46px; }
+    .stat__l { font-size: 15px; }
+    .fw, .services { padding-top: 120px; }
+    .fw__h, .services__h { font-size: 56px; }
+    .filterbar { margin-top: 20px; }
+    .filterbar { gap: 0; padding: 4px; }
+    .filterbar .glass-pill { min-height: 40px; padding: 0 9px; font-size: 14px; letter-spacing: -0.02em; }
+    .fw__grid { grid-template-columns: 1fr; gap: 16px; margin-top: 24px; }
+    .card { padding: 10px 10px 14px; gap: 12px; border-radius: 26px; }
+    .fw__grid { gap: 20px; }
+    .card__img { border-radius: 16px; }
+    .card__t { font-size: 19px; }
+    .card__y { font-size: 15px; }
+    .services__intro { font-size: 17px; }
+    .acc { padding: 2px 20px; border-radius: 26px; }
+    .acc__btn { font-size: 21px; padding: 20px 0; }
+    .acc__body { grid-template-columns: 1fr; gap: 14px; padding-bottom: 24px; }
+    .acc__text { grid-row: auto; font-size: 17px; }
+    .acc__price { text-align: left; font-size: 21px; }
+    .acc__go { justify-self: start; }
+    .quote { margin-top: 40px; padding: 28px 22px; border-radius: 26px; }
+    .quote__p { font-size: 16px; }
+    .proof, .how { padding-top: 120px; }
+    .field + .proof { padding-top: 32px; }
+    .proof__line, .how__head p, .close__p { font-size: 17px; }
     .proof__names ul { font-size: 17px; }
     .proof__quote p { font-size: 20px; }
     .how__list { grid-template-columns: 1fr; gap: 12px; }
