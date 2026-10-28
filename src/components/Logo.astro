@@ -32,7 +32,7 @@
 </script>
 
 <style>
-  .logo { --h: 48px; display: flex; text-decoration: none; align-items: flex-start; margin-left: calc(-0.157 * var(--h)); /* the files' left padding */ }
+  .logo { --h: 32.4px; /* Studio at 24px, the old text logo size (Josh, 28 Oct) */ display: flex; text-decoration: none; align-items: flex-start; margin-left: calc(-0.157 * var(--h)); /* the files' left padding */ }
   .logo__art { display: grid; }
   .logo__art > * { grid-area: 1 / 1; width: calc(3.75 * var(--h)); height: var(--h); }
   .logo__word { margin: calc(0.08 * var(--h)) 0 0 calc(-0.0375 * var(--h)); /* onto the video's baseline (287px down its 400) and word space */ font-family: var(--display); font-weight: 500; font-size: calc(0.74 * var(--h)); line-height: 1; letter-spacing: 0; }
@@ -42,5 +42,5 @@
   /* Over the night chapters the text is cream (#F1DFC8): the cream still, also mid-play. */
   :global(.is-dark) .logo :is(.logo__ink, .logo__flow) { visibility: hidden; }
   :global(.is-dark) .logo .logo__cream { visibility: visible; }
-  @media (max-width: 759.98px) { .logo { --h: 36px; } }
+  @media (max-width: 759.98px) { .logo { --h: 28.4px; } } /* 21px, the old phone size */
 </style>
