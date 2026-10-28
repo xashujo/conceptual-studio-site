@@ -1,0 +1,34 @@
+headline: Brands & Data, Made Clear
+intro: Conceptual Studio is a design studio in London. Most of our work is in education. We also design for companies and edit video for social media.
+stats:
+  - number: 50
+    after: "+"
+    label: Projects Delivered
+  - number: 1
+    after: M+
+    label: Data Points Visualised
+  - number: 48
+    after: hr
+    label: First-Concept Turnaround
+  - number: 90
+    after: "%"
+    label: of Clients Return for More Work
+results:
+  - src/content/projects/oxford-school-of-english.yml
+  - src/content/projects/new-city-college-strategic-intent.yml
+steps:
+  - title: Call & Brief
+    text: We talk through what you need, your budget, the formats and what the work has to achieve, so you know exactly what to expect before we start.
+  - title: Design & Feedback
+    text: We share work in progress and refine it with you, so nothing in the final round comes as a surprise.
+  - title: Revisions & Finishing
+    text: We make your changes and finish every detail before anything is signed off.
+  - title: Handover
+    text: You get the final files in the formats your team needs, delivered however suits you.
+values:
+  - title: Clarity First
+    text: If a chart or a page needs explaining, it isn't finished yet.
+  - title: Made to Be Used
+    text: Files and guidelines your own team can work from, without coming back to us every time.
+  - title: Straight Answers
+    text: "A fixed quote after our first call, and a reply {reply time}."

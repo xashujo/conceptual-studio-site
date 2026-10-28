@@ -244,6 +244,46 @@ content:
         type: image
         options: { media: images, extensions: [svg] }
 
+  - name: home
+    label: Home page
+    type: file
+    path: src/content/home/home.yml
+    format: yaml
+    description: "The words on the home page. Projects, services, Trusted By clients and the quote are set in their own sections."
+    fields:
+      - { name: headline, label: Headline, type: string, required: true }
+      - { name: intro, label: Intro, type: text, required: true, description: "The sentence under the headline. Also the page's description in search results." }
+      - name: stats
+        label: Stats
+        type: object
+        list: true
+        description: "The figures under the opening. Placeholders until confirmed: replace before launch."
+        fields:
+          - { name: number, label: Number, type: number, required: true, description: "Counts up to this, e.g. 50" }
+          - { name: after, label: After the number, type: string, description: "e.g. + or % or hr or M+" }
+          - { name: label, label: Label, type: string, required: true }
+      - name: results
+        label: Why Clients Choose Us
+        type: reference
+        list: true
+        description: "The projects shown beside the quote, with their summaries."
+        options: { collection: projects, value: "{path}", label: "{title}", search: title }
+      - name: steps
+        label: How We Work
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Step, type: string, required: true }
+          - { name: text, label: Text, type: text, required: true }
+      - name: values
+        label: About
+        type: object
+        list: true
+        description: "The working principles in the About section. Write {reply time} to drop in the Reply time from Site settings."
+        fields:
+          - { name: title, label: Title, type: string, required: true }
+          - { name: text, label: Text, type: text, required: true }
+
   - name: settings
     label: Site settings
     type: file

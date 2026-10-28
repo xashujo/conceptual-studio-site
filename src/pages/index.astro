@@ -8,14 +8,14 @@ import '../styles/tokens.css';
 import '../styles/components.css';
 import { Image } from 'astro:assets';
 import { email, startHref, quoteHref, sentence, trustedBy } from '../data/site';
-import { availability, homeQuote, responseTime } from '../lib/site';
+import { availability, homeQuote, responseTime, home } from '../lib/site';
 import { featured, projectHref, homeFilters, bySlug } from '../data/work';
 import { services } from '../data/services';
 import heroArt from '../assets/art/engraved/jardin-quiet.jpg';
 import workArt from '../assets/art/engraved/hunt-hills-gold.jpg'; // La Chasse Chinoise, Huquier after Boucher, The Met 53.600.1009, public domain
 import closeArt from '../assets/art/engraved/lemoyne-night.jpg';
 
-const headline = 'Brands & Data, Made Clear'; // option 3 (Josh, 26 Oct)
+const headline = home.headline; // Pages CMS: Home page (option 3, Josh, 26 Oct)
 const links = [['Work', '#work'], ['Services', '#services'], ['About', '#about'], ['Contact', '#contact']];
 
 // Title Case for headings, buttons and labels (Josh, 28 Oct): every word capitalised except the small
@@ -25,13 +25,8 @@ const titleCase = (s: string) => s.replace(/\band\b/gi, '&').split(' ')
   .map((w, i, all) => (i > 0 && i < all.length - 1 && small.has(w.toLowerCase()) ? w.toLowerCase() : w.charAt(0).toUpperCase() + w.slice(1)))
   .join(' ');
 
-// Placeholder figures from Josh's brief (28 Oct), not yet confirmed. Replace each before launch.
-const stats = [
-  { n: 50, after: '+', label: 'Projects Delivered' }, // CONFIRM
-  { n: 1, after: 'M+', label: 'Data Points Visualised' }, // CONFIRM
-  { n: 48, after: 'hr', label: 'First-Concept Turnaround' }, // CONFIRM
-  { n: 90, after: '%', label: 'of Clients Return for More Work' }, // CONFIRM
-];
+// Pages CMS: Home page > Stats. Placeholder figures from Josh's brief (28 Oct), not yet confirmed: replace before launch.
+const stats = home.stats.map((s) => ({ n: s.number, after: s.after, label: s.label }));
 
 // Featured work and the services come from Pages CMS (Projects and Services).
 // The first four by home page position show; any more wait behind "Show More".
@@ -41,21 +36,12 @@ const cards = featured.map((p) => ({
   position: p.homePosition ?? p.position, filter: p.homeFilter, student: p.student,
 }));
 // Why clients choose us (pass 2): the two case studies' own summaries from the CMS, beside the quote.
-const results = ['oxford-school-of-english', 'new-city-college-strategic-intent'].map(bySlug)
+const results = home.results.map(bySlug) // Pages CMS: Home page > Why Clients Choose Us
   .map((p) => ({ client: p.client, title: p.title, line: p.summary, href: projectHref(p) }));
 // How we work (pass 2, "we" voice).
-const steps = [
-  ['Call & Brief', 'We talk through what you need, your budget, the formats and what the work has to achieve, so you know exactly what to expect before we start.'],
-  ['Design & Feedback', 'We share work in progress and refine it with you, so nothing in the final round comes as a surprise.'],
-  ['Revisions & Finishing', 'We make your changes and finish every detail before anything is signed off.'],
-  ['Handover', 'You get the final files in the formats your team needs, delivered however suits you.'],
-];
+const steps = home.steps.map((s) => [s.title, s.text]); // Pages CMS: Home page > How We Work
 // About: three working principles, each resting on something the site already promises.
-const values = [
-  ['Clarity First', 'If a chart or a page needs explaining, it isn\'t finished yet.'],
-  ['Made to Be Used', 'Files and guidelines your own team can work from, without coming back to us every time.'],
-  ['Straight Answers', `A fixed quote after our first call, and a reply ${responseTime}.`],
-];
+const values = home.values.map((v) => [v.title, v.text.replaceAll('{reply time}', responseTime)]); // Pages CMS: Home page > About
 const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.home.price, time: s.home.time, href: s.href ?? '/services/', link: titleCase(s.home.link), text: s.line }));
 ---
 <!doctype html>

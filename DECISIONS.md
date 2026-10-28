@@ -818,3 +818,13 @@ Museum model:
   edge on every glass piece in every browser, with 12px blur on unbent chrome (commit de157e0). The glass
   stays as glass-light set it.
 - Home pass 2 merged to main with Josh's OK (28 Oct).
+
+## Home page in the CMS (28 Oct 2026, Josh)
+- A Home page section in Pages CMS (src/content/home/home.yml) holds the words
+  the two home passes typed into the page: headline, intro (also the meta
+  description), the four stats, the Why Clients Choose Us projects, How We
+  Work and the About values. "{reply time}" in a value drops in the Reply time
+  setting. Projects, services, Trusted By clients, the quote and the glass
+  were already in the CMS. The built home page is identical before and after.
+- The stats are still placeholders from the brief. [TBC: Josh to confirm the
+  four figures before launch.]

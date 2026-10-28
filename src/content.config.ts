@@ -84,6 +84,18 @@ export const collections = {
       order: z.number().nullish(),
     }),
   }),
+  // The home page's own words (Josh, 28 Oct): one file, src/content/home/home.yml.
+  home: defineCollection({
+    loader: yml('home'),
+    schema: z.object({
+      headline: z.string().min(1),
+      intro: z.string().min(1),
+      stats: z.array(z.object({ number: z.number(), after: z.string().nullish().transform((s) => s ?? ''), label: z.string().min(1) })),
+      results: z.array(ref),
+      steps: z.array(z.object({ title: z.string().min(1), text: z.string().min(1) })),
+      values: z.array(z.object({ title: z.string().min(1), text: z.string().min(1) })),
+    }),
+  }),
   settings: defineCollection({
     loader: yml('settings'),
     schema: z.object({

@@ -4,6 +4,8 @@
 import { getCollection, getEntry } from 'astro:content';
 
 const settings = (await getEntry('settings', 'site'))!.data;
+/** The home page's own words, from Pages CMS (Home page). "{reply time}" in a value becomes the Reply time setting. */
+export const home = (await getEntry('home', 'home'))!.data;
 
 export const email = settings.email;
 export const startHref = `mailto:${email}?subject=New%20project`; // shortcut: email until the enquiry form exists
