@@ -102,7 +102,7 @@ content:
       - name: featuredOrder
         label: Home page position
         type: number
-        description: "Lower numbers come first. The first four show on the home page; any more appear under \"Show More\"."
+        description: "Lower numbers come first. The first six show on the home page (two rows of three); any more appear under \"Show More\"."
       - name: homeFilter
         label: Home page filter (optional)
         type: select

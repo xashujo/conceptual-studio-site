@@ -14,5 +14,6 @@ cover:
   alt: Heat map of Essex showing ACL enrolments by local authority in 2024, in five shades of blue
   caption: Heat map of enrolments by local authority, 2024
 coverFocus: 50% 0%
-featured: false
+featured: true
+featuredOrder: 5
 hasPage: false

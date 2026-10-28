@@ -29,8 +29,8 @@ const titleCase = (s: string) => s.replace(/\band\b/gi, '&').split(' ')
 const stats = home.stats.map((s) => ({ n: s.number, after: s.after, label: s.label }));
 
 // Featured work and the services come from Pages CMS (Projects and Services).
-// The first four by home page position show; any more wait behind "Show More".
-const SHOWN = 4;
+// The first six by home page position show (two rows of three); any more wait behind "Show More".
+const SHOWN = 6;
 const cards = featured.map((p) => ({
   title: p.title, year: p.year, href: projectHref(p), image: p.image, alt: p.alt,
   position: p.homePosition ?? p.position, filter: p.homeFilter, student: p.student, outcome: p.outcome,
@@ -145,7 +145,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
             {cards.map((c, i) => (
               <li data-filter={c.filter ?? ''} data-more={i >= SHOWN ? '' : undefined}>
                 <a class="card glass" href={c.href} data-lens>
-                  <Image class="card__img" src={c.image} alt={c.alt} widths={[400, 700, 1100]} sizes="(min-width: 760px) min(580px, 47vw), calc(100vw - 32px)" style={c.position ? `object-position: ${c.position}` : undefined} />
+                  <Image class="card__img" src={c.image} alt={c.alt} widths={[400, 700, 1100]} sizes="(min-width: 1100px) 380px, (min-width: 760px) 47vw, calc(100vw - 32px)" style={c.position ? `object-position: ${c.position}` : undefined} />
                   <span class="card__row">
                     <span class="card__t">{c.title}</span>
                     <span class="card__tags">
@@ -361,9 +361,9 @@ const menu = services.flatMap((s) => s.href?.includes('#')
       let all = false;
       const show = () => {
         const match = items.filter((li) => current === 'all' || li.dataset.filter === current);
-        const shown = all ? match : match.slice(0, 4);
+        const shown = all ? match : match.slice(0, 6);
         items.forEach((li) => { li.hidden = !shown.includes(li); });
-        more.hidden = all || match.length <= 4;
+        more.hidden = all || match.length <= 6;
         empty.hidden = match.length > 0;
       };
       const swap = async () => {
@@ -515,15 +515,16 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .stat__plus { margin-left: 0.12em; -webkit-text-stroke: 0.03em currentColor; } /* half a space off the figure, and stroked to the digits' weight: Agatho has no bolder cut (Josh, 28 Oct) */
   .stat__l { font-size: 18px; line-height: 1.35; font-weight: 500; text-wrap: balance; }
 
-  /* Featured work: heading, the filter bar, then compact cards two to a row, all the same shape. */
+  /* Featured work: heading, the filter bar, then compact landscape cards three to a row (Josh, 28 Oct), all the same shape. */
   .fw { padding-top: 120px; }
   .filterbar { position: relative; display: inline-flex; gap: 2px; margin-top: 28px; padding: 6px; border-radius: var(--pill); max-width: 100%; overflow-x: auto; scrollbar-width: none; }
   .filterbar[hidden] { display: none; }
-  .fw__grid { list-style: none; margin: 32px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+  .fw__grid { list-style: none; margin: 32px 0 0; padding: 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; }
   .fw__grid > [hidden] { display: none; }
-  /* Projects span two columns; videos are vertical, so they take one: four to a row (two on phones). */
-  .fw__grid > li { grid-column: span 2; }
-  .fw__grid > .fw__vid { grid-column: span 1; }
+  /* Projects span four of twelve columns (three to a row, two on tablets, one on phones); videos are vertical,
+     so they take three: four to a row (two on phones). */
+  .fw__grid > li { grid-column: span 4; }
+  .fw__grid > .fw__vid { grid-column: span 3; }
   /* Narrow cards: the year sits under the title, so a longer title never pushes it to a line of its own. */
   .fw__vid .card__row { flex-direction: column; align-items: start; gap: 2px; }
   .fw__vid .card__y { margin-left: 0; }
@@ -538,7 +539,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .card__img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 16px; } /* concentric: 28px card, 12px inset */
   .card__row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 0 8px 2px; }
   .card__y { margin-left: auto; }
-  .card__t { font-size: 22px; line-height: 1.2; font-weight: 600; letter-spacing: -0.02em; }
+  .card__t { font-size: 20px; line-height: 1.2; font-weight: 600; letter-spacing: -0.02em; }
   .card__y { font-size: 17px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
   .card__tags { display: flex; flex-wrap: wrap; gap: 6px; }
   .card__out { display: block; margin-top: -8px; padding: 0 8px 2px; font-size: 17px; line-height: 1.4; color: var(--ink-2); }
@@ -604,7 +605,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .how__list li { position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 48px; min-height: 280px; padding: 32px 32px 36px; border-radius: 28px; }
   .how__list li:nth-child(1), .how__list li:nth-child(4) { grid-column: span 7; }
   .how__list li:nth-child(2), .how__list li:nth-child(3) { grid-column: span 5; }
-  .how__t { font-size: 24px; line-height: 1.2; font-weight: 600; letter-spacing: -0.02em; }
+  .how__t { font-family: var(--display); font-size: 30px; line-height: 1.1; font-weight: 500; letter-spacing: -0.01em; } /* Agatho, like the headings (Josh, 28 Oct) */
   .how__list p { font-size: 20px; line-height: 1.5; max-width: 40ch; }
 
   /* About: two short paragraphs, then three principles under one hairline. */
@@ -634,6 +635,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .menu .glass-pill { width: 100%; min-height: 52px; padding: 0 18px; font-size: 20px; }
 
   @media (max-width: 1099.98px) {
+    .fw__grid > li { grid-column: span 6; }
     .nav { padding-left: 20px; }
     .nav__links .glass-pill { padding: 0 12px; font-size: 16px; }
     .hero__bento { grid-template-columns: 1fr; }
@@ -675,6 +677,8 @@ const menu = services.flatMap((s) => s.href?.includes('#')
     .filterbar { gap: 0; padding: 4px; }
     .filterbar .glass-pill { min-height: 40px; padding: 0 9px; font-size: 14px; letter-spacing: -0.02em; }
     .fw__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 24px; }
+    .fw__grid > li { grid-column: span 2; }
+    .fw__grid > .fw__vid { grid-column: span 1; }
     .vid__icon { width: 52px; height: 52px; }
     .fw__vid .card__t { font-size: 17px; }
     .card { padding: 10px 10px 14px; gap: 12px; border-radius: 26px; }
@@ -706,6 +710,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
     .how__list { grid-template-columns: 1fr; gap: 12px; }
     .how__list li:nth-child(n) { grid-column: auto; min-height: 0; gap: 20px; padding: 24px 22px 26px; border-radius: 26px; }
     .how__list p { font-size: 17px; }
+    .how__t { font-size: 25px; }
     .about { padding-block: 120px; }
     .about__text { margin-top: 24px; gap: 16px; }
     .about__text p { font-size: 17px; }

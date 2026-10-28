@@ -14,5 +14,6 @@ cover:
   alt: Map of London boroughs marking the BSix and New City College campuses
   caption: Campus map, BSix and New City College
 coverFocus: 0% 0%
-featured: false
+featured: true
+featuredOrder: 6
 hasPage: false

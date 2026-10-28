@@ -894,3 +894,8 @@ Museum model:
   three columns wide from the first stat's left edge, the quote (quieter: 17px,
   secondary ink, no button) above the last stat, 24px gaps throughout, the
   whole block centred. Tablet and phone stack plate, quote, stats.
+- Selected Work: three landscape project cards a row (12-column grid, projects
+  span 4; two a row on tablets, one on phones), six shown before Show More.
+  ACL Essex infographics and NCC infographics added to the home page (CMS:
+  Show on the home page, positions 5 and 6) so the two rows are full.
+- How We Work step titles are Agatho 30px (25px on phones), -0.01em.
