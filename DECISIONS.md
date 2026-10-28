@@ -814,3 +814,15 @@ Museum model:
 - Not changed, for Josh to edit in Pages CMS: the Brand Identity summary ends "without coming back to me
   every time". It is shared with the Services pages, which still say "I". [TBC]
 - The stat label "of Clients Return for More Work" starts lowercase on purpose: it reads on from "90%".
+- Apple-style glass in every browser (Josh, 28 Oct: "fast and easy to render on all browsers, like Apple,
+  a bit of blur, chromatic aberration, and some bend"; Apple Music's lyrics panel as the reference). Still
+  one CSS backdrop blur per piece; everything new is box-shadow, which costs almost nothing:
+  - Chromatic fringe on every glass edge: warm red to the left and top, cool blue to the right and bottom
+    (50% and 42% on paper; 40% and 32% on dark glass, where it shows more, as on Apple's).
+  - A lit inner edge (16px glow, 55% on paper) so the rim reads as thick glass bending light.
+  - All scale with the Shine dial.
+  - The real bend stays Chromium's, on the three small pieces (nav and filter bar on the home page).
+    Safari and Firefox cannot bend live content in CSS, so they get the fringe and lit edge without it.
+  - Small glass that can't bend (the nav in Firefox and Safari) blurs 12px, up from 5px, so headings no
+    longer read through it.
+  [TBC: Josh to check in his own Firefox and Safari. Headless Firefox here doesn't draw backdrop blur.]
