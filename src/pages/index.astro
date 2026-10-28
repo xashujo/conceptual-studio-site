@@ -146,13 +146,12 @@ const menu = services.flatMap((s) => s.href?.includes('#')
               <li data-filter={c.filter ?? ''} data-more={i >= SHOWN ? '' : undefined}>
                 <a class="card glass" href={c.href} data-lens>
                   <Image class="card__img" src={c.image} alt={c.alt} widths={[400, 700, 1100]} sizes="(min-width: 1100px) 380px, (min-width: 760px) 47vw, calc(100vw - 32px)" style={c.position ? `object-position: ${c.position}` : undefined} />
-                  <span class="card__t" title={c.title}>{c.title}</span>
+                  <span class="card__head"><span class="card__t" title={c.title}>{c.title}</span><span class="card__y">{c.year}</span></span>
                   <span class="card__row">
                     <span class="card__tags">
                       {c.filter && <span class="tag">{c.filter}</span>}
                       {c.student && <span class="tag">Student Work</span>}
                     </span>
-                    <span class="card__y">{c.year}</span>
                   </span>
                   <span class="card__out">{c.outcome}</span>
                 </a>
@@ -540,13 +539,14 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .card__row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 0 8px 2px; }
   .card__y { margin-left: auto; }
   .card__t { font-size: 20px; line-height: 1.2; font-weight: 600; letter-spacing: -0.02em; }
-  .card__y { font-size: 17px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .card__y { font-size: 17px; color: var(--ink-2); letter-spacing: -0.01em; } /* proportional figures: tabular ones left gaps (Josh, 28 Oct) */
   .card__tags { display: flex; flex-wrap: wrap; gap: 6px; }
   .card__out { display: block; margin-top: -8px; padding: 0 8px 2px; font-size: 17px; line-height: 1.4; color: var(--ink-2); }
   /* One fixed shape for every project card (Josh, 28 Oct): the title on one line, then badges left and the year
      right, then the outcome held to two lines (space kept even when empty), so rows line up and stay short. */
-  .card > .card__t { padding: 0 8px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-  .card > .card__t + .card__row { margin-top: -6px; flex-wrap: nowrap; }
+  .card__head { display: flex; align-items: baseline; gap: 12px; padding: 0 8px; }
+  .card__head .card__t { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .card__head + .card__row { margin-top: -6px; flex-wrap: nowrap; }
   .card__row .card__tags { flex-wrap: nowrap; overflow: hidden; }
   .card > .card__out { min-height: 2.8em; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
   .tag { padding: 5px 11px; border-radius: var(--pill); background: color-mix(in srgb, var(--ink) 7%, transparent); font-size: 14px; font-weight: 500; line-height: 1.2; }
