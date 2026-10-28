@@ -51,7 +51,7 @@ const count = (f: string) => projects.filter((p) => (f === 'all' ? !p.student : 
 
   /* The page word sits on the open sky, top right (TASTE 2 and 3). */
   .head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-top: 120px; min-height: 58svh; align-content: start; }
-  .head__word { grid-column: 7 / -1; font-family: var(--display); font-weight: 500; font-size: clamp(120px, 17vw, 260px); line-height: 0.82; letter-spacing: -0.04em; color: var(--ink); }
+  .head__word { grid-column: 7 / -1; font-family: var(--display); font-weight: 500; font-size: clamp(120px, 17vw, 260px); line-height: 0.82; letter-spacing: -0.015em; color: var(--ink); }
   .head__p { grid-column: 7 / span 5; margin-top: 20px; font-size: 22px; line-height: 1.4; font-weight: 500; }
 
   .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }

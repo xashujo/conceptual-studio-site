@@ -41,7 +41,7 @@ const ruled = !/[gjpqy]/.test(word);
   .open { position: relative; isolation: isolate; padding: calc(100px + var(--tall) * 100svh) var(--margin) 0; overflow: hidden; }
   .open__art { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; -webkit-mask-image: linear-gradient(to bottom, #000 45%, transparent 96%); mask-image: linear-gradient(to bottom, #000 45%, transparent 96%); }
   /* Cap height well over 20x the body (TASTE 3); the measured fit keeps it margin to margin. */
-  .open__word { position: relative; font-family: var(--display); font-weight: 500; font-size: min(509px, calc((100vw - 2 * var(--margin)) * var(--fit))); line-height: 0.74; letter-spacing: -0.03em; padding-top: 0.06em; white-space: nowrap; }
+  .open__word { position: relative; font-family: var(--display); font-weight: 500; font-size: min(509px, calc((100vw - 2 * var(--margin)) * var(--fit))); line-height: 0.74; letter-spacing: -0.015em; padding-top: 0.06em; white-space: nowrap; }
   .open__word.is-unruled { padding-bottom: 0.24em; } /* room for the descender inside the art band */
   .open__foot { padding-bottom: 8px; }
   .credits { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; align-items: start; padding-top: 18px; font-size: 24px; line-height: 1.3; letter-spacing: -0.01em; }

@@ -877,3 +877,11 @@ Museum model:
   with dark text, like the buttons in the night bands.
 - Availability dot: #1F9D55 on light, #3FD37E (same hue, lighter) on dark and
   on the pill's black hover, so it reads as one green; it fades between them.
+
+## Agatho spacing (28 Oct 2026, Josh)
+- Agatho headings were too tight and uneven ("About": the A and b touched).
+  Tracking loosened everywhere Agatho is set: -0.03 to -0.04em became
+  -0.015em, -0.02em became -0.01em.
+- The font's class kerning grouped b with the round letters, pulling it under
+  A's foot (-24 units). The subset font now has its own A+b pair at +20, the
+  same gap as A+h and A+l (fontTools, public/fonts/agatho-medium-subset.woff2).

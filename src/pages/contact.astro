@@ -45,7 +45,7 @@ const steps = [
 <style>
   /* The desk: lens glass over the hills, right of centre so the trees show round it. */
   .desk { position: absolute; z-index: 2; top: 100px; right: calc(var(--margin) + 4vw); width: min(520px, 40vw); padding: 32px 34px 28px; display: grid; gap: 16px; }
-  .desk__h { font-family: var(--display); font-weight: 500; font-size: 40px; line-height: 1.05; letter-spacing: -0.02em; }
+  .desk__h { font-family: var(--display); font-weight: 500; font-size: 40px; line-height: 1.05; letter-spacing: -0.01em; }
   .desk__p { font-size: 18px; line-height: 1.5; }
   .desk__acts { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
   .desk :global(.avail) { --fill: color-mix(in srgb, var(--paper) 55%, transparent); }
@@ -59,7 +59,7 @@ const steps = [
   .next__list p { font-size: 20px; line-height: 1.5; color: var(--ink-2); max-width: 36em; }
   .else { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-top: 120px; }
   .else__list { grid-column: 6 / span 7; list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 48px; }
-  .else__list a { font-family: var(--display); font-size: clamp(36px, 4vw, 56px); line-height: 1.1; letter-spacing: -0.02em; text-decoration: none; }
+  .else__list a { font-family: var(--display); font-size: clamp(36px, 4vw, 56px); line-height: 1.1; letter-spacing: -0.01em; text-decoration: none; }
   .else__list a:hover .arrow { transform: rotate(-45deg); }
 
   @media (max-width: 1099.98px) {
