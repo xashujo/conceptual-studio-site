@@ -694,3 +694,12 @@ Museum model:
 - Firefox and Safari: the /work/ cards sit over live content, so they stay
   clear glass without the bend. The /system/ plates don't bend there yet either
   (they overhang their painting's box).
+
+## Light glass (28 Oct 2026, Josh: "keep it light so the website is lightning fast")
+- At most 3 pieces bend per page, in every browser, and only small chrome
+  (72px tall or less: the nav, pills, bars), in page order. Everything else
+  is a pane: blurred glass at 16px, 22% paper (34% Paper 2 at night), CSS
+  only, no SVG filter or WebGL canvas. The homepage pass goes from 14 bending
+  panes to 3; /work/ from 12 to none.
+- The bend magnifies and refracts only a little: Site settings > Glass set to
+  bend 60 (was 200) and reach 100 (was 200). Frost, blur and shine unchanged.
