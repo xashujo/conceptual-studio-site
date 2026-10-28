@@ -13,7 +13,7 @@ stats:
   - number: 48
     after: hr
     label: First-Concept Turnaround
-  - number: 69
+  - number: 70
     after: "%"
     label: of Clients Return for More Work
 workHeading: Selected Work
@@ -21,11 +21,11 @@ allProjects: All Projects
 results:
   - src/content/projects/oxford-school-of-english.yml
   - src/content/projects/new-city-college-strategic-intent.yml
+workImage: "@assets/art/engraved/kew-night.jpg"
+proofImage: "@assets/art/engraved/ranelagh-night.jpg"
 howHeading: How We Work
 howIntro: How a project runs, from the first call to the files you keep.
-howImage: '@assets/art/engraved/peche.webp'
-workImage: '@assets/art/engraved/kew-night.jpg'
-proofImage: '@assets/art/engraved/ranelagh-night.jpg'
+howImage: "@assets/art/engraved/peche.webp"
 steps:
   - title: Call & Brief
     text: We talk through what you need, your budget, the formats and what the work
