@@ -311,6 +311,7 @@ content:
         options: { media: images }
       - { name: howHeading, label: How We Work heading, type: string, required: true }
       - { name: howIntro, label: How We Work intro, type: text, required: true }
+      - { name: closeText, label: Start a Project text, type: text, required: true }
       - name: howImage
         label: How We Work background
         type: image

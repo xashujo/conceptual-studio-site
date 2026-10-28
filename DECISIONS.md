@@ -903,3 +903,4 @@ Museum model:
   left and year right on one row, outcome held to two lines with the space
   kept when empty, so every card in a row is the same height.
 - 28 Oct: How We Work is an even 2×2; title sits straight over its text, no min-height.
+- 28 Oct: Home spacing scale (--sp-section/head/gap/card, smaller on phones) used by every section; Start a Project text in a dark glass panel capped at 680px, text in CMS (closeText), reply time only in What happens next.

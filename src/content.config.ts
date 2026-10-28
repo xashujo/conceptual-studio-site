@@ -106,6 +106,7 @@ export const collections = {
       results: z.array(ref),
       howHeading: z.string().min(1),
       howIntro: z.string().min(1),
+      closeText: z.string().min(1),
       servicesImage: image(),
       howImage: image(),
       aboutImage: image(),
