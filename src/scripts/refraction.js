@@ -130,11 +130,14 @@ export function mountRefraction(el, opts = {}) {
     if (result) c.setAttribute('result', result);
     return c;
   };
+  // Red bends more and blue less than green: chromatic aberration at the rim. The split is set per size in update().
+  const red = bend(1, 'dr');
+  const blue = bend(1, 'db');
   if (lens) {
     filter.append(map,
-      bend(1.08, 'dr'), keep('dr', 0, 'r'),
+      red, keep('dr', 0, 'r'),
       bend(1, 'dg'), keep('dg', 1, 'g'),
-      bend(0.92, 'db'), keep('db', 2, 'b'),
+      blue, keep('db', 2, 'b'),
       add('r', 'g', 'rg'), add('rg', 'b'));
   } else filter.append(map, bend(1));
   svg.append(filter);
@@ -147,7 +150,8 @@ export function mountRefraction(el, opts = {}) {
     const h = el.offsetHeight;
     if (!w || !h) return;
     const r = Math.min(radiusPx(getComputedStyle(el).borderTopLeftRadius, w), w / 2, h / 2);
-    const band = lens ? Math.max(14, Math.min(w, h) * 0.3) : 0; // lens rim: 30% of the short side, 14px minimum
+    // Lens rim: 30% of the short side, 14 to 40px. The cap keeps big plates' fringe a rim, not a rainbow band (Josh, 28 Oct).
+    const band = lens ? Math.min(40, Math.max(14, Math.min(w, h) * 0.3)) : 0;
     // Reach (Josh's dial) widens only the bent band, so the drag travels further in; the middle blur keeps --lens-band.
     const reach = lens ? band * Math.min(1, dial('reach')) : 0; // below 100 the bent rim narrows; above it, a soft tail (in the map)
     const up = lens ? Math.max(0, dial('reach') - 1) : 0;
@@ -158,7 +162,16 @@ export function mountRefraction(el, opts = {}) {
     map.setAttribute('height', String(h));
     map.setAttribute('href', displacementMap(w, h, r, reach, up));
     el.style.setProperty('--refract', `url(#${id})`);
-    if (lens) el.style.setProperty('--lens-band', `${band}px`);
+    if (lens) {
+      // Chrome's colour split, gentler than WebGL's 22% (Josh, 28 Oct: "a bit too strong"): 15% on buttons,
+      // pills and bars, 7% on big plates. Stored as k so the bend dial keeps it when rescaling.
+      const split = Math.min(w, h) > 120 ? 0.07 : 0.15;
+      maps.find((x) => x[0] === red)[1] = 1 + split;
+      maps.find((x) => x[0] === blue)[1] = 1 - split;
+      red.setAttribute('scale', String(scale * (1 + split) * dial('bend')));
+      blue.setAttribute('scale', String(scale * (1 - split) * dial('bend')));
+      el.style.setProperty('--lens-band', `${band}px`);
+    }
     el.classList.add(lens ? 'is-lens' : 'is-refracting');
   }
   update();

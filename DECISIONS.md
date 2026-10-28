@@ -644,6 +644,13 @@ Museum model:
   into the fade bends paper there instead of hidden art. Glass over live
   content (the scrolling nav over work photos) still can't bend in those
   browsers; over plain paper or black a bend shows nothing anyway.
+- Chromatic aberration (Josh, 28 Oct): the red/blue split at the lens rim is
+  22% of the bend (was 8%), in both the Chromium SVG lens and the WebGL glass,
+  so the colour fringe shows round the sides.
+- Chrome's hero plate read as a rainbow band at 22% (Josh, 28 Oct; he liked
+  the Chrome buttons and the Firefox/Safari hero). Chromium lens: the rim is
+  capped at 40px, and big plates (short side over 120px) split at 10%;
+  buttons, pills and bars keep 22%. WebGL keeps 22% everywhere.
 
 ## Glass dials (27 Oct 2026, branch glass-dials)
 - Josh wants to tune the glass himself. Pages CMS > Site settings > Glass has
@@ -673,6 +680,29 @@ Museum model:
 - Nothing reaches the site. Changes are kept in the browser per page, can be
   undone one by one, and "Copy my changes" gives a list (page, element, screen
   width, before and after, selector) for Claude to apply to the right styles.
+
+## Lens glass everywhere (28 Oct 2026, Josh)
+- Every piece of glass on the site is lens glass: the shared nav and its phone
+  menu sheet, the contact desk, the /work/ cards, the /system/ plates and dock,
+  and the home page (already). The layouts mount it from data-lens;
+  data-liquid still names the painting behind, which Firefox and Safari bend
+  with WebGL. The frosted plate glass (WebGL at 52% tint) is gone from the site;
+  only the hidden /prototypes/ keep it, as records of past options.
+- Chrome's colour fringe is gentler than WebGL's (Josh: "a bit too strong" in
+  Chrome): 15% on buttons, pills and bars, 7% on big plates. Firefox and Safari
+  keep 22%. The split follows the bend dial.
+- Firefox and Safari: the /work/ cards sit over live content, so they stay
+  clear glass without the bend. The /system/ plates don't bend there yet either
+  (they overhang their painting's box).
+
+## Light glass (28 Oct 2026, Josh: "keep it light so the website is lightning fast")
+- At most 3 pieces bend per page, in every browser, and only small chrome
+  (72px tall or less: the nav, pills, bars), in page order. Everything else
+  is a pane: blurred glass at 16px, 22% paper (34% Paper 2 at night), CSS
+  only, no SVG filter or WebGL canvas. The homepage pass goes from 14 bending
+  panes to 3; /work/ from 12 to none.
+- The bend magnifies and refracts only a little: Site settings > Glass set to
+  bend 60 (was 200) and reach 100 (was 200). Frost, blur and shine unchanged.
 
 ## Home page, pass 1 of 2 (28 Oct 2026, branch home-pass-1)
 - Brief: "Update the HOME PAGE", pass 1. Goal: convert visitors into clients; read
@@ -766,11 +796,14 @@ Museum model:
   of a darker pill with a dark outline (Josh: "something about it feels off"; it read as pressed in and
   greyish). On the dark nav it is a warm gold tint. The filters share it. It now follows the section in view
   (Home, Work, Services, About, Contact) instead of staying on Home.
-- Nav glass: plain frosted shared .glass, no lens bend (Josh, 28 Oct). Bent, with Reach at 200, the whole
-  bar smeared the page scrolling under it into streaks, and in Firefox it stayed cream with cream text over
-  the night chapters. Its scroll-edge colour and dark colour are now set outright, so every browser turns
-  it dark over the close. This replaces "the nav and the hero plate are lens glass" (27 Oct) for the nav.
-  The hero plate and the panes keep the lens.
+- Nav glass (Josh, 28 Oct): with Reach at 200 the bent nav smeared the page under it into streaks, and in
+  Firefox it stayed cream with cream text over the night chapters. Fixed by merging glass-light into this
+  branch (Josh: the glass should be the same as glass-light): bend 60 and reach 100, at most three bending
+  pieces per page (small chrome only), every big pane plain blurred glass. On the home page the nav and
+  the filter bar bend; the hero plate, stats, cards, services, quote and result panes are panes. The
+  filter bar is shown before the lens counts heights, so it gets its bend. The nav's scroll-edge and dark
+  colours are set outright, so every browser turns it dark over the close (checked in Chromium and
+  Firefox). Firefox can't bend the nav over live content, so it shows the clear glass there.
 - Background art scrolls with the page now (Josh: the held image made it feel as if the page wasn't moving).
   Two bands, each fading in at the top and out at the foot, at the home page's 60% strength:
   - Stats and Featured Work: La Chasse Chinoise (Huquier after Boucher, The Met 53.600.1009, public domain),

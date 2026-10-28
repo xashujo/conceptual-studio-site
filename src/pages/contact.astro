@@ -17,7 +17,7 @@ const steps = [
     <div><p class="clock"><span class="clock__dot" aria-hidden="true"></span><span>London, UK <span data-clock>(local time)</span></span></p><p class="hours">{hours}</p></div>
     <p><a class="link mail" href={`mailto:${email}`}>{email}</a><br />{replyTime}</p>
     <button class="btn" type="button" data-copy={email}><span data-copy-label>Copy email</span></button>
-    <div class="desk plate-glass" slot="over" data-liquid="open-art" data-tone="light" data-opacity="0.52">
+    <div class="desk glass" slot="over" data-lens data-liquid="open-art">
       <h2 class="desk__h">Tell me about your project</h2>
       <p class="desk__p">A few lines on what it is, who it's for and when you need it is plenty. I'll come back with questions or a time to talk.</p>
       <div class="desk__acts">
@@ -43,7 +43,7 @@ const steps = [
 </Page>
 
 <style>
-  /* The desk: plate glass over the hills, right of centre so the trees show round it. */
+  /* The desk: lens glass over the hills, right of centre so the trees show round it. */
   .desk { position: absolute; z-index: 2; top: 100px; right: calc(var(--margin) + 4vw); width: min(520px, 40vw); padding: 32px 34px 28px; display: grid; gap: 16px; }
   .desk__h { font-family: var(--display); font-weight: 500; font-size: 40px; line-height: 1.05; letter-spacing: -0.02em; }
   .desk__p { font-size: 18px; line-height: 1.5; }

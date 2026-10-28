@@ -70,7 +70,7 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
   </head>
   <body>
     <!-- Sticky glass nav. It turns light over the night chapters (script below). -->
-    <nav class="nav glass" aria-label="Main" data-nav>
+    <nav class="nav glass" aria-label="Main" data-lens data-nav>
       <a class="nav__mark" href="/">Conceptual Studio</a>
       <ul class="nav__links">
         <li><a class="glass-pill" href="#top" aria-current="true">Home</a></li>
@@ -263,8 +263,11 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
 
       // Lens glass. The hero plate can use the WebGL glass over its painting in Firefox and Safari;
       // the field panes move over live content, so there they keep the clear CSS glass.
-      // The nav is plain frosted glass (pass 2): bent, it smeared the page scrolling under it into streaks.
+      // Light glass (glass-light, Josh 28 Oct): only small chrome bends, three pieces at most, nav first;
+      // big panes are plain blurred glass (lens.js decides).
       const heroArt = document.querySelector<HTMLImageElement>('.hero__art');
+      document.querySelector<HTMLElement>('[data-filters]')!.hidden = false; // shown before the lens counts its height
+      mountLens(document.querySelector('[data-nav]'), null);
       mountLens(document.querySelector('.hero__plate'), heroArt, [0.58, 0.92]);
       document.querySelectorAll<HTMLElement>('.field [data-lens]').forEach((el) => mountLens(el, null));
 
@@ -401,7 +404,9 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
      labels never sit on bent text or busy photos. Over the opening it stays clear. */
   .nav.is-over { background-color: color-mix(in srgb, #F1DFC8 80%, transparent); }
   /* Over the night chapters: set outright, so every browser turns dark (Firefox kept it cream, with cream text). */
-  .nav.is-dark, .nav.is-over.is-dark { background-color: rgb(34 29 23 / 0.8); color: #F1DFC8; }
+  .nav.is-over.is-lens::before, .nav.is-over[data-lens]:not(.is-lens) { background-color: color-mix(in srgb, #F1DFC8 80%, transparent); }
+  .nav.is-dark, .nav.is-over.is-dark, .nav.is-dark.is-lens::before, .nav.is-dark[data-lens]:not(.is-lens) { background-color: rgb(34 29 23 / 0.8); }
+  .nav.is-dark { color: #F1DFC8; }
   .nav__mark { font-family: var(--display); font-size: 24px; letter-spacing: -0.02em; text-decoration: none; }
   .nav__links { list-style: none; display: flex; gap: 2px; margin: 0; padding: 0; }
   .nav__menu { display: none; }
