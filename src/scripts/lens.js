@@ -14,13 +14,14 @@ import { mountLiquidGlass } from './liquid-glass.js';
 const BENDS = 3;
 let bends = 0;
 
+// data-bend forces a bend outside the budget: only the /glass/ tuning page uses it, so every piece there previews the bend.
 export function mountLens(el, image, fade, held = false) {
   const h = el.offsetHeight;
-  if (!h || h > 72 || bends >= BENDS) {
+  if (!el.hasAttribute('data-bend') && (!h || h > 72 || bends >= BENDS)) {
     el.classList.add('is-pane');
     return;
   }
-  bends++;
+  if (!el.hasAttribute('data-bend')) bends++;
   if (mountRefraction(el, { lens: true }) || !image) return;
   const a = el.getBoundingClientRect();
   const b = image.getBoundingClientRect();

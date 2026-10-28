@@ -832,3 +832,12 @@ Museum model:
   files when a collection names no file type; it now says yml. Laura De Vos
   and Mark Silverman added as testimonials, word for word from brief
   Appendix A, not on the home page.
+- /glass/ previews the site's glass as it is (28 Oct): its bars, pills and
+  buttons carry data-bend, which lifts the 3-bend limit on that page only, and
+  each section has a labelled pane showing the blurred big-glass style.
+
+## Branch clean-up (28 Oct 2026, Josh)
+- Pages CMS edits "main", the live site. All other branches were deleted:
+  16 already fully in main, plus two replaced ones. To recover them:
+  glass (old step-1 glass) at 0942a02, home-pass-1 (first home pass,
+  replaced by pass 2) at 83302d0.

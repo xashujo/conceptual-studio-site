@@ -18,7 +18,7 @@ const dials = [
   ['reach', 'Reach', 'How far in from the edge the bend travels'],
 ];
 const grounds = [
-  { id: 'painting', title: 'Over a painting', note: 'Le Jardin Chinois, as on the home page.' },
+  { id: 'painting', title: 'Over a painting', note: 'Le Jardin Chinois, as on the home page. Bars, pills and buttons bend; the pane is blurred' },
   { id: 'paper', title: 'Over paper', note: 'Specimen only: the site never puts glass on flat paper' },
   { id: 'black', title: 'Over black', note: 'A night chapter: the Lemoyne close, then plain warm black' },
 ];
@@ -40,7 +40,7 @@ const grounds = [
           {g.id === 'black' && <Image class="ground__art ground__art--top" src={lemoyne} alt="" widths={[800, 1600, 2400]} sizes="100vw" loading="eager" />}
 
           {['lens'].map(() => (
-            <div class="bar glass" data-lens>
+            <div class="bar glass" data-lens data-bend>
               <span class="bar__mark">Conceptual Studio</span>
               <ul class="bar__links"><li>Work</li><li>Services</li><li>About</li><li>Contact</li></ul>
               <span class="btn btn--solid bar__cta">Start a project</span>
@@ -48,12 +48,15 @@ const grounds = [
           ))}
 
           <div class="row">
-            <div class="dock glass" data-lens><ul><li>Work</li><li>Services</li><li>About</li><li>Contact</li></ul></div>
+            <div class="dock glass" data-lens data-bend><ul><li>Work</li><li>Services</li><li>About</li><li>Contact</li></ul></div>
           </div>
           <div class="row">
-            <span class="round glass" data-lens aria-hidden="true">↗</span>
-            <span class="round glass" data-lens aria-hidden="true">↓</span>
-            <span class="round glass round--wide" data-lens>Taking new projects</span>
+            <span class="round glass" data-lens data-bend aria-hidden="true">↗</span>
+            <span class="round glass" data-lens data-bend aria-hidden="true">↓</span>
+            <span class="round glass round--wide" data-lens data-bend>Taking new projects</span>
+          </div>
+          <div class="row">
+            <div class="pane glass" data-lens><b>A pane</b><span>Big glass (cards, the hero, the contact desk): blurred, no bend.</span></div>
           </div>
 
           <p class="plate ground__label"><b id={`t-${g.id}`}>{g.title}</b><span>({g.note})</span></p>
@@ -129,6 +132,7 @@ const grounds = [
   .dock ul { list-style: none; display: flex; margin: 0; padding: 0; font-size: 16px; font-weight: 500; }
   .dock li { display: grid; place-items: center; min-height: 44px; padding: 0 12px; }
   .ground__label { margin: 0; }
+  .pane { width: min(420px, 100%); padding: 22px 24px; border-radius: 28px; display: grid; gap: 4px; font-size: 16px; }
   /* The dials: a plain paper panel (not glass, so it never changes while you tune), pinned bottom right. */
   .dials { position: fixed; z-index: 20; right: 16px; bottom: 16px; width: min(320px, calc(100vw - 32px)); max-height: calc(100svh - 32px); overflow: auto; padding: 20px; border-radius: 24px; background: var(--paper); color: var(--ink); box-shadow: 0 0 0 1px rgb(110 80 36 / 0.2), 4px 14px 36px -12px rgb(40 24 8 / 0.4); display: grid; gap: 14px; }
   .dials__h { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; }
