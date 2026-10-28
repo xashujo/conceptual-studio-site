@@ -873,3 +873,5 @@ Museum model:
   the same colours. Set once in components.css; the per-component faint
   hovers (glass button, data chart toggle, ladder, /system/) were removed.
 - Home: "More About the Studio" is a glass button with its arrow, not a link.
+- Home: Selected Work cards no longer rise on hover; they turn to cream glass
+  with dark text, like the buttons in the night bands.

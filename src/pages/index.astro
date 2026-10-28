@@ -458,7 +458,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .filterbar[hidden] { display: none; }
   .fw__grid { list-style: none; margin: 32px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
   .fw__grid > [hidden] { display: none; }
-  .card { position: relative; display: grid; align-content: start; gap: 14px; height: 100%; padding: 12px 12px 16px; border-radius: 28px; text-decoration: none; transition: transform 260ms var(--ease-out); }
+  .card { position: relative; display: grid; align-content: start; gap: 14px; height: 100%; padding: 12px 12px 16px; border-radius: 28px; text-decoration: none; transition: background-color 300ms ease-out, color 300ms ease-out; }
   .card__img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 16px; } /* concentric: 28px card, 12px inset */
   .card__row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 0 8px 2px; }
   .card__y { margin-left: auto; }
@@ -466,7 +466,8 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .card__y { font-size: 17px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
   .card__tags { display: flex; flex-wrap: wrap; gap: 6px; }
   .tag { padding: 5px 11px; border-radius: var(--pill); background: color-mix(in srgb, var(--ink) 7%, transparent); font-size: 14px; font-weight: 500; line-height: 1.2; }
-  @media (hover: hover) { .card:hover { transform: translateY(-4px); } }
+  /* Hover (Josh, 28 Oct): no rise; the card turns to its day glass, like the buttons in the night bands. */
+  @media (hover: hover) { .fw .card.glass:hover { color-scheme: light; background: color-mix(in srgb, var(--paper) 90%, transparent); } } /* beats the night pane glass */
   .card:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
   .fw__empty { margin-top: 32px; font-size: 20px; }
   .fw__foot [hidden] { display: none; }
