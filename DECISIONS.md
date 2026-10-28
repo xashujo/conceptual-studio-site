@@ -845,7 +845,9 @@ Museum model:
 ## Home page conversion pass (28 Oct 2026, Josh)
 - Hero: the third button is a plain "Selected Work ↓" (no label swap), the
   same height, padding and type as Start a Project and the availability
-  pill, with the same faint hover. It scrolls (smoothly) to the work.
+  pill. Its arrow points right and turns down on hover (always down on touch
+  screens). On hover it and the availability pill fill solid ink with cream
+  text, like Start a Project (a faint darken looked washed out on a filled pill).
 - The stats moved up into the opening, straight under the hero plate, then
   Trusted By as one centred line with a single space after the label. Stat
   figures are set looser (0.01em) with the + or % nudged off them, and a
