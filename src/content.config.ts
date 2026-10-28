@@ -87,11 +87,19 @@ export const collections = {
   // The home page's own words (Josh, 28 Oct): one file, src/content/home/home.yml.
   home: defineCollection({
     loader: yml('home'),
-    schema: z.object({
+    schema: ({ image }) => z.object({
       headline: z.string().min(1),
       intro: z.string().min(1),
+      workButton: z.string().min(1),
+      workButtonHover: z.string().min(1),
+      trustedByLabel: z.string().min(1),
       stats: z.array(z.object({ number: z.number(), after: z.string().nullish().transform((s) => s ?? ''), label: z.string().min(1) })),
+      workHeading: z.string().min(1),
+      allProjects: z.string().min(1),
       results: z.array(ref),
+      howHeading: z.string().min(1),
+      howIntro: z.string().min(1),
+      howImage: image(),
       steps: z.array(z.object({ title: z.string().min(1), text: z.string().min(1) })),
       values: z.array(z.object({ title: z.string().min(1), text: z.string().min(1) })),
     }),

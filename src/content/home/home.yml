@@ -1,6 +1,9 @@
 headline: Brands & Data, Made Clear
 intro: Conceptual Studio is a design studio in London. Most of our work is in
   education. We also design for companies and edit video for social media.
+workButton: See the Work
+workButtonHover: Selected Work
+trustedByLabel: Trusted By
 stats:
   - number: 25
     after: +
@@ -14,9 +17,14 @@ stats:
   - number: 69
     after: "%"
     label: of Clients Return for More Work
+workHeading: Selected Work
+allProjects: All Projects
 results:
   - src/content/projects/oxford-school-of-english.yml
   - src/content/projects/new-city-college-strategic-intent.yml
+howHeading: How We Work
+howIntro: How a project runs, from the first call to the files you keep.
+howImage: '@assets/art/engraved/garden.webp'
 steps:
   - title: Call & Brief
     text: We talk through what you need, your budget, the formats and what the work

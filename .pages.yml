@@ -256,6 +256,9 @@ content:
     fields:
       - { name: headline, label: Headline, type: string, required: true }
       - { name: intro, label: Intro, type: text, required: true, description: "The sentence under the headline. Also the page's description in search results." }
+      - { name: workButton, label: Work button, type: string, required: true, description: "The glass button under the headline. Phones always show this." }
+      - { name: workButtonHover, label: Work button on hover, type: string, required: true, description: "What the button changes to when the mouse is over it, with a ↓ after it. It scrolls down to the work." }
+      - { name: trustedByLabel, label: Trusted By label, type: string, required: true, description: "The bold words before the client names. The names are ticked in Clients." }
       - name: stats
         label: Stats
         type: object
@@ -265,12 +268,22 @@ content:
           - { name: number, label: Number, type: number, required: true, description: "Counts up to this. Type the number without commas, e.g. 20000: the site adds them (20,000)." }
           - { name: after, label: After the number, type: string, description: "e.g. + or % or hr or M+" }
           - { name: label, label: Label, type: string, required: true }
+      - { name: workHeading, label: Work heading, type: string, required: true, description: "The big heading over the work grid, e.g. Selected Work." }
+      - { name: allProjects, label: All projects button, type: string, required: true, description: "The glass button under the work grid. It opens the Work page." }
       - name: results
         label: Why Clients Choose Us
         type: reference
         list: true
         description: "The projects shown beside the quote, with their summaries."
         options: { collection: projects, value: "{path}", label: "{title}", search: title }
+      - { name: howHeading, label: How We Work heading, type: string, required: true }
+      - { name: howIntro, label: How We Work intro, type: text, required: true }
+      - name: howImage
+        label: How We Work background
+        type: image
+        required: true
+        description: "The painting behind the How We Work tiles. Upload a large, wide file; it's shown faded behind the glass."
+        options: { media: images }
       - name: steps
         label: How We Work
         type: object

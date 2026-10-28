@@ -841,3 +841,24 @@ Museum model:
   16 already fully in main, plus two replaced ones. To recover them:
   glass (old step-1 glass) at 0942a02, home-pass-1 (first home pass,
   replaced by pass 2) at 83302d0.
+
+## Home page conversion pass (28 Oct 2026, Josh)
+- Hero: "See the Work" swaps to "Selected Work ↓" on hover, like the other
+  buttons; phones keep "See the Work". It scrolls (smoothly) to the work.
+- The stats moved up into the opening, straight under the hero plate, then
+  Trusted By as one centred line with a single space after the label. Stat
+  figures are set looser (0.01em) with the + or % nudged off them, and a
+  little smaller so 20,000+ fits its card at every width.
+- "Featured Work" is now "Selected Work". "All Projects" is a glass button.
+- The band art no longer zooms when the work is filtered or a service opens:
+  each band's image has a fixed height (a little above the band's tallest
+  state) instead of filling the band, and the fade moved onto the band.
+- Services all start closed.
+- How We Work has its own band of art, and its tiles are glass. The painting
+  is a CMS field (Home page > How We Work background). [TBC: a new
+  chinoiserie painting; Boucher's Le Jardin Chinois engraving (garden.webp)
+  stands in until it is chosen.]
+- Every section heading has one size, set once on .big: the Selected Work one.
+- New CMS fields on Home page: Work button, Work button on hover, Trusted By
+  label, Work heading, All projects button, How We Work heading, intro and
+  background.

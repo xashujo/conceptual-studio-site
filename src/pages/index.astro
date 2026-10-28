@@ -81,24 +81,10 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
           <div class="acts">
             <a class="btn btn--solid" href={startHref}><span class="swap"><span>Start a Project</span><span aria-hidden="true">Contact Us ↗</span></span></a>
             {availability.on && <a class="avail" href={`mailto:${email}`}><span class="avail__dot" aria-hidden="true"></span><span class="swap"><span>{titleCase(availability.text)}</span><span aria-hidden="true">↗ Email Us</span></span></a>}
-            <a class="btn glass-button" href="#work">See the Work</a>
+            <a class="btn glass-button" href="#work"><span class="swap"><span>{home.workButton}</span><span aria-hidden="true">{home.workButtonHover} ↓</span></span></a>
           </div>
         </div>
-        {trustedBy.length > 0 && (
-          <div class="hero__with">
-            <p class="hero__with-h">Trusted By</p>
-            <p class="hero__names">{trustedBy.join(', ')} &amp; More</p>
-          </div>
-        )}
-      </header>
-
-      <!-- Art behind the glass, so every pane has something to bend (Josh, 28 Oct). Two bands that scroll with
-           the page, each its own etching (pass 2, Josh: the held image made the page feel like it wasn't moving). -->
-      <div class="field">
-        <div class="band">
-        <div class="band__art" aria-hidden="true"><Image src={workArt} alt="" widths={[800, 1600]} sizes="100vw" /></div>
-
-        <section class="stats wrap" aria-label="The studio in numbers">
+        <section class="stats" aria-label="The studio in numbers">
           <ul class="stats__list">
             {stats.map((s) => (
               <li class="stat glass" data-lens>
@@ -108,10 +94,20 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
             ))}
           </ul>
         </section>
+        {trustedBy.length > 0 && (
+          <p class="hero__with"><b>{home.trustedByLabel}</b> {trustedBy.join(', ')} &amp; More</p>
+        )}
+      </header>
+
+      <!-- Art behind the glass, so every pane has something to bend (Josh, 28 Oct). Two bands that scroll with
+           the page, each its own etching (pass 2, Josh: the held image made the page feel like it wasn't moving). -->
+      <div class="field">
+        <div class="band" style="--art-h: 1800px">
+        <div class="band__art" aria-hidden="true"><Image src={workArt} alt="" widths={[800, 1600]} sizes="100vw" /></div>
 
         <section class="fw wrap" id="work" aria-labelledby="fw-h">
-          <h2 class="fw__h big" id="fw-h">Featured Work</h2>
-          <div class="filterbar glass" role="group" aria-label="Filter featured work" data-lens data-filters hidden>
+          <h2 class="fw__h big" id="fw-h">{home.workHeading}</h2>
+          <div class="filterbar glass" role="group" aria-label={`Filter ${home.workHeading.toLowerCase()}`} data-lens data-filters hidden>
             <button class="glass-pill" type="button" data-filter="all" aria-pressed="true">All</button>
             {homeFilters.map((f) => <button class="glass-pill" type="button" data-filter={f} aria-pressed="false">{f}</button>)}
           </div>
@@ -135,12 +131,12 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
           <p class="fw__empty" data-empty hidden>No projects under this filter yet.</p>
           <div class="fw__foot">
             <button class="btn glass-button" type="button" data-show-more hidden>Show More</button>
-            <a class="link" href="/work/">All Projects<span class="arrow" aria-hidden="true">→</span></a>
+            <a class="btn glass-button" href="/work/">{home.allProjects} <span class="arrow" aria-hidden="true">→</span></a>
           </div>
         </section>
         </div>
 
-        <div class="band">
+        <div class="band" style="--art-h: 2400px">
         <div class="band__art" aria-hidden="true"><Image src={heroArt} alt="" widths={[800, 1600, 2400]} sizes="100vw" /></div>
         <section class="services wrap" id="services" aria-labelledby="services-h">
           <h2 class="big services__h" id="services-h">Services</h2>
@@ -195,18 +191,22 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
           <a class="btn glass-button proof__go" href={startHref}>Start a Project <span class="arrow" aria-hidden="true">→</span></a>
         </section>
         </div>
-      </div>
 
-      <!-- How we work: a real ordered list, the order carried by position, not numerals. -->
-      <section class="how wrap" aria-labelledby="how-h">
-        <div class="how__head">
-          <h2 class="big how__h" id="how-h">How We Work</h2>
-          <p>How a project runs, from the first call to the files you keep.</p>
+        <!-- How we work: a real ordered list, the order carried by position, not numerals. Its own painting behind
+             the glass tiles, so they have something to bend (Josh, 28 Oct). -->
+        <div class="band" style="--art-h: 1200px">
+        <div class="band__art" aria-hidden="true"><Image src={home.howImage} alt="" widths={[800, 1600, 2400]} sizes="100vw" /></div>
+        <section class="how wrap" aria-labelledby="how-h">
+          <div class="how__head">
+            <h2 class="big how__h" id="how-h">{home.howHeading}</h2>
+            <p>{home.howIntro}</p>
+          </div>
+          <ol class="how__list">
+            {steps.map(([t, d]) => <li class="glass" data-lens><h3 class="how__t">{t}</h3><p>{d}</p></li>)}
+          </ol>
+        </section>
         </div>
-        <ol class="how__list">
-          {steps.map(([t, d]) => <li><h3 class="how__t">{t}</h3><p>{d}</p></li>)}
-        </ol>
-      </section>
+      </div>
 
       <!-- About (pass 2): what we do for clients, not a CV. -->
       <section class="about wrap" id="about" aria-labelledby="about-h">
@@ -255,7 +255,7 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
       document.querySelector<HTMLElement>('[data-filters]')!.hidden = false; // shown before the lens counts its height
       mountLens(document.querySelector('[data-nav]'), null);
       mountLens(document.querySelector('.hero__plate'), heroArt, [0.58, 0.92]);
-      document.querySelectorAll<HTMLElement>('.field [data-lens]').forEach((el) => mountLens(el, null));
+      document.querySelectorAll<HTMLElement>('.field [data-lens], .stat').forEach((el) => mountLens(el, null));
 
       // Nav: light over the night chapters, dark over paper. Watches a 1px line across the nav's middle.
       const nav = document.querySelector<HTMLElement>('[data-nav]')!;
@@ -339,8 +339,8 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
         panel.toggleAttribute('data-closed', !open);
         panel.inert = !open;
       };
-      rows.forEach((row, i) => {
-        setRow(row, i === 0);
+      rows.forEach((row) => {
+        setRow(row, false); // all closed on load (Josh, 28 Oct)
         row.querySelector('.acc__btn')!.addEventListener('click', () => {
           const open = row.querySelector('.acc__btn')!.getAttribute('aria-expanded') !== 'true';
           rows.forEach((r) => setRow(r, r === row && open));
@@ -378,8 +378,11 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
 
 <style>
   .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-  .big { font-family: var(--display); font-weight: 500; letter-spacing: -0.03em; line-height: 0.92; }
+  /* Every section heading, one size: the Selected Work heading's (Josh, 28 Oct). */
+  .big { font-family: var(--display); font-weight: 500; font-size: clamp(56px, 7.8vw, 120px); letter-spacing: -0.03em; line-height: 0.92; }
   .acts { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 14px; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   [id] { scroll-margin-top: 96px; } /* anchors land below the sticky nav */
 
   /* Nav: sticky glass for the whole page (Josh, 28 Oct; replaces "scrolls away with the opening").
@@ -398,39 +401,41 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
   .nav__menu { display: none; }
 
   /* Opening: the quiet etching fills the screen, the plate centred over the trees and sky. */
-  .hero { position: relative; isolation: isolate; min-height: 100svh; padding: 116px var(--margin) 40px; display: grid; grid-template-rows: 1fr auto; }
+  .hero { position: relative; isolation: isolate; min-height: 100svh; padding: 116px var(--margin) 40px; display: grid; grid-template-rows: 1fr auto auto; }
   .hero__art { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 92%); mask-image: linear-gradient(to bottom, #000 58%, transparent 92%); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
   .hero__plate { position: relative; align-self: center; justify-self: center; width: min(680px, 50vw); padding: 44px 44px 40px; display: grid; gap: 22px; border-radius: 28px; }
   .hero__h { font-family: var(--display); font-weight: 500; font-size: clamp(34px, 2.8vw, 40px); line-height: 1.06; letter-spacing: -0.02em; text-wrap: balance; }
   .hero__p { font-size: 18px; line-height: 1.5; }
   .hero__plate .avail { --fill: color-mix(in srgb, var(--paper) 55%, transparent); }
-  /* Trusted By: the label sits right against the names (Josh, 28 Oct). */
-  .hero__with { justify-self: center; width: min(1140px, 100%); display: flex; flex-wrap: wrap; column-gap: 12px; align-items: baseline; padding-top: 32px; font-size: 18px; line-height: 1.5; }
-  .hero__with-h { font-weight: 600; white-space: nowrap; }
-  .hero__names { text-wrap: balance; }
+  /* Trusted By: one centred line, a single space between the label and the names (Josh, 28 Oct). */
+  .hero__with { justify-self: center; width: min(1140px, 100%); padding-top: 32px; font-size: 18px; line-height: 1.5; text-align: center; text-wrap: balance; }
+  .hero__with b { font-weight: 600; }
 
   /* The field: an etching behind each band of glass, scrolling with it. Each fades in at the top and out at
      the foot, like the other art on the site. */
   .field { padding-bottom: 24px; }
   .band { position: relative; isolation: isolate; padding-bottom: 160px; }
   .band__art { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
-  .band__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; opacity: 0.6; -webkit-mask-image: linear-gradient(transparent, #000 180px, #000 calc(100% - 140px), transparent); mask-image: linear-gradient(transparent, #000 180px, #000 calc(100% - 140px), transparent); } /* taste-skill-ignore: art fade into the page (DECISIONS); 60% is the home page's "quiet" strength */
+  /* The art's size is fixed by the page width, never by the band's height, so filtering the work or opening a
+     service doesn't zoom it (Josh, 28 Oct). The band crops it; the fade sits on the band's edges. */
+  .band__art { -webkit-mask-image: linear-gradient(transparent, #000 180px, #000 calc(100% - 140px), transparent); mask-image: linear-gradient(transparent, #000 180px, #000 calc(100% - 140px), transparent); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
+  .band__art img { width: 100%; height: var(--art-h); /* each band sets it a little above its tallest state */ object-fit: cover; object-position: 50% 20%; opacity: 0.6; -webkit-mask-image: linear-gradient(#000 calc(100% - 240px), transparent); mask-image: linear-gradient(#000 calc(100% - 240px), transparent); } /* 60% is the home page's "quiet" strength */
   .band:first-child .band__art img { object-position: 50% 0%; }
 
   /* One centred column for everything under the opening (Josh, 28 Oct: "centred to the page").
      Headings stay left-aligned inside it. 1140px lets both rows of work fit one screen at 1440. */
   .band > section { box-sizing: content-box; max-width: 1140px; margin-inline: auto; }
 
-  /* Stats: four glass cards, a large number over a short label. */
-  .stats { padding-top: 40px; }
+  /* Stats: four glass cards, a large number over a short label, straight under the hero plate (Josh, 28 Oct). */
+  .stats { justify-self: center; box-sizing: border-box; width: min(1140px, 100%); padding-top: 40px; }
   .stats__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
   .stat { position: relative; display: grid; align-content: space-between; gap: 28px; min-height: 196px; padding: 28px 28px 26px; border-radius: 28px; }
-  .stat__n { font-family: var(--display); font-weight: 500; font-size: clamp(56px, 5vw, 76px); line-height: 0.9; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  .stat__n { font-family: var(--display); font-weight: 500; font-size: clamp(48px, 4.2vw, 62px); line-height: 0.9; letter-spacing: 0.01em; font-variant-numeric: tabular-nums; }
+  .stat__n [aria-hidden] > :last-child { margin-left: 0.06em; } /* the + or % sits a little off the figure */
   .stat__l { font-size: 18px; line-height: 1.35; font-weight: 500; text-wrap: balance; }
 
   /* Featured work: heading, the filter bar, then compact cards two to a row, all the same shape. */
   .fw { padding-top: 120px; }
-  .fw__h { font-size: clamp(56px, 7.8vw, 120px); }
   .filterbar { position: relative; display: inline-flex; gap: 2px; margin-top: 28px; padding: 6px; border-radius: var(--pill); max-width: 100%; overflow-x: auto; scrollbar-width: none; }
   .filterbar[hidden] { display: none; }
   .fw__grid { list-style: none; margin: 32px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
@@ -451,7 +456,6 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
 
   /* Services: the same heading as Featured Work, then full-width rows that open one at a time. */
   .services { padding-top: 140px; }
-  .services__h { font-size: clamp(56px, 7.8vw, 120px); }
   .services__intro { margin-top: 20px; max-width: 46ch; font-size: 20px; line-height: 1.45; }
   .acc { position: relative; margin-top: 40px; padding: 4px 32px; border-radius: 28px; }
   .acc__row + .acc__row { border-top: 1px solid color-mix(in srgb, var(--ink) 16%, transparent); }
@@ -477,7 +481,6 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
 
   /* Why clients choose us: the quote in one large pane, two results stacked beside it (asymmetric, 7 + 5). */
   .proof { padding-top: 140px; }
-  .proof__h { font-size: clamp(56px, 7.8vw, 120px); }
   .proof__grid { display: grid; grid-template-columns: 7fr 5fr; grid-template-rows: 1fr 1fr; gap: 24px; margin-top: 40px; }
   .proof__quote { position: relative; grid-row: span 2; display: flex; flex-direction: column; justify-content: space-between; gap: 40px; margin: 0; padding: 44px 44px 40px; border-radius: 28px; }
   .proof__quote blockquote { margin: 0; }
@@ -495,11 +498,10 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
   /* How we work: the same heading as the sections above, then the bento. */
   .how { box-sizing: content-box; max-width: 1140px; margin-inline: auto; padding-block: 140px 0; display: grid; gap: 40px; }
   .how__head { display: grid; gap: 20px; }
-  .how__h, .about__h { font-size: clamp(56px, 7.8vw, 120px); }
   .how__head p { max-width: 46ch; font-size: 20px; line-height: 1.45; }
   /* Bento (Josh, 26 Oct): two rows of unequal tiles, wide then narrow, then narrow then wide. Title at the top, text at the foot. */
   .how__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; }
-  .how__list li { display: flex; flex-direction: column; justify-content: space-between; gap: 48px; min-height: 280px; padding: 32px 32px 36px; border-radius: 28px; background: var(--paper-2); }
+  .how__list li { position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 48px; min-height: 280px; padding: 32px 32px 36px; border-radius: 28px; }
   .how__list li:nth-child(1), .how__list li:nth-child(4) { grid-column: span 7; }
   .how__list li:nth-child(2), .how__list li:nth-child(3) { grid-column: span 5; }
   .how__t { font-size: 24px; line-height: 1.2; font-weight: 600; letter-spacing: -0.02em; }
@@ -520,7 +522,7 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
   .close { position: relative; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-block: min(560px, 40vw) 96px; align-items: end; }
   .close__art { position: absolute; inset: 0; z-index: -1; overflow: hidden; }
   .close__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%); mask-image: linear-gradient(to bottom, transparent, #000 14%); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
-  .close__h { grid-column: 1 / span 7; font-size: clamp(56px, 7.8vw, 120px); }
+  .close__h { grid-column: 1 / span 7; }
   .close__body { grid-column: 8 / -1; display: grid; gap: 24px; }
   .close__p { font-size: 20px; line-height: 1.5; }
   .footer { padding: 0 var(--margin) 40px; text-align: center; font-size: 16px; color: var(--gold-ink); }
@@ -562,10 +564,9 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
     .stats { padding-top: 32px; }
     .stats__list { gap: 12px; }
     .stat { min-height: 150px; padding: 20px 18px; gap: 20px; border-radius: 26px; }
-    .stat__n { font-size: 46px; }
+    .stat__n { font-size: 9.6vw; } /* 20,000+ fits a phone-width card */
     .stat__l { font-size: 15px; }
     .fw, .services { padding-top: 120px; }
-    .fw__h, .services__h { font-size: 56px; }
     .filterbar { margin-top: 20px; }
     .filterbar { gap: 0; padding: 4px; }
     .filterbar .glass-pill { min-height: 40px; padding: 0 9px; font-size: 14px; letter-spacing: -0.02em; }
@@ -585,7 +586,6 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
     .quote { margin-top: 40px; padding: 28px 22px; border-radius: 26px; }
     .quote__p { font-size: 16px; }
     .proof, .how { padding-top: 120px; }
-    .proof__h, .how__h, .about__h { font-size: 56px; }
     .proof__grid { grid-template-columns: 1fr; gap: 16px; margin-top: 28px; }
     .proof__quote { padding: 26px 22px 24px; gap: 28px; border-radius: 26px; }
     .proof__quote p { font-size: 20px; line-height: 1.4; }
@@ -608,7 +608,6 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
     .about__values p { margin-top: 6px; font-size: 16px; }
     .close { padding-block: 300px 80px; }
     .close__art img { object-position: 42% 30%; }
-    .close__h { font-size: 56px; }
     .footer { font-size: 14px; padding-bottom: 28px; }
   }
   @media (min-width: 760px) { .menu { display: none; } }
