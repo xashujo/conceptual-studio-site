@@ -479,6 +479,10 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .band__art { -webkit-mask-image: linear-gradient(transparent, #000 180px, #000 calc(100% - 140px), transparent); mask-image: linear-gradient(transparent, #000 180px, #000 calc(100% - 140px), transparent); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
   .band__art img { width: 100%; height: var(--art-h); /* each band sets it a little above its tallest state */ object-fit: cover; object-position: 50% 20%; opacity: 0.6; -webkit-mask-image: linear-gradient(#000 calc(100% - 240px), transparent); mask-image: linear-gradient(#000 calc(100% - 240px), transparent); } /* 60% is the home page's "quiet" strength */
   .band:first-child .band__art img { object-position: 50% 0%; }
+  /* Calm the art to the close's Lemoyne (Josh, 28 Oct: the rest felt busy): flatter tone and softened hatching,
+     so the engravings read as soft masses, not fine line. In CSS, so any image swapped in through the CMS calms too. */
+  .band__art img { filter: contrast(0.62) blur(1.5px); }
+  .band.night .band__art img { filter: contrast(0.8) blur(1.5px); opacity: 0.5; } /* less contrast here would grey the black */
 
   /* One centred column for everything under the opening (Josh, 28 Oct: "centred to the page").
      Headings stay left-aligned inside it. 1140px lets both rows of work fit one screen at 1440. */
