@@ -56,7 +56,7 @@ const count = (f: string) => projects.filter((p) => (f === 'all' ? !p.student : 
 
   .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
   .filter { --fill: color-mix(in srgb, var(--paper) 70%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); min-height: 44px; padding: 0 18px; font-size: 16px; gap: 8px; }
-  .filter[aria-pressed='true'] { --fill: var(--ink); --fill-hover: var(--ink); color: var(--paper); }
+  .filter[aria-pressed='true'] { --fill: var(--ink); color: var(--paper); }
   .filter__n { font-variant-numeric: tabular-nums; opacity: 0.6; font-size: 14px; }
   .filter:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
   .archive-note { margin-bottom: 12px; font-size: 18px; font-weight: 500; }

@@ -23,23 +23,23 @@ a { color: inherit; }
 .plate span { display: block; font-weight: 400; color: var(--ink-2); }
 
 /* ---------- Buttons and links ---------- */
-/* One change per hover (22). Arrows turn → to ↗ in 180ms ease-out (DECISIONS). */
+/* One change per hover (22). Arrows turn → to ↗ in 180ms ease-out (DECISIONS).
+   Hover fills every button with ink and turns its text to paper (Josh, 28 Oct): black on the light pages, and,
+   because the night chapters swap the two tokens, cream with dark text there. */
 .btn {
   --fill: color-mix(in srgb, var(--ink) 5%, var(--paper));
-  --fill-hover: color-mix(in srgb, var(--ink) 11%, var(--paper));
-  --fill-pressed: color-mix(in srgb, var(--ink) 17%, var(--paper));
+  --fill-hover: var(--ink);
+  --fill-pressed: color-mix(in srgb, var(--ink) 84%, var(--paper));
   position: relative; display: inline-flex; align-items: center; gap: 10px;
   min-height: 48px; padding: 0 22px; border: 0; border-radius: var(--pill);
   background: var(--fill); color: var(--ink);
   font: 500 18px/1 var(--text); letter-spacing: -0.01em; text-decoration: none; white-space: nowrap; cursor: pointer;
-  transition: background-color 300ms ease-out, transform 160ms var(--ease-out);
+  transition: background-color 300ms ease-out, color 300ms ease-out, transform 160ms var(--ease-out);
   -webkit-tap-highlight-color: transparent;
 }
 .btn--solid {
   --fill: var(--ink);
-  --fill-hover: var(--ink); /* one change per hover (22): the label swap carries it */
-  --fill-pressed: color-mix(in srgb, var(--ink) 84%, var(--paper));
-  color: var(--paper);
+  color: var(--paper); /* already ink, so its hover is the label swap alone (22) */
 }
 .arrow { display: inline-block; margin-left: 0.35em; font-weight: 400; transition: transform 180ms ease-out; }
 .btn .arrow { margin-left: 0; }
@@ -68,11 +68,11 @@ a { color: inherit; }
 .link:active, .link.is-pressed { text-decoration-color: currentColor; opacity: 0.7; }
 
 /* Availability pill: the one pill badge. "Available to book a call" becomes "Email me". */
-.avail { --fill: color-mix(in srgb, var(--ink) 5%, var(--paper)); display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 18px 0 16px; border-radius: var(--pill); background: var(--fill); color: var(--ink); font-weight: 500; font-size: 16px; text-decoration: none; white-space: nowrap; transition: color 150ms ease-out; }
+.avail { --fill: color-mix(in srgb, var(--ink) 5%, var(--paper)); display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 18px 0 16px; border-radius: var(--pill); background: var(--fill); color: var(--ink); font-weight: 500; font-size: 16px; text-decoration: none; white-space: nowrap; transition: color 300ms ease-out, background-color 300ms ease-out; }
 .avail__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--live); flex: none; animation: blink 2s ease-in-out infinite; }
 .avail .swap > :last-child { transform: translateY(100%); }
 @media (hover: hover) {
-  .avail:hover { color: var(--live); }
+  .avail:hover { background: var(--ink); color: var(--paper); } /* like the buttons; the dot stays green */
   .avail:hover .swap > :first-child { transform: translateY(-100%); opacity: 0; }
   .avail:hover .swap > :last-child { transform: none; opacity: 1; }
 }
@@ -112,7 +112,10 @@ a { color: inherit; }
     inset 0 0 0 1px rgb(241 223 200 / 0.08);
 }
 /* Glass button: a .btn made of the glass. Hover and press deepen the glass rather than replace it. */
-.btn.glass-button { --fill: var(--glass-bg); --fill-hover: color-mix(in srgb, var(--ink) 7%, var(--glass-bg)); --fill-pressed: color-mix(in srgb, var(--ink) 13%, var(--glass-bg)); text-decoration: none; }
+.btn.glass-button { --fill: var(--glass-bg); text-decoration: none; }
+/* A hovered or pressed button's text is paper. Set after the night glass, whose text colour would otherwise win. */
+@media (hover: hover) { .btn:hover { color: var(--paper); } }
+.btn:is(.is-hover, :active, .is-pressed) { color: var(--paper); }
 /* The current page in the nav and the chosen filter (Josh, 28 Oct; replaces TASTE 23's brackets).
    Plain text at rest, a faint tint on hover. The current one is a lifted piece of the same glass, lighter
    than the bar, lit from the top left (pass 2: the old darker, outlined pill read as pressed-in and greyish). */

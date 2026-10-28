@@ -865,3 +865,11 @@ Museum model:
 - New CMS fields on Home page: Work button, Work button on hover, Trusted By
   label, Work heading, All projects button, How We Work heading, intro and
   background.
+
+## One button hover, site-wide (28 Oct 2026, Josh)
+- Every .btn and the availability pill fill with ink on hover and their text
+  turns paper: black with cream text on the light pages, cream with dark text
+  in the night chapters (the tokens swap there, so it's one rule). Press keeps
+  the same colours. Set once in components.css; the per-component faint
+  hovers (glass button, data chart toggle, ladder, /system/) were removed.
+- Home: "More About the Studio" is a glass button with its arrow, not a link.

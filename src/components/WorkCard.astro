@@ -42,7 +42,7 @@ const Title = href ? 'a' : 'span';
   .wc__fig :global(.plate) { padding-inline: 8px; }
   .wc__btn { align-self: flex-start; margin: 14px 0 2px; min-height: 40px; padding: 0 16px; font-size: 16px; --fill: color-mix(in srgb, var(--paper) 55%, transparent); }
   @media (hover: hover) {
-    .wc:has(a.wc__link:hover) .wc__btn { background: var(--fill-hover); }
+    .wc:has(a.wc__link:hover) .wc__btn { background: var(--fill-hover); color: var(--paper); }
     .wc:has(a.wc__link:hover) .arrow { transform: rotate(-45deg); }
     .wc:has(a.wc__link:hover) .wc__img { filter: brightness(1.04); }
   }

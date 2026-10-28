@@ -47,7 +47,7 @@ const rungs = [...s.tiers.map((t) => ({ ...t, value: `${s.id}:${t.id}` })), ...(
   .rung__note { font-size: 16px; line-height: 1.5; color: var(--ink-2); }
   .rung__btn { margin-top: auto; align-self: flex-start; }
   .rung > :nth-last-child(2) { margin-bottom: 24px; }
-  :is(.rung--custom, .rung--pick) .rung__btn { --fill: var(--ink); --fill-hover: var(--ink); --fill-pressed: color-mix(in srgb, var(--ink) 84%, var(--paper)); color: var(--paper); }
+  :is(.rung--custom, .rung--pick) .rung__btn { --fill: var(--ink); color: var(--paper); }
 
   /* Phones and small tablets: one rung per swipe, the next one peeking in. */
   @media (max-width: 1099.98px) {

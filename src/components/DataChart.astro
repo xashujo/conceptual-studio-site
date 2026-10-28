@@ -90,7 +90,7 @@ const labelled = new Set([0, 1, rows.length - 1]); // start, the low, now
   .dc__head { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
   .dc__title { font-size: 20px; line-height: 1.3; font-weight: 600; letter-spacing: -0.01em; max-width: 26ch; }
   .dc__toggle[hidden] { display: none; }
-  .dc__toggle { --fill: var(--paper); --fill-hover: color-mix(in srgb, var(--ink) 6%, var(--paper)); flex: none; font-size: 16px; min-height: 44px; }
+  .dc__toggle { --fill: var(--paper); flex: none; font-size: 16px; min-height: 44px; }
   /* No script: table, then the finished chart. With script: one view at a time, so the card is
      never held open by the hidden view (the gold line still draws in). */
   .dc__body { display: grid; gap: 28px; }
