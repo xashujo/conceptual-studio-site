@@ -855,9 +855,9 @@ Museum model:
   state) instead of filling the band, and the fade moved onto the band.
 - Services all start closed.
 - How We Work has its own band of art, and its tiles are glass. The painting
-  is a CMS field (Home page > How We Work background). [TBC: a new
-  chinoiserie painting; Boucher's Le Jardin Chinois engraving (garden.webp)
-  stands in until it is chosen.]
+  is a CMS field (Home page > How We Work background): Boucher's La Pêche
+  Chinoise (1742, Besançon), from Josh, toned gold like the other art
+  (peche.webp) and credited on the colophon.
 - Every section heading has one size, set once on .big: the Selected Work one.
 - New CMS fields on Home page: Work button, Work button on hover, Trusted By
   label, Work heading, All projects button, How We Work heading, intro and

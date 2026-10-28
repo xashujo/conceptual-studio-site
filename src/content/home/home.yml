@@ -24,7 +24,7 @@ results:
   - src/content/projects/new-city-college-strategic-intent.yml
 howHeading: How We Work
 howIntro: How a project runs, from the first call to the files you keep.
-howImage: '@assets/art/engraved/garden.webp'
+howImage: '@assets/art/engraved/peche.webp'
 steps:
   - title: Call & Brief
     text: We talk through what you need, your budget, the formats and what the work

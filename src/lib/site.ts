@@ -71,5 +71,8 @@ export const art = {
   garden: {
     title: 'Le Jardin Chinois (The Chinese Garden), François Boucher, 1742',
     medium: 'Oil on canvas, Musée des Beaux-Arts et d’Archéologie, Besançon. Public domain. Engraved and toned in gold. [TBC: where the scan came from]',
+  },  peche: {
+    title: 'La Pêche Chinoise (The Chinese Fishing Party), François Boucher, 1742',
+    medium: 'Oil on canvas, Musée des Beaux-Arts et d’Archéologie, Besançon. Public domain. Toned in gold. [TBC: where the scan came from]',
   },
 };
