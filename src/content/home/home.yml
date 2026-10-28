@@ -19,11 +19,11 @@ stats:
 workHeading: Selected Work
 allProjects: All Projects
 socialVideos:
-  - title: Mongolia Blob Tracking
+  - title: Blob Tracking
     year: 2026
     video: /media/video/mongolia-blob-tracking.mp4
     poster: "@assets/work/social/mongolia-blob-tracking.jpg"
-    alt: Black and white footage from Mongolia with blob tracking boxes and lines following the movement.
+    alt: Black and white footage of a Mongolian warrior, with blob tracking boxes and lines following the movement.
   - title: Blob Tracking Tutorial
     year: 2026
     video: /media/video/blob-tracking-tutorial.mp4

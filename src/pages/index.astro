@@ -501,6 +501,10 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   /* Projects span two columns; videos are vertical, so they take one: four to a row (two on phones). */
   .fw__grid > li { grid-column: span 2; }
   .fw__grid > .fw__vid { grid-column: span 1; }
+  /* Narrow cards: the year sits under the title, so a longer title never pushes it to a line of its own. */
+  .fw__vid .card__row { flex-direction: column; align-items: start; gap: 2px; }
+  .fw__vid .card__y { margin-left: 0; }
+  .fw__vid .card__t { font-size: 20px; }
   .vid { position: relative; }
   .card .vid__v { display: block; aspect-ratio: 9 / 16; background: #000; }
   .vid__play { position: absolute; inset: 0; display: grid; place-items: center; border: 0; padding: 0; border-radius: 16px; background: none; cursor: pointer; }
@@ -648,6 +652,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
     .filterbar .glass-pill { min-height: 40px; padding: 0 9px; font-size: 14px; letter-spacing: -0.02em; }
     .fw__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 24px; }
     .vid__icon { width: 52px; height: 52px; }
+    .fw__vid .card__t { font-size: 17px; }
     .card { padding: 10px 10px 14px; gap: 12px; border-radius: 26px; }
     .fw__grid { gap: 20px; }
     .card__img { border-radius: 16px; }
