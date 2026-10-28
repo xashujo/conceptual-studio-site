@@ -689,10 +689,11 @@ Museum model:
   (nav items and filters). The values are defined once as --glass-bg,
   --glass-filter and --glass-shadow on .glass and .glass-button. Panels and cards
   on the home page also get the lens (data-lens), like the hero plate and nav.
-- Glass over flat paper: the Jardin etching now runs behind stats, featured work
-  and services as a held field (as on /work/), fading in at the top and out at the
-  foot, so every pane has art behind it (Josh, 28 Oct). Keeps "never glass on
-  flat paper".
+- Glass over flat paper: one Jardin etching is held behind the opening, stats,
+  featured work and services (sticky, as on /work/), so every pane has art behind
+  it and the painting never restarts (Josh, 28 Oct: the repeat "looks
+  unprofessional"). It fades to paper only below the custom quote. The opening's
+  own fade at the hero's foot is gone. Keeps "never glass on flat paper".
 - The nav is sticky at the top on every scroll position (Josh). This replaces
   "the nav scrolls away with the opening" and TASTE 24's bottom dock for the home
   page. It turns light over night chapters (IntersectionObserver), and once page
@@ -700,12 +701,19 @@ Museum model:
   glass spec) so labels never sit on bent text.
 - The current page is a filled tinted pill with aria-current, not brackets (Josh,
   28 Oct). This replaces TASTE 23 on the home page.
-- Firefox and Safari: the nav and the field panes keep the clear CSS glass, not the
-  WebGL bend, because they move over live content (a captured painting would go
-  stale). The hero plate keeps the WebGL bend there.
+- One glass on every pane in every browser (Josh, 28 Oct: the stats glass didn't
+  match the hero in Firefox). Chromium: the CSS lens on all of them. Firefox and
+  Safari: the WebGL glass on all of them, bending the held painting and redrawn on
+  scroll. lens.js gains a "held" option that skips its inside-the-painting check
+  for this. Glass buttons stay the plain CSS glass everywhere. Once the hero plate
+  reaches the nav, the nav's WebGL steps aside for the paper scroll edge.
+- Nav light and dark switching is checked on scroll; the IntersectionObserver
+  version stayed dark after jumping up from the footer.
 - Under the opening, stats, featured work, services and the quote panel sit in one
   centred 1140px column; headings stay left-aligned inside it (Josh, 28 Oct:
   "centred to the page"). Trusted By sits in the same column.
+- Trusted By is one strip of glass under the hero, label running straight into
+  the names (Josh, 28 Oct: tighter). Glass because the painting now runs behind it.
 - Trusted By replaces Worked with. Its names come from a new optional CMS field on
   Clients, "Show in Trusted By on the home page", in their Order, then "& More":
   New City College London, Southbank College Group, Oxford School of English,
@@ -715,6 +723,8 @@ Museum model:
   CONFIRM in the code. [TBC: Josh to confirm or replace each. 48hr needs checking
   against "brand identity from 4 weeks" and "reply within three working days".]
   They count up once when they come into view; with reduced motion they don't.
+  Every figure has the same tracking, units set tight and the plus 0.08em away
+  (Josh, 28 Oct). Proportional figures, so "1M+" isn't gappy.
 - Featured work: compact glass cards, two to a row, every image 16:10, title,
   category tag and year on one line, a 4px hover lift. Replaces the large cards,
   the pair, and Strategic Intent's charts on the home page (TASTE 6 "one exhibit
@@ -729,11 +739,13 @@ Museum model:
 - More than four featured projects: the rest wait behind a Show More glass
   button. The CMS "Home page position" help text now says this.
 - KUT Magazine keeps a "Student Work" tag on its card (honesty, as before).
-- Services: full-width accordion rows in one glass panel, one open at a time
-  (Brand Identity open first), plus icon turning to a cross. Name, then the
+- Services: full-width accordion rows in one glass panel, one open at a time,
+  all closed on load (Josh, 28 Oct). Closed in the page itself, so nothing flashes
+  open; without script every row shows open, plus icon turning to a cross. Name, then the
   description, "from" price and time from the CMS, and a View Prices glass button.
   Brand identity stays From £4,900 (Josh, 28 Oct; the brief's £4,800 was a typo).
   The Oxford ID card image beside services is removed.
 - Custom quote: its own centred glass panel under the services, set like the
   hero plate: "Need Something Else?", one sentence, "Ask for a Custom Quote".
+- See the Work keeps its arrow and the turning-arrow hover, now as a glass button.
 - The hero plate is 680px wide (was 640) so its three buttons sit on one line.

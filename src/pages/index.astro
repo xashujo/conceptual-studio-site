@@ -27,10 +27,10 @@ const titleCase = (s: string) => s.replace(/\band\b/gi, '&').split(' ')
 
 // Placeholder figures from Josh's brief (28 Oct), not yet confirmed. Replace each before launch.
 const stats = [
-  { n: 50, after: '+', label: 'Projects Delivered' }, // CONFIRM
-  { n: 1, after: 'M+', label: 'Data Points Visualised' }, // CONFIRM
-  { n: 48, after: 'hr', label: 'First-Concept Turnaround' }, // CONFIRM
-  { n: 90, after: '%', label: 'of Clients Return for More Work' }, // CONFIRM
+  { n: 50, unit: '', plus: true, label: 'Projects Delivered' }, // CONFIRM
+  { n: 1, unit: 'M', plus: true, label: 'Data Points Visualised' }, // CONFIRM
+  { n: 48, unit: 'hr', plus: false, label: 'First-Concept Turnaround' }, // CONFIRM
+  { n: 90, unit: '%', plus: false, label: 'of Clients Return for More Work' }, // CONFIRM
 ];
 
 // Featured work and the services come from Pages CMS (Projects and Services).
@@ -70,35 +70,31 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
       <a class="nav__menu glass-pill" href="#site-links">Menu</a>
     </nav>
     <main>
-      <!-- Opening: the etching fills the screen; the hero plate is glass over it. -->
+      <!-- One painting held behind the opening, stats, work and services (Josh, 28 Oct: it must not repeat).
+           It stays put while the page scrolls over it, so every pane of glass has the same art behind it. -->
+      <div class="field">
+      <div class="field__track" aria-hidden="true"><div class="field__art"><Image class="hero__art" src={heroArt} alt="" widths={[640, 1024, 1600, 2400]} sizes="100vw" loading="eager" fetchpriority="high" /></div></div>
       <header class="hero">
-        <Image class="hero__art" src={heroArt} alt="" widths={[640, 1024, 1600, 2400]} sizes="100vw" loading="eager" fetchpriority="high" />
         <div class="hero__plate glass" data-lens>
           <h1 class="hero__h">{headline}</h1>
           <p class="hero__p">{sentence}</p>
           <div class="acts">
             <a class="btn btn--solid" href={startHref}><span class="swap"><span>Start a Project</span><span aria-hidden="true">Contact Me ↗</span></span></a>
             {availability.on && <a class="avail" href={`mailto:${email}`}><span class="avail__dot" aria-hidden="true"></span><span class="swap"><span>{titleCase(availability.text)}</span><span aria-hidden="true">↗ Email Me</span></span></a>}
-            <a class="btn glass-button" href="#work">See the Work</a>
+            <a class="btn glass-button" href="#work">See the Work <span class="arrow" aria-hidden="true">→</span></a>
           </div>
         </div>
         {trustedBy.length > 0 && (
-          <div class="hero__with">
-            <p class="hero__with-h">Trusted By</p>
-            <p class="hero__names">{trustedBy.join(', ')} &amp; More</p>
-          </div>
+          <p class="trusted glass" data-lens><b>Trusted By</b> {trustedBy.join(', ')} &amp; More</p>
         )}
       </header>
 
-      <!-- The etching carries on behind the glass, so every pane has art to bend (Josh, 28 Oct). -->
-      <div class="field">
-        <div class="field__track" aria-hidden="true"><div class="field__art"><Image src={heroArt} alt="" widths={[800, 1600, 2400]} sizes="100vw" /></div></div>
 
         <section class="stats wrap" aria-label="The studio in numbers">
           <ul class="stats__list">
             {stats.map((s) => (
               <li class="stat glass" data-lens>
-                <p class="stat__n"><span aria-hidden="true"><span data-count={s.n}>{s.n}</span>{s.after}</span><span class="sr-only">{s.n}{s.after}</span></p>
+                <p class="stat__n"><span aria-hidden="true"><span data-count={s.n}>{s.n}</span>{s.unit && <span class="stat__unit">{s.unit}</span>}{s.plus && <span class="stat__plus">+</span>}</span><span class="sr-only">{`${s.n}${s.unit}${s.plus ? '+' : ''}`}</span></p>
                 <p class="stat__l">{s.label}</p>
               </li>
             ))}
@@ -138,16 +134,17 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
         <section class="services wrap" id="services" aria-labelledby="services-h">
           <h2 class="big services__h" id="services-h">Services</h2>
           <p class="services__intro">Every project is priced on its scope, so these are starting points. You'll get a fixed quote after our first call.</p>
-          <!-- One open at a time. Without script every row stays open. -->
+          <!-- All closed on load; one open at a time (Josh, 28 Oct). Without script every row shows open. -->
+          <noscript><style>.acc__panel[data-closed] { grid-template-rows: 1fr; } .acc__icon { display: none; }</style></noscript>
           <div class="acc glass" data-lens data-acc>
             {menu.map((s) => (
               <div class="acc__row">
                 <h3 class="acc__h">
-                  <button class="acc__btn" type="button" id={`svc-${s.id}-btn`} aria-controls={`svc-${s.id}`} aria-expanded="true">
+                  <button class="acc__btn" type="button" id={`svc-${s.id}-btn`} aria-controls={`svc-${s.id}`} aria-expanded="false">
                     <span>{s.name}</span><span class="acc__icon" aria-hidden="true"></span>
                   </button>
                 </h3>
-                <div class="acc__panel" id={`svc-${s.id}`} role="region" aria-labelledby={`svc-${s.id}-btn`}>
+                <div class="acc__panel" id={`svc-${s.id}`} role="region" aria-labelledby={`svc-${s.id}-btn`} data-closed>
                   <div class="acc__inner">
                     <div class="acc__body">
                       <p class="acc__text">{s.text}</p>
@@ -245,32 +242,29 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
       const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
       const ease = 'cubic-bezier(0.16, 1, 0.3, 1)';
 
-      // Lens glass. The hero plate can use the WebGL glass over its painting in Firefox and Safari;
-      // the nav and the field panes move over live content, so there they keep the clear CSS glass.
+      // One glass for every pane (Josh, 28 Oct). Chromium bends the live page; Firefox and Safari bend the
+      // held painting with the WebGL glass. Panes hidden for now (filtered cards) size themselves when shown.
       const heroArt = document.querySelector<HTMLImageElement>('.hero__art');
-      mountLens(document.querySelector('.hero__plate'), heroArt, [0.58, 0.92]);
-      document.querySelectorAll<HTMLElement>('[data-nav], .field [data-lens]').forEach((el) => mountLens(el, null));
+      document.querySelector<HTMLElement>('[data-filters]')!.hidden = false; // shown before mounting so it has a size
+      document.querySelectorAll<HTMLElement>('[data-nav], .field [data-lens]').forEach((el) => mountLens(el, heroArt, undefined, true));
 
-      // Nav: light over the night chapters, dark over paper. Watches a 1px line across the nav's middle.
+      // Nav: light over the night chapters, dark over paper. Checked on every scroll against the nav's middle
+      // line; an IntersectionObserver band missed big jumps (it stayed dark after jumping up from the footer).
       const nav = document.querySelector<HTMLElement>('[data-nav]')!;
-      const nights = [...document.querySelectorAll('.night')];
-      const under = new Set<Element>();
-      let watch: IntersectionObserver | undefined;
-      const watchNav = () => {
-        watch?.disconnect(); under.clear();
+      const nights = [...document.querySelectorAll<HTMLElement>('.night')];
+      const tone = () => {
         const r = nav.getBoundingClientRect();
-        const y = Math.round(r.top + r.height / 2);
-        watch = new IntersectionObserver((entries) => {
-          entries.forEach((e) => (e.isIntersecting ? under.add(e.target) : under.delete(e.target)));
-          nav.classList.toggle('is-dark', under.size > 0);
-        }, { rootMargin: `-${y}px 0px -${Math.max(0, innerHeight - y - 1)}px 0px` });
-        nights.forEach((n) => watch!.observe(n));
+        const y = r.top + r.height / 2;
+        nav.classList.toggle('is-dark', nights.some((n) => { const b = n.getBoundingClientRect(); return b.top <= y && b.bottom >= y; }));
       };
-      watchNav();
-      addEventListener('resize', watchNav);
-      // Scroll edge: true once content (past the opening's art) is under the nav.
-      const field = document.querySelector<HTMLElement>('.field')!;
-      const edge = () => nav.classList.toggle('is-over', field.getBoundingClientRect().top < nav.getBoundingClientRect().bottom);
+      tone();
+      addEventListener('scroll', tone, { passive: true });
+      addEventListener('resize', tone);
+
+      // Scroll edge: once the hero plate reaches the nav, paper fills in behind the nav so its labels
+      // never sit on other words or on photos. Over the opening it stays clear glass.
+      const plate = document.querySelector<HTMLElement>('.hero__plate')!;
+      const edge = () => nav.classList.toggle('is-over', plate.getBoundingClientRect().top < nav.getBoundingClientRect().bottom + 8);
       edge();
       addEventListener('scroll', edge, { passive: true });
 
@@ -313,7 +307,6 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
         show();
         grid.animate([{ opacity: 0, transform: 'scale(0.98)' }, { opacity: 1, transform: 'none' }], { duration: 320, easing: ease });
       };
-      bar.hidden = false;
       bar.addEventListener('click', (e) => {
         const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-filter]');
         if (!btn || btn.dataset.filter === current) return;
@@ -333,8 +326,8 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
         panel.toggleAttribute('data-closed', !open);
         panel.inert = !open;
       };
-      rows.forEach((row, i) => {
-        setRow(row, i === 0);
+      rows.forEach((row) => {
+        setRow(row, false);
         row.querySelector('.acc__btn')!.addEventListener('click', () => {
           const open = row.querySelector('.acc__btn')!.getAttribute('aria-expanded') !== 'true';
           rows.forEach((r) => setRow(r, r === row && open));
@@ -369,41 +362,46 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
      labels never sit on bent text or busy photos. Over the opening it stays clear. */
   .nav.is-over { background-color: color-mix(in srgb, var(--paper) 78%, transparent); }
   .nav.is-over.is-lens::before, .nav.is-over[data-lens]:not(.is-lens) { background-color: color-mix(in srgb, var(--paper) 78%, transparent); }
+  /* Firefox and Safari: the WebGL glass steps aside for the same paper band. */
+  .nav.is-over.has-liquid { background: color-mix(in srgb, var(--paper) 78%, transparent) !important; -webkit-backdrop-filter: blur(24px) !important; backdrop-filter: blur(24px) !important; }
+  .nav.is-over .lg-canvas { opacity: 0; }
+  .nav.is-dark.is-over.has-liquid { background: color-mix(in srgb, var(--paper-2) 82%, transparent) !important; }
   .nav__mark { font-family: var(--display); font-size: 24px; letter-spacing: -0.02em; text-decoration: none; }
   .nav__links { list-style: none; display: flex; gap: 2px; margin: 0; padding: 0; }
   .nav__menu { display: none; }
 
   /* Opening: the quiet etching fills the screen, the plate centred over the trees and sky. */
-  .hero { position: relative; isolation: isolate; min-height: 100svh; padding: 116px var(--margin) 40px; display: grid; grid-template-rows: 1fr auto; }
-  .hero__art { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 92%); mask-image: linear-gradient(to bottom, #000 58%, transparent 92%); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
+  .hero { position: relative; min-height: 100svh; padding: 116px var(--margin) 40px; display: grid; grid-template-rows: 1fr auto; }
   .hero__plate { position: relative; align-self: center; justify-self: center; width: min(680px, 50vw); padding: 44px 44px 40px; display: grid; gap: 22px; border-radius: 28px; }
   .hero__h { font-family: var(--display); font-weight: 500; font-size: clamp(34px, 2.8vw, 40px); line-height: 1.06; letter-spacing: -0.02em; text-wrap: balance; }
   .hero__p { font-size: 18px; line-height: 1.5; }
   .hero__plate .avail { --fill: color-mix(in srgb, var(--paper) 55%, transparent); }
   /* Trusted By: the label sits right against the names (Josh, 28 Oct). */
-  .hero__with { justify-self: center; width: min(1140px, 100%); display: flex; flex-wrap: wrap; column-gap: 12px; align-items: baseline; padding-top: 32px; font-size: 18px; line-height: 1.5; }
-  .hero__with-h { font-weight: 600; white-space: nowrap; }
-  .hero__names { text-wrap: balance; }
+  /* Trusted By: one line of glass, the label running straight into the names (Josh, 28 Oct: tighter).
+     Glass because the painting now carries on behind it. */
+  .trusted { position: relative; justify-self: center; width: min(1140px, 100%); margin-top: 32px; padding: 15px 24px; border-radius: 28px; font-size: 18px; line-height: 1.5; text-wrap: balance; }
+  .trusted b { font-weight: 600; margin-right: 0.3em; }
 
-  /* The field: the etching held behind stats, featured work and services, so the glass always has art
-     under it. It fades in at the top and out at the foot, like the other art on the site. */
-  .field { position: relative; isolation: isolate; padding-bottom: 96px; }
+  /* The field: one painting held behind the opening, stats, featured work and services. It stays put
+     while the page scrolls over it, so it extends rather than repeating, and fades to paper only at the foot. */
+  .field { position: relative; isolation: isolate; padding-bottom: 240px; }
   .field__track { position: absolute; inset: 0; z-index: -2; } /* keeps the sticky art inside the field */
   .field__art { position: sticky; top: 0; height: 100svh; overflow: hidden; }
-  .field__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; }
-  .field::before, .field::after { content: ''; position: absolute; left: 0; right: 0; z-index: -1; pointer-events: none; }
-  .field::before { top: 0; height: 30svh; background: linear-gradient(var(--paper), transparent); }
-  .field::after { bottom: 0; height: 50svh; background: linear-gradient(transparent, var(--paper) 85%); }
+  .hero__art { width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; }
+  .field::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; z-index: -1; height: 280px; pointer-events: none; background: linear-gradient(transparent, var(--paper) 80%); }
 
   /* One centred column for everything under the opening (Josh, 28 Oct: "centred to the page").
      Headings stay left-aligned inside it. 1140px lets both rows of work fit one screen at 1440. */
   .field > section { box-sizing: content-box; max-width: 1140px; margin-inline: auto; }
 
   /* Stats: four glass cards, a large number over a short label. */
-  .stats { padding-top: 40px; }
+  .stats { padding-top: 120px; }
   .stats__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
   .stat { position: relative; display: grid; align-content: space-between; gap: 28px; min-height: 196px; padding: 28px 28px 26px; border-radius: 28px; }
-  .stat__n { font-family: var(--display); font-weight: 500; font-size: clamp(56px, 5vw, 76px); line-height: 0.9; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  /* One setting for every figure: the same tracking, the unit set tight, the plus given a little air (Josh, 28 Oct). */
+  .stat__n { font-family: var(--display); font-weight: 500; font-size: clamp(56px, 5vw, 76px); line-height: 0.9; letter-spacing: -0.01em; font-variant-numeric: lining-nums proportional-nums; white-space: nowrap; }
+  .stat__unit { margin-left: 0.02em; }
+  .stat__plus { margin-left: 0.08em; }
   .stat__l { font-size: 18px; line-height: 1.35; font-weight: 500; text-wrap: balance; }
 
   /* Featured work: heading, the filter bar, then compact cards two to a row, all the same shape. */
@@ -436,6 +434,7 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
   .acc__btn { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 24px; padding: 26px 0; border: 0; background: none; color: inherit; font: 600 28px/1.2 var(--text); letter-spacing: -0.02em; text-align: left; cursor: pointer; }
   .acc__btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 8px; }
   .acc__icon { position: relative; flex: none; width: 20px; height: 20px; transition: transform 320ms var(--ease-out); }
+  @media (hover: hover) { .acc__btn:hover .acc__icon { transform: scale(1.12); } .acc__btn[aria-expanded='true']:hover .acc__icon { transform: rotate(45deg) scale(1.12); } }
   .acc__icon::before, .acc__icon::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 2px; margin-top: -1px; border-radius: 1px; background: currentColor; }
   .acc__icon::after { transform: rotate(90deg); }
   [aria-expanded='true'] > .acc__icon { transform: rotate(45deg); }
@@ -531,12 +530,12 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
     [id] { scroll-margin-top: 80px; }
     .hero { padding: 84px var(--margin) 24px; }
     .hero__art { object-position: 30% 50%; }
+    .trusted { margin-top: 20px; padding: 14px 18px; border-radius: 26px; font-size: 16px; }
     .hero__plate { width: 100%; align-self: start; padding: 24px 22px 22px; gap: 16px; border-radius: 26px; }
     .hero__h { font-size: 34px; }
     .hero__p { font-size: 16px; line-height: 1.45; }
-    .hero__with { padding-top: 24px; font-size: 16px; }
-    .field { padding-bottom: 72px; }
-    .stats { padding-top: 32px; }
+    .field { padding-bottom: 180px; }
+    .stats { padding-top: 80px; }
     .stats__list { gap: 12px; }
     .stat { min-height: 150px; padding: 20px 18px; gap: 20px; border-radius: 26px; }
     .stat__n { font-size: 46px; }
