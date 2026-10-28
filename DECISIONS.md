@@ -899,3 +899,6 @@ Museum model:
   ACL Essex infographics and NCC infographics added to the home page (CMS:
   Show on the home page, positions 5 and 6) so the two rows are full.
 - How We Work step titles are Agatho 30px (25px on phones), -0.01em.
+- Project cards have one fixed shape: title on one line (ellipsis), badges
+  left and year right on one row, outcome held to two lines with the space
+  kept when empty, so every card in a row is the same height.
