@@ -8,7 +8,8 @@
   --ink: light-dark(#000000, #F1DFC8);
   --ink-2: color-mix(in srgb, var(--ink) 62%, var(--paper)); /* warm secondary text, never a neutral grey */
   --gold: #926E34; /* large text and graphics only, never body text on paper; same in both */
-  --live: #1F9D55; /* availability dot only */
+  --live: light-dark(#1F9D55, #3FD37E); /* availability dot only. On dark the same hue, lighter, so it reads as the same green */
+  --live-on-ink: light-dark(#3FD37E, #1F9D55); /* the dot on an ink fill (the pill's hover) */
   --amber: #F1A90F; /* the London clock dot only */
 
   --display: 'Agatho', 'Agatho Fallback', Georgia, serif;

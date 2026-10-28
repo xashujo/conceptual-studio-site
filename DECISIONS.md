@@ -875,3 +875,5 @@ Museum model:
 - Home: "More About the Studio" is a glass button with its arrow, not a link.
 - Home: Selected Work cards no longer rise on hover; they turn to cream glass
   with dark text, like the buttons in the night bands.
+- Availability dot: #1F9D55 on light, #3FD37E (same hue, lighter) on dark and
+  on the pill's black hover, so it reads as one green; it fades between them.

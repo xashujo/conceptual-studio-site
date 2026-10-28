@@ -69,10 +69,11 @@ a { color: inherit; }
 
 /* Availability pill: the one pill badge. "Available to book a call" becomes "Email me". */
 .avail { --fill: color-mix(in srgb, var(--ink) 5%, var(--paper)); display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 18px 0 16px; border-radius: var(--pill); background: var(--fill); color: var(--ink); font-weight: 500; font-size: 16px; text-decoration: none; white-space: nowrap; transition: color 300ms ease-out, background-color 300ms ease-out; }
-.avail__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--live); flex: none; animation: blink 2s ease-in-out infinite; }
+.avail__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--live); flex: none; animation: blink 2s ease-in-out infinite; transition: background-color 300ms ease-out; }
 .avail .swap > :last-child { transform: translateY(100%); }
 @media (hover: hover) {
-  .avail:hover { background: var(--ink); color: var(--paper); } /* like the buttons; the dot stays green */
+  .avail:hover { background: var(--ink); color: var(--paper); } /* like the buttons */
+  .avail:hover .avail__dot { background: var(--live-on-ink); }
   .avail:hover .swap > :first-child { transform: translateY(-100%); opacity: 0; }
   .avail:hover .swap > :last-child { transform: none; opacity: 1; }
 }
