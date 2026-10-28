@@ -1,45 +1,18 @@
 ---
-// The nav wordmark: Josh's gold flow, played once on load (28 Oct). Transparent video needs two files:
-// VP9 WebM with alpha for Chrome, Firefox and Android, HEVC with alpha for Safari and iOS (any app's browser).
-// The stills are its last frame (ink, and cream for the night chapters), shown without script, with reduced
-// motion and if playback fails. Once it ends the video itself holds its last frame (swapping to the still flickered). The video only says "Conceptual", so "Studio" is live text in
-// the same face and size, set on its baseline (Josh, 28 Oct: the logo reads Conceptual Studio).
+// The nav wordmark: Josh's "Conceptual Studio" with the gold flow through both words (28 Oct; replaces the video).
+// Ink text over paper, cream (#F1DFC8) over the night chapters. Cropped to the artwork, so the width is the logo's.
 ---
 <a class="logo nav__mark" href="/" aria-label="Conceptual Studio">
-  <span class="logo__art">
-  <img class="logo__ink" src="/brand/logo-ink.webp" alt="" width="750" height="200" />
-  <img class="logo__cream" src="/brand/logo-cream.webp" alt="" width="750" height="200" />
-  <video class="logo__flow" muted playsinline disablepictureinpicture preload="auto" aria-hidden="true" data-webm="/brand/logo-flow.webm" data-hevc="/brand/logo-flow.mp4"></video>
-  </span>
-  <span class="logo__word">Studio</span>
+  <img class="logo__ink" src="/brand/logo-ink.webp" alt="" width="720" height="140" />
+  <img class="logo__cream" src="/brand/logo-cream.webp" alt="" width="720" height="140" />
 </a>
 
-<script>
-  const ua = navigator.userAgent;
-  // Same rule as Josh's Framer component: WebKit (every iOS browser, Safari on the Mac) only shows HEVC's alpha.
-  const apple = /iP(hone|ad|od)/.test(ua) || (/Safari/.test(ua) && !/Chrome|Chromium|Android|Firefox/.test(ua));
-  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    document.querySelectorAll<HTMLElement>('.logo').forEach((logo) => {
-      const v = logo.querySelector('video')!;
-      const still = () => logo.classList.remove('is-playing');
-      v.addEventListener('error', still);
-      v.src = (apple ? v.dataset.hevc : v.dataset.webm)!;
-      logo.classList.add('is-playing');
-      v.play().catch(still); // autoplay blocked (iOS Low Power Mode): the still stays
-    });
-  }
-</script>
-
 <style>
-  .logo { --h: 32.4px; /* Studio at 24px, the old text logo size (Josh, 28 Oct) */ display: flex; text-decoration: none; align-items: flex-start; margin-left: calc(-0.157 * var(--h)); /* the files' left padding */ }
-  .logo__art { display: grid; }
-  .logo__art > * { grid-area: 1 / 1; width: calc(3.75 * var(--h)); height: var(--h); }
-  .logo__word { margin: calc(0.08 * var(--h)) 0 0 calc(-0.0375 * var(--h)); /* onto the video's baseline (287px down its 400) and word space */ font-family: var(--display); font-weight: 500; font-size: calc(0.74 * var(--h)); line-height: 1; letter-spacing: 0; }
-  .logo__cream, .logo__flow { visibility: hidden; }
-  .logo.is-playing .logo__flow { visibility: visible; }
-  .logo.is-playing .logo__ink { visibility: hidden; }
-  /* Over the night chapters the text is cream (#F1DFC8): the cream still, also mid-play. */
-  :global(.is-dark) .logo :is(.logo__ink, .logo__flow) { visibility: hidden; }
-  :global(.is-dark) .logo .logo__cream { visibility: visible; }
-  @media (max-width: 759.98px) { .logo { --h: 28.4px; } } /* 21px, the old phone size */
+  /* 180px wide: the text matches the old 24px text logo (Josh, 28 Oct). */
+  .logo { display: grid; text-decoration: none; }
+  .logo > img { grid-area: 1 / 1; width: 180px; height: auto; transition: opacity 300ms ease-out; }
+  .logo__cream { opacity: 0; }
+  :global(.is-dark) .logo .logo__ink { opacity: 0; }
+  :global(.is-dark) .logo .logo__cream { opacity: 1; }
+  @media (max-width: 759.98px) { .logo > img { width: 158px; } } /* the old 21px phone size */
 </style>
