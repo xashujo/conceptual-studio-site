@@ -885,3 +885,5 @@ Museum model:
 - The font's class kerning grouped b with the round letters, pulling it under
   A's foot (-24 units). The subset font now has its own A+b pair at +20, the
   same gap as A+h and A+l (fontTools, public/fonts/agatho-medium-subset.woff2).
+- Why Clients Choose Us panes have no backdrop blur (phones drew seams and
+  tiles in it): a near-solid warm black fill, 88%, instead.
