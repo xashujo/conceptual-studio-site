@@ -91,7 +91,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
           <ul class="stats__list">
             {stats.map((s) => (
               <li class="stat glass" data-lens>
-                <p class="stat__n"><span aria-hidden="true"><span data-count={s.n}>{s.n.toLocaleString('en-GB')}</span>{s.after}</span><span class="sr-only">{s.n.toLocaleString('en-GB')}{s.after}</span></p>
+                <p class="stat__n"><span aria-hidden="true"><span data-count={s.n}>{s.n.toLocaleString('en-GB')}</span><span class={s.after === '+' ? 'stat__plus' : undefined}>{s.after}</span></span><span class="sr-only">{s.n.toLocaleString('en-GB')}{s.after}</span></p>
                 <p class="stat__l">{s.label}</p>
               </li>
             ))}
@@ -449,7 +449,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .stats__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
   .stat { position: relative; display: grid; align-content: space-between; gap: 28px; min-height: 196px; padding: 28px 28px 26px; border-radius: 28px; }
   .stat__n { font-family: var(--display); font-weight: 500; font-size: clamp(48px, 4.2vw, 62px); line-height: 0.9; letter-spacing: 0.01em; font-variant-numeric: tabular-nums; }
-  .stat__n [aria-hidden] > :last-child { margin-left: 0.06em; } /* the + or % sits a little off the figure */
+  .stat__plus { margin-left: 0.12em; } /* about half a space off the figure (Josh, 28 Oct) */
   .stat__l { font-size: 18px; line-height: 1.35; font-weight: 500; text-wrap: balance; }
 
   /* Featured work: heading, the filter bar, then compact cards two to a row, all the same shape. */
