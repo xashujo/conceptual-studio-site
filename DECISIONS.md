@@ -888,3 +888,9 @@ Museum model:
 - Why Clients Choose Us panes keep their glass blur; the result cards no
   longer lift (moving blurred glass drew seams on phones) and instead turn to
   day glass on hover, like the Selected Work cards.
+
+## Hero bento (28 Oct 2026, Josh)
+- The plate and the hero quote share the stats' four-column grid: the plate
+  three columns wide from the first stat's left edge, the quote (quieter: 17px,
+  secondary ink, no button) above the last stat, 24px gaps throughout, the
+  whole block centred. Tablet and phone stack plate, quote, stats.

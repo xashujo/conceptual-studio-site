@@ -80,6 +80,9 @@ const menu = services.flatMap((s) => s.href?.includes('#')
       <!-- Opening: the etching fills the screen; the hero plate is glass over it. -->
       <header class="hero" id="top">
         <Image class="hero__art" src={heroArt} alt="" widths={[640, 1024, 1600, 2400]} sizes="100vw" loading="eager" fetchpriority="high" />
+        <!-- Bento (Josh, 28 Oct): the plate and the client quote share the stats' four-column grid, the plate three
+             columns wide from the first stat's left edge, the quote above the last stat. -->
+        <div class="hero__bento">
         <div class="hero__plate glass" data-lens>
           <h1 class="hero__h">{headline}</h1>
           <p class="hero__p">{sentence}</p>
@@ -88,6 +91,14 @@ const menu = services.flatMap((s) => s.href?.includes('#')
             {availability.on && <a class="avail" href={`mailto:${email}`}><span class="avail__dot" aria-hidden="true"></span><span class="swap"><span>{titleCase(availability.text)}</span><span aria-hidden="true">↗ Email Us</span></span></a>}
             <a class="btn hero__work" href="#work">{home.workButton} <span class="hero__down" aria-hidden="true">→</span></a>
           </div>
+        </div>
+        <!-- One client's words beside the plate, so trust lands before the scroll (Josh, 28 Oct). Not the quote further down. -->
+        {heroQuote && (
+          <figure class="hero__quote glass" data-lens>
+            <blockquote><p>“{heroQuote.short || heroQuote.quote}”</p></blockquote>
+            <figcaption><b>{heroQuote.name}</b>, {heroQuote.role}, {heroQuote.organisation}</figcaption>
+          </figure>
+        )}
         </div>
         <section class="stats" aria-label="The studio in numbers">
           <ul class="stats__list">
@@ -99,13 +110,6 @@ const menu = services.flatMap((s) => s.href?.includes('#')
             ))}
           </ul>
         </section>
-        <!-- One client's words straight under the stats, so trust lands before the scroll (Josh, 28 Oct). Not the quote further down. -->
-        {heroQuote && (
-          <figure class="hero__quote">
-            <blockquote><p>“{heroQuote.short || heroQuote.quote}”</p></blockquote>
-            <figcaption><b>{heroQuote.name}</b>, {heroQuote.role}, {heroQuote.organisation}</figcaption>
-          </figure>
-        )}
         {trustedBy.length > 0 && (
           <p class="hero__with"><b>{home.trustedByLabel}</b> {trustedBy.join(', ')} &amp; More</p>
         )}
@@ -301,7 +305,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
       document.querySelector<HTMLElement>('[data-filters]')!.hidden = false; // shown before the lens counts its height
       mountLens(document.querySelector('[data-nav]'), null);
       mountLens(document.querySelector('.hero__plate'), heroArt, [0.58, 0.92]);
-      document.querySelectorAll<HTMLElement>('.field [data-lens], .stat').forEach((el) => mountLens(el, null));
+      document.querySelectorAll<HTMLElement>('.field [data-lens], .stat, .hero__quote').forEach((el) => mountLens(el, null));
 
       // Nav: light over the night chapters, dark over paper. Watches a 1px line across the nav's middle.
       const nav = document.querySelector<HTMLElement>('[data-nav]')!;
@@ -457,9 +461,10 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .nav__menu { display: none; }
 
   /* Opening: the quiet etching fills the screen, the plate centred over the trees and sky. */
-  .hero { position: relative; isolation: isolate; min-height: 100svh; padding: 116px var(--margin) 40px; display: grid; grid-template-rows: 1fr auto auto; }
+  .hero { position: relative; isolation: isolate; min-height: 100svh; padding: 116px var(--margin) 40px; display: grid; align-content: center; } /* the bento, stats and Trusted By as one centred block */
   .hero__art { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 92%); mask-image: linear-gradient(to bottom, #000 58%, transparent 92%); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
-  .hero__plate { position: relative; align-self: center; justify-self: center; width: min(680px, 50vw); padding: 44px 44px 40px; display: grid; gap: 22px; border-radius: 28px; }
+  .hero__bento { align-self: center; justify-self: center; width: min(1140px, 100%); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+  .hero__plate { position: relative; grid-column: span 3; padding: 44px 44px 40px; display: grid; gap: 22px; border-radius: 28px; }
   .hero__h { font-family: var(--display); font-weight: 500; font-size: clamp(34px, 2.8vw, 40px); line-height: 1.06; letter-spacing: -0.01em; text-wrap: balance; }
   .hero__p { font-size: 18px; line-height: 1.5; }
   /* The three hero buttons share one shape: the .btn's height, padding and type (Josh, 28 Oct). */
@@ -475,9 +480,10 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   /* Trusted By: one centred line, a single space between the label and the names (Josh, 28 Oct). */
   .hero__with { justify-self: center; width: min(1140px, 100%); padding-top: 32px; font-size: 18px; line-height: 1.5; text-align: center; text-wrap: balance; }
   .hero__with b { font-weight: 600; }
-  .hero__quote { justify-self: center; width: min(760px, 100%); margin: 0; padding-top: 40px; text-align: center; }
+  .hero__quote { position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 20px; margin: 0; padding: 28px 28px 26px; border-radius: 28px; }
   .hero__quote blockquote { margin: 0; }
-  .hero__quote p { font-size: 22px; line-height: 1.4; letter-spacing: -0.01em; text-wrap: balance; }
+  /* Quieter than the plate (Josh, 28 Oct: it mustn't compete with Start a Project): smaller, softer text, no button. */
+  .hero__quote p { font-size: 17px; line-height: 1.45; color: var(--ink-2); text-wrap: pretty; text-indent: -0.4em; } /* hang the opening quote mark */
   .hero__quote figcaption { margin-top: 10px; font-size: 16px; line-height: 1.45; color: var(--ink-2); }
   .hero__quote figcaption b { font-weight: 600; color: var(--ink); }
 
@@ -499,7 +505,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .band > section { box-sizing: content-box; max-width: 1140px; margin-inline: auto; }
 
   /* Stats: four glass cards, a large number over a short label, straight under the hero plate (Josh, 28 Oct). */
-  .stats { justify-self: center; box-sizing: border-box; width: min(1140px, 100%); padding-top: 40px; }
+  .stats { justify-self: center; box-sizing: border-box; width: min(1140px, 100%); padding-top: 24px; } /* the bento's gap, so plate, quote and stats read as one grid */
   .stats__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
   .stat { position: relative; display: grid; align-content: space-between; gap: 28px; min-height: 196px; padding: 28px 28px 26px; border-radius: 28px; }
   .stat__n { font-family: var(--display); font-weight: 500; font-size: clamp(48px, 4.2vw, 62px); line-height: 0.9; letter-spacing: 0.01em; font-variant-numeric: tabular-nums; }
@@ -628,7 +634,8 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   @media (max-width: 1099.98px) {
     .nav { padding-left: 20px; }
     .nav__links .glass-pill { padding: 0 12px; font-size: 16px; }
-    .hero__plate { width: min(600px, 72vw); }
+    .hero__bento { grid-template-columns: 1fr; }
+    .hero__plate { grid-column: auto; }
     .about__text { grid-column: 1 / -1; }
     .stats__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .proof__grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
@@ -648,14 +655,15 @@ const menu = services.flatMap((s) => s.href?.includes('#')
     [id] { scroll-margin-top: 80px; }
     .hero { padding: 84px var(--margin) 24px; }
     .hero__art { object-position: 30% 50%; }
-    .hero__plate { width: 100%; align-self: start; padding: 24px 22px 22px; gap: 16px; border-radius: 26px; }
+    .hero__bento { align-self: start; gap: 12px; }
+    .hero__plate { padding: 24px 22px 22px; gap: 16px; border-radius: 26px; }
     .hero__h { font-size: 34px; }
     .hero__p { font-size: 16px; line-height: 1.45; }
     .hero__with { padding-top: 24px; font-size: 16px; }
-    .hero__quote { padding-top: 28px; }
-    .hero__quote p { font-size: 18px; }
+    .hero__quote { padding: 22px 22px 20px; border-radius: 26px; }
+    .hero__quote p { font-size: 16px; }
     .band { padding-bottom: 120px; }
-    .stats { padding-top: 32px; }
+    .stats { padding-top: 12px; }
     .stats__list { gap: 12px; }
     .stat { min-height: 150px; padding: 20px 18px; gap: 20px; border-radius: 26px; }
     .stat__n { font-size: 9.6vw; } /* 20,000+ fits a phone-width card */
