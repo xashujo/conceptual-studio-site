@@ -42,8 +42,10 @@ const results = home.results.map(bySlug) // Pages CMS: Home page > Why Clients C
 const steps = home.steps.map((s) => [s.title, s.text]); // Pages CMS: Home page > How We Work
 // About: three working principles, each resting on something the site already promises.
 const values = home.values.map((v) => [v.title, v.text.replaceAll('{reply time}', responseTime)]); // Pages CMS: Home page > About
-const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.home.price, time: s.home.time, href: s.href ?? '/services/', link: titleCase(s.home.link), text: s.line,
-  tiers: s.href?.includes('#') ? s.tiers : null })); // services without a page of their own (retainers) list every tier
+// A service without a page of its own (the retainers) gets one row per tier, so each shows without opening a group.
+const menu = services.flatMap((s) => s.href?.includes('#')
+  ? s.tiers.map((t) => ({ id: `${s.id}-${t.id}`, name: t.name, badge: t.badge, price: t.price, time: t.time, href: s.href!, link: `${t.name} prices`, text: t.lead || s.line }))
+  : [{ id: s.id, name: titleCase(s.name), badge: undefined, price: s.home.price, time: s.home.time, href: s.href ?? '/services/', link: titleCase(s.home.link), text: s.line }]);
 ---
 <!doctype html>
 <html lang="en-GB" style={glassStyle}>
@@ -148,16 +150,14 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
               <div class="acc__row">
                 <h3 class="acc__h">
                   <button class="acc__btn" type="button" id={`svc-${s.id}-btn`} aria-controls={`svc-${s.id}`} aria-expanded="true">
-                    <span>{s.name}</span><span class="acc__icon" aria-hidden="true"></span>
+                    <span>{s.name}{s.badge && <span class="acc__badge">{s.badge}</span>}</span><span class="acc__icon" aria-hidden="true"></span>
                   </button>
                 </h3>
                 <div class="acc__panel" id={`svc-${s.id}`} role="region" aria-labelledby={`svc-${s.id}-btn`}>
                   <div class="acc__inner">
                     <div class="acc__body">
                       <p class="acc__text">{s.text}</p>
-                      {s.tiers
-                        ? <div class="acc__price acc__tiers">{s.tiers.map((t) => <p>{t.price}<span>{t.name}{t.time && `, ${t.time.toLowerCase()}`}</span></p>)}</div>
-                        : <p class="acc__price">{s.price}{s.time && <span>{s.time}</span>}</p>}
+                      <p class="acc__price">{s.price}{s.time && <span>{s.time}</span>}</p>
                       <a class="btn glass-button acc__go" href={s.href} aria-label={s.link}>View Prices <span class="arrow" aria-hidden="true">→</span></a>
                     </div>
                   </div>
@@ -474,7 +474,7 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
   .acc__body { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px 48px; align-items: end; padding-bottom: 30px; }
   .acc__text { grid-row: span 2; align-self: start; max-width: 54ch; font-size: 20px; line-height: 1.5; }
   .acc__price { text-align: right; font-size: 24px; line-height: 1.25; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
-  .acc__tiers { display: grid; gap: 14px; }
+  .acc__badge { display: inline-block; margin-left: 12px; padding: 6px 12px; border-radius: var(--pill); background: var(--ink); color: var(--paper); font-size: 14px; font-weight: 600; line-height: 1; letter-spacing: 0; vertical-align: 0.25em; }
   .acc__price span { display: block; font-size: 17px; font-weight: 400; letter-spacing: 0; color: var(--ink-2); }
   .acc__go { justify-self: end; }
 
