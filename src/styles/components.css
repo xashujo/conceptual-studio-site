@@ -184,6 +184,9 @@ a { color: inherit; }
 }
 .night .glass.is-lens::before, .glass.is-lens.is-dark::before { background: color-mix(in srgb, var(--paper-2) min(96%, calc(30% * var(--g-frost))), transparent); }
 
+/* Lens glass needs a positioned box for its ::before; zero specificity, so any page's own position wins. */
+:where(.glass[data-lens]) { position: relative; }
+
 /* A lens piece Firefox or Safari can't bend (nothing known behind it): the same clear glass,
    a slight blur and a whisper of tint, with the lens rims. */
 .glass[data-lens]:not(.is-lens):not(.has-liquid) {

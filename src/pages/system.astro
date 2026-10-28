@@ -131,7 +131,7 @@ const nightRows = [{ label: 'Primary on night', kind: 'primary' }, { label: 'Pil
         <figure class="art__fig">
           <div class="art__frame" id="art-gold">
             <Image class="art__img" src={huntHills} alt="Detail of an 18th-century chinoiserie print: a pavilion, an archer and a figure under tall trees, with hills and open sky, in gold on cream" widths={[800, 1600]} sizes="100vw" />
-            <div class="plate-glass art__plate" data-liquid="art-gold" data-tone="light">
+            <div class="glass art__plate" data-lens data-liquid="art-gold">
               <h3 class="plate__h">Tell me about your project</h3>
               <p>A short call is the quickest way to find out if I'm the right fit.</p>
               <div class="plate__row">
@@ -172,7 +172,7 @@ const nightRows = [{ label: 'Primary on night', kind: 'primary' }, { label: 'Pil
           <figure class="art__fig">
             <div class="art__frame" id="art-night">
               <Image class="art__img" src={ranelagh} alt="The Chinese pavilion on the canal at Ranelagh Gardens, with the Rotunda behind it, its etched lines in gold on warm black" widths={[800, 1600]} sizes="100vw" />
-              <div class="plate-glass art__plate" data-liquid="art-night" data-tone="dark">
+              <div class="glass is-dark art__plate" data-lens data-liquid="art-night">
                 <h3 class="plate__h">Start a project</h3>
                 <p>Send me the brief, or just the problem. I'll come back with questions.</p>
                 <div class="plate__row">
@@ -180,7 +180,7 @@ const nightRows = [{ label: 'Primary on night', kind: 'primary' }, { label: 'Pil
                 </div>
               </div>
               <!-- Tier B, chrome glass: the dock, as it passes over a picture. -->
-              <nav class="dock glass" aria-label="Dock specimen" data-refract>
+              <nav class="dock glass" aria-label="Dock specimen" data-lens>
                 <a href="/" aria-label="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20h-5v-6H9v6H4z"/></svg></a>
                 <a href="/about/" aria-label="About"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="3.5"/><path d="M5 20c1.2-3.5 4-5 7-5s5.8 1.5 7 5"/></svg></a>
                 <a href="/work/" aria-label="Work"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6.5h6l2 2h9v10h-17z"/></svg></a>
@@ -240,17 +240,12 @@ const nightRows = [{ label: 'Primary on night', kind: 'primary' }, { label: 'Pil
     <footer><FooterEngraving /></footer>
 
     <script>
-      import { mountLiquidGlass } from '../scripts/liquid-glass.js';
-      import { mountRefraction } from '../scripts/refraction.js';
+      import { mountLens } from '../scripts/lens.js';
 
-      // Tier A: plate glass samples the painting behind it.
-      document.querySelectorAll<HTMLElement>('[data-liquid]').forEach((panel) => {
-        const image = document.getElementById(panel.dataset.liquid!)?.querySelector('img');
-        const opacity = panel.dataset.opacity ? Number(panel.dataset.opacity) : undefined;
-        mountLiquidGlass(panel, { image, tone: panel.dataset.tone, opacity });
+      // Lens glass everywhere (Josh, 28 Oct): data-liquid names the element holding the painting behind it.
+      document.querySelectorAll<HTMLElement>('[data-lens]').forEach((el) => {
+        mountLens(el, el.dataset.liquid ? document.getElementById(el.dataset.liquid)?.querySelector('img') : null);
       });
-      // Tier B: CSS glass, with edge refraction in Chromium.
-      document.querySelectorAll<HTMLElement>('[data-refract]').forEach((el) => mountRefraction(el));
 
       // Copy email: label swaps, reverts after 1.55s, announced politely.
       const status = document.querySelector<HTMLElement>('[data-copy-status]');
