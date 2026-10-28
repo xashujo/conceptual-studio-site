@@ -262,7 +262,7 @@ content:
         list: true
         description: "The figures under the opening. Placeholders until confirmed: replace before launch."
         fields:
-          - { name: number, label: Number, type: number, required: true, description: "Counts up to this, e.g. 50" }
+          - { name: number, label: Number, type: number, required: true, description: "Counts up to this. Type the number without commas, e.g. 20000: the site adds them (20,000)." }
           - { name: after, label: After the number, type: string, description: "e.g. + or % or hr or M+" }
           - { name: label, label: Label, type: string, required: true }
       - name: results

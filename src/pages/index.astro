@@ -102,7 +102,7 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
           <ul class="stats__list">
             {stats.map((s) => (
               <li class="stat glass" data-lens>
-                <p class="stat__n"><span aria-hidden="true"><span data-count={s.n}>{s.n}</span>{s.after}</span><span class="sr-only">{s.n}{s.after}</span></p>
+                <p class="stat__n"><span aria-hidden="true"><span data-count={s.n}>{s.n.toLocaleString('en-GB')}</span>{s.after}</span><span class="sr-only">{s.n.toLocaleString('en-GB')}{s.after}</span></p>
                 <p class="stat__l">{s.label}</p>
               </li>
             ))}
@@ -290,7 +290,7 @@ const menu = services.map((s) => ({ id: s.id, name: titleCase(s.name), price: s.
           const t0 = performance.now();
           const step = (t: number) => {
             const k = Math.min(1, (t - t0) / 1400);
-            el.textContent = String(Math.round(to * (1 - (1 - k) ** 3)));
+            el.textContent = Math.round(to * (1 - (1 - k) ** 3)).toLocaleString('en-GB'); // 20000 shows as 20,000
             if (k < 1) requestAnimationFrame(step);
           };
           requestAnimationFrame(step);
