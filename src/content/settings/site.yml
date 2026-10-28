@@ -12,8 +12,8 @@ socialLinks:
 companyName: Conceptual Studio Limited
 companyNumber: "15410582"
 glass:
-  bend: 60
+  bend: 50
   frost: 150
-  blur: 100
+  blur: 65
   shine: 50
-  reach: 100
+  reach: 50
