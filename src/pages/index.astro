@@ -465,7 +465,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .hero__art { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 92%); mask-image: linear-gradient(to bottom, #000 58%, transparent 92%); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
   .hero__bento { align-self: center; justify-self: center; width: min(1140px, 100%); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
   .hero__plate { position: relative; grid-column: span 3; padding: 44px 44px 40px; display: grid; gap: 22px; border-radius: 28px; }
-  .hero__h { font-family: var(--display); font-weight: 500; font-size: clamp(34px, 2.8vw, 40px); line-height: 1.06; letter-spacing: -0.01em; text-wrap: balance; }
+  .hero__h { font-family: var(--display); font-weight: 500; font-size: clamp(38px, 3.3vw, 48px); line-height: 1.06; letter-spacing: -0.01em; text-wrap: balance; }
   .hero__p { font-size: 18px; line-height: 1.5; }
   /* The three hero buttons share one shape: the .btn's height, padding and type (Josh, 28 Oct). */
   .hero__plate .avail { --fill: color-mix(in srgb, var(--paper) 55%, transparent); }
@@ -507,7 +507,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   /* Stats: four glass cards, a large number over a short label, straight under the hero plate (Josh, 28 Oct). */
   .stats { justify-self: center; box-sizing: border-box; width: min(1140px, 100%); padding-top: 24px; } /* the bento's gap, so plate, quote and stats read as one grid */
   .stats__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
-  .stat { position: relative; display: grid; align-content: space-between; gap: 28px; min-height: 196px; padding: 28px 28px 26px; border-radius: 28px; }
+  .stat { position: relative; display: grid; align-content: space-between; gap: 20px; min-height: 160px; padding: 26px 28px 24px; border-radius: 28px; }
   .stat__n { font-family: var(--display); font-weight: 500; font-size: clamp(48px, 4.2vw, 62px); line-height: 0.9; letter-spacing: 0.01em; font-variant-numeric: tabular-nums; }
   .stat__plus { margin-left: 0.12em; -webkit-text-stroke: 0.03em currentColor; } /* half a space off the figure, and stroked to the digits' weight: Agatho has no bolder cut (Josh, 28 Oct) */
   .stat__l { font-size: 18px; line-height: 1.35; font-weight: 500; text-wrap: balance; }
@@ -623,8 +623,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .close__body { grid-column: 8 / -1; display: grid; gap: 24px; }
   .close__p { font-size: 20px; line-height: 1.5; }
   .close__next { font-size: 16px; line-height: 1.5; opacity: 0.85; }
-  .footer { padding: 0 var(--margin) 40px; text-align: center; font-size: 16px; color: var(--gold-ink); }
-  .end { --gold-ink: #D9BE91; }
+  .footer { padding: 0 var(--margin) 40px; text-align: center; font-size: 16px; color: #F1DFC8; }
 
   /* Phone menu sheet: the shared glass, under the nav. */
   .menu { position: fixed; inset: 74px var(--margin) auto; margin: 0; width: auto; padding: 8px; border: 0; border-radius: 26px; color: var(--ink); }
@@ -657,7 +656,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
     .hero__art { object-position: 30% 50%; }
     .hero__bento { align-self: start; gap: 12px; }
     .hero__plate { padding: 24px 22px 22px; gap: 16px; border-radius: 26px; }
-    .hero__h { font-size: 34px; }
+    .hero__h { font-size: 36px; }
     .hero__p { font-size: 16px; line-height: 1.45; }
     .hero__with { padding-top: 24px; font-size: 16px; }
     .hero__quote { padding: 22px 22px 20px; border-radius: 26px; }
@@ -665,7 +664,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
     .band { padding-bottom: 120px; }
     .stats { padding-top: 12px; }
     .stats__list { gap: 12px; }
-    .stat { min-height: 150px; padding: 20px 18px; gap: 20px; border-radius: 26px; }
+    .stat { min-height: 128px; padding: 18px 18px; gap: 16px; border-radius: 26px; }
     .stat__n { font-size: 9.6vw; } /* 20,000+ fits a phone-width card */
     .stat__l { font-size: 15px; }
     .fw, .services { padding-top: 120px; }
