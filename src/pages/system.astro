@@ -247,17 +247,17 @@ const nightRows = [{ label: 'Primary on night', kind: 'primary' }, { label: 'Pil
         mountLens(el, el.dataset.liquid ? document.getElementById(el.dataset.liquid)?.querySelector('img') : null);
       });
 
-      // Copy email: label swaps, reverts after 1.55s, announced politely.
+      // Copy email: label swaps, reverts after 2s, announced politely.
       const status = document.querySelector<HTMLElement>('[data-copy-status]');
       document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
         const label = btn.querySelector<HTMLElement>('[data-copy-label]')!;
         let timer = 0;
         btn.addEventListener('click', async () => {
           try { await navigator.clipboard.writeText(btn.dataset.copy!); } catch { return; }
-          label.textContent = 'Email copied';
+          btn.style.minWidth = `${btn.offsetWidth}px`; label.textContent = 'Copied!';
           if (status) status.textContent = 'Email address copied';
           clearTimeout(timer);
-          timer = window.setTimeout(() => { label.textContent = 'Copy email'; if (status) status.textContent = ''; }, 1550);
+          timer = window.setTimeout(() => { label.textContent = 'Copy email'; if (status) status.textContent = ''; }, 2000);
         });
       });
     </script>
