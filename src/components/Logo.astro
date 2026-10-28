@@ -2,12 +2,16 @@
 // The nav wordmark: Josh's gold flow, played once on load (28 Oct). Transparent video needs two files:
 // VP9 WebM with alpha for Chrome, Firefox and Android, HEVC with alpha for Safari and iOS (any app's browser).
 // The stills are its last frame (ink, and cream for the night chapters), shown without script, with reduced
-// motion, if playback fails, and once it ends.
+// motion, if playback fails, and once it ends. The video only says "Conceptual", so "Studio" is live text in
+// the same face and size, set on its baseline (Josh, 28 Oct: the logo reads Conceptual Studio).
 ---
 <a class="logo nav__mark" href="/" aria-label="Conceptual Studio">
+  <span class="logo__art">
   <img class="logo__ink" src="/brand/logo-ink.webp" alt="" width="750" height="200" />
   <img class="logo__cream" src="/brand/logo-cream.webp" alt="" width="750" height="200" />
   <video class="logo__flow" muted playsinline disablepictureinpicture preload="auto" aria-hidden="true" data-webm="/brand/logo-flow.webm" data-hevc="/brand/logo-flow.mp4"></video>
+  </span>
+  <span class="logo__word">Studio</span>
 </a>
 
 <script>
@@ -28,13 +32,15 @@
 </script>
 
 <style>
-  .logo { --h: 48px; display: grid; height: var(--h); margin-left: calc(-0.157 * var(--h)); /* the files' left padding */ }
-  .logo > * { grid-area: 1 / 1; width: calc(3.75 * var(--h)); height: var(--h); }
+  .logo { --h: 48px; display: flex; text-decoration: none; align-items: flex-start; margin-left: calc(-0.157 * var(--h)); /* the files' left padding */ }
+  .logo__art { display: grid; }
+  .logo__art > * { grid-area: 1 / 1; width: calc(3.75 * var(--h)); height: var(--h); }
+  .logo__word { margin: calc(0.08 * var(--h)) 0 0 calc(-0.0375 * var(--h)); /* onto the video's baseline (287px down its 400) and word space */ font-family: var(--display); font-weight: 500; font-size: calc(0.74 * var(--h)); line-height: 1; letter-spacing: 0; }
   .logo__cream, .logo__flow { visibility: hidden; }
   .logo.is-playing .logo__flow { visibility: visible; }
   .logo.is-playing .logo__ink { visibility: hidden; }
   /* Over the night chapters the text is cream (#F1DFC8): the cream still, also mid-play. */
   :global(.is-dark) .logo :is(.logo__ink, .logo__flow) { visibility: hidden; }
   :global(.is-dark) .logo .logo__cream { visibility: visible; }
-  @media (max-width: 759.98px) { .logo { --h: 42px; } }
+  @media (max-width: 759.98px) { .logo { --h: 36px; } }
 </style>
