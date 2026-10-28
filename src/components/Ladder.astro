@@ -1,34 +1,45 @@
 ---
 // The pricing ladder (brief 6.4): three rungs plus Custom, side by side on desktop, swiped on phones.
 // Columns under one margin-to-margin hairline (TASTE 18), not boxed cards (TASTE never-do).
-// Each button opens the enquiry form below with that rung chosen.
+// Each button opens the enquiry form below with that rung chosen. A rung with a badge is glass.
 import { serviceById, custom } from '../data/services';
-interface Props { service: string }
-const s = serviceById(Astro.props.service);
-const rungs = [...s.tiers.map((t) => ({ ...t, value: `${s.id}:${t.id}` })), { ...custom, value: `${s.id}:custom` }];
+interface Props { service: string; custom?: boolean }
+const { service, custom: withCustom = true } = Astro.props;
+const s = serviceById(service);
+const rungs = [...s.tiers.map((t) => ({ ...t, value: `${s.id}:${t.id}` })), ...(withCustom ? [{ ...custom, value: `${s.id}:custom` }] : [])];
 ---
-<div class="ladder" role="list">
+<div class="ladder" role="list" style={`--n: ${rungs.length}`}>
   {rungs.map((t) => (
-    <article class:list={['rung', { 'rung--custom': t.id === 'custom' }]} role="listitem" aria-labelledby={`rung-${t.value.replace(':', '-')}`}>
+    <article class:list={['rung', { 'rung--custom': t.id === 'custom', 'rung--pick glass': t.badge }]} role="listitem" aria-labelledby={`rung-${t.value.replace(':', '-')}`}>
+      {t.badge && <p class="rung__badge">{t.badge}</p>}
       <h3 class="rung__name" id={`rung-${t.value.replace(':', '-')}`}>{t.name}</h3>
+      {t.lead && <p class="rung__lead">{t.lead}</p>}
       <p class="rung__price">{t.price}</p>
       {t.time && <p class="rung__time">{t.time}</p>}
-      <p class="rung__inc">{t.included}</p>
+      {t.included.includes('\n')
+        ? <ul class="rung__inc">{t.included.split('\n').filter(Boolean).map((i) => <li>{i}</li>)}</ul>
+        : <p class="rung__inc">{t.included}</p>}
       {t.note && <p class="rung__note">{t.note}</p>}
       <a class="btn rung__btn" href={`?need=${t.value}#enquire`} data-need={t.value}>
-        <span class="swap"><span>{t.id === 'custom' ? 'Ask for a quote' : 'Choose this'}</span><span aria-hidden="true">Open the form</span></span><span class="arrow" aria-hidden="true">→</span>
+        <span class="swap"><span>{t.button || (t.id === 'custom' ? 'Ask for a quote' : 'Choose this')}</span><span aria-hidden="true">Open the form</span></span><span class="arrow" aria-hidden="true">→</span>
       </a>
     </article>
   ))}
 </div>
 
 <style>
-  .ladder { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--ink); }
+  .ladder { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); border-top: 1px solid var(--ink); }
   .rung { display: flex; flex-direction: column; gap: 10px; padding: 24px 24px 28px; }
   .rung:first-child { padding-left: 0; }
   .rung + .rung { border-left: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); }
   /* Custom is a tone step, not another box, with Framer's 25px corner at the bottom. */
   .rung--custom { background: var(--paper-2); border-radius: 0 0 25px 25px; border-left-color: transparent !important; }
+  /* The badged rung: a piece of glass with Framer's 25px corners, its button filled ink like Custom's. */
+  .rung--pick { border-radius: 25px; border-color: transparent !important; padding-left: 24px !important; }
+  .rung--pick + .rung { border-left-color: transparent; }
+  .rung__badge { align-self: flex-start; padding: 6px 12px; border-radius: var(--pill); background: var(--ink); color: var(--paper); font-size: 14px; font-weight: 600; line-height: 1; }
+  .rung__lead { font-size: 18px; line-height: 1.45; color: var(--ink-2); }
+  ul.rung__inc { margin: 14px 0 0; padding-left: 1.1em; display: grid; gap: 6px; }
   .rung__name { font-size: 20px; line-height: 1.3; font-weight: 600; letter-spacing: -0.01em; }
   .rung__price { font-size: 40px; line-height: 1.1; font-weight: 700; letter-spacing: -0.045em; margin-top: 18px; }
   .rung__time { font-size: 20px; line-height: 1.3; color: var(--ink-2); }
@@ -36,7 +47,7 @@ const rungs = [...s.tiers.map((t) => ({ ...t, value: `${s.id}:${t.id}` })), { ..
   .rung__note { font-size: 16px; line-height: 1.5; color: var(--ink-2); }
   .rung__btn { margin-top: auto; align-self: flex-start; }
   .rung > :nth-last-child(2) { margin-bottom: 24px; }
-  .rung--custom .rung__btn { --fill: var(--ink); --fill-hover: var(--ink); --fill-pressed: color-mix(in srgb, var(--ink) 84%, var(--paper)); color: var(--paper); }
+  :is(.rung--custom, .rung--pick) .rung__btn { --fill: var(--ink); --fill-hover: var(--ink); --fill-pressed: color-mix(in srgb, var(--ink) 84%, var(--paper)); color: var(--paper); }
 
   /* Phones and small tablets: one rung per swipe, the next one peeking in. */
   @media (max-width: 1099.98px) {

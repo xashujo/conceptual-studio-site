@@ -5,7 +5,8 @@ import Site from '../../layouts/Site.astro';
 import PageOpen from '../../components/PageOpen.astro';
 import Stages from '../../components/Stages.astro';
 import Enquiry from '../../components/Enquiry.astro';
-import { services } from '../../data/services';
+import Ladder from '../../components/Ladder.astro';
+import { services, serviceById } from '../../data/services';
 import { email } from '../../site';
 import art from '../../assets/art/engraved/hunt-sky-gold.jpg';
 
@@ -42,11 +43,20 @@ const procurement = [
           <p class="svc__line">{s.line}</p>
           <p class="svc__go">
             {s.href
-              ? <a class="btn" href={s.href}><span class="swap"><span>Prices and work</span><span aria-hidden="true">Open the page</span></span><span class="arrow" aria-hidden="true">→</span></a>
+              ? <a class="btn" href={s.href}><span class="swap"><span>{s.href.includes('#') ? 'See the tiers' : 'Prices and work'}</span><span aria-hidden="true">Open the page</span></span><span class="arrow" aria-hidden="true">→</span></a>
               : <a class="btn" href={`?need=${s.id}:unsure#enquire`} data-need={`${s.id}:unsure`}><span class="swap"><span>Ask about editing</span><span aria-hidden="true">Open the form</span></span><span class="arrow" aria-hidden="true">→</span></a>}
           </p>
         </article>
       ))}
+    </section>
+
+    <!-- Retainers have no page of their own: their tiers sit here (Pages CMS: Services and prices > Monthly design retainers). -->
+    <section class="ret wrap" id="retainers" aria-labelledby="ret-h">
+      <div class="ret__head">
+        <h2 class="h2" id="ret-h">Monthly retainers</h2>
+        <p>{serviceById('retainer').line} Three-month minimum, then month to month with 30 days' notice.</p>
+      </div>
+      <Ladder service="retainer" custom={false} />
     </section>
 
     <section class="how wrap" aria-labelledby="how-h">
@@ -91,6 +101,11 @@ const procurement = [
   .svc__line { grid-column: 1 / span 6; grid-row: 3; font-size: 20px; line-height: 1.45; }
   .svc__go { grid-column: 8 / -1; grid-row: 3; justify-self: end; align-self: start; }
 
+  .ret { padding-top: 120px; scroll-margin-top: 24px; }
+  .ret__head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; margin-bottom: 32px; align-items: end; }
+  .ret__head h2 { grid-column: 1 / span 4; }
+  .ret__head p { grid-column: 6 / -1; font-size: 18px; line-height: 1.5; color: var(--ink-2); max-width: 56ch; }
+
   .how { padding-top: 160px; }
   .how__h { margin-bottom: 24px; }
   .how__terms { margin: 56px 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
@@ -110,6 +125,8 @@ const procurement = [
     .intro__note { grid-column: 1 / span 9; }
     .proc__side { grid-column: 1 / -1; position: static; margin-bottom: 32px; }
     .proc__list { grid-column: 1 / -1; }
+    .ret__head h2, .ret__head p { grid-column: 1 / -1; }
+    .ret__head p { margin-top: 12px; }
   }
   @media (max-width: 759.98px) {
     .intro { padding-top: 112px; }

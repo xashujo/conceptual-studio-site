@@ -197,8 +197,11 @@ content:
           - { name: name, label: Rung name, type: string, required: true }
           - { name: price, label: Price, type: string, required: true, description: "Written exactly as it should appear, e.g. From £4,900 or From £1,200 a month" }
           - { name: time, label: Time, type: string, description: "Calendar time, e.g. from 4 weeks" }
-          - { name: includes, label: What it includes, type: text, required: true }
+          - { name: includes, label: What it includes, type: text, required: true, description: "Put each item on its own line to show them as a list." }
           - { name: note, label: Small note (optional), type: string, description: "e.g. Quoted per project." }
+          - { name: lead, label: Who it's for (optional), type: string, description: "One line under the name, e.g. For growing brands that need a steady design partner." }
+          - { name: badge, label: Badge (optional), type: string, description: "e.g. Most popular. A rung with a badge is shown in glass so it stands out. Use it on one rung only." }
+          - { name: button, label: Button text (optional), type: string, description: "e.g. Start a retainer. Leave empty for Choose this. Every button opens the enquiry form with this rung chosen." }
       - name: homePrice
         label: Home page price (optional)
         type: string

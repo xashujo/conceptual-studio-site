@@ -1,0 +1,40 @@
+name: Monthly design retainers
+order: 4
+page: /services/#retainers
+summary: A set amount of design time every month, for teams with a steady flow of work. Brand, campaign, report and presentation design from one designer who already knows your brand.
+homePrice: From £500 a month
+homeTime: three-month minimum
+homeLink: Retainer prices
+tiers:
+  - name: Ongoing Design Support
+    lead: For small teams that need regular design help without hiring.
+    price: £500 a month
+    time: Up to 10 hours a month
+    includes: |-
+      Social graphics, slides, flyers and small campaign assets
+      Updates to your existing brand files and templates
+      Work started within three working days of your request
+      A short planning email each month to line up what's next
+    button: Start a retainer
+  - name: Creative Partner
+    badge: Most popular
+    lead: For growing brands that need a steady design partner.
+    price: £1,000 a month
+    time: Up to 24 hours a month, three full days
+    includes: |-
+      Brand and campaign design, reports and presentations
+      Priority scheduling: work started the next working day
+      A 30-minute planning call each month, with ideas for what to make next
+      A better hourly rate than Ongoing Design Support
+    button: Start a retainer
+  - name: Creative Direction
+    lead: For organisations that need senior creative input across their brand.
+    price: Custom quote
+    time: From four days a month
+    includes: |-
+      Brand and campaign direction, from idea to finished work
+      Design systems and templates your team can use
+      Briefing and reviewing work from your team or other suppliers
+      A quarterly review of how your brand is showing up
+    button: Request a call
+    note: Quoted after a call.

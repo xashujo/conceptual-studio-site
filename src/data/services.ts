@@ -3,7 +3,7 @@
 // Times are calendar time, first call to final files.
 import { getCollection } from 'astro:content';
 
-export interface Tier { id: string; name: string; price: string; time?: string; included: string; note?: string }
+export interface Tier { id: string; name: string; price: string; time?: string; included: string; note?: string; lead?: string; badge?: string; button?: string }
 export interface Service {
   id: string; name: string; href?: string; line: string; tiers: Tier[];
   home: { price: string; time?: string; link: string };
@@ -16,6 +16,7 @@ export const services: Service[] = (await getCollection('services'))
   .map(({ id, data: d }) => {
     const tiers = d.tiers.map((t) => ({
       id: slug(t.name), name: t.name, price: t.price, time: t.time ?? undefined, included: t.includes, note: t.note ?? undefined,
+      lead: t.lead ?? undefined, badge: t.badge ?? undefined, button: t.button ?? undefined,
     }));
     return {
       id, name: d.name, href: d.page ?? undefined, line: d.summary, tiers,
