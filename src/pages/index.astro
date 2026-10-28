@@ -114,6 +114,18 @@ const menu = services.flatMap((s) => s.href?.includes('#')
       <!-- Art behind the glass, so every pane has something to bend (Josh, 28 Oct). Two bands that scroll with
            the page, each its own etching (pass 2, Josh: the held image made the page feel like it wasn't moving). -->
       <div class="field">
+        <!-- The site's two duotones, so any background uploaded in the CMS comes out toned like the rest:
+             gold on the light bands, the close's warm dark on the night ones. Same colours as the toning script. -->
+        <svg class="tones" aria-hidden="true">
+          <filter id="tone-day" color-interpolation-filters="sRGB">
+            <feColorMatrix type="matrix" values=".2126 .7152 .0722 0 0  .2126 .7152 .0722 0 0  .2126 .7152 .0722 0 0  0 0 0 1 0" />
+            <feComponentTransfer><feFuncR type="table" tableValues=".361 .808 .969" /><feFuncG type="table" tableValues=".267 .690 .886" /><feFuncB type="table" tableValues=".133 .522 .776" /></feComponentTransfer>
+          </filter>
+          <filter id="tone-night" color-interpolation-filters="sRGB">
+            <feColorMatrix type="matrix" values=".2126 .7152 .0722 0 0  .2126 .7152 .0722 0 0  .2126 .7152 .0722 0 0  0 0 0 1 0" />
+            <feComponentTransfer><feFuncR type="table" tableValues=".161 .404 .553" /><feFuncG type="table" tableValues=".133 .329 .451" /><feFuncB type="table" tableValues=".094 .227 .310" /></feComponentTransfer>
+          </filter>
+        </svg>
         <!-- The sections alternate night and day (Josh, 28 Oct): Work night, Services day, Why Clients night,
              How We Work and About day, then the close at night to the end. Each night band has its own night engraving. -->
         <div class="band night">
@@ -478,7 +490,9 @@ const menu = services.flatMap((s) => s.href?.includes('#')
      service doesn't zoom it (Josh, 28 Oct). The band crops it; the fade sits on the band's edges. */
   .band__art { -webkit-mask-image: linear-gradient(transparent, #000 180px, #000 calc(100% - 140px), transparent); mask-image: linear-gradient(transparent, #000 180px, #000 calc(100% - 140px), transparent); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
   .band__art img { width: 100%; height: auto; /* its own shape, so it is never zoomed past the page width */ opacity: 0.6; -webkit-mask-image: linear-gradient(#000 calc(100% - 240px), transparent); mask-image: linear-gradient(#000 calc(100% - 240px), transparent); } /* 60% is the home page's "quiet" strength */
-  .band.night .band__art img { opacity: 0.9; } /* the night art is toned dark already, like the close */
+  .band__art img { filter: url(#tone-day); }
+  .band.night .band__art img { opacity: 0.9; filter: url(#tone-night); } /* the night art is toned dark, like the close */
+  .tones { position: absolute; width: 0; height: 0; }
 
   /* One centred column for everything under the opening (Josh, 28 Oct: "centred to the page").
      Headings stay left-aligned inside it. 1140px lets both rows of work fit one screen at 1440. */
