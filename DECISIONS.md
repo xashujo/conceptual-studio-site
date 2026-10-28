@@ -620,3 +620,7 @@ Museum model:
 - Chromatic aberration (Josh, 28 Oct): the red/blue split at the lens rim is
   22% of the bend (was 8%), in both the Chromium SVG lens and the WebGL glass,
   so the colour fringe shows round the sides.
+- Chrome's hero plate read as a rainbow band at 22% (Josh, 28 Oct; he liked
+  the Chrome buttons and the Firefox/Safari hero). Chromium lens: the rim is
+  capped at 40px, and big plates (short side over 120px) split at 10%;
+  buttons, pills and bars keep 22%. WebGL keeps 22% everywhere.

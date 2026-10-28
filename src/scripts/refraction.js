@@ -112,12 +112,14 @@ export function mountRefraction(el, opts = {}) {
     if (result) c.setAttribute('result', result);
     return c;
   };
+  // Red bends more and blue less than green: chromatic aberration at the rim. The split is set per size in update().
+  const red = bend(1, 'dr');
+  const blue = bend(1, 'db');
   if (lens) {
     filter.append(map,
-      // Red bends 22% more and blue 22% less than green: visible chromatic aberration at the rim (Josh, 28 Oct).
-      bend(1.22, 'dr'), keep('dr', 0, 'r'),
+      red, keep('dr', 0, 'r'),
       bend(1, 'dg'), keep('dg', 1, 'g'),
-      bend(0.78, 'db'), keep('db', 2, 'b'),
+      blue, keep('db', 2, 'b'),
       add('r', 'g', 'rg'), add('rg', 'b'));
   } else filter.append(map, bend(1));
   svg.append(filter);
@@ -130,7 +132,8 @@ export function mountRefraction(el, opts = {}) {
     const h = el.offsetHeight;
     if (!w || !h) return;
     const r = Math.min(radiusPx(getComputedStyle(el).borderTopLeftRadius, w), w / 2, h / 2);
-    const band = lens ? Math.max(14, Math.min(w, h) * 0.3) : 0; // lens rim: 30% of the short side, 14px minimum
+    // Lens rim: 30% of the short side, 14 to 40px. The cap keeps big plates' fringe a rim, not a rainbow band (Josh, 28 Oct).
+    const band = lens ? Math.min(40, Math.max(14, Math.min(w, h) * 0.3)) : 0;
     const next = `${w}x${h}r${r}`;
     if (next === key) return;
     key = next;
@@ -138,7 +141,13 @@ export function mountRefraction(el, opts = {}) {
     map.setAttribute('height', String(h));
     map.setAttribute('href', displacementMap(w, h, r, band));
     el.style.setProperty('--refract', `url(#${id})`);
-    if (lens) el.style.setProperty('--lens-band', `${band}px`);
+    if (lens) {
+      // 22% split on buttons, pills and bars; 10% on big plates, where 22% read as a rainbow band (Josh, 28 Oct).
+      const split = Math.min(w, h) > 120 ? 0.1 : 0.22;
+      red.setAttribute('scale', String(scale * (1 + split)));
+      blue.setAttribute('scale', String(scale * (1 - split)));
+      el.style.setProperty('--lens-band', `${band}px`);
+    }
     el.classList.add(lens ? 'is-lens' : 'is-refracting');
   }
   update();
