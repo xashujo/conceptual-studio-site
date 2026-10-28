@@ -818,3 +818,6 @@ Museum model:
   edge on every glass piece in every browser, with 12px blur on unbent chrome (commit de157e0). The glass
   stays as glass-light set it.
 - Home pass 2 merged to main with Josh's OK (28 Oct).
+- /glass/ previews the site's glass as it is (28 Oct): its bars, pills and
+  buttons carry data-bend, which lifts the 3-bend limit on that page only, and
+  each section has a labelled pane showing the blurred big-glass style.
