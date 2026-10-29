@@ -2,7 +2,8 @@ availability: true
 availabilityText: Taking new projects
 email: joshuamcdonald099@gmail.com
 responseTime: within three working days
-nextSteps: "What happens next: a reply {reply time}, a free 20-minute call to talk it through, then a fixed quote."
+nextSteps: "What happens next: a reply {reply time}, a free 20-minute call to
+  talk it through, then a fixed quote."
 socialLinks:
   - label: Instagram
     url: https://www.instagram.com/conceptual.pdf/
@@ -16,5 +17,5 @@ glass:
   bend: 50
   frost: 150
   blur: 65
-  shine: 50
+  shine: 65
   reach: 50
