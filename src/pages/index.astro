@@ -575,9 +575,12 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .band__art img { position: absolute; left: 0; top: calc(-1 * var(--y, 0px)); width: 100%; height: var(--run-h, 100%); object-fit: cover; object-position: 50% 0; opacity: 0.45; filter: url(#tone-day); } /* quieter (Josh, 2 Nov: less cluttered) */
   .band.night .band__art img { opacity: 0.4; filter: url(#tone-night); }
   /* Plain canvas (Josh, 2 Nov: simpler): the weave only, toned per band like the painting. A tile, so nothing zooms. */
-  .canvas { background: var(--canvas) 0 0 / 510px repeat; opacity: 0.5; filter: url(#tone-day); }
+  /* Soft-light over the band's own paper, so the weave reads on cream and on warm black without shifting either
+     colour: a tactile ground for the glass to bend (Josh, 2 Nov: "plain colour... glass just falls apart"). */
+  .canvas { background: var(--canvas) 0 0 / 510px repeat; mix-blend-mode: soft-light; opacity: 0.9; }
   .hero__art.canvas { height: 100%; }
-  .band.night .canvas { opacity: 0.35; filter: url(#tone-night); } /* toned dark like the close, and kept quiet so text reads over it */
+  .hero:has(.canvas), .band:has(> .canvas) { background: var(--paper); } /* the paper the weave blends into */
+  .band.night .canvas { opacity: 1; }
   .tones { position: absolute; width: 0; height: 0; }
 
   /* One centred column for everything under the opening (Josh, 28 Oct: "centred to the page").
