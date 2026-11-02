@@ -12,7 +12,6 @@ import { email, startHref, quoteHref, sentence, trustedBy } from '../data/site';
 import { availability, homeQuote, responseTime, home } from '../lib/site';
 import { featured, projectHref, homeFilters, bySlug } from '../data/work';
 import { services } from '../data/services';
-import heroArt from '../assets/art/engraved/jardin-quiet.jpg';
 import closeArt from '../assets/art/engraved/lemoyne-night.jpg';
 
 const headline = home.headline; // Pages CMS: Home page (option 3, Josh, 26 Oct)
@@ -79,7 +78,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
     <main>
       <!-- Opening: the etching fills the screen; the hero plate is glass over it. -->
       <header class="hero" id="top">
-        <Image class="hero__art" src={heroArt} alt="" widths={[640, 1024, 1600, 2400]} sizes="100vw" loading="eager" fetchpriority="high" />
+        <Image class="hero__art" src={home.pageImage} alt="" widths={[1100, 2200]} sizes="100vw" loading="eager" fetchpriority="high" />
         <!-- Landing view (Josh, 2 Nov): one plate that says what clients get, with the big Start a Project; the stats follow. -->
         <div class="hero__bento">
         <div class="hero__plate glass" data-lens>
@@ -352,18 +351,20 @@ const menu = services.flatMap((s) => s.href?.includes('#')
       // the field panes move over live content, so there they keep the clear CSS glass.
       // Light glass (glass-light, Josh 28 Oct): only small chrome bends, three pieces at most, nav first;
       // big panes are plain blurred glass (lens.js decides).
-      const heroArt = document.querySelector<HTMLImageElement>('.hero__art');
       document.querySelector<HTMLElement>('[data-filters]')!.hidden = false; // shown before the lens counts its height
-      mountLens(document.querySelector('.hero__plate'), heroArt, [0.58, 0.92]);
+      mountLens(document.querySelector('.hero__plate'), null); // over the running painting, so CSS glass like the panes
       document.querySelectorAll<HTMLElement>('.field [data-lens], .stat, .close__body').forEach((el) => mountLens(el, null));
 
-      // The running painting: each band's slice starts where the band sits in the field.
+      // The running painting: it starts at the top of the opening, and each band's slice starts where the band sits.
+      const hero = document.querySelector<HTMLElement>('.hero')!;
       const field = document.querySelector<HTMLElement>('.field')!;
       const place = () => {
-        field.style.setProperty('--field-h', `${field.offsetHeight}px`);
-        field.querySelectorAll<HTMLElement>('.band').forEach((b) => b.style.setProperty('--y', `${b.offsetTop - field.offsetTop}px`));
+        document.documentElement.style.setProperty('--run-h', `${hero.offsetHeight + field.offsetHeight}px`);
+        field.querySelectorAll<HTMLElement>('.band').forEach((b) => b.style.setProperty('--y', `${hero.offsetHeight + b.offsetTop - field.offsetTop}px`));
       };
-      new ResizeObserver(place).observe(field);
+      const ro = new ResizeObserver(place);
+      ro.observe(hero);
+      ro.observe(field);
 
       // Nav: light over the night chapters, dark over paper. Watches a 1px line across the nav's middle.
       const nav = document.querySelector<HTMLElement>('[data-nav]')!;
@@ -530,7 +531,9 @@ const menu = services.flatMap((s) => s.href?.includes('#')
 
   /* Opening: the quiet etching fills the screen, the plate centred over the trees and sky. */
   .hero { position: relative; isolation: isolate; min-height: 100svh; padding: 116px var(--margin) 40px; display: grid; align-content: center; } /* the bento and stats as one centred block */
-  .hero__art { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 92%); mask-image: linear-gradient(to bottom, #000 58%, transparent 92%); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
+  /* The opening is the first stretch of the running painting (Josh, 2 Nov), toned and quiet like the bands. */
+  .hero { overflow: clip; }
+  .hero__art { position: absolute; top: 0; left: 0; z-index: -1; width: 100%; height: var(--run-h, 100%); object-fit: cover; object-position: 50% 0; opacity: 0.45; filter: url(#tone-day); }
   .hero__bento { align-self: center; justify-self: center; width: min(1140px, 100%); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-gap); }
   .hero__plate { position: relative; grid-column: 1 / -1; padding: 64px 56px 56px; display: grid; justify-items: center; gap: 26px; border-radius: var(--radius); text-align: center; } /* type and space carry it: one centred statement */
   .hero__h { font-family: var(--display); font-weight: 500; font-size: clamp(44px, 5.2vw, 76px); line-height: 1.06; letter-spacing: -0.01em; text-wrap: balance; }
@@ -554,10 +557,10 @@ const menu = services.flatMap((s) => s.href?.includes('#')
      as Apple's pages do). The art fills its band edge to edge and stops there; no fades between sections. */
   .band__art { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
   .band.night { --ink-2: color-mix(in srgb, var(--ink) 86%, var(--paper)); } /* secondary text 5:1 or better over the art */
-  /* One painting runs down the whole field (Josh, 2 Nov): every band holds the same image, sized to the field
+  /* One painting runs down the whole field (Josh, 2 Nov): every band holds the same image, sized to the opening plus the field
      and shifted up by the band's own offset (--y, set below), so each shows the next stretch of it. */
-  .band__art img { position: absolute; left: 0; top: calc(-1 * var(--y, 0px)); width: 100%; height: var(--field-h, 100%); object-fit: cover; object-position: 50% 0; opacity: 0.6; filter: url(#tone-day); } /* 60% is the home page's "quiet" strength */
-  .band.night .band__art img { opacity: 0.5; filter: url(#tone-night); } /* toned dark like the close, and kept quiet so text reads over it */
+  .band__art img { position: absolute; left: 0; top: calc(-1 * var(--y, 0px)); width: 100%; height: var(--run-h, 100%); object-fit: cover; object-position: 50% 0; opacity: 0.45; filter: url(#tone-day); } /* quieter (Josh, 2 Nov: less cluttered) */
+  .band.night .band__art img { opacity: 0.4; filter: url(#tone-night); } /* toned dark like the close, and kept quiet so text reads over it */
   .tones { position: absolute; width: 0; height: 0; }
 
   /* One centred column for everything under the opening (Josh, 28 Oct: "centred to the page").
@@ -747,7 +750,6 @@ const menu = services.flatMap((s) => s.href?.includes('#')
     .nav__menu { display: inline-flex; min-height: 42px; font-size: 16px; background: color-mix(in srgb, var(--ink) 6%, transparent); }
     [id] { scroll-margin-top: 80px; }
     .hero { padding: 84px var(--margin) 24px; }
-    .hero__art { object-position: 30% 50%; }
     .hero__bento { align-self: start; }
     .hero__plate { padding: 24px 22px 22px; gap: 16px; border-radius: var(--radius); }
     .hero__h { font-size: 36px; }
