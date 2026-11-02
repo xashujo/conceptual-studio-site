@@ -74,6 +74,7 @@ export const collections = {
     schema: z.object({
       quote: z.string(), name: z.string(), role: z.string(), organisation: z.string(),
       onHomePage: z.boolean().nullish().transform((v) => !!v),
+      homeOrder: z.number().nullish(),
     }),
   }),
   clients: defineCollection({
@@ -107,6 +108,9 @@ export const collections = {
       // Why Clients Choose Us (Josh, 2 Nov): what's distinctive about the studio, between the clients and the proof.
       proofHeading: z.string().min(1),
       servicesIntro: z.string().min(1),
+      customQuote: z.string().min(1),
+      orgHeading: z.string().nullish().transform((v) => v ?? ''),
+      orgPoints: z.array(z.string().min(1)).nullish().transform((v) => v ?? []),
       approach: z.array(z.object({ title: z.string().min(1), text: z.string().min(1) })),
       results: z.array(ref),
       backdrop: z.enum(['canvas', 'painting']).default('canvas'),

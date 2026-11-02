@@ -51,7 +51,10 @@ export const clientGroups = (['Education', 'Companies and international'] as con
   .filter((g) => g.names.length);
 
 // The quote shown on the home page (ticked "Show on the home page" in Testimonials).
-export const homeQuote = (await getCollection('testimonials', (t) => t.data.onHomePage))[0]?.data;
+export const homeQuotes = (await getCollection('testimonials', (t) => t.data.onHomePage)).map((t) => t.data)
+  .sort((a, b) => (a.homeOrder ?? 99) - (b.homeOrder ?? 99) || a.name.localeCompare(b.name));
+/** The large quote in Why Clients Choose; the rest sit in a row under it. */
+export const homeQuote = homeQuotes[0];
 
 // Every artwork on the site, with the credit the colophon and the plate captions use.
 export const art = {

@@ -9,7 +9,7 @@ import '../styles/tokens.css';
 import '../styles/components.css';
 import { Image, getImage } from 'astro:assets';
 import { email, booking, startHref, quoteHref, sentence, trustedBy } from '../data/site';
-import { availability, homeQuote, responseTime, home } from '../lib/site';
+import { availability, homeQuote, homeQuotes, responseTime, home, social, company } from '../lib/site';
 import { featured, projectHref, homeFilters, bySlug } from '../data/work';
 import { services } from '../data/services';
 import closeArt from '../assets/art/engraved/lemoyne-night.jpg';
@@ -88,10 +88,10 @@ const menu = services.flatMap((s) => s.href?.includes('#')
           <h1 class="hero__h">{headline}</h1>
           <p class="hero__p">{sentence}</p>
           <div class="acts">
-            <a class="btn btn--solid hero__start" href={booking}><span class="swap" data-alt="Book a Free Call ↗"><span>{home.startButton}</span></span></a>
-            {availability.on && <a class="avail" href={booking}><span class="avail__dot" aria-hidden="true"></span><span class="swap" data-alt="↗ Book a Call"><span>{titleCase(availability.text)}</span></span></a>}
+            <a class="btn btn--solid hero__start" href={booking}>{home.startButton}</a>
             <a class="btn hero__work" href="#work">{home.workButton} <span class="hero__down" aria-hidden="true">→</span></a>
           </div>
+          {availability.on && <p class="hero__avail"><span class="avail__dot" aria-hidden="true"></span>{availability.text}</p>}
         </div>
         </div>
         <section class="stats" aria-label="The studio in numbers">
@@ -251,9 +251,15 @@ const menu = services.flatMap((s) => s.href?.includes('#')
           </div>
           <div class="quote glass" data-lens>
             <h3 class="quote__h">Need Something Else?</h3>
-            <p class="quote__p">A mix of these, or something we haven't listed? Tell us what you need and we'll send a fixed quote {responseTime}.</p>
+            <p class="quote__p">{home.customQuote.replaceAll('{reply time}', responseTime)}</p>
             <a class="btn glass-button" href={quoteHref}>Ask for a Custom Quote <span class="arrow" aria-hidden="true">→</span></a>
           </div>
+          {home.orgPoints.length > 0 && (
+            <div class="org glass" data-lens>
+              <h3 class="quote__h">{home.orgHeading}</h3>
+              <ul class="org__list">{home.orgPoints.map((p) => <li>{p.replaceAll('{company number}', company.number)}</li>)}</ul>
+            </div>
+          )}
         </section>
 
         </div>
@@ -292,7 +298,17 @@ const menu = services.flatMap((s) => s.href?.includes('#')
               </a>
             ))}
           </div>
-          <a class="btn glass-button proof__go" href={booking}>Start a Project <span class="arrow" aria-hidden="true">→</span></a>
+          {homeQuotes.length > 1 && (
+            <div class="proof__more">
+              {homeQuotes.slice(1).map((q) => (
+                <figure class="proof__small glass" data-lens>
+                  <blockquote><p>“{q.quote}”</p></blockquote>
+                  <figcaption><b>{q.name}</b>{q.role}, {q.organisation}</figcaption>
+                </figure>
+              ))}
+            </div>
+          )}
+          <a class="btn glass-button proof__go" href={booking}>{home.startButton} <span class="arrow" aria-hidden="true">→</span></a>
         </section>
         </div>
 
@@ -339,7 +355,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
         <div class="close__body glass" data-lens>
           <p class="close__p">{home.closeText}</p>
           <div class="acts">
-            <a class="btn btn--solid" href={booking}><span class="swap" data-alt="Book a Free Call ↗"><span>{home.startButton}</span></span></a>
+            <a class="btn btn--solid" href={booking}>{home.startButton}</a>
             <button class="btn" type="button" data-copy={email}><span data-label>Copy Email</span></button>
             <span class="sr-only" aria-live="polite" data-status></span>
           </div>
@@ -347,7 +363,11 @@ const menu = services.flatMap((s) => s.href?.includes('#')
         </div>
       </section>
       <!-- Footer links and the garden engraving removed (Josh, 28 Oct): only the copyright stays, centred under the close. -->
-      <footer class="footer"><p>© 2026 Conceptual Studio Limited</p></footer>
+      <footer class="footer">
+        {social.length > 0 && <ul class="footer__social">{social.map((l) => <li><a href={l.href} rel="noopener">{l.label}</a></li>)}</ul>}
+        <p>{company.name}, registered in England, no. {company.number}</p>
+        <p>© {new Date().getFullYear()} {company.name}</p>
+      </footer>
     </div>
 
         <script>
@@ -697,7 +717,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .trusted__l { font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); }
   .trusted__list { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 32px; margin: 0; padding: 0; list-style: none; font-size: 17px; color: var(--ink-2); }
   .trusted__list img { display: block; height: 28px; width: auto; filter: brightness(0) invert(1) sepia(.35); opacity: .7; } /* any logo to one soft cream */
-  .approach { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-gap); margin: 0; margin-top: var(--sp-head); padding: 0; list-style: none; }
+  .approach { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--sp-gap); margin: 0; margin-top: var(--sp-head); padding: 0; list-style: none; }
   .approach__t { font-family: var(--display); font-weight: 500; font-size: 26px; line-height: 1.1; margin-bottom: 10px; }
   .approach p { font-size: 18px; line-height: 1.5; color: var(--ink-2); text-wrap: pretty; }
   .proof__grid { display: grid; grid-template-columns: 7fr 5fr; grid-template-rows: 1fr 1fr; gap: var(--sp-gap); margin-top: var(--sp-head); }
@@ -747,7 +767,19 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .close__direct { margin-top: 18px; font-size: 18px; overflow-wrap: anywhere; }
   .close__direct a { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
   .vid__link { padding: 0 8px; font-size: 16px; }
-  .footer { padding: 0 var(--margin) 40px; text-align: center; font-size: 16px; color: #F1DFC8; }
+  .footer { display: grid; gap: 6px; justify-items: center; padding: 0 var(--margin) 40px; text-align: center; font-size: 16px; color: #F1DFC8; }
+  .footer__social { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 20px; margin: 0 0 8px; padding: 0; list-style: none; }
+  .footer__social a { display: inline-block; padding-block: 8px; color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+  .hero__avail { display: inline-flex; align-items: center; gap: 10px; margin-top: 14px; font-size: 15px; font-weight: 500; color: var(--ink-2); }
+  .hero__plate .hero__avail { justify-self: center; }
+  .org { margin: 24px auto 0; width: min(640px, 100%); padding: 40px 44px; border-radius: var(--radius); }
+  .org__list { margin: 18px 0 0; padding-left: 1.1em; display: grid; gap: 8px; font-size: 18px; line-height: 1.45; }
+  .proof__more { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--sp-gap); margin-top: var(--sp-gap); }
+  .proof__small { margin: 0; padding: var(--sp-card); border-radius: var(--radius); display: flex; flex-direction: column; justify-content: space-between; gap: 24px; }
+  .proof__small blockquote { margin: 0; }
+  .proof__small p { font-size: 19px; line-height: 1.45; text-wrap: pretty; text-indent: -0.4em; }
+  .proof__small figcaption { font-size: 16px; line-height: 1.45; }
+  .proof__small figcaption b { display: block; font-weight: 600; }
 
   /* Phone menu sheet: the shared glass, under the nav. */
   .menu { position: fixed; inset: 74px var(--margin) auto; margin: 0; width: auto; padding: 8px; border: 0; border-radius: var(--radius); color: var(--ink); }

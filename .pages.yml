@@ -225,6 +225,7 @@ content:
       - { name: role, label: Role, type: string, required: true }
       - { name: organisation, label: Organisation, type: string, required: true }
       - { name: onHomePage, label: Show on the home page, type: boolean, description: "Tick one quote only." }
+      - { name: homeOrder, label: Home page position, type: number, description: "Lower numbers come first. The first is the large quote; the others sit in a row under it." }
 
   - name: clients
     label: Clients
@@ -291,6 +292,13 @@ content:
           - { name: linkLabel, label: Link words (optional), type: string, description: "e.g. Watch on Instagram. Empty shows \"See the post\"." }
       - { name: proofHeading, label: Why Clients Choose heading, type: string, required: true, description: "The big heading over the client names, the quote and the proof." }
       - { name: servicesIntro, label: Services intro, type: text, required: true, description: "The line under the Services heading." }
+      - { name: customQuote, label: Need something else line, type: text, required: true, description: "The line in the Need Something Else? box under Services. {reply time} becomes the Reply time in Site settings." }
+      - { name: orgHeading, label: Working with organisations heading, type: string, description: "The box under Services for colleges and larger buyers." }
+      - name: orgPoints
+        label: Working with organisations points
+        type: string
+        list: true
+        description: "One short line each. {company number} becomes the number in Site settings. Only claim what's true (no insurance line unless you have it). Empty hides the box."
       - name: approach
         label: Why Clients Choose, what sets the studio apart
         type: object

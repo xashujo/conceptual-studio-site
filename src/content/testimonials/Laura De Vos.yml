@@ -2,4 +2,5 @@ quote: "Everyone was so impressed with your concepts and overall branding - it w
 name: Laura De Vos
 role: Marketing & Student Recruitment
 organisation: New City College
-onHomePage: false
+onHomePage: true
+homeOrder: 2

@@ -2,4 +2,5 @@ quote: "Your work is excellent and looks great in the final document. I'll have 
 name: Mark Silverman
 role: Managing Director
 organisation: Plus Pursuits
-onHomePage: false
+onHomePage: true
+homeOrder: 3
