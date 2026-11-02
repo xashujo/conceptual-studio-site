@@ -364,11 +364,14 @@ const menu = services.flatMap((s) => s.href?.includes('#')
       let width = 0;
       const place = () => {
         // Sized once per page width, with room to spare, so opening a service never zooms it (Josh, 2 Nov).
+        // All reads, then all writes: one layout instead of one per band.
+        const top = hero.offsetHeight - field.offsetTop;
+        const ys = [...field.querySelectorAll<HTMLElement>('.band')].map((b) => [b, top + b.offsetTop] as const);
         if (innerWidth !== width) {
           width = innerWidth;
           document.documentElement.style.setProperty('--run-h', `${Math.round((hero.offsetHeight + field.offsetHeight) * 1.25)}px`);
         }
-        field.querySelectorAll<HTMLElement>('.band').forEach((b) => b.style.setProperty('--y', `${hero.offsetHeight + b.offsetTop - field.offsetTop}px`));
+        ys.forEach(([b, y]) => b.style.setProperty('--y', `${y}px`));
       };
       const ro = new ResizeObserver(place);
       ro.observe(hero);
@@ -404,7 +407,8 @@ const menu = services.flatMap((s) => s.href?.includes('#')
           const t0 = performance.now() + STAT_IN(Number(el.dataset.i));
           const step = (t: number) => {
             const k = Math.min(1, Math.max(0, (t - t0) / 1400));
-            el.textContent = Math.round(to * (1 - (1 - k) ** 3)).toLocaleString('en-GB'); // 20000 shows as 20,000
+            const text = Math.round(to * (1 - (1 - k) ** 3)).toLocaleString('en-GB'); // 20000 shows as 20,000
+            if (el.textContent !== text) el.textContent = text; // only touch the page when the figure changes
             if (k < 1) requestAnimationFrame(step);
           };
           requestAnimationFrame(step);
@@ -511,7 +515,8 @@ const menu = services.flatMap((s) => s.href?.includes('#')
         navLinks.forEach((a) => (a.hash === `#${current.id}` ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current')));
       };
       spy();
-      addEventListener('scroll', spy, { passive: true });
+      let spying = 0; // once per frame, however fast the scroll events come
+      addEventListener('scroll', () => { spying ||= requestAnimationFrame(() => { spying = 0; spy(); }); }, { passive: true });
     </script>
     <Tune />
   </body>
