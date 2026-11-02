@@ -92,4 +92,6 @@ values:
     text: You talk to the person doing the work, from the first call to the final
       files.
 closeText: Book a free 20-minute call, or tell me a little about what you're working on and I'll be in touch about next steps.
+backdrop: canvas
+canvasImage: "@assets/art/engraved/canvas-texture.jpg"
 pageImage: "@assets/art/engraved/apotheosis-strip.jpg"

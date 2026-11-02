@@ -109,6 +109,8 @@ export const collections = {
       servicesIntro: z.string().min(1),
       approach: z.array(z.object({ title: z.string().min(1), text: z.string().min(1) })),
       results: z.array(ref),
+      backdrop: z.enum(['canvas', 'painting']).default('canvas'),
+      canvasImage: image(),
       pageImage: image(),
       howHeading: z.string().min(1),
       howIntro: z.string().min(1),

@@ -305,6 +305,18 @@ content:
         list: true
         description: "The projects shown beside the quote, with their summaries."
         options: { collection: projects, value: "{path}", label: "{title}", search: title }
+      - name: backdrop
+        label: Background
+        type: select
+        required: true
+        description: "What sits behind the sections above Start a Project: plain canvas, or the Page painting running down the page."
+        options: { values: [ { value: canvas, label: Canvas }, { value: painting, label: Page painting } ] }
+      - name: canvasImage
+        label: Canvas texture
+        type: image
+        required: true
+        description: "A small seamless texture, repeated behind every section and toned gold or dark."
+        options: { media: images }
       - name: pageImage
         label: Page painting
         type: image
