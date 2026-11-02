@@ -50,7 +50,6 @@ export const clientGroups = (['Education', 'Companies and international'] as con
 
 // The quote shown on the home page (ticked "Show on the home page" in Testimonials).
 export const homeQuote = (await getCollection('testimonials', (t) => t.data.onHomePage))[0]?.data;
-export const heroQuote = (await getCollection('testimonials', (t) => t.data.inHero))[0]?.data;
 
 // Every artwork on the site, with the credit the colophon and the plate captions use.
 export const art = {

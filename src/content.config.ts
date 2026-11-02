@@ -74,8 +74,6 @@ export const collections = {
     schema: z.object({
       quote: z.string(), name: z.string(), role: z.string(), organisation: z.string(),
       onHomePage: z.boolean().nullish().transform((v) => !!v),
-      inHero: z.boolean().nullish().transform((v) => !!v),
-      short: text,
     }),
   }),
   clients: defineCollection({
@@ -95,6 +93,7 @@ export const collections = {
     schema: ({ image }) => z.object({
       headline: z.string().min(1),
       intro: z.string().min(1),
+      startButton: z.string().min(1),
       workButton: z.string().min(1),
       trustedByLabel: z.string().min(1),
       stats: z.array(z.object({ number: z.number(), after: z.string().nullish().transform((s) => s ?? ''), label: z.string().min(1) })),
