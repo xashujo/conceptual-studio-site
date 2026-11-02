@@ -105,6 +105,8 @@ export const collections = {
       // Why Clients Choose Us (Josh, 2 Nov): what's distinctive about the studio, between the clients and the proof.
       approach: z.array(z.object({ title: z.string().min(1), text: z.string().min(1) })),
       results: z.array(ref),
+      backdrop: z.enum(['canvas', 'painting']).default('canvas'),
+      canvasImage: image(),
       pageImage: image(),
       howHeading: z.string().min(1),
       howIntro: z.string().min(1),
