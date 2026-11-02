@@ -1,0 +1,51 @@
+---
+// Procurement (Josh, 2 Nov): what a college's or company's finance team needs to set the studio up as a
+// supplier. Working with organisations, the supplier details (Net 30, invoices against a PO, not VAT
+// registered, bank transfer: no payments on the site), and how invoicing runs. Words: Pages CMS > Procurement page.
+import Studio from '../layouts/Studio.astro';
+import Band from '../components/studio/Band.astro';
+import { email } from '../lib/site';
+import { procurementPage as p } from '../lib/pages';
+const pack = `mailto:${email}?subject=Supplier%20pack`;
+---
+<Studio title="Procurement | Conceptual Studio" description={p.intro} closeText={p.closeText}>
+  <Band opening labelledby="proc-h">
+    <div class="ph__plate glass" data-lens>
+      <h1 class="ph__h" id="proc-h">{p.heading}</h1>
+      <p class="ph__p">{p.intro}</p>
+      <div class="acts">
+        <a class="btn btn--solid" href={pack}><span class="swap" data-alt="Email Me ↗"><span>{p.packButton}</span></span></a>
+        <a class="btn" href="#details">{p.detailsHeading}</a>
+      </div>
+    </div>
+  </Band>
+
+  <Band night labelledby="org-h">
+    <h2 class="big" id="org-h">{p.orgHeading}</h2>
+    <ul class="tiles" style="margin-top: var(--sp-head)">
+      {p.org.map((o, i) => <li class="glass" data-lens data-reveal style={`--i: ${i % 2}`}><h3>{o.title}</h3><p>{o.text}</p></li>)}
+    </ul>
+  </Band>
+
+  <Band id="details" labelledby="details-h">
+    <h2 class="big" id="details-h">{p.detailsHeading}</h2>
+    <dl class="facts glass" data-lens style="margin-top: var(--sp-head)">
+      {p.details.map((d) => <div><dt>{d.label}</dt><dd>{d.value}</dd></div>)}
+    </dl>
+  </Band>
+
+  <Band night labelledby="steps-h">
+    <h2 class="big" id="steps-h">{p.stepsHeading}</h2>
+    <ol class="tiles" style="margin-top: var(--sp-head)">
+      {p.steps.map((s, i) => <li class="glass" data-lens data-reveal style={`--i: ${i % 2}`}><h3>{s.title}</h3><p>{s.text}</p></li>)}
+    </ol>
+  </Band>
+
+  <Band label={p.packButton}>
+    <div class="quote glass" data-lens data-reveal style="margin-top: 0">
+      <h2 class="mid">{p.packButton}</h2>
+      <p class="quote__p">{p.packText}</p>
+      <a class="btn glass-button" href={pack}>{p.packButton} <span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+  </Band>
+</Studio>

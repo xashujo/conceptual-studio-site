@@ -1,0 +1,196 @@
+---
+// Every page in the home page's design language (Josh, 2 Nov): the sticky glass nav, one painting running
+// down the page behind hard-edged day and night bands (the page fills them with <Band>), and the night close
+// with Start a Project on Lemoyne's ceiling. The painting is the Home page's "Page painting" in Pages CMS.
+import Tune from '../components/Tune.astro';
+import Logo from '../components/Logo.astro';
+import { Image } from 'astro:assets';
+import { glassStyle, email, startHref, home, company, responseTime } from '../lib/site';
+import '../styles/tokens.css';
+import '../styles/components.css';
+import '../styles/studio.css';
+import closeArt from '../assets/art/engraved/lemoyne-night.jpg';
+
+interface Props {
+  title: string; description: string;
+  /** The page's own nav item, e.g. "/work/". The home page passes its section anchors instead. */
+  current?: string;
+  links?: [string, string][];
+  turnstile?: boolean; noindex?: boolean;
+  /** The close: words over the buttons, or a slot named "close" in place of the panel. */
+  closeText?: string; closeWide?: boolean;
+}
+const { title, description, current, turnstile = false, noindex = false, closeWide = false } = Astro.props;
+const closeText = (Astro.props.closeText ?? home.closeText).replaceAll('{reply time}', responseTime);
+const pages: [string, string][] = [['Home', '/'], ['Work', '/work/'], ['Services', '/services/'], ['About', '/about/'], ['Contact', '/contact/']];
+const links = Astro.props.links ?? pages;
+const isCurrent = (h: string) => h === current || (h !== '/' && current?.startsWith(h));
+---
+<!doctype html>
+<html lang="en-GB" style={glassStyle}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="preload" href="/fonts/agatho-medium-subset.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter-4-variable.woff2" as="font" type="font/woff2" crossorigin />
+    {turnstile && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
+  </head>
+  <body>
+    <nav class="nav glass glass--nav" aria-label="Main" data-nav>
+      <Logo />
+      <ul class="nav__links">
+        {links.map(([l, h]) => <li><a class="glass-pill" href={h} aria-current={isCurrent(h) ? 'page' : undefined}>{l}</a></li>)}
+      </ul>
+      <button class="nav__menu glass-pill" type="button" popovertarget="site-menu">Menu</button>
+    </nav>
+    <!-- Phone menu: a glass sheet under the nav. A native popover, so Escape and tapping outside close it. -->
+    <div class="menu glass" id="site-menu" popover>
+      <ul>{links.map(([l, h]) => <li><a class="glass-pill" href={h} aria-current={isCurrent(h) ? 'page' : undefined}>{l}</a></li>)}</ul>
+    </div>
+
+    <!-- The site's two duotones, so the painting comes out toned like the rest: gold by day, warm dark by night. -->
+    <svg class="tones" aria-hidden="true">
+      <filter id="tone-day" color-interpolation-filters="sRGB">
+        <feColorMatrix type="matrix" values=".2126 .7152 .0722 0 0  .2126 .7152 .0722 0 0  .2126 .7152 .0722 0 0  0 0 0 1 0" />
+        <feComponentTransfer><feFuncR type="table" tableValues=".361 .808 .969" /><feFuncG type="table" tableValues=".267 .690 .886" /><feFuncB type="table" tableValues=".133 .522 .776" /></feComponentTransfer>
+      </filter>
+      <filter id="tone-night" color-interpolation-filters="sRGB">
+        <feColorMatrix type="matrix" values=".2126 .7152 .0722 0 0  .2126 .7152 .0722 0 0  .2126 .7152 .0722 0 0  0 0 0 1 0" />
+        <feComponentTransfer><feFuncR type="table" tableValues=".161 .404 .553" /><feFuncG type="table" tableValues=".133 .329 .451" /><feFuncB type="table" tableValues=".094 .227 .310" /></feComponentTransfer>
+      </filter>
+    </svg>
+
+    <main class="run" data-run><slot /></main>
+
+    <!-- Close and footer: one night chapter to the end of the page. -->
+    <div class="night end">
+      <div class="close__art" aria-hidden="true"><Image src={closeArt} alt="" widths={[800, 1400, 1900]} sizes="100vw" /></div>
+      <section class:list={['close wrap', { 'close--wide': closeWide }]} id={links === pages ? 'start' : 'contact'} aria-labelledby="close-h">
+        <h2 class="close__h big" id="close-h">Start a Project</h2>
+        {Astro.slots.has('close') ? <slot name="close" /> : (
+          <div class="close__body glass" data-lens>
+            <p class="close__p">{closeText}</p>
+            <div class="acts">
+              <a class="btn btn--solid" href={startHref}><span class="swap" data-alt="Email Me ↗"><span>{home.startButton}</span></span></a>
+              <button class="btn" type="button" data-copy={email}><span data-copy-label>Copy Email</span></button>
+            </div>
+          </div>
+        )}
+      </section>
+      <footer class="footer"><p>© {new Date().getFullYear()} {company.name}</p></footer>
+    </div>
+    <p class="sr-only" aria-live="polite" data-copy-status></p>
+
+    <script>
+      import { mountLens } from '../scripts/lens.js';
+      document.documentElement.classList.add('js');
+      const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Glass: small chrome may bend (lens.js keeps it to three pieces); big panes are plain blurred glass.
+      document.querySelector<HTMLElement>('[data-filters]')?.removeAttribute('hidden'); // shown before the lens counts its height
+      document.querySelectorAll<HTMLElement>('[data-lens]').forEach((el) => mountLens(el, null));
+
+      // The running painting (when the CMS Background is the painting): each band's slice starts where it sits.
+      const run = document.querySelector<HTMLElement>('[data-run]')!;
+      const bands = [...run.querySelectorAll<HTMLElement>(':scope > .band')];
+      let width = 0;
+      const place = () => {
+        // Sized once per page width, with room to spare, so opening a row never zooms it (as on the home page).
+        if (innerWidth !== width) { width = innerWidth; document.documentElement.style.setProperty('--run-h', `${Math.round(run.offsetHeight * 1.25)}px`); }
+        bands.forEach((b) => b.style.setProperty('--y', `${b.offsetTop}px`));
+      };
+      if (run.querySelector('.band__art img')) new ResizeObserver(place).observe(run);
+
+      // Nav: light over the night chapters, dark over day. Watches a 1px line across the nav's middle.
+      const nav = document.querySelector<HTMLElement>('[data-nav]')!;
+      const nights = [...document.querySelectorAll('.night')];
+      const under = new Set<Element>();
+      let watch: IntersectionObserver | undefined;
+      const watchNav = () => {
+        watch?.disconnect(); under.clear();
+        const r = nav.getBoundingClientRect();
+        const y = Math.round(r.top + r.height / 2);
+        watch = new IntersectionObserver((entries) => {
+          entries.forEach((e) => (e.isIntersecting ? under.add(e.target) : under.delete(e.target)));
+          nav.classList.toggle('is-dark', under.size > 0);
+        }, { rootMargin: `-${y}px 0px -${Math.max(0, innerHeight - y - 1)}px 0px` });
+        nights.forEach((n) => watch!.observe(n));
+      };
+      watchNav();
+      addEventListener('resize', watchNav);
+
+      // Phone menu: a link closes the sheet as it jumps.
+      const menu = document.querySelector<HTMLElement>('#site-menu')!;
+      menu.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a')) menu.hidePopover(); });
+
+      // On the home page the nav's current pill follows the section in view.
+      const navLinks = [...document.querySelectorAll<HTMLAnchorElement>('.nav__links a')].filter((a) => a.getAttribute('href')!.startsWith('#'));
+      if (navLinks.length) {
+        const sections = navLinks.map((a) => document.querySelector<HTMLElement>(a.hash)).filter(Boolean) as HTMLElement[];
+        const spy = () => {
+          const line = innerHeight * 0.35;
+          const now = sections.filter((s) => s.getBoundingClientRect().top <= line).pop() ?? sections[0];
+          navLinks.forEach((a) => (a.hash === `#${now.id}` ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current')));
+        };
+        spy();
+        addEventListener('scroll', spy, { passive: true });
+      }
+
+      // Rows that open one at a time; closed rows are inert so focus skips them.
+      const setRow = (row: HTMLElement, open: boolean) => {
+        row.querySelector('.acc__btn')!.setAttribute('aria-expanded', String(open));
+        const panel = row.querySelector<HTMLElement>('.acc__panel')!;
+        panel.toggleAttribute('data-closed', !open);
+        panel.inert = !open;
+      };
+      document.querySelectorAll('[data-acc]').forEach((acc) => {
+        const rows = [...acc.querySelectorAll<HTMLElement>('.acc__row')];
+        rows.forEach((row) => {
+          setRow(row, false); // all closed on load (Josh, 28 Oct)
+          row.querySelector('.acc__btn')!.addEventListener('click', () => {
+            const open = row.querySelector('.acc__btn')!.getAttribute('aria-expanded') !== 'true';
+            rows.forEach((r) => setRow(r, r === row && open));
+            if (!open) row.querySelector('video')?.pause();
+          });
+        });
+      });
+
+      // Copy email: the label confirms, a polite live region announces it, then it reverts. Width held so it doesn't jump.
+      const status = document.querySelector<HTMLElement>('[data-copy-status]')!;
+      document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+        const label = btn.querySelector<HTMLElement>('[data-copy-label]')!;
+        const rest = label.textContent;
+        let timer = 0;
+        btn.addEventListener('click', async () => {
+          try { await navigator.clipboard.writeText(btn.dataset.copy!); } catch { location.href = `mailto:${btn.dataset.copy}`; return; }
+          btn.style.minWidth = `${btn.offsetWidth}px`; label.textContent = 'Copied!'; status.textContent = 'Email address copied';
+          clearTimeout(timer);
+          timer = window.setTimeout(() => { label.textContent = rest; status.textContent = ''; }, 2000);
+        });
+      });
+
+      // Below the fold, pieces rise in as they near the screen (CSS does nothing without the .js class).
+      const reveal = [...document.querySelectorAll<HTMLElement>('[data-reveal]')];
+      if (still || !('IntersectionObserver' in window)) reveal.forEach((el) => el.classList.add('is-in'));
+      else {
+        const io = new IntersectionObserver((entries) => entries.forEach((e) => {
+          if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+        }), { rootMargin: '0px 0px -8% 0px' });
+        reveal.forEach((el) => io.observe(el));
+      }
+
+      // The London clock: hours and minutes, London time, whatever the visitor's own zone.
+      const clocks = document.querySelectorAll<HTMLElement>('[data-clock]');
+      if (clocks.length) {
+        const fmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit' });
+        const tick = () => clocks.forEach((c) => { c.textContent = fmt.format(new Date()); });
+        tick();
+        setInterval(tick, 15000);
+      }
+    </script>
+    <Tune />
+  </body>
+</html>

@@ -1,7 +1,32 @@
 name: Data visualisation and reports
 order: 2
+lane: Colleges & Data
 page: /services/data-visualisation/
 summary: Charts, maps and infographics, and the reports they sit in, from annual reports to sustainability reports, drawn from your own figures.
+kinds: That can be a set of charts for a document you're laying out yourself, a whole annual, strategy or sustainability report, or custom maps, like heat maps of London boroughs.
+demoHeading: A Table Becomes a Chart
+demoText: These are real figures from the Department for Education, shown as the table you'd get in a spreadsheet. Press the button to see what I do with them.
+examples:
+  - src: '@assets/work/new-city-college-strategic-intent/02.webp'
+    alt: Black map of east London boroughs showing the colleges that merged to form New City College, with a timeline from 1990 to 2024
+    title: Strategic Intent, New City College London, 2025
+    caption: Map and timeline of the college mergers, 1990 to 2024
+  - src: '@assets/work/new-city-college-infographics/02.webp'
+    alt: Consultation page with a black map of London marking the BSix and New City College campuses
+    focus: 50% 30%
+    title: New City College London, 2024
+    caption: Maps for the BSix merger consultation
+faqs:
+  - question: Do the prices include VAT?
+    answer: No VAT is added. Conceptual Studio isn't VAT registered, so the price you're quoted is the price you pay.
+  - question: What files do I get?
+    answer: Charts come as PNG and PDF, ready for your own layout. A full report comes as print-ready PDFs for coated and uncoated paper, an accessible PDF and PNGs of every chart.
+  - question: Can the charts match our brand?
+    answer: Yes. They are drawn in your colours and typefaces, so they sit in your documents as if your own team had made them.
+  - question: How long does a report take?
+    answer: Charts take from 1 week and a report of around 16 pages from 2 weeks, counted in calendar time from our first call to your final files. Longer reports are quoted.
+  - question: Can you design a report we reuse every year?
+    answer: "Yes. That is the top rung: the report is built as a template, so next year's edition starts from your new figures, not a blank page."
 homeLink: Data visualisation prices
 tiers:
   - name: Charts and infographics

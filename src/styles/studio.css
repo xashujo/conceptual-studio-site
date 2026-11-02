@@ -1,0 +1,179 @@
+/* The studio's page system (Josh, 2 Nov): the home page's design language, shared by every page.
+   The sticky glass nav, the one painting running down the page behind hard-edged bands that alternate
+   day and night, the glass, the type and spacing, and the night close with Start a Project.
+   Loaded by src/layouts/Studio.astro; page-specific rules stay in each page. */
+
+/* One spacing scale (Josh, 28 Oct): section top, heading to content, grid gaps, card padding. */
+:root { --sp-section: 140px; --sp-head: 40px; --sp-gap: 24px; --sp-card: 32px; }
+@media (max-width: 759.98px) { :root { --sp-section: 112px; --sp-head: 28px; --sp-gap: 16px; --sp-card: 22px; } }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+[id] { scroll-margin-top: 96px; } /* anchors land below the sticky nav */
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* Every section heading, one size: the Selected Work heading's (Josh, 28 Oct). */
+.big { font-family: var(--display); font-weight: 500; font-size: clamp(56px, 7.8vw, 120px); letter-spacing: -0.015em; line-height: 0.92; }
+/* A smaller Agatho heading inside a pane. */
+.mid { font-family: var(--display); font-weight: 500; font-size: clamp(30px, 2.8vw, 40px); line-height: 1.06; letter-spacing: -0.01em; }
+.acts { display: flex; flex-wrap: wrap; align-items: center; gap: var(--btn-gap); }
+.lede { max-width: 46ch; font-size: 20px; line-height: 1.45; text-wrap: pretty; }
+.flow > * + * { margin-top: 1em; }
+
+/* Nav: sticky glass for the whole page; .is-dark turns it light over the night chapters. */
+.nav { position: fixed; z-index: 50; top: 14px; left: var(--margin); right: var(--margin); height: 60px; border-radius: var(--radius); display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 8px 0 24px; transition: color 300ms ease-out, background-color 300ms ease-out, box-shadow 300ms ease-out; }
+.nav.is-dark { color: #F1DFC8; }
+.nav__links { list-style: none; display: flex; gap: 2px; margin: 0; padding: 0; }
+.nav__menu { display: none; }
+/* Phone menu sheet: the shared glass, under the nav. */
+.menu { position: fixed; inset: 74px var(--margin) auto; margin: 0; width: auto; padding: 8px; border: 0; border-radius: var(--radius); color: var(--ink); }
+.menu ul { list-style: none; margin: 0; padding: 0; display: grid; }
+.menu .glass-pill { width: 100%; min-height: 52px; padding: 0 18px; font-size: 20px; }
+
+/* The running painting (Josh, 2 Nov): one painting down the whole page. Every band holds the same image,
+   sized to the run's height and shifted up by the band's own offset (--y, set by the layout script), so each
+   shows the next stretch of it. Each band is its own section with a clean edge, no fades between them. */
+.run { position: relative; }
+.band { position: relative; isolation: isolate; padding-bottom: 160px; }
+.band__art { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.band__art img { position: absolute; left: 0; top: calc(-1 * var(--y, 0px)); width: 100%; height: var(--run-h, 100%); object-fit: cover; object-position: 50% 0; opacity: 0.45; filter: url(#tone-day); }
+.band.night { --ink-2: color-mix(in srgb, var(--ink) 86%, var(--paper)); } /* secondary text 5:1 or better over the art */
+.band.night .band__art img { opacity: 0.4; filter: url(#tone-night); }
+.tones { position: absolute; width: 0; height: 0; }
+/* Plain canvas (Josh, 2 Nov: simpler): the weave only, toned per band like the painting. A tile, so nothing zooms. */
+.canvas { background: var(--canvas) 0 0 / 510px repeat; opacity: 0.5; filter: url(#tone-day); }
+.band.night .canvas { opacity: 0.35; filter: url(#tone-night); }
+/* One centred column for everything under the opening (Josh, 28 Oct: "centred to the page"). */
+.band > :is(section, header) { box-sizing: content-box; max-width: 1140px; margin-inline: auto; padding-top: var(--sp-section); }
+
+/* A page opening: the painting fills it, one glass plate over it with the page's heading. */
+.ph { min-height: min(100svh, 820px); padding: 116px var(--margin) 64px; display: grid; align-content: center; }
+.ph > header { padding: 0; width: 100%; box-sizing: border-box; }
+.ph__plate { position: relative; display: grid; justify-items: center; gap: 22px; padding: 56px 56px 52px; border-radius: var(--radius); text-align: center; }
+.ph__h { font-family: var(--display); font-weight: 500; font-size: clamp(64px, 9vw, 136px); line-height: 0.92; letter-spacing: -0.015em; text-wrap: balance; }
+.ph__p { max-width: 52ch; font-size: 20px; line-height: 1.5; text-wrap: pretty; }
+.ph__plate .acts { justify-content: center; margin-top: 4px; }
+.ph__plate .avail, .ph__plate .btn:not(.btn--solid) { --fill: color-mix(in srgb, var(--paper) 55%, transparent); }
+.ph__plate .btn { min-height: var(--btn-h-sm); padding: 0 var(--btn-px-sm); font-size: 16px; }
+.ph__plate .btn--solid { min-height: 56px; padding: 0 30px; font-size: 18px; }
+
+/* Heading over a section, with an optional intro beside or under it. */
+.head { display: grid; gap: 20px; }
+.head + * { margin-top: var(--sp-head); }
+
+/* A pane of glass holding text. */
+.pane { position: relative; padding: var(--sp-card); border-radius: var(--radius); }
+.pane p { font-size: 20px; line-height: 1.5; max-width: 60ch; }
+
+/* Tiles: glass cards in an even grid, title over text (How We Work's bento). */
+.tiles { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-gap); }
+.tiles--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.tiles > li { position: relative; display: flex; flex-direction: column; gap: 14px; padding: var(--sp-card); border-radius: var(--radius); }
+.tiles h3 { font-family: var(--display); font-size: 30px; line-height: 1.1; font-weight: 500; letter-spacing: -0.01em; }
+.tiles p { font-size: 20px; line-height: 1.5; max-width: 40ch; }
+.tiles--3 h3 { font-size: 26px; }
+.tiles--3 p { font-size: 18px; }
+
+/* A ruled list of facts: label left, value right (the procurement details, the case study credits). */
+.facts { margin: 0; padding: 4px var(--sp-card); border-radius: var(--radius); }
+.facts > div { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 24px; padding-block: 18px; }
+.facts > div + div { border-top: 1px solid color-mix(in srgb, var(--ink) 16%, transparent); }
+.facts dt { font-size: 17px; font-weight: 600; line-height: 1.5; }
+.facts dd { margin: 0; font-size: 18px; line-height: 1.5; max-width: 60ch; }
+
+/* A tag such as a filter name on a card. */
+.tag { padding: 5px 11px; border-radius: var(--pill); background: color-mix(in srgb, var(--ink) 7%, transparent); font-size: 14px; font-weight: 500; line-height: 1.2; }
+
+/* Rows that open one at a time (Services, the work list view, questions). Without script every row stays open. */
+.acc { position: relative; margin-top: var(--sp-head); padding: 4px var(--sp-card); border-radius: var(--radius); }
+.acc__row + .acc__row { border-top: 1px solid color-mix(in srgb, var(--ink) 16%, transparent); }
+.acc__btn { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 24px; padding: 26px 0; border: 0; background: none; color: inherit; font: 600 28px/1.2 var(--text); letter-spacing: -0.02em; text-align: left; cursor: pointer; }
+.acc__btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 8px; }
+.acc__from { margin-left: auto; font-size: 17px; font-weight: 600; letter-spacing: -0.01em; color: var(--ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; transition: opacity 200ms ease-out; }
+[aria-expanded='true'] > .acc__from { opacity: 0; } /* the large price inside takes over */
+.acc__icon { position: relative; flex: none; width: 20px; height: 20px; transition: transform 320ms var(--ease-out); }
+.acc__icon::before, .acc__icon::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 2px; margin-top: -1px; border-radius: 1px; background: currentColor; }
+.acc__icon::after { transform: rotate(90deg); }
+[aria-expanded='true'] > .acc__icon { transform: rotate(45deg); }
+.acc__panel { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 420ms var(--ease-out); }
+.acc__panel[data-closed] { grid-template-rows: 0fr; }
+.acc__inner { min-height: 0; overflow: hidden; }
+.acc__body { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px 48px; align-items: end; padding-bottom: 30px; }
+.acc__text { grid-row: span 2; align-self: start; max-width: 54ch; font-size: 20px; line-height: 1.5; }
+.acc__price { text-align: right; font-size: 24px; line-height: 1.25; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.acc__price span { display: block; font-size: 17px; font-weight: 400; letter-spacing: 0; color: var(--ink-2); }
+.acc__badge { margin-left: 12px; vertical-align: 0.2em; }
+.acc__go { justify-self: end; }
+.acc--q .acc__btn { font-size: 22px; }
+.acc--q .acc__body { grid-template-columns: 1fr; }
+
+/* A centred call-out, set like the hero plate (Need Something Else?). */
+.quote { position: relative; display: grid; justify-items: center; gap: 18px; width: min(640px, 100%); margin: 56px auto 0; padding: 40px 44px; border-radius: var(--radius); text-align: center; }
+.quote__p { max-width: 44ch; font-size: 18px; line-height: 1.5; text-wrap: pretty; }
+
+/* Below-the-fold pieces rise in as they near the screen. Only with script and motion allowed, so the
+   content is always there if the script fails. Transform and opacity only. */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal] { opacity: 0; transform: translateY(18px); transition: opacity 700ms var(--ease-out), transform 700ms var(--ease-out); transition-delay: calc(var(--i, 0) * 90ms); }
+  .js [data-reveal].is-in { opacity: 1; transform: none; }
+}
+
+/* Close and footer, on warm black: Lemoyne's ceiling to the very bottom. */
+.end { position: relative; isolation: isolate; background: var(--paper); }
+.close { position: relative; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-block: min(560px, 40vw) 96px; align-items: start; }
+.close__art { position: absolute; inset: 0; z-index: -1; overflow: hidden; }
+.close__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%); mask-image: linear-gradient(to bottom, transparent, #000 14%); } /* taste-skill-ignore: the art fades into the black above it, not into another section */
+.close__h { grid-column: 1 / span 6; margin-top: -0.18em; } /* cap tops level with the glass panel */
+.close__body { grid-column: 7 / -1; justify-self: end; width: min(680px, 100%); box-sizing: border-box; display: grid; gap: 24px; padding: var(--sp-card); border-radius: var(--radius); }
+.close__p { font-size: 20px; line-height: 1.5; }
+.close--wide .close__h { grid-column: 1 / -1; }
+.close--wide .close__body { grid-column: 1 / -1; justify-self: stretch; width: auto; margin-top: var(--sp-head); }
+.footer { padding: 0 var(--margin) 40px; text-align: center; font-size: 16px; color: #F1DFC8; }
+
+@media (max-width: 1099.98px) {
+  .nav { padding-left: 20px; }
+  .nav__links .glass-pill { padding: 0 12px; font-size: 16px; }
+  .tiles--3 { grid-template-columns: 1fr; }
+  .close__h, .close__body { grid-column: 1 / -1; }
+  .close__body { margin-top: var(--sp-head); justify-self: start; }
+}
+@media (max-width: 759.98px) {
+  .nav { top: 10px; height: 54px; padding: 0 6px 0 18px; }
+  .nav__links { display: none; }
+  .nav__menu { display: inline-flex; min-height: 42px; font-size: 16px; background: color-mix(in srgb, var(--ink) 6%, transparent); }
+  [id] { scroll-margin-top: 80px; }
+  .band { padding-bottom: 120px; }
+  .ph { min-height: 0; padding: 92px var(--margin) 48px; }
+  .ph__plate { padding: 28px 22px 24px; gap: 16px; }
+  .ph__h { font-size: 56px; }
+  .ph__p, .lede { font-size: 17px; }
+  .pane p { font-size: 17px; }
+  .tiles { grid-template-columns: 1fr; }
+  .tiles h3 { font-size: 25px; }
+  .tiles p { font-size: 17px; }
+  .facts > div { grid-template-columns: 1fr; gap: 4px; padding-block: 14px; }
+  .facts dd { font-size: 17px; }
+  .acc { padding: 2px var(--sp-card); }
+  .acc__btn { font-size: 21px; padding: 20px 0; gap: 14px; }
+  .acc--q .acc__btn { font-size: 18px; }
+  .acc__from { font-size: 14px; }
+  .acc__body { grid-template-columns: 1fr; gap: 14px; padding-bottom: 24px; }
+  .acc__text { grid-row: auto; font-size: 17px; }
+  .acc__price { text-align: left; font-size: 21px; }
+  .acc__go { justify-self: start; }
+  .quote { margin-top: 40px; padding: 28px 22px; }
+  .quote__p, .close__p { font-size: 16px; }
+  .close { padding-block: 300px 80px; }
+  .close__art img { object-position: 42% 30%; }
+  .footer { font-size: 14px; padding-bottom: 28px; }
+}
+@media (min-width: 760px) { .menu { display: none; } }
+
+/* Label swap without a second label in the page text (the "Start a ProjectContact Us" bug): the hover label is
+   drawn from data-alt and hidden from screen readers. Replace with the components.css version once it lands. */
+.swap[data-alt]::after { content: attr(data-alt); content: attr(data-alt) / ''; grid-area: 1 / 1; transform: translateX(12px); opacity: 0; transition: transform 560ms var(--ease-out), opacity 300ms ease-out; }
+.swap[data-alt] > span { transform: none; opacity: 1; }
+@media (hover: hover) {
+  .btn:hover .swap[data-alt] > span { transform: translateX(-12px); opacity: 0; }
+  .btn:hover .swap[data-alt]::after { transform: none; opacity: 1; }
+}

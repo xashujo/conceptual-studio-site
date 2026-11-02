@@ -1,8 +1,50 @@
 ---
-// /work/ (brief 6.2): small glass cards in a varied grid over the Chinese Garden etching.
-import Site from '../../layouts/Site.astro';
-import WorkIndex from '../../components/WorkIndex.astro';
+// /work/ (brief 6.2) in the home page's design language (Josh, 2 Nov): the opening plate, every project in
+// the same grid and list as Selected Work, then the clients. Words: Pages CMS > Work page; projects: Projects.
+import { getImage } from 'astro:assets';
+import Studio from '../../layouts/Studio.astro';
+import Band from '../../components/studio/Band.astro';
+import WorkBrowser from '../../components/WorkBrowser.astro';
+import { projects, filters, projectHref } from '../../data/work';
+import { home, clientGroups } from '../../lib/site';
+import { workPage as w, titleCase } from '../../lib/pages';
+
+const label = Object.fromEntries(filters.map(([k, l]) => [k, titleCase(l)]));
+const items = projects.map((p) => ({
+  title: p.title, year: p.year, href: projectHref(p), image: p.image, alt: p.alt, position: p.position,
+  filters: p.tags.filter((t) => t !== 'archive').map((t) => label[t]), archive: p.student, student: p.student,
+  outcome: p.outcome, brief: p.summary,
+}));
+const videos = await Promise.all(home.socialVideos.map(async (v) => ({ ...v, poster: (await getImage({ src: v.poster, width: 720, format: 'webp' })).src })));
 ---
-<Site title="Work | Conceptual Studio" description="Brand identities, data visualisation and 3D work by Conceptual Studio, London." current="work">
-  <WorkIndex />
-</Site>
+<Studio title="Work | Conceptual Studio" description={w.intro} current="/work/" closeText={w.closeText}>
+  <Band opening labelledby="work-h">
+    <div class="ph__plate glass" data-lens>
+      <h1 class="ph__h" id="work-h">{w.heading}</h1>
+      <p class="ph__p">{w.intro}</p>
+    </div>
+  </Band>
+
+  <Band night label={w.heading}>
+    <WorkBrowser items={items} videos={videos} filters={filters.slice(1, -1).map(([k]) => label[k])} archive={w.archiveFilter} archiveNote={w.archiveNote} label="projects" />
+  </Band>
+
+  <Band labelledby="clients-h">
+    <h2 class="big" id="clients-h">{w.clientsHeading}</h2>
+    <div class="groups">
+      {clientGroups.map((g) => (
+        <div class="pane glass" data-lens data-reveal>
+          <h3 class="groups__h">{titleCase(g.kind)}</h3>
+          <ul class="groups__list">{g.names.map((n) => <li>{n}</li>)}</ul>
+        </div>
+      ))}
+    </div>
+  </Band>
+</Studio>
+
+<style>
+  .groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-gap); margin-top: var(--sp-head); }
+  .groups__h { font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--ink-2); }
+  .groups__list { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 6px; font-family: var(--display); font-size: clamp(28px, 2.6vw, 38px); line-height: 1.15; letter-spacing: -0.01em; }
+  @media (max-width: 759.98px) { .groups { grid-template-columns: 1fr; } .groups__list { font-size: 26px; } }
+</style>

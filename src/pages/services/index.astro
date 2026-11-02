@@ -1,151 +1,103 @@
 ---
-// /services/ (brief 6.4): what I do, who for, how projects work, one entry per service,
-// the procurement block, and a custom quote form.
-import Site from '../../layouts/Site.astro';
-import PageOpen from '../../components/PageOpen.astro';
-import Stages from '../../components/Stages.astro';
-import Enquiry from '../../components/Enquiry.astro';
+// /services/ (brief 6.4) in the home page's design language (Josh, 2 Nov). Monthly plans first, then the
+// one-off work in three lanes (video, colleges and data, branding), each with an easy first step, how a
+// project runs, and the quote form. Words: Pages CMS > Services page; prices: Services and prices.
+import Studio from '../../layouts/Studio.astro';
+import Band from '../../components/studio/Band.astro';
 import Ladder from '../../components/Ladder.astro';
-import { services, serviceById } from '../../data/services';
-import { email } from '../../site';
-import art from '../../assets/art/engraved/hunt-sky-gold.jpg';
+import Enquiry from '../../components/Enquiry.astro';
+import { services } from '../../data/services';
+import { home, responseTime } from '../../lib/site';
+import { servicesPage as sp, titleCase } from '../../lib/pages';
 
-const procurement = [
-  ['Company', 'Conceptual Studio Limited, a London-based SME registered in England and Wales.'],
-  ['Company number', '[TBC]'],
-  ['Registered office', '[TBC: the address, or a registered-office service. UK law asks for it on the website]'],
-  ['VAT', '[TBC: VAT number, or not VAT-registered]'],
-  ['Insurance', '[TBC: professional indemnity and public liability cover, only if held]'],
-  ['Payment', '30-day terms. E-invoices accepted. [TBC: confirm both]'],
-  ['Accessible files', 'Accessible PDFs, and charts supplied with their data tables. [TBC: confirm the standard, such as WCAG 2.2 AA]'],
-  ['Data protection', '[TBC: a short statement on how client data is stored and deleted]'],
-  ['Quality and environment', '[TBC: short statements]'],
-  ['References', 'Two references on request. [TBC: confirm]'],
-];
+// The lanes: every service except the retainers, in their CMS order. Their own page, or the form preset to them.
+const lanes = services.filter((s) => !s.href?.includes('#'));
+const retainer = services.find((s) => s.href?.includes('#'));
+const steps = home.steps.map((s) => ({ title: s.title, text: s.text.replaceAll('{reply time}', responseTime) })); // Pages CMS: Home page > How We Work
 ---
-<Site title="Services and prices | Conceptual Studio" description="Brand identity, data visualisation and social media editing from a London design studio, with starting prices and how projects run." current="services" turnstile>
-  <main>
-    <PageOpen word={['Services']} art={art} size="clamp(96px, 27.5vw, 420px)" who="Conceptual Studio, London" what="Brand identity, data visualisation and social media editing">
-      <a class="link" href="#enquire">Start a project<span class="arrow" aria-hidden="true">→</span></a>
-    </PageOpen>
+<Studio title="Services and Prices | Conceptual Studio" description={sp.intro} current="/services/" turnstile closeText={sp.closeText}>
+  <Band opening labelledby="svc-h">
+    <div class="ph__plate glass" data-lens>
+      <h1 class="ph__h" id="svc-h">{sp.heading}</h1>
+      <p class="ph__p">{sp.intro}</p>
+      <p class="ph__p sv-note">{sp.note}</p>
+      <div class="acts">
+        <a class="btn btn--solid" href="#enquire">{sp.enquiryHeading}</a>
+        {retainer && <a class="btn" href="#retainers">{sp.retainersHeading}</a>}
+        <a class="btn" href="/procurement/">{sp.procurementButton}</a>
+      </div>
+    </div>
+  </Band>
 
-    <section class="intro wrap" aria-label="Who I work with">
-      <p class="intro__lead">I design brand identities and data visualisation, and edit short videos for social media. I work with further education colleges and adult learning services, a language school in Oxford, a tech startup in Tokyo and corporate clients.</p>
-      <p class="intro__note">Every project is priced on its scope, so the prices here are starting points. You’ll get a fixed quote after our first call.</p>
-    </section>
+  {retainer && (
+    <Band night id="retainers" labelledby="ret-h">
+      <div class="head">
+        <h2 class="big" id="ret-h">{sp.retainersHeading}</h2>
+        {sp.retainersNote && <p class="lede">{sp.retainersNote}</p>}
+      </div>
+      <Ladder service={retainer.id} custom={false} />
+    </Band>
+  )}
 
-    <section class="svc wrap" aria-labelledby="svc-h">
-      <h2 class="h2 sr" id="svc-h">What I do</h2>
-      {services.map((s) => (
-        <article class="svc__row">
-          <h3 class="svc__name">{s.href ? <a href={s.href}>{s.name}</a> : s.name}</h3>
-          <p class="svc__from">{s.tiers[0].price}{s.tiers[0].time && <span>, {s.tiers[0].time}</span>}</p>
-          <p class="svc__line">{s.line}</p>
-          <p class="svc__go">
-            {s.href
-              ? <a class="btn" href={s.href}><span class="swap"><span>{s.href.includes('#') ? 'See the tiers' : 'Prices and work'}</span><span aria-hidden="true">Open the page</span></span><span class="arrow" aria-hidden="true">→</span></a>
-              : <a class="btn" href={`?need=${s.id}:unsure#enquire`} data-need={`${s.id}:unsure`}><span class="swap"><span>Ask about editing</span><span aria-hidden="true">Open the form</span></span><span class="arrow" aria-hidden="true">→</span></a>}
-          </p>
-        </article>
+  <Band labelledby="lanes-h">
+    <div class="head">
+      <h2 class="big" id="lanes-h">{sp.listHeading}</h2>
+      {sp.listNote && <p class="lede">{sp.listNote}</p>}
+    </div>
+    <ul class="lanes">
+      {lanes.map((s, i) => (
+        <li class="lane glass" data-lens data-reveal style={`--i: ${i}`}>
+          <p class="lane__k">{s.lane}</p>
+          <h3 class="lane__h">{titleCase(s.name)}</h3>
+          <p class="lane__p">{s.line}</p>
+          <p class="lane__first"><span>{sp.firstStepLabel}</span> {s.tiers[0].name}, <b>{s.tiers[0].price}</b></p>
+          <ul class="lane__tiers">
+            {s.tiers.slice(1).map((t) => <li><span>{t.name}</span><span>{t.price}</span></li>)}
+          </ul>
+          {s.href
+            ? <a class="btn glass-button lane__go" href={s.href}>{titleCase(s.home.link)} <span class="arrow" aria-hidden="true">→</span></a>
+            : <a class="btn glass-button lane__go" href={`?need=${s.id}:${s.tiers[0].id}#enquire`} data-need={`${s.id}:${s.tiers[0].id}`}>{sp.enquiryHeading} <span class="arrow" aria-hidden="true">→</span></a>}
+        </li>
       ))}
-    </section>
+    </ul>
+  </Band>
 
-    <!-- Retainers have no page of their own: their tiers sit here (Pages CMS: Services and prices > Monthly design retainers). -->
-    <section class="ret wrap" id="retainers" aria-labelledby="ret-h">
-      <div class="ret__head">
-        <h2 class="h2" id="ret-h">Monthly retainers</h2>
-        <p>{serviceById('retainer').line} Three-month minimum, then month to month with 30 days' notice.</p>
-      </div>
-      <Ladder service="retainer" custom={false} />
-    </section>
+  <Band night labelledby="how-h">
+    <h2 class="big" id="how-h">{sp.howHeading}</h2>
+    <ol class="tiles" style="margin-top: var(--sp-head)">
+      {steps.map((s, i) => <li class="glass" data-lens data-reveal style={`--i: ${i % 2}`}><h3>{s.title}</h3><p>{s.text}</p></li>)}
+    </ol>
+    <dl class="terms">
+      {sp.terms.map((t) => <div><dt>{t.title}</dt><dd>{t.text}</dd></div>)}
+    </dl>
+  </Band>
 
-    <section class="how wrap" aria-labelledby="how-h">
-      <h2 class="h2 how__h" id="how-h">How a project runs</h2>
-      <Stages />
-      <dl class="how__terms">
-        <div><dt>Timelines</dt><dd>The times on these pages are calendar time, from our first call to your final files, feedback rounds included.</dd></div>
-        <div><dt>What I need from you</dt><dd>[TBC: what clients supply, such as existing brand files, figures and who signs work off]</dd></div>
-        <div><dt>Quotes and invoices</dt><dd>A fixed quote for the agreed scope, sent within three working days of our call. [TBC: deposit, invoice stages and whether prices include VAT]</dd></div>
-      </dl>
-    </section>
-
-    <section class="proc wrap" aria-labelledby="proc-h">
-      <div class="proc__side">
-        <h2 class="h2" id="proc-h">For procurement teams</h2>
-        <p>What your finance team needs to set me up as a supplier. The supplier pack has all of it in one PDF.</p>
-        <p><a class="link" href={`mailto:${email}?subject=Supplier%20pack`}>Ask for the supplier pack<span class="arrow" aria-hidden="true">→</span></a></p>
-      </div>
-      <dl class="proc__list">
-        {procurement.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
-      </dl>
-    </section>
-
-    <Enquiry heading="Ask for a quote" />
-  </main>
-</Site>
+  <Band label={sp.enquiryHeading}>
+    <Enquiry heading={sp.enquiryHeading} />
+    <div class="quote glass" data-lens data-reveal>
+      <h3 class="mid">{sp.procurementHeading}</h3>
+      <p class="quote__p">{sp.procurementText}</p>
+      <a class="btn glass-button" href="/procurement/">{sp.procurementButton} <span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+  </Band>
+</Studio>
 
 <style>
-  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-  .intro { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-top: 160px; }
-  .intro__lead { grid-column: 1 / span 8; font-size: 24px; line-height: 1.4; letter-spacing: -0.01em; font-weight: 500; max-width: 40ch; text-wrap: pretty; }
-  .intro__note { grid-column: 1 / span 6; margin-top: 24px; font-size: 20px; line-height: 1.45; color: var(--ink-2); }
-
-  /* One ruled row per service: the Framer card's head (title left, price right, hairline) without the image. */
-  .svc { padding-top: 120px; }
-  .svc__row { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; row-gap: 12px; padding-block: 0 72px; }
-  .svc__row::before { content: ''; grid-column: 1 / -1; grid-row: 2; height: 0; border-top: 1px solid var(--ink); margin-block: 4px 12px; }
-  .svc__name { grid-column: 1 / span 7; grid-row: 1; font-size: 40px; line-height: 1.2; font-weight: 700; letter-spacing: -0.045em; }
-  .svc__name a { text-decoration: none; }
-  .svc__from { grid-column: 8 / -1; grid-row: 1; justify-self: end; align-self: end; padding-bottom: 6px; font-size: 20px; line-height: 1.3; font-weight: 500; text-align: right; }
-  .svc__from span { color: var(--ink-2); font-weight: 400; }
-  .svc__line { grid-column: 1 / span 6; grid-row: 3; font-size: 20px; line-height: 1.45; }
-  .svc__go { grid-column: 8 / -1; grid-row: 3; justify-self: end; align-self: start; }
-
-  .ret { padding-top: 120px; scroll-margin-top: 24px; }
-  .ret__head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; margin-bottom: 32px; align-items: end; }
-  .ret__head h2 { grid-column: 1 / span 4; }
-  .ret__head p { grid-column: 6 / -1; font-size: 18px; line-height: 1.5; color: var(--ink-2); max-width: 56ch; }
-
-  .how { padding-top: 160px; }
-  .how__h { margin-bottom: 24px; }
-  .how__terms { margin: 56px 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
-  .how__terms dt { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
-  .how__terms dd { margin: 0; font-size: 16px; line-height: 1.5; color: var(--ink-2); max-width: 36ch; }
-
-  .proc { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-top: 160px; padding-bottom: 160px; }
-  .proc__side { grid-column: 1 / span 4; display: flex; flex-direction: column; gap: 14px; align-self: start; position: sticky; top: 32px; }
-  .proc__side p { font-size: 18px; line-height: 1.5; max-width: 32ch; }
-  .proc__list { grid-column: 6 / -1; margin: 0; border-top: 1px solid var(--ink); }
-  .proc__list div { display: grid; grid-template-columns: 200px 1fr; gap: 24px; padding-block: 14px; border-bottom: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); }
-  .proc__list dt { font-size: 16px; font-weight: 600; line-height: 1.5; }
-  .proc__list dd { margin: 0; font-size: 16px; line-height: 1.5; }
-
-  @media (max-width: 1099.98px) {
-    .intro__lead { grid-column: 1 / -1; font-size: 24px; }
-    .intro__note { grid-column: 1 / span 9; }
-    .proc__side { grid-column: 1 / -1; position: static; margin-bottom: 32px; }
-    .proc__list { grid-column: 1 / -1; }
-    .ret__head h2, .ret__head p { grid-column: 1 / -1; }
-    .ret__head p { margin-top: 12px; }
-  }
-  @media (max-width: 759.98px) {
-    .intro { padding-top: 112px; }
-    .intro__lead { font-size: 20px; line-height: 1.45; }
-    .intro__note { grid-column: 1 / -1; font-size: 18px; }
-    .svc { padding-top: 80px; }
-    .svc__row { grid-template-columns: 1fr; padding-block: 0 56px; row-gap: 8px; }
-    .svc__row::before { grid-row: 2; margin-block: 2px 8px; }
-    .svc__name { grid-row: 1; }
-    .svc__from { grid-row: 3; }
-    .svc__line { grid-row: 4; }
-    .svc__go { grid-row: 5; }
-    .svc__name, .svc__from, .svc__line, .svc__go { grid-column: 1; justify-self: start; text-align: left; }
-    .svc__name { font-size: 30px; }
-    .svc__line { font-size: 18px; }
-    .svc__go { margin-top: 10px; }
-    .how, .proc { padding-top: 112px; }
-    .proc { padding-bottom: 112px; }
-    .how__terms { grid-template-columns: 1fr; }
-    .proc__list div { grid-template-columns: 1fr; gap: 2px; }
-  }
+  .sv-note { font-size: 17px; color: var(--ink-2); }
+  .lanes { list-style: none; margin: var(--sp-head) 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-gap); }
+  .lane { position: relative; display: flex; flex-direction: column; gap: 12px; padding: var(--sp-card); border-radius: var(--radius); }
+  .lane__k { font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--ink-2); }
+  .lane__h { font-family: var(--display); font-size: 30px; line-height: 1.08; font-weight: 500; letter-spacing: -0.01em; }
+  .lane__p { font-size: 17px; line-height: 1.5; }
+  .lane__first { margin-top: 6px; padding: 14px 16px; border-radius: var(--radius-inner); background: color-mix(in srgb, var(--ink) 6%, transparent); font-size: 17px; line-height: 1.4; }
+  .lane__first span { display: block; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--ink-2); }
+  .lane__first b { font-weight: 600; }
+  .lane__tiers { list-style: none; margin: 0 0 8px; padding: 0; font-size: 16px; line-height: 1.4; }
+  .lane__tiers li { display: flex; justify-content: space-between; gap: 16px; padding-block: 9px; border-top: 1px solid color-mix(in srgb, var(--ink) 14%, transparent); }
+  .lane__tiers li span:last-child { font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
+  .lane__go { margin-top: auto; align-self: flex-start; }
+  .terms { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-gap); margin: var(--sp-head) 0 0; padding-top: 24px; border-top: 1px solid color-mix(in srgb, var(--ink) 22%, transparent); }
+  .terms dt { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+  .terms dd { margin: 0; font-size: 17px; line-height: 1.5; color: var(--ink-2); max-width: 36ch; }
+  @media (max-width: 1099.98px) { .lanes, .terms { grid-template-columns: 1fr; } }
 </style>

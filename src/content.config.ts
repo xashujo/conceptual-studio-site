@@ -9,7 +9,38 @@ const ref = z.string().transform((p) => p.split('/').pop()!.replace(/\.ya?ml$/, 
 const yml = (folder: string) => glob({ pattern: '*.{yml,yaml}', base: `./src/content/${folder}` });
 const text = z.string().nullish().transform((s) => s ?? '');
 
+// The other pages' own words (Josh, 2 Nov): one file each in src/content/pages/, edited in Pages CMS.
+// "{reply time}" in any of them becomes the Reply time from Site settings.
+const page = (file: string, shape: z.ZodRawShape) => defineCollection({ loader: glob({ pattern: `${file}.yml`, base: './src/content/pages' }), schema: z.object(shape) });
+const s = z.string().min(1);
+const items = z.array(z.object({ title: s, text: s }));
+export const pages = {
+  workPage: page('work', { heading: s, intro: s, archiveFilter: s, archiveNote: text, clientsHeading: s, closeText: s }),
+  caseStudyPage: page('case-study', {
+    backLabel: s, clientLabel: s, disciplinesLabel: s, outcomeLabel: s, problemHeading: s, didHeading: s, workHeading: s,
+    beforeAfterHeading: s, happenedHeading: s, nextLabel: s, closeText: s,
+  }),
+  servicesPage: page('services', {
+    heading: s, intro: s, note: s, listHeading: s, retainersHeading: s, retainersNote: text, howHeading: s,
+    listNote: text, firstStepLabel: s, terms: items, procurementHeading: s, procurementText: s, procurementButton: s, enquiryHeading: s,
+    workHeading: s, pricesHeading: s, pricesNote: text, faqHeading: s, closeText: s,
+  }),
+  aboutPage: page('about', {
+    heading: s, intro: s, storyHeading: s, story: s, valuesHeading: s, values: items, clientsHeading: s,
+    wantHeading: s, want: s, closeText: s,
+  }),
+  contactPage: page('contact', {
+    heading: s, intro: s, emailLabel: s, hours: text, elsewhereHeading: s, procurementHeading: s, procurementText: s, procurementButton: s,
+    enquiryHeading: s, formHeading: s, enquiryIntro: s, enquiryAlt: text, callLink: text, callButton: s, thanksHeading: s, thanksText: s,
+  }),
+  procurementPage: page('procurement', {
+    heading: s, intro: s, orgHeading: s, org: items, detailsHeading: s, details: z.array(z.object({ label: s, value: s })), stepsHeading: s, steps: items,
+    packButton: s, packText: s, closeText: s,
+  }),
+};
+
 export const collections = {
+  ...pages,
   projects: defineCollection({
     loader: yml('projects'),
     schema: ({ image }) => {
@@ -49,7 +80,7 @@ export const collections = {
   }),
   services: defineCollection({
     loader: yml('services'),
-    schema: z.object({
+    schema: ({ image }) => z.object({
       name: z.string(),
       order: z.number().nullish(),
       page: z.string().nullish(),
@@ -57,6 +88,13 @@ export const collections = {
       homePrice: z.string().nullish(),
       homeTime: z.string().nullish(),
       homeLink: z.string().nullish(),
+      // The service's own page (Josh, 2 Nov): the kinds of work, real examples and questions.
+      lane: text,
+      kinds: text,
+      examples: z.array(z.object({ src: image(), alt: z.string().min(1), focus: z.string().nullish(), title: z.string(), caption: z.string() })).nullish().transform((v) => v ?? []),
+      faqs: z.array(z.object({ question: z.string().min(1), answer: z.string().min(1) })).nullish().transform((v) => v ?? []),
+      demoHeading: text,
+      demoText: text,
       tiers: z.array(z.object({
         name: z.string(),
         price: z.string(),

@@ -4,8 +4,13 @@
 import { getCollection } from 'astro:content';
 
 export interface Tier { id: string; name: string; price: string; time?: string; included: string; note?: string; lead?: string; badge?: string; button?: string }
+import type { ImageMetadata } from 'astro';
 export interface Service {
   id: string; name: string; href?: string; line: string; tiers: Tier[];
+  /** The lane it sits in on /services/ (Video, Colleges & Data, Branding, Monthly) and its own page's words. */
+  lane: string; kinds: string; faqs: { q: string; a: string }[];
+  examples: { img: ImageMetadata; alt: string; pos?: string; title: string; medium: string }[];
+  demo: { heading: string; text: string };
   home: { price: string; time?: string; link: string };
 }
 
@@ -20,6 +25,9 @@ export const services: Service[] = (await getCollection('services'))
     }));
     return {
       id, name: d.name, href: d.page ?? undefined, line: d.summary, tiers,
+      lane: d.lane || d.name, kinds: d.kinds, faqs: d.faqs.map((f) => ({ q: f.question, a: f.answer })),
+      examples: d.examples.map((e) => ({ img: e.src, alt: e.alt, pos: e.focus ?? undefined, title: e.title, medium: e.caption })),
+      demo: { heading: d.demoHeading, text: d.demoText },
       home: { price: d.homePrice || tiers[0].price, time: d.homeTime || tiers[0].time, link: d.homeLink || `${d.name} prices` },
     };
   });

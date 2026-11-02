@@ -1,20 +1,24 @@
 ---
-// The enquiry form (brief 11). Web3Forms, a Turnstile check and a honeypot. Four required fields, nothing else (Josh, 2 Nov 2026),
-// "What you need" preset from the page and from any ladder button. Inline validation and an
-// inline thank-you, no reload. Without JavaScript it still posts straight to Web3Forms.
+// The enquiry form (brief 11). Web3Forms, a Turnstile check and a honeypot. Name, email, organisation and
+// what you need are required; budget, deadline, a link and a note are optional (Josh, 2 Nov: lane, budget band,
+// deadline, link). "What you need" is preset from the page and from any ladder or lane button. Inline validation
+// and an inline thank-you, no reload. Without JavaScript it still posts straight to Web3Forms.
+// Words: Pages CMS > Contact page (the enquiry form fields).
 import { services, budgets } from '../data/services';
-import { email, calUrl, web3formsKey, turnstileSiteKey } from '../site';
+import { email, web3formsKey, turnstileSiteKey } from '../site';
 import { nextSteps } from '../lib/site';
-interface Props { service?: string; heading?: string }
-const { service, heading = 'Start a project' } = Astro.props;
+import { contactPage as c } from '../lib/pages';
+interface Props { service?: string; heading?: string; night?: boolean }
+const { service, heading = c.enquiryHeading, night = false } = Astro.props;
 const preset = service ? `${service}:unsure` : '';
+const [altBefore, altAfter] = (c.enquiryAlt || '').split('{email}');
 ---
-<section class="enq wrap" id="enquire" aria-labelledby="enq-h">
+<div class="enq glass" id="enquire" data-lens>
   <div class="enq__side">
-    <h2 class="enq__h" id="enq-h">{heading}</h2>
-    <p class="enq__p">Tell me a little about what you're working on, and I'll be in touch to discuss the next steps.</p>
-    <p class="enq__alt">Or email your brief to <a href={`mailto:${email}`}>{email}</a>. The form can't take attachments.</p>
-    <p><a class="link" href={calUrl}>Book a 20-minute call<span class="arrow" aria-hidden="true">→</span></a></p>
+    <h2 class="enq__h mid">{heading}</h2>
+    <p class="enq__p">{c.enquiryIntro}</p>
+    {c.enquiryAlt && <p class="enq__alt">{altBefore}{altAfter !== undefined && <><a href={`mailto:${email}`}>{email}</a>{altAfter}</>}</p>}
+    {c.callLink && <p><a class="link" href={c.callLink}>{c.callButton}<span class="arrow" aria-hidden="true">→</span></a></p>}
   </div>
 
   <form class="enq__form" action="https://api.web3forms.com/submit" method="POST" novalidate data-enquiry data-email={email}>
@@ -38,10 +42,10 @@ const preset = service ? `${service}:unsure` : '';
     </div>
     <div class="f f--wide">
       <label for="enq-need">What you need</label>
-      <select id="enq-need" name="need" required data-msg="Please choose what you need, or Custom if you're not sure.">
+      <select id="enq-need" name="need" required data-msg="Please choose what you need, or a custom quote if you're not sure.">
         <option value="" selected={!preset}>Choose one</option>
         {services.map((s) => (
-          <optgroup label={s.name}>
+          <optgroup label={`${s.lane}: ${s.name}`}>
             {s.tiers.map((t) => <option value={`${s.id}:${t.id}`}>{s.name}: {t.name}</option>)}
             <option value={`${s.id}:unsure`} selected={preset === `${s.id}:unsure`}>{s.name}: not sure which yet</option>
             <option value={`${s.id}:custom`}>{s.name}: custom quote</option>
@@ -52,19 +56,26 @@ const preset = service ? `${service}:unsure` : '';
         </optgroup>
       </select>
     </div>
-    <div class="f f--wide">
+    <div class="f">
       <label for="enq-budget">Budget <span>optional</span></label>
-      <select id="enq-budget" name="budget" aria-describedby="enq-budget-help">
+      <select id="enq-budget" name="budget">
         <option value="">Choose a band</option>
         {budgets.map((b) => <option>{b}</option>)}
       </select>
-      <p class="f__help" id="enq-budget-help">A rough band helps me suggest the right scope.</p>
+    </div>
+    <div class="f">
+      <label for="enq-deadline">Deadline <span>optional</span></label>
+      <input id="enq-deadline" name="deadline" type="text" placeholder="e.g. end of March" />
     </div>
     <div class="f f--wide">
-      <label for="enq-msg">Tell me about the project, including any deadline <span>optional</span></label>
-      <textarea id="enq-msg" name="message" rows="5"></textarea>
+      <label for="enq-link">Link to your current brand or feed <span>optional</span></label>
+      <input id="enq-link" name="link" type="url" inputmode="url" placeholder="https://" data-msg="Please enter a full link, starting https://, or leave it empty." />
     </div>
-    <div class="cf-turnstile f--wide" data-sitekey={turnstileSiteKey} data-theme="light"></div>
+    <div class="f f--wide">
+      <label for="enq-msg">Anything else about the project <span>optional</span></label>
+      <textarea id="enq-msg" name="message" rows="4"></textarea>
+    </div>
+    <div class="cf-turnstile f--wide" data-sitekey={turnstileSiteKey} data-theme={night ? 'dark' : 'light'}></div>
     <div class="enq__send f--wide">
       <button class="btn btn--solid" type="submit"><span data-send>Send enquiry</span><span class="arrow" aria-hidden="true">→</span></button>
       <p class="enq__status" role="status" aria-live="polite" data-status></p>
@@ -73,11 +84,11 @@ const preset = service ? `${service}:unsure` : '';
   </form>
 
   <div class="enq__done" tabindex="-1" hidden data-done>
-    <h3 class="enq__done-h">Thanks, I've got it.</h3>
-    <p>I'll reply within three working days. If it's easier to talk it through first, book a call.</p>
-    <p><a class="btn btn--solid" href={calUrl}><span class="swap"><span>Book a 20-minute call</span><span aria-hidden="true">Open Cal.com ↗</span></span></a></p>
+    <h3 class="enq__done-h mid">{c.thanksHeading}</h3>
+    <p>{c.thanksText}</p>
+    {c.callLink && <p><a class="btn btn--solid" href={c.callLink}>{c.callButton}</a></p>}
   </div>
-</section>
+</div>
 
 <script>
   const form = document.querySelector<HTMLFormElement>('[data-enquiry]');
@@ -87,7 +98,7 @@ const preset = service ? `${service}:unsure` : '';
     const status = form.querySelector<HTMLElement>('[data-status]')!;
     const send = form.querySelector<HTMLElement>('[data-send]')!;
     const need = form.querySelector<HTMLSelectElement>('select[name="need"]')!;
-    const fields = [...form.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[required]')];
+    const fields = [...form.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[required], [type="url"]')];
 
     // Preset "What you need" from a ladder button, or from ?need= when someone arrives by link.
     const choose = (v: string | null) => { if (v && [...need.options].some((o) => o.value === v)) need.value = v; };
@@ -109,8 +120,7 @@ const preset = service ? `${service}:unsure` : '';
     const clear = (el: HTMLInputElement | HTMLSelectElement) => {
       el.removeAttribute('aria-invalid');
       el.closest('.f')?.querySelector('.f__err')?.remove();
-      const help = el.id === 'enq-budget' ? 'enq-budget-help' : '';
-      help ? el.setAttribute('aria-describedby', help) : el.removeAttribute('aria-describedby');
+      el.removeAttribute('aria-describedby');
     };
     const check = (el: HTMLInputElement | HTMLSelectElement) => {
       if (el.checkValidity()) { clear(el); return true; }
@@ -156,15 +166,14 @@ const preset = service ? `${service}:unsure` : '';
 </script>
 
 <style>
-  .enq { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; scroll-margin-top: 24px; }
+  .enq { position: relative; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding: var(--sp-card); border-radius: var(--radius); scroll-margin-top: 96px; }
   .enq__side { grid-column: 1 / span 4; display: flex; flex-direction: column; gap: 18px; align-self: start; }
-  .enq__h { font-family: var(--display); font-weight: 500; font-size: clamp(44px, 4.4vw, 64px); line-height: 0.98; letter-spacing: -0.015em; text-wrap: balance; }
-  .enq__p { font-size: 20px; line-height: 1.45; max-width: 30ch; }
+  .enq__p { font-size: 19px; line-height: 1.45; max-width: 30ch; }
   .enq__alt { font-size: 16px; line-height: 1.5; color: var(--ink-2); max-width: 34ch; }
   .enq__alt a { color: var(--ink); text-underline-offset: 4px; text-decoration-thickness: 1px; overflow-wrap: anywhere; }
 
   .enq__form, .enq__done { grid-column: 6 / -1; }
-  .enq__form { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 24px; border-top: 1px solid var(--ink); padding-top: 28px; }
+  .enq__form { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 24px; }
   .enq__form[hidden] { display: none; }
   .enq__form[aria-busy] { opacity: 0.6; pointer-events: none; }
   .f { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
@@ -172,33 +181,31 @@ const preset = service ? `${service}:unsure` : '';
   .f label { font-size: 16px; font-weight: 500; }
   .f label span { font-weight: 400; color: var(--ink-2); margin-left: 6px; }
   .f :is(input, select, textarea) {
-    width: 100%; min-height: 52px; padding: 13px 16px; border: 1px solid transparent; border-radius: var(--radius-inner);
-    background: var(--paper-2); color: var(--ink); font: 400 18px/1.4 var(--text); appearance: none;
+    width: 100%; min-height: 52px; padding: 13px 16px; border: 1px solid color-mix(in srgb, var(--ink) 10%, transparent); border-radius: var(--radius-inner);
+    background: color-mix(in srgb, var(--paper) 70%, transparent); color: var(--ink); font: 400 18px/1.4 var(--text); appearance: none;
     transition: border-color 150ms ease-out, background-color 150ms ease-out;
   }
+  .f ::placeholder { color: var(--ink-2); opacity: 0.8; }
   .f select { padding-right: 44px; background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%); background-size: 6px 6px; background-position: calc(100% - 24px) 50%, calc(100% - 18px) 50%; background-repeat: no-repeat; }
-  .f textarea { resize: vertical; min-height: 132px; }
+  .f textarea { resize: vertical; min-height: 116px; }
   .f :is(input, select, textarea):hover { border-color: color-mix(in srgb, var(--ink) 25%, transparent); }
   .f :is(input, select, textarea):focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
   .f [aria-invalid] { border-color: #A3341F; }
-  .f__err { font-size: 15px; line-height: 1.4; color: #A3341F; font-weight: 500; }
+  .f__err { font-size: 15px; line-height: 1.4; color: light-dark(#A3341F, #F08A72); font-weight: 500; }
   .f__help { font-size: 15px; line-height: 1.4; color: var(--ink-2); }
   .enq__trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
   .enq__send { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-top: 6px; }
   .enq__status { font-size: 16px; line-height: 1.4; }
 
-  .enq__done { border-top: 1px solid var(--ink); padding-top: 28px; display: flex; flex-direction: column; gap: 16px; font-size: 20px; line-height: 1.45; outline: none; }
+  .enq__done { display: flex; flex-direction: column; gap: 16px; font-size: 20px; line-height: 1.45; outline: none; }
   .enq__done[hidden] { display: none; }
-  .enq__done-h { font-size: 40px; line-height: 1.1; font-weight: 700; letter-spacing: -0.045em; }
-  .enq__done .btn { margin-top: 8px; }
 
   @media (max-width: 1099.98px) {
-    .enq__side { grid-column: 1 / -1; margin-bottom: 40px; }
+    .enq__side { grid-column: 1 / -1; margin-bottom: 32px; }
     .enq__form, .enq__done { grid-column: 1 / -1; }
   }
   @media (max-width: 759.98px) {
     .enq__form { grid-template-columns: 1fr; gap: 20px; }
-    .enq__p { font-size: 18px; }
-    .enq__done-h { font-size: 32px; }
+    .enq__p { font-size: 17px; }
   }
 </style>

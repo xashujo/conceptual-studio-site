@@ -211,6 +211,28 @@ content:
         type: string
         description: "Leave empty to use the first rung's time."
       - { name: homeLink, label: Home page link text, type: string, description: "e.g. Brand identity prices" }
+      - { name: lane, label: Lane, type: string, description: "The group it sits in on the Services page, e.g. Video, Colleges & Data, Branding. Its first rung is shown as the easy first step." }
+      - { name: kinds, label: Kinds of work (own page), type: text, description: "One or two lines on the service's own page, under the description." }
+      - name: examples
+        label: Recent work (own page)
+        type: object
+        list: true
+        description: "Real work shown on the service's own page, two side by side."
+        fields:
+          - { name: src, label: Image file, type: image, required: true, options: { media: images } }
+          - { name: alt, label: Description (alt text), type: string, required: true }
+          - { name: focus, label: Crop (optional), type: string, description: "Left-right then top-bottom, e.g. 50% 40%." }
+          - { name: title, label: Caption line 1, type: string, required: true }
+          - { name: caption, label: Caption line 2, type: string, required: true }
+      - name: faqs
+        label: Questions (own page)
+        type: object
+        list: true
+        fields:
+          - { name: question, label: Question, type: string, required: true }
+          - { name: answer, label: Answer, type: text, required: true }
+      - { name: demoHeading, label: Chart demo heading (optional), type: string, description: "Data visualisation page only: the heading beside the table that turns into a chart. Empty hides the demo." }
+      - { name: demoText, label: Chart demo text (optional), type: text }
 
   - name: testimonials
     label: Testimonials
@@ -338,6 +360,161 @@ content:
         fields:
           - { name: title, label: Title, type: string, required: true }
           - { name: text, label: Text, type: text, required: true }
+
+  - name: workPage
+    label: Work page
+    type: file
+    path: src/content/pages/work.yml
+    format: yaml
+    description: "The words on the Work page. The projects are set in Projects, the clients in Clients. Write {reply time} to drop in the Reply time from Site settings."
+    fields:
+      - { name: heading, label: Heading, type: string, required: true }
+      - { name: intro, label: Intro, type: text, required: true }
+      - { name: archiveFilter, label: Student work filter, type: string, required: true, description: "The last filter button, e.g. Archive: Student Work." }
+      - { name: archiveNote, label: Student work note, type: text, description: "Shown when the student work filter is chosen. Empty hides it." }
+      - { name: clientsHeading, label: Clients heading, type: string, required: true }
+      - { name: closeText, label: Start a Project text, type: text, required: true, description: "The words in the glass panel at the end of the page." }
+
+  - name: caseStudyPage
+    label: Case study pages
+    type: file
+    path: src/content/pages/case-study.yml
+    format: yaml
+    description: "The headings every case study page shares. Each project's own words are in Projects. Write {reply time} to drop in the Reply time from Site settings."
+    fields:
+      - { name: backLabel, label: Back button, type: string, required: true }
+      - { name: clientLabel, label: Client label, type: string, required: true }
+      - { name: disciplinesLabel, label: Disciplines label, type: string, required: true }
+      - { name: outcomeLabel, label: Outcome label, type: string, required: true }
+      - { name: problemHeading, label: The problem heading, type: string, required: true }
+      - { name: didHeading, label: What I did heading, type: string, required: true }
+      - { name: workHeading, label: The work heading, type: string, required: true }
+      - { name: beforeAfterHeading, label: Before and after heading, type: string, required: true }
+      - { name: happenedHeading, label: What happened heading, type: string, required: true }
+      - { name: nextLabel, label: Next project label, type: string, required: true }
+      - { name: closeText, label: Start a Project text, type: text, required: true, description: "The words in the glass panel at the end of the page." }
+
+  - name: servicesPage
+    label: Services page
+    type: file
+    path: src/content/pages/services.yml
+    format: yaml
+    description: "The words on the Services page and the two service pages. Prices are set in Services and prices. Write {reply time} to drop in the Reply time from Site settings."
+    fields:
+      - { name: heading, label: Heading, type: string, required: true }
+      - { name: intro, label: Intro, type: text, required: true }
+      - { name: note, label: Note under the intro, type: text, required: true }
+      - { name: retainersHeading, label: Monthly plans heading, type: string, required: true }
+      - { name: retainersNote, label: Monthly plans note, type: text, description: "e.g. what three days a month buys, and the minimum term." }
+      - { name: listHeading, label: One-off projects heading, type: string, required: true }
+      - { name: listNote, label: One-off projects note, type: text }
+      - { name: firstStepLabel, label: First step label, type: string, required: true, description: "The small label over each lane's first rung, e.g. Start with." }
+      - { name: howHeading, label: How a project runs heading, type: string, required: true, description: "The steps are the How We Work steps on the Home page." }
+      - name: terms
+        label: Terms under the steps
+        type: object
+        list: true
+        description: "Short notes under How a Project Runs, e.g. Timelines, Quotes, Invoices."
+        fields:
+          - { name: title, label: Title, type: string, required: true }
+          - { name: text, label: Text, type: text, required: true }
+      - { name: procurementHeading, label: Procurement box heading, type: string, required: true }
+      - { name: procurementText, label: Procurement box text, type: text, required: true }
+      - { name: procurementButton, label: Procurement button, type: string, required: true }
+      - { name: enquiryHeading, label: Quote form heading, type: string, required: true }
+      - { name: workHeading, label: Recent work heading (service pages), type: string, required: true }
+      - { name: pricesHeading, label: Prices heading (service pages), type: string, required: true }
+      - { name: pricesNote, label: Prices note (service pages), type: text }
+      - { name: faqHeading, label: Questions heading (service pages), type: string, required: true }
+      - { name: closeText, label: Start a Project text, type: text, required: true, description: "The words in the glass panel at the end of the page." }
+
+  - name: aboutPage
+    label: About page
+    type: file
+    path: src/content/pages/about.yml
+    format: yaml
+    description: "The words on the About page. The client names are set in Clients. Write {reply time} to drop in the Reply time from Site settings."
+    fields:
+      - { name: heading, label: Heading, type: string, required: true }
+      - { name: intro, label: Intro, type: text, required: true }
+      - { name: storyHeading, label: Story heading, type: string, required: true }
+      - { name: story, label: Story, type: text, required: true, description: "Leave an empty line between paragraphs." }
+      - { name: valuesHeading, label: How I work heading, type: string, required: true }
+      - name: values
+        label: How I work
+        type: object
+        list: true
+        description: "Three short principles."
+        fields:
+          - { name: title, label: Title, type: string, required: true }
+          - { name: text, label: Text, type: text, required: true }
+      - { name: clientsHeading, label: Clients heading, type: string, required: true }
+      - { name: wantHeading, label: The work I want heading, type: string, required: true }
+      - { name: want, label: The work I want, type: text, required: true, description: "Leave an empty line between paragraphs." }
+      - { name: closeText, label: Start a Project text, type: text, required: true, description: "The words in the glass panel at the end of the page." }
+
+  - name: contactPage
+    label: Contact page and enquiry form
+    type: file
+    path: src/content/pages/contact.yml
+    format: yaml
+    description: "The words on the Contact page and the enquiry form (which also shows on the Services pages). The email address is in Site settings. Never add a phone number here. Write {reply time} to drop in the Reply time from Site settings."
+    fields:
+      - { name: heading, label: Heading, type: string, required: true }
+      - { name: intro, label: Intro, type: text, required: true }
+      - { name: emailLabel, label: Email label (for screen readers), type: string, required: true }
+      - { name: hours, label: Hours, type: string }
+      - { name: elsewhereHeading, label: Social links heading, type: string, required: true, description: "The links themselves are in Site settings." }
+      - { name: procurementHeading, label: Procurement box heading, type: string, required: true }
+      - { name: procurementText, label: Procurement box text, type: text, required: true }
+      - { name: procurementButton, label: Procurement button, type: string, required: true }
+      - { name: enquiryHeading, label: Start button, type: string, required: true }
+      - { name: formHeading, label: Form heading (Contact page), type: string, required: true }
+      - { name: enquiryIntro, label: Form intro, type: text, required: true }
+      - { name: enquiryAlt, label: Email line under the intro, type: string, description: "{email} becomes the email address. Empty hides it." }
+      - { name: callLink, label: Booking link, type: string, description: "The free 20-minute call, e.g. your Google Calendar booking page. Empty hides the button." }
+      - { name: callButton, label: Booking button, type: string, required: true }
+      - { name: thanksHeading, label: Thank-you heading, type: string, required: true }
+      - { name: thanksText, label: Thank-you text, type: text, required: true }
+
+  - name: procurementPage
+    label: Procurement page
+    type: file
+    path: src/content/pages/procurement.yml
+    format: yaml
+    description: "What a finance team needs to set you up as a supplier. Write {reply time} to drop in the Reply time from Site settings."
+    fields:
+      - { name: heading, label: Heading, type: string, required: true }
+      - { name: intro, label: Intro, type: text, required: true }
+      - { name: orgHeading, label: Working with organisations heading, type: string, required: true }
+      - name: org
+        label: Working with organisations
+        type: object
+        list: true
+        description: "Short points for bigger buyers. Only what is true."
+        fields:
+          - { name: title, label: Title, type: string, required: true }
+          - { name: text, label: Text, type: text, required: true }
+      - { name: detailsHeading, label: Supplier details heading, type: string, required: true }
+      - name: details
+        label: Supplier details
+        type: object
+        list: true
+        fields:
+          - { name: label, label: Label, type: string, required: true }
+          - { name: value, label: Value, type: text, required: true }
+      - { name: stepsHeading, label: How invoicing works heading, type: string, required: true }
+      - name: steps
+        label: How invoicing works
+        type: object
+        list: true
+        description: "The steps in order."
+        fields:
+          - { name: title, label: Title, type: string, required: true }
+          - { name: text, label: Text, type: text, required: true }
+      - { name: packButton, label: Supplier pack button, type: string, required: true }
+      - { name: packText, label: Supplier pack text, type: text, required: true }
+      - { name: closeText, label: Start a Project text, type: text, required: true, description: "The words in the glass panel at the end of the page." }
 
   - name: settings
     label: Site settings

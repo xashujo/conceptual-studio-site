@@ -1,0 +1,20 @@
+---
+// One band of the page (Josh, 2 Nov): a hard-edged section toned gold by day or dark by night. Behind it is
+// what the Home page's "Background" field in Pages CMS chooses, same as the home page: the plain canvas weave,
+// or the running painting (each band shows the next stretch of it). Bands alternate day and night down the
+// page; the layout's close is always night, so the last band before it should be day.
+// `opening` makes it the page's first band: it fills the screen and its art loads first.
+import { Image, getImage } from 'astro:assets';
+import { home } from '../../lib/site';
+interface Props { night?: boolean; opening?: boolean; id?: string; label?: string; labelledby?: string; class?: string }
+const { night = false, opening = false, id, label, labelledby, class: cls } = Astro.props;
+const Tag = opening ? 'header' : 'section';
+const painting = home.backdrop === 'painting';
+const canvas = painting ? '' : `--canvas: url(${(await getImage({ src: home.canvasImage, format: 'webp' })).src})`;
+---
+<div class:list={['band', { night, ph: opening }]}>
+  <div class:list={['band__art', { canvas: !painting }]} style={canvas || undefined} aria-hidden="true">
+    {painting && <Image src={home.pageImage} alt="" widths={[1100, 2200]} sizes="100vw" loading={opening ? 'eager' : 'lazy'} fetchpriority={opening ? 'high' : undefined} />}
+  </div>
+  <Tag class:list={['wrap', cls]} id={id} aria-label={label} aria-labelledby={labelledby}><slot /></Tag>
+</div>
