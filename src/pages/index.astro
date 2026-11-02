@@ -328,7 +328,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
           <h2 class="big about__h" id="about-h">About</h2>
           <div class="about__text">
             {home.aboutMe && (
-              <p class="about__me">{home.aboutPhoto && <Image class="about__photo" src={home.aboutPhoto} alt="" width={128} height={128} />}<span>{home.aboutMe}</span></p>
+              <p class="about__me">{home.aboutMe}</p>
             )}
             <p class="about__lead">{home.aboutLead}</p>
             <p>{home.aboutText}</p>
@@ -634,8 +634,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .reel__item { display: grid; gap: 10px; padding: 10px 10px 14px; border-radius: var(--radius); scroll-snap-align: start; }
   .reel__v { display: block; width: 100%; aspect-ratio: 9 / 16; object-fit: cover; border-radius: var(--radius-inner); background: #000; }
   .reel__t { padding: 0 6px; font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
-  .about__me { display: flex; align-items: center; gap: 16px; font-size: 20px; font-weight: 600; }
-  .about__photo { flex: none; width: 64px; height: 64px; border-radius: 50%; object-fit: cover; }
+  .about__me { font-size: 20px; font-weight: 600; }
   .card__tags { display: flex; flex-wrap: wrap; gap: 6px; }
   .card__out { display: block; margin-top: -8px; padding: 0 8px 2px; font-size: 17px; line-height: 1.4; color: var(--ink-2); }
   /* One fixed shape for every project card (Josh, 28 Oct): the title on one line, then badges left and the year

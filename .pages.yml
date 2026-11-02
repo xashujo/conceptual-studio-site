@@ -321,7 +321,6 @@ content:
       - { name: howIntro, label: How We Work intro, type: text, required: true }
       - { name: reelHeading, label: Tutorials reel heading, type: string, description: "The heading over the looping strip of social videos at the end of Selected Work." }
       - { name: aboutMe, label: About, your own line, type: text, description: "One first-person line at the top of About, e.g. I'm Josh. Leave empty to hide it." }
-      - { name: aboutPhoto, label: About, your photo, type: image, description: "A square headshot shown small and round beside your line. Optional.", options: { media: images } }
       - { name: aboutLead, label: About opening line, type: text, required: true }
       - { name: aboutText, label: About text, type: text, required: true }
       - { name: closeText, label: Start a Project text, type: text, required: true }

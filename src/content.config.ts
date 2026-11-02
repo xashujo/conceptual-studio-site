@@ -108,7 +108,6 @@ export const collections = {
       howHeading: z.string().min(1),
       howIntro: z.string().min(1),
       aboutMe: z.string().nullish(),
-      aboutPhoto: image().nullish(),
       reelHeading: z.string().nullish().transform((s) => s || 'Tutorials & Experiments'),
       aboutLead: z.string().min(1),
       aboutText: z.string().min(1),
