@@ -29,11 +29,13 @@ faqs:
 homeLink: Brand identity prices
 tiers:
   - name: Campaign look
+    onHome: true
     price: £1,250
     time: from 2 weeks
     includes: A look for one campaign or event, with a key visual, colours and type, and templates for the posts and posters it needs.
     note: "[TBC: confirm what the campaign look includes and how long it takes]"
   - name: Logo and essentials
+    onHome: true
     price: From £4,900
     time: from 4 weeks
     includes: A logo, colour palette and typefaces, a one-page sheet on how to use them, and mockups showing the identity in use.

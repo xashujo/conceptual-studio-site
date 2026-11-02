@@ -203,6 +203,7 @@ content:
           - { name: badge, label: Badge (optional), type: string, description: "e.g. Most popular. A rung with a badge is shown in glass so it stands out. Use it on one rung only." }
           - { name: button, label: Button text (optional), type: string, description: "e.g. Start a retainer. Leave empty for Choose this. Every button opens the enquiry form with this rung chosen." }
           - { name: monthly, label: Monthly plan, type: boolean, description: "Tick to list this rung under Monthly plans on the home page. Leave unticked for one-off projects." }
+          - { name: onHome, label: Show on the home page, type: boolean, description: "Tick to list this rung in the home page Services list." }
       - name: homePrice
         label: Home page price (optional)
         type: string

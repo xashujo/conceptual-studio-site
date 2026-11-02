@@ -8,6 +8,7 @@ homeTime: three-month minimum
 homeLink: Retainer prices
 tiers:
   - name: Ongoing Design Support
+    onHome: true
     monthly: true
     badge: Most Popular
     lead: Your social templates, monthly report graphics and campaign assets, without hiring.
@@ -20,6 +21,7 @@ tiers:
       A planning email each month to line up what's next, with a summary of the hours used
     button: Start a retainer
   - name: Creative Partner
+    onHome: true
     monthly: true
     lead: For brands running campaigns or regular reports, who want a designer planning ahead with them, not just taking requests.
     price: £1,575 a month
@@ -32,6 +34,7 @@ tiers:
       A check each quarter that everything you publish still looks like one brand
     button: Start a retainer
   - name: Creative Direction
+    onHome: true
     lead: For organisations with their own designers or agencies, who need senior input to set the direction and keep the quality high.
     price: Custom Quote
     time: From 2 days a week

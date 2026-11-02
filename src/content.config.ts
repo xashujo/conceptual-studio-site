@@ -105,6 +105,7 @@ export const collections = {
         badge: z.string().nullish(),
         button: z.string().nullish(),
         monthly: z.boolean().nullish(),
+        onHome: z.boolean().nullish(),
       })).min(1),
     }),
   }),

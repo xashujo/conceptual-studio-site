@@ -3,7 +3,7 @@
 // Times are calendar time, first call to final files.
 import { getCollection } from 'astro:content';
 
-export interface Tier { id: string; name: string; price: string; time?: string; included: string; note?: string; lead?: string; badge?: string; button?: string; monthly: boolean }
+export interface Tier { id: string; name: string; price: string; time?: string; included: string; note?: string; lead?: string; badge?: string; button?: string; monthly: boolean; onHome: boolean }
 import type { ImageMetadata } from 'astro';
 export interface Service {
   id: string; name: string; href?: string; line: string; tiers: Tier[];
@@ -22,7 +22,7 @@ export const services: Service[] = (await getCollection('services'))
     const tiers = d.tiers.map((t) => ({
       id: slug(t.name), name: t.name, price: t.price, time: t.time ?? undefined, included: t.includes, note: t.note ?? undefined,
       lead: t.lead ?? undefined, badge: t.badge ?? undefined, button: t.button ?? undefined,
-      monthly: t.monthly ?? false,
+      monthly: t.monthly ?? false, onHome: t.onHome ?? false,
     }));
     return {
       id, name: d.name, href: d.page ?? undefined, line: d.summary, tiers,

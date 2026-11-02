@@ -30,6 +30,7 @@ faqs:
 homeLink: Data visualisation prices
 tiers:
   - name: Charts and infographics
+    onHome: true
     price: From £700
     time: from 1 week
     includes: The charts your document needs, built from your own figures and supplied as PNG and PDF, ready to drop into your own layout.
