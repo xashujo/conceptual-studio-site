@@ -540,24 +540,13 @@ const menu = services.flatMap((s) => s.href?.includes('#')
     .hero__work:hover .hero__down { transform: rotate(90deg); }
   }
 
-  /* The field: an etching behind each band of glass, scrolling with it. Each fades in at the top and out at
-     the foot, like the other art on the site. */
-  .field { padding-bottom: 24px; }
+  /* The field: an etching behind each band of glass, scrolling with it. */
   .band { position: relative; isolation: isolate; padding-bottom: 160px; }
-  .band__art { position: absolute; inset: -120px 0; z-index: -1; overflow: hidden; pointer-events: none; }
-  /* Seams (Josh, 2 Nov): a light band's art reaches 120px into the next light band and cross-fades, so they
-     never both fade to bare paper. Night bands keep their art inside and meet the light ones with a short
-     96px fade: crisp, with no long muddy stretch (Josh: "the transitions aren't very clean"). */
-  .band.night { background: none; --ink-2: color-mix(in srgb, var(--ink) 86%, var(--paper)); } /* secondary text 5:1 or better over the art */
-  .band.night .band__art { inset: 0; }
-  .band.night::before { content: ''; position: absolute; inset: 0; z-index: -2; background: linear-gradient(var(--paper) calc(100% - 96px), transparent); }
-  .band + .band.night::before { top: -96px; background: linear-gradient(transparent, var(--paper) 96px, var(--paper) calc(100% - 96px), transparent); }
-  /* The art's size is fixed by the page width, never by the band's height, so filtering the work or opening a
-     service doesn't zoom it (Josh, 28 Oct). The band crops it; the fade sits on the band's edges. */
-  .band__art { -webkit-mask-image: linear-gradient(transparent, #000 240px, #000 calc(100% - 240px), transparent); mask-image: linear-gradient(transparent, #000 240px, #000 calc(100% - 240px), transparent); }
-  .band.night .band__art { -webkit-mask-image: linear-gradient(transparent, #000 120px, #000 calc(100% - 120px), transparent); mask-image: linear-gradient(transparent, #000 120px, #000 calc(100% - 120px), transparent); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
-  .band__art img { width: 100%; height: auto; min-height: min(100%, 1400px); object-fit: cover; /* its own shape where that fills the band; stretched only as far as it must, so no bare paper at the foot */ opacity: 0.6; -webkit-mask-image: linear-gradient(#000 calc(100% - 240px), transparent); mask-image: linear-gradient(#000 calc(100% - 240px), transparent); } /* 60% is the home page's "quiet" strength */
-  .band__art img { filter: url(#tone-day); }
+  /* Each band is its own painting with a clean edge (Josh, 2 Nov: "hard lines, like separate paintings",
+     as Apple's pages do). The art fills its band edge to edge and stops there; no fades between sections. */
+  .band__art { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+  .band.night { --ink-2: color-mix(in srgb, var(--ink) 86%, var(--paper)); } /* secondary text 5:1 or better over the art */
+  .band__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; opacity: 0.6; filter: url(#tone-day); } /* 60% is the home page's "quiet" strength */
   .band.night .band__art img { opacity: 0.5; filter: url(#tone-night); } /* toned dark like the close, and kept quiet so text reads over it */
   .tones { position: absolute; width: 0; height: 0; }
 
@@ -713,7 +702,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .about__values p { margin-top: 10px; font-size: 18px; line-height: 1.5; max-width: 32ch; color: var(--ink-2); }
 
   /* Close and footer, on warm black. */
-  .end { position: relative; isolation: isolate; background: linear-gradient(transparent, var(--paper) 120px); } /* fades in over the close's empty top, no seam under About */
+  .end { position: relative; isolation: isolate; background: var(--paper); }
   .close { position: relative; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-block: min(560px, 40vw) 96px; align-items: start; } /* heading top level with the glass panel (Josh, 28 Oct) */
   .close__art { position: absolute; inset: 0; z-index: -1; overflow: hidden; }
   .close__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%); mask-image: linear-gradient(to bottom, transparent, #000 14%); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
