@@ -1,7 +1,7 @@
 ---
-// /services/ (brief 6.4) in the home page's design language (Josh, 2 Nov). Monthly plans first, then the
-// one-off work in three lanes (video, colleges and data, branding), each with an easy first step, how a
-// project runs, and the quote form. Words: Pages CMS > Services page; prices: Services and prices.
+// /services/ (brief 6.4) in the home page's design language (Josh, 2 Nov). Two lanes first (brand, data),
+// each with an easy first step, then anything else without its own page as a short row, then the monthly
+// plans for clients who want to keep going, how a project runs, and the quote form. Words: Pages CMS > Services page; prices: Services and prices.
 import Studio from '../../layouts/Studio.astro';
 import Band from '../../components/studio/Band.astro';
 import Ladder from '../../components/Ladder.astro';
@@ -10,8 +10,10 @@ import { services } from '../../data/services';
 import { home, responseTime } from '../../lib/site';
 import { servicesPage as sp, titleCase } from '../../lib/pages';
 
-// The lanes: every service except the retainers, in their CMS order. Their own page, or the form preset to them.
-const lanes = services.filter((s) => !s.href?.includes('#'));
+// The lanes are the services with a page of their own; the rest (no page, e.g. video) sit in a short row below.
+// One price ladder per lane keeps the range a buyer sees tight (Josh, 2 Nov).
+const lanes = services.filter((s) => s.href && !s.href.includes('#'));
+const extras = services.filter((s) => !s.href);
 const retainer = services.find((s) => s.href?.includes('#'));
 const steps = home.steps.map((s) => ({ title: s.title, text: s.text.replaceAll('{reply time}', responseTime) })); // Pages CMS: Home page > How We Work
 ---
@@ -29,17 +31,8 @@ const steps = home.steps.map((s) => ({ title: s.title, text: s.text.replaceAll('
     </div>
   </Band>
 
-  {retainer && (
-    <Band night id="retainers" labelledby="ret-h">
-      <div class="head">
-        <h2 class="big" id="ret-h">{sp.retainersHeading}</h2>
-        {sp.retainersNote && <p class="lede">{sp.retainersNote}</p>}
-      </div>
-      <Ladder service={retainer.id} custom={false} />
-    </Band>
-  )}
 
-  <Band labelledby="lanes-h">
+  <Band night labelledby="lanes-h">
     <div class="head">
       <h2 class="big" id="lanes-h">{sp.listHeading}</h2>
       {sp.listNote && <p class="lede">{sp.listNote}</p>}
@@ -60,7 +53,30 @@ const steps = home.steps.map((s) => ({ title: s.title, text: s.text.replaceAll('
         </li>
       ))}
     </ul>
+    {extras.length > 0 && (
+      <div class="extras">
+        {sp.extrasHeading && <h3 class="extras__h">{sp.extrasHeading}</h3>}
+        <ul>
+          {extras.map((s) => (
+            <li>
+              <p class="extras__n">{titleCase(s.name)} <b>{s.home.price}</b></p>
+              <p class="extras__p">{s.line}</p>
+              <a class="btn glass-button" href={`?need=${s.id}:${s.tiers[0].id}#enquire`} data-need={`${s.id}:${s.tiers[0].id}`}>{sp.enquiryHeading} <span class="arrow" aria-hidden="true">→</span></a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
   </Band>
+  {retainer && (
+    <Band id="retainers" labelledby="ret-h">
+      <div class="head">
+        <h2 class="big" id="ret-h">{sp.retainersHeading}</h2>
+        {sp.retainersNote && <p class="lede">{sp.retainersNote}</p>}
+      </div>
+      <Ladder service={retainer.id} custom={false} />
+    </Band>
+  )}
 
   <Band night labelledby="how-h">
     <h2 class="big" id="how-h">{sp.howHeading}</h2>
@@ -84,7 +100,7 @@ const steps = home.steps.map((s) => ({ title: s.title, text: s.text.replaceAll('
 
 <style>
   .sv-note { font-size: 17px; color: var(--ink-2); }
-  .lanes { list-style: none; margin: var(--sp-head) 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-gap); }
+  .lanes { list-style: none; margin: var(--sp-head) 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-gap); }
   .lane { position: relative; display: flex; flex-direction: column; gap: 12px; padding: var(--sp-card); border-radius: var(--radius); }
   .lane__k { font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--ink-2); }
   .lane__h { font-family: var(--display); font-size: 30px; line-height: 1.08; font-weight: 500; letter-spacing: -0.01em; }
@@ -96,6 +112,14 @@ const steps = home.steps.map((s) => ({ title: s.title, text: s.text.replaceAll('
   .lane__tiers li { display: flex; justify-content: space-between; gap: 16px; padding-block: 9px; border-top: 1px solid color-mix(in srgb, var(--ink) 14%, transparent); }
   .lane__tiers li span:last-child { font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
   .lane__go { margin-top: auto; align-self: flex-start; }
+  .extras { margin-top: var(--sp-head); }
+  .extras__h { font-size: 20px; line-height: 1.3; font-weight: 600; margin-bottom: 8px; }
+  .extras ul { list-style: none; margin: 0; padding: 0; }
+  .extras li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto; align-items: center; gap: var(--sp-gap); padding-block: 16px; border-top: 1px solid color-mix(in srgb, var(--ink) 14%, transparent); }
+  .extras__n { font-size: 17px; font-weight: 600; }
+  .extras__n b { display: block; font-variant-numeric: tabular-nums; }
+  .extras__p { font-size: 16px; line-height: 1.5; color: var(--ink-2); }
+  @media (max-width: 1099.98px) { .extras li { grid-template-columns: 1fr; align-items: start; gap: 8px; } .extras li .btn { justify-self: start; } }
   .terms { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-gap); margin: var(--sp-head) 0 0; padding-top: var(--sp-head); border-top: 1px solid color-mix(in srgb, var(--ink) 22%, transparent); }
   .terms dt { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
   .terms dd { margin: 0; font-size: 17px; line-height: 1.5; color: var(--ink-2); max-width: 36ch; }

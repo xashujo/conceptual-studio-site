@@ -22,7 +22,7 @@ export const pages = {
   }),
   servicesPage: page('services', {
     heading: s, intro: s, note: s, listHeading: s, retainersHeading: s, retainersNote: text, howHeading: s,
-    listNote: text, firstStepLabel: s, terms: items, procurementHeading: s, procurementText: s, procurementButton: s, enquiryHeading: s,
+    listNote: text, extrasHeading: text, firstStepLabel: s, terms: items, procurementHeading: s, procurementText: s, procurementButton: s, enquiryHeading: s,
     workHeading: s, pricesHeading: s, pricesNote: text, faqHeading: s, closeText: s,
   }),
   aboutPage: page('about', {

@@ -410,6 +410,7 @@ content:
       - { name: retainersNote, label: Monthly plans note, type: text, description: "e.g. what three days a month buys, and the minimum term." }
       - { name: listHeading, label: One-off projects heading, type: string, required: true }
       - { name: listNote, label: One-off projects note, type: text }
+      - { name: extrasHeading, label: Other services heading, type: string, description: "Over the short row of services that have no page of their own, e.g. Also Available." }
       - { name: firstStepLabel, label: First step label, type: string, required: true, description: "The small label over each lane's first rung, e.g. Start with." }
       - { name: howHeading, label: How a project runs heading, type: string, required: true, description: "The steps are the How We Work steps on the Home page." }
       - name: terms
