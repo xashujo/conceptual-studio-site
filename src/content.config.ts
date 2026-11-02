@@ -102,6 +102,8 @@ export const collections = {
       // Vertical videos under the Social Media filter; the file path is under public/ (Pages CMS: Short videos).
       socialVideos: z.array(z.object({ title: z.string().min(1), year: z.number().int(), video: z.string().min(1), poster: image(), alt: z.string().min(1) }))
         .nullish().transform((v) => v ?? []),
+      // Why Clients Choose Us (Josh, 2 Nov): what's distinctive about the studio, between the clients and the proof.
+      approach: z.array(z.object({ title: z.string().min(1), text: z.string().min(1) })),
       results: z.array(ref),
       howHeading: z.string().min(1),
       howIntro: z.string().min(1),

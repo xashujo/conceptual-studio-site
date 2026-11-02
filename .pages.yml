@@ -238,7 +238,7 @@ content:
     fields:
       - { name: name, label: Name, type: string, required: true }
       - { name: trustedBy, label: Show in "Worked with", type: boolean, description: "Shows the name in the client lists on the About and Services pages and in \"Who I work with\" on the home page." }
-      - { name: homeTrusted, label: Show in "Trusted By" on the home page, type: boolean, description: "The line under the home page opening. Names follow the Order field, then \"& More\" is added." }
+      - { name: homeTrusted, label: Show in "Trusted By" on the home page, type: boolean, description: "The client row at the top of Why Clients Choose Us. Names follow the Order field. Shows the logo if one is uploaded, otherwise the name." }
       - name: group
         label: Group
         type: select
@@ -246,8 +246,9 @@ content:
           values: [Education, Companies and international]
       - { name: order, label: Order, type: number, description: "Lower numbers come first." }
       - name: logo
-        label: Logo (SVG, not used yet)
+        label: Logo (SVG)
         type: image
+        description: "Shown in Trusted By on the home page in place of the name, toned to one soft cream so every logo matches. Use the one-colour version if there is one." 
         options: { media: images, extensions: [svg] }
 
   - name: home
@@ -261,7 +262,7 @@ content:
       - { name: intro, label: Intro, type: text, required: true, description: "The sentence under the headline. Also the page's description in search results." }
       - { name: startButton, label: Main button, type: string, required: true, description: "The big black button under the intro, e.g. Start a Project. The same words are used on the button at the end of the page." }
       - { name: workButton, label: Work button, type: string, required: true, description: "The third button under the headline, e.g. Selected Work. A ↓ is added after it; it scrolls down to the work." }
-      - { name: trustedByLabel, label: Trusted By label, type: string, required: true, description: "The bold words before the client names. The names are ticked in Clients." }
+      - { name: trustedByLabel, label: Trusted By label, type: string, required: true, description: "The small label over the client names at the top of Why Clients Choose Us. The names (and logos, once uploaded) are ticked in Clients." }
       - name: stats
         label: Stats
         type: object
@@ -284,8 +285,16 @@ content:
           - { name: video, label: Video file (MP4), type: file, required: true, options: { media: videos } }
           - { name: poster, label: Still shown before it plays, type: image, required: true, options: { media: images } }
           - { name: alt, label: Description (alt text), type: string, required: true, description: "What the video shows, for people who can't see it." }
+      - name: approach
+        label: Why Clients Choose Us, what sets us apart
+        type: object
+        list: true
+        description: "Three short points under the client names: what makes the studio's approach different."
+        fields:
+          - { name: title, label: Title, type: string, required: true }
+          - { name: text, label: Text, type: text, required: true }
       - name: results
-        label: Why Clients Choose Us
+        label: Why Clients Choose Us, proof
         type: reference
         list: true
         description: "The projects shown beside the quote, with their summaries."

@@ -102,9 +102,6 @@ const menu = services.flatMap((s) => s.href?.includes('#')
             ))}
           </ul>
         </section>
-        {trustedBy.length > 0 && (
-          <p class="hero__with"><b>{home.trustedByLabel}</b> {trustedBy.join(', ')} &amp; More</p>
-        )}
       </header>
 
       <!-- Art behind the glass, so every pane has something to bend (Josh, 28 Oct). Two bands that scroll with
@@ -213,6 +210,19 @@ const menu = services.flatMap((s) => s.href?.includes('#')
              Inside the field so the glass has the etching behind it. -->
         <section class="proof wrap" aria-labelledby="proof-h">
           <h2 class="big proof__h" id="proof-h">Why Clients Choose Us</h2>
+          <!-- Credibility, then what sets us apart, then the proof (Josh, 2 Nov). The clients stay small and quiet:
+               a logo if one is uploaded in Clients, toned to one cream, otherwise the name. -->
+          {trustedBy.length > 0 && (
+            <div class="trusted">
+              <p class="trusted__l">{home.trustedByLabel}</p>
+              <ul class="trusted__list">
+                {trustedBy.map((c) => <li>{c.logo ? <img src={c.logo.src} alt={c.name} height="28" loading="lazy" /> : c.name}</li>)}
+              </ul>
+            </div>
+          )}
+          <ul class="approach">
+            {home.approach.map((a) => <li><h3 class="approach__t">{a.title}</h3><p>{a.text}</p></li>)}
+          </ul>
           <div class="proof__grid">
             {homeQuote && (
               <figure class="proof__quote glass" data-lens>
@@ -460,7 +470,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .nav__menu { display: none; }
 
   /* Opening: the quiet etching fills the screen, the plate centred over the trees and sky. */
-  .hero { position: relative; isolation: isolate; min-height: 100svh; padding: 116px var(--margin) 40px; display: grid; align-content: center; } /* the bento, stats and Trusted By as one centred block */
+  .hero { position: relative; isolation: isolate; min-height: 100svh; padding: 116px var(--margin) 40px; display: grid; align-content: center; } /* the bento and stats as one centred block */
   .hero__art { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 92%); mask-image: linear-gradient(to bottom, #000 58%, transparent 92%); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
   .hero__bento { align-self: center; justify-self: center; width: min(1140px, 100%); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-gap); }
   .hero__plate { position: relative; grid-column: 1 / -1; padding: 64px 56px 56px; display: grid; justify-items: center; gap: 26px; border-radius: 28px; text-align: center; } /* type and space carry it: one centred statement */
@@ -478,9 +488,6 @@ const menu = services.flatMap((s) => s.href?.includes('#')
     .hero__down { transform: none; }
     .hero__work:hover .hero__down { transform: rotate(90deg); }
   }
-  /* Trusted By: one centred line, a single space between the label and the names (Josh, 28 Oct). */
-  .hero__with { justify-self: center; width: min(1140px, 100%); padding-top: 32px; font-size: 18px; line-height: 1.5; text-align: center; text-wrap: balance; }
-  .hero__with b { font-weight: 600; }
 
   /* The field: an etching behind each band of glass, scrolling with it. Each fades in at the top and out at
      the foot, like the other art on the site. */
@@ -583,6 +590,14 @@ const menu = services.flatMap((s) => s.href?.includes('#')
 
   /* Why clients choose us: the quote in one large pane, two results stacked beside it (asymmetric, 7 + 5). */
   .proof { padding-top: var(--sp-section); }
+  /* Trusted By: a quiet row of names or one-colour logos, no panel, so it never outweighs the proof (Josh, 2 Nov). */
+  .trusted { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px 32px; margin-top: var(--sp-head); padding-block: 20px; border-block: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); }
+  .trusted__l { font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); }
+  .trusted__list { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 32px; margin: 0; padding: 0; list-style: none; font-size: 17px; color: var(--ink-2); }
+  .trusted__list img { display: block; height: 28px; width: auto; filter: brightness(0) invert(1) sepia(.35); opacity: .7; } /* any logo to one soft cream */
+  .approach { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-gap); margin: 0; margin-top: var(--sp-head); padding: 0; list-style: none; }
+  .approach__t { font-family: var(--display); font-weight: 500; font-size: 26px; line-height: 1.1; margin-bottom: 10px; }
+  .approach p { font-size: 18px; line-height: 1.5; color: var(--ink-2); text-wrap: pretty; }
   .proof__grid { display: grid; grid-template-columns: 7fr 5fr; grid-template-rows: 1fr 1fr; gap: var(--sp-gap); margin-top: var(--sp-head); }
   .proof__quote { position: relative; grid-row: span 2; display: flex; flex-direction: column; justify-content: space-between; gap: 40px; margin: 0; padding: var(--sp-card); border-radius: 28px; }
   .proof__quote blockquote { margin: 0; }
@@ -661,7 +676,6 @@ const menu = services.flatMap((s) => s.href?.includes('#')
     .hero__plate { padding: 24px 22px 22px; gap: 16px; border-radius: 26px; }
     .hero__h { font-size: 36px; }
     .hero__p { font-size: 16px; line-height: 1.45; }
-    .hero__with { padding-top: 24px; font-size: 16px; }
     .band { padding-bottom: 120px; }
     .stat { min-height: 128px; padding: 18px 18px; gap: 16px; border-radius: 26px; }
     .stat__n { font-size: 9.6vw; } /* 20,000+ fits a phone-width card */
@@ -687,7 +701,8 @@ const menu = services.flatMap((s) => s.href?.includes('#')
     .acc__go { justify-self: start; }
     .quote { margin-top: 40px; padding: 28px 22px; border-radius: 26px; }
     .quote__p { font-size: 16px; }
-    .proof__grid { grid-template-columns: 1fr; }
+    .proof__grid, .approach { grid-template-columns: 1fr; }
+    .trusted, .trusted__list { gap: 8px 20px; }
     .proof__quote { gap: 28px; border-radius: 26px; }
     .proof__quote p { font-size: 20px; line-height: 1.4; }
     .proof__quote figcaption { font-size: 16px; }
