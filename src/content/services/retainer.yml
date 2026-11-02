@@ -8,6 +8,7 @@ homeTime: three-month minimum
 homeLink: Retainer prices
 tiers:
   - name: Ongoing Design Support
+    monthly: true
     badge: Most Popular
     lead: Your social templates, monthly report graphics and campaign assets, without hiring.
     price: £945 a month
@@ -19,6 +20,7 @@ tiers:
       A planning email each month to line up what's next, with a summary of the hours used
     button: Start a retainer
   - name: Creative Partner
+    monthly: true
     lead: For brands running campaigns or regular reports, who want a designer planning ahead with them, not just taking requests.
     price: £1,575 a month
     time: 5 days a month (37.5 hours)

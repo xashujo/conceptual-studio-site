@@ -10,6 +10,7 @@ tiers:
     price: £450
     includes: Five short edits from your footage, with captions and versions sized for each platform. A low-risk way to start.
   - name: Video monthly
+    monthly: true
     price: From £360 a month
     includes: Four short edits a month, planned together so they look like a set.
   - name: Single edit
