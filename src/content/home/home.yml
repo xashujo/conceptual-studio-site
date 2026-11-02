@@ -1,7 +1,6 @@
 headline: Brands & Data, Made Clear
-intro: We turn complex ideas into clear, compelling visuals, helping organisations
-  build recognisable brands, communicate with confidence and make information
-  easier to understand.
+intro: We turn complex ideas into clear visuals, so organisations build
+  recognisable brands and make information easy to understand.
 startButton: Start a Project
 workButton: Explore Our Work
 trustedByLabel: Trusted By
@@ -20,6 +19,7 @@ stats:
     label: of Clients Return for More Work
 workHeading: Selected Work
 allProjects: All Projects
+reelHeading: Tutorials & Experiments
 socialVideos:
   - title: Blob Tracking Tutorial
     year: 2026
@@ -58,8 +58,9 @@ workImage: "@assets/art/engraved/apotheosis-work.jpg"
 proofImage: "@assets/art/engraved/apotheosis-proof.jpg"
 howHeading: How We Work
 howIntro: Four stages, each ending in a clear decision, so you always know where your project stands.
+aboutMe: I'm Josh, the designer behind Conceptual Studio. When you work with the studio, you work with me.
 aboutLead: Conceptual Studio was founded in London in 2024 to make complex ideas clear. Strategies, mergers and annual figures become identities, charts and pages that people take in at a glance and remember.
-aboutText: We enjoy the problems that look dry on paper, like a merger to explain, a year of figures to present or an identity that has to hold together across a whole college. We start every project from one idea and judge it by whether people understand it. Because the studio is small and focused, you work directly with the person doing the design, and your project gets full attention.
+aboutText: We enjoy the problems that look dry on paper, like a merger to explain, a year of figures to present or an identity that has to hold together across a whole college. We start every project from one idea and judge it by whether people understand it.
 servicesImage: "@assets/art/engraved/apotheosis-services.jpg"
 howImage: "@assets/art/engraved/apotheosis-how.jpg"
 aboutImage: "@assets/art/engraved/apotheosis-about.jpg"
@@ -73,8 +74,7 @@ steps:
       take forward, and that decision sets the course for everything after it.
   - title: Development
     text: We build out the full set of pages, charts or assets and share work in
-      progress as it takes shape. Your feedback comes in the rounds set out in your
-      quote, so you always know what is changing and what comes next.
+      progress. Your feedback comes in the rounds set out in your quote.
   - title: Delivery
     text: Nothing is final until you sign it off. We check every detail, then hand
       over the files in the formats your team needs.
@@ -87,4 +87,4 @@ values:
   - title: Small and Focused
     text: You talk to the person doing the work, from the first call to the final
       files.
-closeText: Tell us a little about what you're working on, and we'll be in touch to discuss the next steps.
+closeText: Tell us what you're working on and we'll be in touch about next steps.

@@ -31,8 +31,9 @@ const stats = home.stats.map((s) => ({ n: s.number, after: s.after, label: s.lab
 // Featured work and the services come from Pages CMS (Projects and Services).
 // The first six by home page position show (two rows of three); any more wait behind "Show More".
 const SHOWN = 6;
+// The client shows under the title (Louis Moss), unless it is the project's own name.
 const cards = featured.map((p) => ({
-  title: p.title, year: p.year, href: projectHref(p), image: p.image, alt: p.alt,
+  title: p.title, client: p.client === p.title ? '' : p.client, year: p.year, href: projectHref(p), image: p.image, alt: p.alt,
   position: p.homePosition ?? p.position, filter: p.homeFilter, student: p.student, outcome: p.outcome, brief: p.summary,
 }));
 // Social media videos (Pages CMS: Home page > Social media videos), after the projects under Social Media.
@@ -143,6 +144,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
                 <a class="card glass" href={c.href} data-lens>
                   <Image class="card__img" src={c.image} alt={c.alt} widths={[400, 700, 1100]} sizes="(min-width: 1100px) 380px, (min-width: 760px) 47vw, calc(100vw - 32px)" style={c.position ? `object-position: ${c.position}` : undefined} />
                   <span class="card__head"><span class="card__t" title={c.title}>{c.title}</span><span class="card__y">{c.year}</span></span>
+                  <span class="card__c">{c.client}</span>
                   <span class="card__row">
                     <span class="card__tags">
                       {c.filter && <span class="tag">{c.filter}</span>}
@@ -174,7 +176,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
               <div class="acc__row" data-filter={c.filter ?? ''} data-more={i >= SHOWN ? '' : undefined}>
                 <h3 class="acc__h">
                   <button class="acc__btn" type="button" id={`fwl-${i}-btn`} aria-controls={`fwl-${i}`} aria-expanded="true">
-                    <span class="fwl__t">{c.title}</span>
+                    <span class="fwl__t">{c.title}{c.client && <span class="fwl__c">{c.client}</span>}</span>
                     <span class="fwl__tags">{c.filter && <span class="tag">{c.filter}</span>}{c.student && <span class="tag">Student Work</span>}</span>
                     <span class="acc__from">{c.year}</span><span class="acc__icon" aria-hidden="true"></span>
                   </button>
@@ -214,6 +216,20 @@ const menu = services.flatMap((s) => s.href?.includes('#')
             <button class="btn glass-button" type="button" data-show-more hidden>Show More</button>
             <a class="btn glass-button" href="/work/">{home.allProjects} <span class="arrow" aria-hidden="true">→</span></a>
           </div>
+          <!-- Tutorials reel (Josh, 2 Nov, borrowed from Louis Moss and Oliur): the social videos loop silently while in view. -->
+          {videos.length > 0 && (
+            <div class="reel">
+              <h3 class="reel__h">{home.reelHeading}</h3>
+              <ul class="reel__list">
+                {videos.map((v) => (
+                  <li class="reel__item glass" data-lens>
+                    <video class="reel__v" src={v.video} poster={v.poster} preload="none" muted loop playsinline aria-label={v.alt} data-reel></video>
+                    <span class="reel__t">{v.title}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </section>
         </div>
 
@@ -311,6 +327,9 @@ const menu = services.flatMap((s) => s.href?.includes('#')
         <section class="about wrap" id="about" aria-labelledby="about-h">
           <h2 class="big about__h" id="about-h">About</h2>
           <div class="about__text">
+            {home.aboutMe && (
+              <p class="about__me">{home.aboutPhoto && <Image class="about__photo" src={home.aboutPhoto} alt="" width={128} height={128} />}<span>{home.aboutMe}</span></p>
+            )}
             <p class="about__lead">{home.aboutLead}</p>
             <p>{home.aboutText}</p>
             <a class="btn glass-button" href="/about/">More About the Studio <span class="arrow" aria-hidden="true">→</span></a>
@@ -450,6 +469,13 @@ const menu = services.flatMap((s) => s.href?.includes('#')
         v.play();
       }));
       vids.forEach((v) => v.addEventListener('play', () => vids.forEach((o) => o !== v && o.pause())));
+      // The reel loops while on screen; with reduced motion it keeps its stills and gets controls instead.
+      const reel = document.querySelectorAll<HTMLVideoElement>('[data-reel]');
+      if (still) reel.forEach((v) => (v.controls = true));
+      else {
+        const io = new IntersectionObserver((es) => es.forEach((e) => (e.isIntersecting ? (e.target as HTMLVideoElement).play().catch(() => {}) : (e.target as HTMLVideoElement).pause())), { rootMargin: '100px' });
+        reel.forEach((v) => io.observe(v));
+      }
 
       // Services accordion: one row open at a time; closed rows are inert so focus skips them.
       // The work list (list view) uses the same rows: one open at a time within each list.
@@ -600,13 +626,23 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .card__y { margin-left: auto; }
   .card__t { font-size: 20px; line-height: 1.2; font-weight: 600; letter-spacing: -0.02em; }
   .card__y { font-size: 17px; font-weight: 600; color: var(--ink-2); letter-spacing: -0.01em; } /* proportional figures: tabular ones left gaps (Josh, 28 Oct) */
+  .card__c { display: block; margin-top: -8px; padding: 0 8px; font-size: 15px; font-weight: 500; letter-spacing: 0.02em; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 1.3em; } /* kept when empty so rows line up */
+  .fwl__c { display: block; margin-top: 2px; font-size: 15px; font-weight: 500; color: var(--ink-2); }
+  .reel { margin-top: 72px; }
+  .reel__h { font-family: var(--display); font-size: 30px; line-height: 1.1; font-weight: 500; letter-spacing: -0.01em; }
+  .reel__list { list-style: none; margin: 24px 0 0; padding: 0 0 8px; display: grid; grid-auto-flow: column; grid-auto-columns: 220px; /* small, never art-sized (Josh) */ gap: var(--sp-gap); overflow-x: auto; scroll-snap-type: x mandatory; }
+  .reel__item { display: grid; gap: 10px; padding: 10px 10px 14px; border-radius: var(--radius); scroll-snap-align: start; }
+  .reel__v { display: block; width: 100%; aspect-ratio: 9 / 16; object-fit: cover; border-radius: var(--radius-inner); background: #000; }
+  .reel__t { padding: 0 6px; font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
+  .about__me { display: flex; align-items: center; gap: 16px; font-size: 20px; font-weight: 600; }
+  .about__photo { flex: none; width: 64px; height: 64px; border-radius: 50%; object-fit: cover; }
   .card__tags { display: flex; flex-wrap: wrap; gap: 6px; }
   .card__out { display: block; margin-top: -8px; padding: 0 8px 2px; font-size: 17px; line-height: 1.4; color: var(--ink-2); }
   /* One fixed shape for every project card (Josh, 28 Oct): the title on one line, then badges left and the year
      right, then the outcome held to two lines (space kept even when empty), so rows line up and stay short. */
   .card__head { display: flex; align-items: baseline; gap: 12px; padding: 0 8px; }
   .card__head .card__t { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-  .card__head + .card__row { margin-top: -6px; flex-wrap: nowrap; }
+  .card__c + .card__row { margin-top: -6px; flex-wrap: nowrap; }
   .card__row .card__tags { flex-wrap: nowrap; overflow: hidden; }
   .card > .card__out { min-height: 2.8em; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
   .tag { padding: 5px 11px; border-radius: var(--pill); background: color-mix(in srgb, var(--ink) 7%, transparent); font-size: 14px; font-weight: 500; line-height: 1.2; }
