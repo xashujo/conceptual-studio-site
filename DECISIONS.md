@@ -189,7 +189,6 @@ Museum model:
   exhibit. The card uses the bus shelter poster instead. [TBC: is there
   a photo of the new sign in place on the shopfront?]
 - Copy email uses joshua@conceptualstudio.co.uk, the studio address (Josh, 2 Nov 2026; was the Gmail from the Framer contact page).
-  page. [TBC: a studio address instead?]
 
 ## Home prototypes (26 Oct 2026, /prototypes/)
 - Built on main at Josh's request, not on a branch. /prototypes/ and
