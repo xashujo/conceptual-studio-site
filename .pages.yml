@@ -354,7 +354,6 @@ content:
       - { name: availability, label: Taking new projects, type: boolean, description: "Shows or hides the green dot on the home page." }
       - { name: availabilityText, label: Availability text, type: string, required: true }
       - { name: email, label: Email, type: string, required: true }
-      - { name: phone, label: Phone (optional), type: string, description: "Shown as plain text beside the email at the bottom of the home page, e.g. 07700 900123. Leave empty to hide it." }
       - { name: bookingUrl, label: Booking link, type: string, description: "The web address of your booking page for the free 20-minute call (e.g. a Google Calendar appointment schedule). The Start a Project buttons open it. Empty opens an email instead." }
       - { name: responseTime, label: Reply time, type: string, required: true, description: "Finishes the sentence \"I reply...\", e.g. within three working days" }
       - { name: nextSteps, label: What happens next, type: text, description: "One short line under the enquiry form. {reply time} becomes the Reply time above. Empty hides it." }

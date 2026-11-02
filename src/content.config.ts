@@ -127,8 +127,6 @@ export const collections = {
       availability: z.boolean(),
       availabilityText: z.string(),
       email: z.string().email(),
-      // Shown as plain text beside the email in the close (feedback, 2 Nov). Empty hides it.
-      phone: z.string().nullish().transform((v) => v ?? ''),
       // The free 20-minute call (Josh's plan, 2 Nov): replaces "Email Us". Empty falls back to email.
       bookingUrl: z.string().url().nullish().transform((v) => v ?? ''),
       responseTime: z.string(),
