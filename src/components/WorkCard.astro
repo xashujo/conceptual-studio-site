@@ -38,7 +38,7 @@ const Title = href ? 'a' : 'span';
   a.wc__link:focus-visible { outline: none; }
   .wc:has(a.wc__link:focus-visible) { outline: 2px solid var(--ink); outline-offset: 3px; }
   .wc__disc { padding: 6px 8px 14px; font-size: 16px; line-height: 1.45; color: var(--ink-2); }
-  .wc__img { width: 100%; aspect-ratio: var(--ratio, 4 / 3); object-fit: cover; border-radius: 16px; }
+  .wc__img { width: 100%; aspect-ratio: var(--ratio, 4 / 3); object-fit: cover; border-radius: var(--radius-inner); }
   .wc__fig :global(.plate) { padding-inline: 8px; }
   .wc__btn { align-self: flex-start; margin: 14px 0 2px; min-height: 40px; padding: 0 16px; font-size: 16px; --fill: color-mix(in srgb, var(--paper) 55%, transparent); }
   @media (hover: hover) {

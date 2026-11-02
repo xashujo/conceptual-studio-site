@@ -113,7 +113,7 @@ const count = (f: string) => projects.filter((p) => (f === 'all' ? !p.student : 
     /* Bento on phones: two columns, every third tile across both; half tiles keep a square image. */
     .grid--bento { grid-template-columns: 1fr 1fr; gap: 10px; }
     .grid--bento :global(.wc) { --inset: 6px; padding-top: 12px; border-radius: calc(12px + var(--inset)); }
-    .grid--bento :global(.wc__img) { border-radius: 12px; }
+    .grid--bento :global(.wc__img) { border-radius: var(--radius-inner); }
     .grid--bento :global(.wc:not(:nth-child(3n + 1 of :not([hidden])))) :global(.wc__img) { aspect-ratio: 1; }
     .grid--bento :global(.wc__head) { padding-inline: 6px; padding-bottom: 10px; }
     .grid--bento :global(.wc__title), .grid--bento :global(.wc__year) { font-size: 17px; }

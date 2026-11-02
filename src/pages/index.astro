@@ -507,14 +507,14 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   /* Every section heading, one size: the Selected Work heading's (Josh, 28 Oct). */
   .big { font-family: var(--display); font-weight: 500; font-size: clamp(56px, 7.8vw, 120px); letter-spacing: -0.015em; line-height: 0.92; }
-  .acts { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 14px; }
+  .acts { display: flex; flex-wrap: wrap; align-items: center; gap: var(--btn-gap); }
   html { scroll-behavior: smooth; }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   [id] { scroll-margin-top: 96px; } /* anchors land below the sticky nav */
 
   /* Nav: sticky glass for the whole page (Josh, 28 Oct; replaces "scrolls away with the opening").
      It sits at the top, and .is-dark turns it light over the night chapters. */
-  .nav { position: fixed; z-index: 50; top: 14px; left: var(--margin); right: var(--margin); height: 60px; border-radius: 28px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 8px 0 24px; transition: color 300ms ease-out, background-color 300ms ease-out, box-shadow 300ms ease-out; }
+  .nav { position: fixed; z-index: 50; top: 14px; left: var(--margin); right: var(--margin); height: 60px; border-radius: var(--radius); display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 8px 0 24px; transition: color 300ms ease-out, background-color 300ms ease-out, box-shadow 300ms ease-out; }
   .nav.is-dark { color: #F1DFC8; }
   .nav__mark { font-family: var(--display); font-size: 24px; letter-spacing: -0.01em; text-decoration: none; }
   .nav__links { list-style: none; display: flex; gap: 2px; margin: 0; padding: 0; }
@@ -524,13 +524,13 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .hero { position: relative; isolation: isolate; min-height: 100svh; padding: 116px var(--margin) 40px; display: grid; align-content: center; } /* the bento and stats as one centred block */
   .hero__art { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 92%); mask-image: linear-gradient(to bottom, #000 58%, transparent 92%); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
   .hero__bento { align-self: center; justify-self: center; width: min(1140px, 100%); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-gap); }
-  .hero__plate { position: relative; grid-column: 1 / -1; padding: 64px 56px 56px; display: grid; justify-items: center; gap: 26px; border-radius: 28px; text-align: center; } /* type and space carry it: one centred statement */
+  .hero__plate { position: relative; grid-column: 1 / -1; padding: 64px 56px 56px; display: grid; justify-items: center; gap: 26px; border-radius: var(--radius); text-align: center; } /* type and space carry it: one centred statement */
   .hero__h { font-family: var(--display); font-weight: 500; font-size: clamp(44px, 5.2vw, 76px); line-height: 1.06; letter-spacing: -0.01em; text-wrap: balance; }
   .hero__p { max-width: 50ch; font-size: 20px; line-height: 1.5; text-wrap: pretty; }
   .hero__plate .acts { justify-content: center; margin-top: 6px; }
   /* The three hero buttons share one shape: the .btn's height, padding and type (Josh, 28 Oct). */
   .hero__plate .avail { --fill: color-mix(in srgb, var(--paper) 55%, transparent); }
-  .hero__plate .btn { min-height: 44px; padding: 0 18px; font-size: 16px; } /* the availability pill's size, so all three fit one row */
+  .hero__plate .btn { min-height: var(--btn-h-sm); padding: 0 var(--btn-px-sm); font-size: 16px; } /* the availability pill's size, so all three fit one row */
   .hero__plate .hero__start { min-height: 60px; padding: 0 34px; font-size: 20px; } /* the one call to action, bigger than the rest (Josh, 2 Nov) */
   .hero__work { --fill: color-mix(in srgb, var(--paper) 55%, transparent); gap: 8px; }
   /* The arrow points down where there's no hover (phones, tablets); with a mouse it points right and turns down on hover. */
@@ -566,7 +566,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   /* Stats: four glass cards, a large number over a short label, straight under the hero plate (Josh, 28 Oct). */
   .stats { justify-self: center; box-sizing: border-box; width: min(1140px, 100%); padding-top: var(--sp-gap); } /* the bento's gap, so plate, quote and stats read as one grid */
   .stats__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-gap); }
-  .stat { position: relative; display: grid; align-content: space-between; gap: 20px; min-height: 160px; padding: 26px 28px 24px; border-radius: 28px; }
+  .stat { position: relative; display: grid; align-content: space-between; gap: 20px; min-height: 160px; padding: 26px 28px 24px; border-radius: var(--radius); }
   /* After the hero has landed, the stat cards rise in one by one, left to right (Josh, 2 Nov). Delay matches STAT_IN in the script. */
   @media (prefers-reduced-motion: no-preference) { .stat { animation: stat-in 700ms var(--ease-out) calc(500ms + var(--i) * 140ms) both; } }
   @keyframes stat-in { from { opacity: 0; transform: translateY(18px); } }
@@ -590,12 +590,12 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .fw__vid .card__t { font-size: 20px; }
   .vid { position: relative; }
   .card .vid__v { display: block; aspect-ratio: 9 / 16; background: #000; }
-  .vid__play { position: absolute; inset: 0; display: grid; place-items: center; border: 0; padding: 0; border-radius: 16px; background: none; cursor: pointer; }
+  .vid__play { position: absolute; inset: 0; display: grid; place-items: center; border: 0; padding: 0; border-radius: var(--radius-inner); background: none; cursor: pointer; }
   .vid__icon { display: grid; place-items: center; width: 64px; height: 64px; padding-left: 3px; border-radius: 50%; transition: transform 300ms ease-out; }
   @media (hover: hover) { .vid__play:hover .vid__icon { transform: scale(1.08); } }
   .vid__play:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
-  .card { position: relative; display: grid; align-content: start; gap: 12px; height: 100%; padding: 12px 12px 16px; border-radius: 28px; text-decoration: none; transition: background-color 300ms ease-out, color 300ms ease-out; }
-  .card__img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 16px; } /* concentric: 28px card, 12px inset */
+  .card { position: relative; display: grid; align-content: start; gap: 12px; height: 100%; padding: 12px 12px 16px; border-radius: var(--radius); text-decoration: none; transition: background-color 300ms ease-out, color 300ms ease-out; }
+  .card__img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: var(--radius-inner); } /* concentric: 28px card, 12px inset */
   .card__row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 0 8px 2px; }
   .card__y { margin-left: auto; }
   .card__t { font-size: 20px; line-height: 1.2; font-weight: 600; letter-spacing: -0.02em; }
@@ -615,7 +615,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .card:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
   .fw__empty { margin-top: 32px; font-size: 20px; }
   .fw__foot [hidden] { display: none; }
-  .fw__foot { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; margin-top: 28px; font-size: 20px; }
+  .fw__foot { display: flex; flex-wrap: wrap; align-items: center; gap: var(--btn-gap); margin-top: var(--btn-space); font-size: 20px; }
   /* Grid or list view (Josh, 2 Nov). The list is the Services accordion: title, tags and year, opening to the brief. */
   /* The toggle is its own glass circle beside the filters, so the filters can scroll on phones without hiding it. */
   .fw__tools { display: flex; align-items: center; gap: 10px; margin-top: var(--sp-head); }
@@ -633,13 +633,13 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .fwl__body { grid-template-columns: minmax(0, 1fr) 360px; align-items: start; }
   .fwl__body .acc__text { grid-row: 1; }
   .fwl__body .acc__go { grid-column: 1; justify-self: start; }
-  .fwl__img { grid-column: 2; grid-row: 1 / span 2; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 16px; }
+  .fwl__img { grid-column: 2; grid-row: 1 / span 2; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: var(--radius-inner); }
   .fwl__vid { grid-column: 1; grid-row: 1; width: 220px; aspect-ratio: 9 / 16; background: #000; } /* social videos play in the open row */
 
   /* Services: the same heading as Featured Work, then full-width rows that open one at a time. */
   .services { padding-top: var(--sp-section); }
   .services__intro { margin-top: 20px; max-width: 46ch; font-size: 20px; line-height: 1.45; }
-  .acc { position: relative; margin-top: var(--sp-head); padding: 4px var(--sp-card); border-radius: 28px; }
+  .acc { position: relative; margin-top: var(--sp-head); padding: 4px var(--sp-card); border-radius: var(--radius); }
   .acc__row + .acc__row { border-top: 1px solid color-mix(in srgb, var(--ink) 16%, transparent); }
   .acc__btn { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 24px; padding: 26px 0; border: 0; background: none; color: inherit; font: 600 28px/1.2 var(--text); letter-spacing: -0.02em; text-align: left; cursor: pointer; }
   .acc__btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 8px; }
@@ -660,7 +660,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .acc__go { justify-self: end; }
 
   /* Custom quote: centred, set like the hero plate. */
-  .quote { position: relative; display: grid; justify-items: center; gap: 18px; width: min(640px, 100%); margin: 56px auto 0; padding: 40px 44px; border-radius: 28px; text-align: center; }
+  .quote { position: relative; display: grid; justify-items: center; gap: 18px; width: min(640px, 100%); margin: 56px auto 0; padding: 40px 44px; border-radius: var(--radius); text-align: center; }
   .quote__h { font-family: var(--display); font-weight: 500; font-size: clamp(30px, 2.8vw, 40px); line-height: 1.06; letter-spacing: -0.01em; }
   .quote__p { max-width: 44ch; font-size: 18px; line-height: 1.5; text-wrap: pretty; }
 
@@ -675,19 +675,19 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .approach__t { font-family: var(--display); font-weight: 500; font-size: 26px; line-height: 1.1; margin-bottom: 10px; }
   .approach p { font-size: 18px; line-height: 1.5; color: var(--ink-2); text-wrap: pretty; }
   .proof__grid { display: grid; grid-template-columns: 7fr 5fr; grid-template-rows: 1fr 1fr; gap: var(--sp-gap); margin-top: var(--sp-head); }
-  .proof__quote { position: relative; grid-row: span 2; display: flex; flex-direction: column; justify-content: space-between; gap: 40px; margin: 0; padding: var(--sp-card); border-radius: 28px; }
+  .proof__quote { position: relative; grid-row: span 2; display: flex; flex-direction: column; justify-content: space-between; gap: 40px; margin: 0; padding: var(--sp-card); border-radius: var(--radius); }
   .proof__quote blockquote { margin: 0; }
   .proof__quote p { font-size: 28px; line-height: 1.36; letter-spacing: -0.02em; font-weight: 450; text-wrap: pretty; text-indent: -0.4em; } /* hang the opening quote mark */
   .proof__quote figcaption { font-size: 18px; line-height: 1.45; }
   .proof__quote figcaption b { display: block; font-weight: 600; }
-  .result { position: relative; display: flex; flex-direction: column; gap: 14px; padding: var(--sp-card); border-radius: 28px; text-decoration: none; transition: background-color 300ms ease-out, color 300ms ease-out; }
+  .result { position: relative; display: flex; flex-direction: column; gap: 14px; padding: var(--sp-card); border-radius: var(--radius); text-decoration: none; transition: background-color 300ms ease-out, color 300ms ease-out; }
   .result__who { font-size: 17px; color: var(--ink-2); }
   .result__line { font-size: 21px; line-height: 1.38; font-weight: 500; letter-spacing: -0.015em; text-wrap: balance; hyphens: none; }
   .result__go { margin-top: auto; padding-top: 8px; font-size: 18px; font-weight: 500; }
   /* Hover like the Selected Work cards: no lift (moving blurred glass left seams on phones), the card turns to day glass. */
   @media (hover: hover) { .band .result.glass:hover { color-scheme: light; background: color-mix(in srgb, var(--paper) 90%, transparent); } .result:hover .arrow { transform: rotate(-45deg); } }
   .result:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
-  .proof__go { margin-top: 32px; }
+  .proof__go { margin-top: var(--btn-space); }
 
   /* How we work: the same heading as the sections above, then the bento. */
   .how { box-sizing: content-box; max-width: 1140px; margin-inline: auto; padding-block: var(--sp-section) 0; display: grid; gap: var(--sp-head); }
@@ -695,7 +695,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .how__head p { max-width: 46ch; font-size: 20px; line-height: 1.45; }
   /* Bento (Josh, 26 Oct): two rows of unequal tiles, wide then narrow, then narrow then wide. Title at the top, text at the foot. */
   .how__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--sp-gap); }
-  .how__list li { position: relative; display: flex; flex-direction: column; gap: 14px; padding: var(--sp-card); border-radius: 28px; } /* title straight over its text, no empty middle (Josh, 28 Oct) */
+  .how__list li { position: relative; display: flex; flex-direction: column; gap: 14px; padding: var(--sp-card); border-radius: var(--radius); } /* title straight over its text, no empty middle (Josh, 28 Oct) */
   .how__list li { grid-column: span 6; } /* even 2×2 (Josh, 28 Oct) */
   .how__t { font-family: var(--display); font-size: 30px; line-height: 1.1; font-weight: 500; letter-spacing: -0.01em; } /* Agatho, like the headings (Josh, 28 Oct) */
   .how__list p { font-size: 20px; line-height: 1.5; max-width: 40ch; }
@@ -716,12 +716,12 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .close__art { position: absolute; inset: 0; z-index: -1; overflow: hidden; }
   .close__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%); mask-image: linear-gradient(to bottom, transparent, #000 14%); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
   .close__h { grid-column: 1 / span 6; margin-top: -0.18em; } /* cap tops, not the line box, level with the panel */
-  .close__body { grid-column: 7 / -1; justify-self: end; width: min(680px, 100%); box-sizing: border-box; display: grid; gap: 24px; padding: var(--sp-card); border-radius: 28px; } /* dark glass so it reads over the Lemoyne (Josh, 28 Oct) */
+  .close__body { grid-column: 7 / -1; justify-self: end; width: min(680px, 100%); box-sizing: border-box; display: grid; gap: 24px; padding: var(--sp-card); border-radius: var(--radius); } /* dark glass so it reads over the Lemoyne (Josh, 28 Oct) */
   .close__p { font-size: 20px; line-height: 1.5; }
   .footer { padding: 0 var(--margin) 40px; text-align: center; font-size: 16px; color: #F1DFC8; }
 
   /* Phone menu sheet: the shared glass, under the nav. */
-  .menu { position: fixed; inset: 74px var(--margin) auto; margin: 0; width: auto; padding: 8px; border: 0; border-radius: 26px; color: var(--ink); }
+  .menu { position: fixed; inset: 74px var(--margin) auto; margin: 0; width: auto; padding: 8px; border: 0; border-radius: var(--radius); color: var(--ink); }
   .menu ul { list-style: none; margin: 0; padding: 0; display: grid; }
   .menu .glass-pill { width: 100%; min-height: 52px; padding: 0 18px; font-size: 20px; }
 
@@ -748,11 +748,11 @@ const menu = services.flatMap((s) => s.href?.includes('#')
     .hero { padding: 84px var(--margin) 24px; }
     .hero__art { object-position: 30% 50%; }
     .hero__bento { align-self: start; }
-    .hero__plate { padding: 24px 22px 22px; gap: 16px; border-radius: 26px; }
+    .hero__plate { padding: 24px 22px 22px; gap: 16px; border-radius: var(--radius); }
     .hero__h { font-size: 36px; }
     .hero__p { font-size: 16px; line-height: 1.45; }
     .band { padding-bottom: 120px; }
-    .stat { min-height: 128px; padding: 18px 18px; gap: 16px; border-radius: 26px; }
+    .stat { min-height: 128px; padding: 18px 18px; gap: 16px; border-radius: var(--radius); }
     .stat__n { font-size: 9.6vw; } /* 20,000+ fits a phone-width card */
     .stat__l { font-size: 15px; }
     .filterbar { gap: 0; padding: 4px; }
@@ -769,33 +769,32 @@ const menu = services.flatMap((s) => s.href?.includes('#')
     .fw__grid > .fw__vid { grid-column: span 1; }
     .vid__icon { width: 52px; height: 52px; }
     .fw__vid .card__t { font-size: 17px; }
-    .card { padding: 10px 10px 14px; gap: 12px; border-radius: 26px; }
-    .card__img { border-radius: 16px; }
+    .card { padding: 10px 10px 14px; gap: 12px; border-radius: var(--radius); }
+    .card__img { border-radius: var(--radius-inner); }
     .card__t { font-size: 19px; }
     .card__y { font-size: 15px; }
     .services__intro { font-size: 17px; }
-    .acc { padding: 2px var(--sp-card); border-radius: 26px; }
+    .acc { padding: 2px var(--sp-card); border-radius: var(--radius); }
     .acc__btn { font-size: 21px; padding: 20px 0; gap: 14px; }
     .acc__from { font-size: 14px; }
     .acc__body { grid-template-columns: 1fr; gap: 14px; padding-bottom: 24px; }
     .acc__text { grid-row: auto; font-size: 17px; }
     .acc__price { text-align: left; font-size: 21px; }
     .acc__go { justify-self: start; }
-    .quote { margin-top: 40px; padding: 28px 22px; border-radius: 26px; }
+    .quote { margin-top: 40px; padding: 28px 22px; border-radius: var(--radius); }
     .quote__p { font-size: 16px; }
     .proof__grid, .approach { grid-template-columns: 1fr; }
     .trusted, .trusted__list { gap: 8px 20px; }
-    .proof__quote { gap: 28px; border-radius: 26px; }
+    .proof__quote { gap: 28px; border-radius: var(--radius); }
     .proof__quote p { font-size: 20px; line-height: 1.4; }
     .proof__quote figcaption { font-size: 16px; }
-    .result { gap: 10px; border-radius: 26px; }
+    .result { gap: 10px; border-radius: var(--radius); }
     .result__who { font-size: 15px; }
     .result__line { font-size: 19px; }
     .result__go { font-size: 16px; }
-    .proof__go { margin-top: 24px; }
     .how__head p, .close__p { font-size: 17px; }
     .how__list { grid-template-columns: 1fr; }
-    .how__list li:nth-child(n) { grid-column: auto; gap: 12px; border-radius: 26px; }
+    .how__list li:nth-child(n) { grid-column: auto; gap: 12px; border-radius: var(--radius); }
     .how__list p { font-size: 17px; }
     .how__t { font-size: 25px; }
     .about { padding-block: var(--sp-section); }

@@ -31,7 +31,7 @@ a { color: inherit; }
   --fill-hover: var(--ink);
   --fill-pressed: color-mix(in srgb, var(--ink) 84%, var(--paper));
   position: relative; display: inline-flex; align-items: center; gap: 10px;
-  min-height: 48px; padding: 0 22px; border: 0; border-radius: var(--pill);
+  min-height: var(--btn-h); padding: 0 var(--btn-px); border: 0; border-radius: var(--pill);
   background: var(--fill); color: var(--ink);
   font: 500 18px/1 var(--text); letter-spacing: -0.01em; text-decoration: none; white-space: nowrap; cursor: pointer;
   transition: background-color 300ms ease-out, color 300ms ease-out, transform 160ms var(--ease-out);
@@ -43,7 +43,7 @@ a { color: inherit; }
 }
 .arrow { display: inline-block; margin-left: 0.35em; font-weight: 400; transition: transform 180ms ease-out; }
 .btn .arrow { margin-left: 0; }
-.link { display: inline-block; padding-block: 10px; border-radius: 4px; font-weight: 500; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 5px; text-decoration-color: color-mix(in srgb, var(--ink) 35%, transparent); transition: text-decoration-color 300ms ease-out; }
+.link { display: inline-block; padding-block: 10px; border-radius: var(--radius-fine); font-weight: 500; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 5px; text-decoration-color: color-mix(in srgb, var(--ink) 35%, transparent); transition: text-decoration-color 300ms ease-out; }
 
 /* Label swap (16): the offer at rest, the action on hover. The action slides in from 12px right. */
 .swap { display: inline-grid; overflow: hidden; }
@@ -68,7 +68,7 @@ a { color: inherit; }
 .link:active, .link.is-pressed { text-decoration-color: currentColor; opacity: 0.7; }
 
 /* Availability pill: the one pill badge. "Available to book a call" becomes "Email me". */
-.avail { --fill: color-mix(in srgb, var(--ink) 5%, var(--paper)); display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 18px 0 16px; border-radius: var(--pill); background: var(--fill); color: var(--ink); font-weight: 500; font-size: 16px; text-decoration: none; white-space: nowrap; transition: color 300ms ease-out, background-color 300ms ease-out; }
+.avail { --fill: color-mix(in srgb, var(--ink) 5%, var(--paper)); display: inline-flex; align-items: center; gap: 10px; min-height: var(--btn-h-sm); padding: 0 var(--btn-px-sm) 0 16px; border-radius: var(--pill); background: var(--fill); color: var(--ink); font-weight: 500; font-size: 16px; text-decoration: none; white-space: nowrap; transition: color 300ms ease-out, background-color 300ms ease-out; }
 .avail__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--live); flex: none; animation: blink 2s ease-in-out infinite; transition: background-color 300ms ease-out; }
 .avail .swap > :last-child { transform: translateY(100%); }
 @media (hover: hover) {
@@ -246,7 +246,7 @@ a { color: inherit; }
 :is(.night .glass, .glass.is-dark)[data-lens]:not(.is-lens):not(.has-liquid) { background: color-mix(in srgb, var(--paper-2) min(96%, calc(30% * var(--g-frost))), transparent); }
 
 /* Tier A, plate glass: the WebGL canvas replaces the backdrop once it has drawn. */
-.plate-glass { position: relative; border-radius: 28px; }
+.plate-glass { position: relative; border-radius: var(--radius); }
 .plate-glass:not(.has-liquid) { background: color-mix(in srgb, var(--paper) min(96%, calc(78% * var(--g-frost))), transparent); }
 .lg-canvas { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; border-radius: inherit; pointer-events: none; }
 .has-liquid { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; background: transparent !important; }

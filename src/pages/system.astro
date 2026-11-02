@@ -311,7 +311,7 @@ const nightRows = [{ label: 'Primary on night', kind: 'primary' }, { label: 'Pil
       .body-spec__text ul { margin-top: 8px; padding-left: 1.1em; }
       .body-spec__text li + li { margin-top: 4px; }
       .typeset__fig { grid-column: 9 / -1; align-self: stretch; display: flex; flex-direction: column; }
-      .typeset__img { width: 100%; flex: 1; min-height: 520px; object-fit: cover; object-position: 52% 50%; border-radius: 25px; }
+      .typeset__img { width: 100%; flex: 1; min-height: 520px; object-fit: cover; object-position: 52% 50%; border-radius: var(--radius); }
 
       /* Painting: full bleed, faded top and bottom into the page like the footer engraving. */
       .art { padding-top: 160px; }
@@ -388,7 +388,7 @@ const nightRows = [{ label: 'Primary on night', kind: 'primary' }, { label: 'Pil
         .typeset__main, .typeset__fig { grid-column: 1 / -1; }
         .body-spec__text { margin-top: 48px; }
         .typeset__fig { margin-top: 48px; }
-        .typeset__img { min-height: 0; flex: none; aspect-ratio: 4 / 5; border-radius: 22px; }
+        .typeset__img { min-height: 0; flex: none; aspect-ratio: 4 / 5; border-radius: var(--radius); }
         .art { padding-top: 112px; }
         .art__frame { height: 560px; min-height: 0; }
         .art__img { object-position: 62% 40%; }

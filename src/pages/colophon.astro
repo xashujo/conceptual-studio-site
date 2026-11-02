@@ -64,7 +64,7 @@ const works = [
   .sec__head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; margin-bottom: 48px; }
   .sec__p { grid-column: 7 / span 6; font-size: 20px; line-height: 1.55; }
   .works { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 56px 24px; }
-  .works img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 25px; }
+  .works img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius); }
   .works__where { margin-top: 8px; font-size: 16px; line-height: 1.5; }
 
   @media (max-width: 899.98px) {
@@ -75,6 +75,6 @@ const works = [
     .sec__p { grid-column: 1; }
     .sec__p { font-size: 18px; }
     .works { grid-template-columns: 1fr; gap: 40px; }
-    .works img { border-radius: 22px; }
+    .works img { border-radius: var(--radius); }
   }
 </style>

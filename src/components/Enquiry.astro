@@ -172,7 +172,7 @@ const preset = service ? `${service}:unsure` : '';
   .f label { font-size: 16px; font-weight: 500; }
   .f label span { font-weight: 400; color: var(--ink-2); margin-left: 6px; }
   .f :is(input, select, textarea) {
-    width: 100%; min-height: 52px; padding: 13px 16px; border: 1px solid transparent; border-radius: 14px;
+    width: 100%; min-height: 52px; padding: 13px 16px; border: 1px solid transparent; border-radius: var(--radius-inner);
     background: var(--paper-2); color: var(--ink); font: 400 18px/1.4 var(--text); appearance: none;
     transition: border-color 150ms ease-out, background-color 150ms ease-out;
   }

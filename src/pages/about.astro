@@ -50,7 +50,7 @@ import { art as credits, clients, startHref } from '../lib/site';
 <style>
   .story { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-top: 160px; align-items: start; }
   .story__pic { grid-column: 1 / span 5; }
-  .story__ph { aspect-ratio: 4 / 5; border-radius: 25px; background: var(--paper-2); display: grid; place-items: center; color: var(--ink-2); font-size: 18px; }
+  .story__ph { aspect-ratio: 4 / 5; border-radius: var(--radius); background: var(--paper-2); display: grid; place-items: center; color: var(--ink-2); font-size: 18px; }
   .story__text { grid-column: 7 / span 6; }
   .story__h, .want__h, .clients__h { font-size: 40px; line-height: 1.1; font-weight: 700; letter-spacing: -0.05em; margin-bottom: 28px; }
   .want { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-top: 160px; }
@@ -69,6 +69,6 @@ import { art as credits, clients, startHref } from '../lib/site';
     .story__h, .want__h, .clients__h { font-size: 32px; margin-bottom: 20px; }
     .prose { font-size: 18px; }
     .clients__list { columns: 1; font-size: 32px; }
-    .story__ph { border-radius: 22px; }
+    .story__ph { border-radius: var(--radius); }
   }
 </style>

@@ -111,7 +111,7 @@ const sizes = { full: '(min-width: 760px) 95vw, 100vw', pair: '(min-width: 760px
 
   .lead { margin-top: 64px; }
   /* The opening exhibit keeps its own shape (a portrait poster stays portrait), as tall as the screen allows. */
-  .lead img { width: auto; max-width: 100%; max-height: 88svh; margin-inline: auto; border-radius: 4px; }
+  .lead img { width: auto; max-width: 100%; max-height: 88svh; margin-inline: auto; border-radius: var(--radius-fine); }
   .lead :global(.plate) { text-align: center; }
 
   .text { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; margin-top: 140px; }
@@ -122,12 +122,12 @@ const sizes = { full: '(min-width: 760px) 95vw, 100vw', pair: '(min-width: 760px
   .work > .text__h { margin-bottom: 32px; }
   .row { display: grid; gap: 24px; margin-top: 40px; }
   .row img { width: 100%; }
-  .row--full img { max-height: 88svh; width: auto; max-width: 100%; margin-inline: auto; border-radius: 4px; }
+  .row--full img { max-height: 88svh; width: auto; max-width: 100%; margin-inline: auto; border-radius: var(--radius-fine); }
   .row--full :global(.plate) { text-align: center; }
   .row--pair, .row--quad { grid-template-columns: 1fr 1fr; align-items: start; }
   .row--trio { grid-template-columns: repeat(3, 1fr); align-items: start; }
-  .row--pair img, .row--trio img { aspect-ratio: 4 / 3; object-fit: cover; border-radius: 4px; }
-  .row--quad img { aspect-ratio: 1.41; object-fit: cover; border-radius: 4px; }
+  .row--pair img, .row--trio img { aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius-fine); }
+  .row--quad img { aspect-ratio: 1.41; object-fit: cover; border-radius: var(--radius-fine); }
   .ba__pair { grid-column: 1 / -1; margin-top: 32px; }
 
   .next { margin-top: 160px; }
@@ -136,7 +136,7 @@ const sizes = { full: '(min-width: 760px) 95vw, 100vw', pair: '(min-width: 760px
   .next__title { font-family: var(--display); font-size: clamp(40px, 5vw, 72px); line-height: 1; letter-spacing: -0.01em; }
   @media (hover: hover) { .next__link:hover .arrow { transform: rotate(-45deg); } }
   .next__link:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
-  .cta { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding-top: 32px; }
+  .cta { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding-top: var(--btn-space); }
   .cta__p { font-size: 22px; line-height: 1.4; max-width: 34ch; }
 
   @media (max-width: 759.98px) {

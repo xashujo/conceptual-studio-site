@@ -18,7 +18,19 @@
   --margin: max(16px, 2.5vw); /* TASTE 18: 36px at 1440 */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1); /* Framer's label slide */
   --pill: 999px;
+
+  /* One set of corners and button spacing for the whole site (Josh, 2 Nov). */
+  --radius: 28px;        /* glass panels, cards and standalone images */
+  --radius-inner: 16px;  /* an image or field inside a panel */
+  --radius-fine: 4px;    /* case study photos and focus rings */
+  --btn-h: 48px;         /* button height */
+  --btn-px: 22px;        /* button side padding */
+  --btn-h-sm: 44px;      /* the compact size: hero buttons and the availability pill */
+  --btn-px-sm: 18px;
+  --btn-gap: 12px;       /* between buttons in a row */
+  --btn-space: 32px;     /* above a button or a row of buttons */
 }
+@media (max-width: 759.98px) { :root { --radius: 26px; --btn-space: 24px; } }
 
 .night { color-scheme: dark; }
 

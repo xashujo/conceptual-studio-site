@@ -90,7 +90,7 @@ const s = serviceById(service);
   .sp-faq summary::-webkit-details-marker { display: none; }
   .sp-faq summary .arrow { transform: rotate(90deg); transition: transform 180ms ease-out; }
   .sp-faq details[open] summary .arrow { transform: rotate(-90deg); }
-  .sp-faq summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 4px; }
+  .sp-faq summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: var(--radius-fine); }
   .sp-faq details p { padding-bottom: 22px; font-size: 18px; line-height: 1.5; max-width: 60ch; }
 
   @media (max-width: 1099.98px) {
