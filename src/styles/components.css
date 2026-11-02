@@ -112,6 +112,32 @@ a { color: inherit; }
     inset 1px 1px 0 rgb(237 220 180 / calc(0.45 * var(--g-shine))), /* cream-gold rim (TASTE 11) */
     inset 0 0 0 1px rgb(241 223 200 / 0.08);
 }
+/* The nav's glass (Josh, 2 Nov): one look in every browser and at every scroll position, CSS only (no SVG
+   filter, no WebGL). Blur and saturate over a light tint, a lit rim, and a faint red and blue fringe at the
+   ends standing in for the lens's colour split. The tint stays light enough to see the page move behind it. */
+.glass.glass--nav {
+  --glass-bg: color-mix(in srgb, var(--paper) min(96%, calc(52% * var(--g-frost))), transparent);
+  --glass-filter: blur(calc(14px * var(--g-blur))) saturate(1.6);
+  --glass-shadow:
+    inset 1.5px 1.5px 0 -0.5px rgb(255 250 240 / calc(0.95 * var(--g-shine))),
+    inset -1.5px -1.5px 0 -0.5px rgb(255 250 240 / calc(0.7 * var(--g-shine))),
+    inset 3px 0 4px -2px rgb(255 70 40 / 0.22),
+    inset -3px 0 4px -2px rgb(40 110 255 / 0.22),
+    inset 0 0 14px rgb(255 252 246 / calc(0.3 * var(--g-shine))),
+    inset 0 0 0 1px rgb(110 80 36 / 0.14),
+    3px 10px 28px -16px rgb(40 24 8 / 0.32);
+  transition: color 300ms ease-out, background-color 300ms ease-out, box-shadow 300ms ease-out;
+}
+.glass.glass--nav.is-dark {
+  --glass-bg: rgb(34 29 23 / calc(0.62 * var(--g-frost)));
+  --glass-shadow:
+    inset 1.5px 1.5px 0 -0.5px rgb(237 220 180 / calc(0.7 * var(--g-shine))),
+    inset -1px -1px 0 -0.5px rgb(237 220 180 / calc(0.35 * var(--g-shine))),
+    inset 3px 0 4px -2px rgb(255 90 60 / 0.2),
+    inset -3px 0 4px -2px rgb(70 140 255 / 0.2),
+    inset 0 0 14px rgb(237 220 180 / calc(0.1 * var(--g-shine)));
+  color: #F1DFC8;
+}
 /* Glass button: a .btn made of the glass. Hover and press deepen the glass rather than replace it. */
 .btn.glass-button { --fill: var(--glass-bg); text-decoration: none; }
 /* A hovered or pressed button's text is paper. Set after the night glass, whose text colour would otherwise win. */

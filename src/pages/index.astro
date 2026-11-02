@@ -61,7 +61,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   </head>
   <body>
     <!-- Sticky glass nav. It turns light over the night chapters (script below). -->
-    <nav class="nav glass" aria-label="Main" data-lens data-nav>
+    <nav class="nav glass glass--nav" aria-label="Main" data-nav>
       <Logo />
       <ul class="nav__links">
         <li><a class="glass-pill" href="#top" aria-current="true">Home</a></li>
@@ -354,7 +354,6 @@ const menu = services.flatMap((s) => s.href?.includes('#')
       // big panes are plain blurred glass (lens.js decides).
       const heroArt = document.querySelector<HTMLImageElement>('.hero__art');
       document.querySelector<HTMLElement>('[data-filters]')!.hidden = false; // shown before the lens counts its height
-      mountLens(document.querySelector('[data-nav]'), null);
       mountLens(document.querySelector('.hero__plate'), heroArt, [0.58, 0.92]);
       document.querySelectorAll<HTMLElement>('.field [data-lens], .stat, .close__body').forEach((el) => mountLens(el, null));
 
@@ -375,11 +374,6 @@ const menu = services.flatMap((s) => s.href?.includes('#')
       };
       watchNav();
       addEventListener('resize', watchNav);
-      // Scroll edge: true once content (past the opening's art) is under the nav.
-      const field = document.querySelector<HTMLElement>('.field')!;
-      const edge = () => nav.classList.toggle('is-over', field.getBoundingClientRect().top < nav.getBoundingClientRect().bottom);
-      edge();
-      addEventListener('scroll', edge, { passive: true });
 
       // Stats count up once, when they come into view, each starting as its card fades in (STAT_IN, as in the CSS).
       // The final figure is in the page for screen readers.
@@ -521,13 +515,6 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   /* Nav: sticky glass for the whole page (Josh, 28 Oct; replaces "scrolls away with the opening").
      It sits at the top, and .is-dark turns it light over the night chapters. */
   .nav { position: fixed; z-index: 50; top: 14px; left: var(--margin); right: var(--margin); height: 60px; border-radius: 28px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 8px 0 24px; transition: color 300ms ease-out, background-color 300ms ease-out, box-shadow 300ms ease-out; }
-  .nav::before { transition: background-color 300ms ease-out; }
-  /* Scroll edge (TASTE glass spec, iOS 27): once the page passes under the nav, paper fills in behind it so the
-     labels never sit on bent text or busy photos. Over the opening it stays clear. */
-  .nav.is-over { background-color: color-mix(in srgb, #F1DFC8 80%, transparent); }
-  /* Over the night chapters: set outright, so every browser turns dark (Firefox kept it cream, with cream text). */
-  .nav.is-over.is-lens::before, .nav.is-over[data-lens]:not(.is-lens) { background-color: color-mix(in srgb, #F1DFC8 80%, transparent); }
-  .nav.is-dark, .nav.is-over.is-dark, .nav.is-dark.is-lens::before, .nav.is-dark[data-lens]:not(.is-lens) { background-color: rgb(34 29 23 / 0.8); }
   .nav.is-dark { color: #F1DFC8; }
   .nav__mark { font-family: var(--display); font-size: 24px; letter-spacing: -0.01em; text-decoration: none; }
   .nav__links { list-style: none; display: flex; gap: 2px; margin: 0; padding: 0; }
