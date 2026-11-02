@@ -40,9 +40,10 @@ html { scroll-behavior: smooth; }
 .band.night { --ink-2: color-mix(in srgb, var(--ink) 86%, var(--paper)); } /* secondary text 5:1 or better over the art */
 .band.night .band__art img { opacity: 0.4; filter: url(#tone-night); }
 .tones { position: absolute; width: 0; height: 0; }
-/* Plain canvas (Josh, 2 Nov: simpler): the weave only, toned per band like the painting. A tile, so nothing zooms. */
-.canvas { background: var(--canvas) 0 0 / 510px repeat; opacity: 0.5; filter: url(#tone-day); }
-.band.night .canvas { opacity: 0.35; filter: url(#tone-night); }
+/* Plain canvas (Josh, 2 Nov): a woven tile blended over the band's paper, light or dark, as on the home page. A tile, so nothing zooms. */
+.canvas { background: var(--canvas) 0 0 / 510px repeat; mix-blend-mode: soft-light; opacity: 0.9; }
+.band.night .canvas { opacity: 1; }
+.band:has(> .canvas) { background: var(--paper); } /* the paper ground the weave blends into */
 /* One centred column for everything under the opening (Josh, 28 Oct: "centred to the page"). */
 .band > :is(section, header) { box-sizing: content-box; max-width: 1140px; margin-inline: auto; padding-top: var(--sp-section); }
 
