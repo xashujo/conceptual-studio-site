@@ -1,5 +1,5 @@
 ---
-// The enquiry form (brief 11). Web3Forms, a Turnstile check and a honeypot. Four required fields,
+// The enquiry form (brief 11). Web3Forms, a Turnstile check and a honeypot. Four required fields, nothing else (Josh, 2 Nov 2026),
 // "What you need" preset from the page and from any ladder button. Inline validation and an
 // inline thank-you, no reload. Without JavaScript it still posts straight to Web3Forms.
 import { services, budgets } from '../data/services';
@@ -12,7 +12,7 @@ const preset = service ? `${service}:unsure` : '';
 <section class="enq wrap" id="enquire" aria-labelledby="enq-h">
   <div class="enq__side">
     <h2 class="enq__h" id="enq-h">{heading}</h2>
-    <p class="enq__p">Tell me what you need and when you need it by. I reply within three working days, and every project gets a fixed quote after our first call.</p>
+    <p class="enq__p">Tell me a little about what you're working on, and I'll be in touch to discuss the next steps.</p>
     <p class="enq__alt">Or email your brief to <a href={`mailto:${email}`}>{email}</a>. The form can't take attachments.</p>
     <p><a class="link" href={calUrl}>Book a 20-minute call<span class="arrow" aria-hidden="true">→</span></a></p>
   </div>
@@ -32,13 +32,9 @@ const preset = service ? `${service}:unsure` : '';
       <label for="enq-email">Work email</label>
       <input id="enq-email" name="email" type="email" autocomplete="email" required data-msg="Please enter an email address, like name@organisation.org.uk." />
     </div>
-    <div class="f">
+    <div class="f f--wide">
       <label for="enq-org">Organisation</label>
       <input id="enq-org" name="organisation" type="text" autocomplete="organization" required data-msg="Please tell me who the work is for." />
-    </div>
-    <div class="f">
-      <label for="enq-date">Needed by <span>optional</span></label>
-      <input id="enq-date" name="needed_by" type="date" />
     </div>
     <div class="f f--wide">
       <label for="enq-need">What you need</label>
@@ -65,13 +61,9 @@ const preset = service ? `${service}:unsure` : '';
       <p class="f__help" id="enq-budget-help">A rough band helps me suggest the right scope.</p>
     </div>
     <div class="f f--wide">
-      <label for="enq-msg">Tell me about the project <span>optional</span></label>
+      <label for="enq-msg">Tell me about the project, including any deadline <span>optional</span></label>
       <textarea id="enq-msg" name="message" rows="5"></textarea>
     </div>
-    <label class="tick f--wide">
-      <input type="checkbox" name="formal_quote" value="Yes" />
-      <span>I need a formal written quote for procurement</span>
-    </label>
     <div class="cf-turnstile f--wide" data-sitekey={turnstileSiteKey} data-theme="light"></div>
     <div class="enq__send f--wide">
       <button class="btn btn--solid" type="submit"><span data-send>Send enquiry</span><span class="arrow" aria-hidden="true">→</span></button>
@@ -191,13 +183,6 @@ const preset = service ? `${service}:unsure` : '';
   .f [aria-invalid] { border-color: #A3341F; }
   .f__err { font-size: 15px; line-height: 1.4; color: #A3341F; font-weight: 500; }
   .f__help { font-size: 15px; line-height: 1.4; color: var(--ink-2); }
-  .tick { display: flex; gap: 12px; align-items: flex-start; font-size: 18px; line-height: 1.4; cursor: pointer; padding-block: 4px; }
-  /* A warm tickbox: paper 2 with a hairline, filled with ink when ticked. */
-  .tick input { appearance: none; width: 24px; height: 24px; margin: 0; flex: none; border-radius: 7px; background: var(--paper-2); border: 1px solid color-mix(in srgb, var(--ink) 30%, transparent); display: grid; place-items: center; cursor: pointer; transition: background-color 150ms ease-out; }
-  .tick input::after { content: ''; width: 11px; height: 6px; border: solid var(--paper); border-width: 0 0 2px 2px; transform: translateY(-1px) rotate(-45deg); opacity: 0; }
-  .tick input:checked { background: var(--ink); border-color: var(--ink); }
-  .tick input:checked::after { opacity: 1; }
-  .tick input:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
   .enq__trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
   .enq__send { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-top: 6px; }
   .enq__status { font-size: 16px; line-height: 1.4; }
