@@ -33,7 +33,7 @@ const stats = home.stats.map((s) => ({ n: s.number, after: s.after, label: s.lab
 const SHOWN = 6;
 const cards = featured.map((p) => ({
   title: p.title, year: p.year, href: projectHref(p), image: p.image, alt: p.alt,
-  position: p.homePosition ?? p.position, filter: p.homeFilter, student: p.student, outcome: p.outcome,
+  position: p.homePosition ?? p.position, filter: p.homeFilter, student: p.student, outcome: p.outcome, brief: p.summary,
 }));
 // Social media videos (Pages CMS: Home page > Social media videos), after the projects under Social Media.
 const videos = await Promise.all(home.socialVideos.map(async (v) => ({ ...v, poster: (await getImage({ src: v.poster, width: 720, format: 'webp' })).src })));
@@ -126,9 +126,16 @@ const menu = services.flatMap((s) => s.href?.includes('#')
 
         <section class="fw wrap" id="work" aria-labelledby="fw-h">
           <h2 class="fw__h big" id="fw-h">{home.workHeading}</h2>
+          <div class="fw__tools">
           <div class="filterbar glass" role="group" aria-label={`Filter ${home.workHeading.toLowerCase()}`} data-lens data-filters hidden>
             <button class="glass-pill" type="button" data-filter="all" aria-pressed="true">All</button>
             {homeFilters.map((f) => <button class="glass-pill" type="button" data-filter={f} aria-pressed="false">{f}</button>)}
+          </div>
+            <!-- Grid or list view (Josh, 2 Nov): the icon shows the view you'd switch to. -->
+            <button class="fw__view glass" data-lens type="button" aria-label="List view" title="List view" data-view>
+              <svg class="fw__list" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 4h14M2 9h14M2 14h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              <svg class="fw__tiles" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 2h5.5v5.5H2zM10.5 2H16v5.5h-5.5zM2 10.5h5.5V16H2zM10.5 10.5H16V16h-5.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+            </button>
           </div>
           <ul class="fw__grid" data-grid>
             {cards.map((c, i) => (
@@ -161,6 +168,47 @@ const menu = services.flatMap((s) => s.href?.includes('#')
               </li>
             ))}
           </ul>
+          <!-- List view: the same projects as Services-style rows; each opens to its brief, image and link. -->
+          <div class="acc glass fw__list-view" data-lens data-acc data-list hidden>
+            {cards.map((c, i) => (
+              <div class="acc__row" data-filter={c.filter ?? ''} data-more={i >= SHOWN ? '' : undefined}>
+                <h3 class="acc__h">
+                  <button class="acc__btn" type="button" id={`fwl-${i}-btn`} aria-controls={`fwl-${i}`} aria-expanded="true">
+                    <span class="fwl__t">{c.title}</span>
+                    <span class="fwl__tags">{c.filter && <span class="tag">{c.filter}</span>}{c.student && <span class="tag">Student Work</span>}</span>
+                    <span class="acc__from">{c.year}</span><span class="acc__icon" aria-hidden="true"></span>
+                  </button>
+                </h3>
+                <div class="acc__panel" id={`fwl-${i}`} role="region" aria-labelledby={`fwl-${i}-btn`}>
+                  <div class="acc__inner">
+                    <div class="acc__body fwl__body">
+                      <Image class="fwl__img" src={c.image} alt={c.alt} widths={[400, 700]} sizes="(min-width: 760px) 360px, calc(100vw - 76px)" style={c.position ? `object-position: ${c.position}` : undefined} />
+                      <p class="acc__text">{c.brief}</p>
+                      <a class="btn glass-button acc__go" href={c.href}>View Project <span class="arrow" aria-hidden="true">→</span></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+            {videos.map((v, i) => (
+              <div class="acc__row" data-filter="Social Media" data-more="">
+                <h3 class="acc__h">
+                  <button class="acc__btn" type="button" id={`fwv-${i}-btn`} aria-controls={`fwv-${i}`} aria-expanded="true">
+                    <span class="fwl__t">{v.title}</span>
+                    <span class="fwl__tags"><span class="tag">Social Media</span></span>
+                    <span class="acc__from">{v.year}</span><span class="acc__icon" aria-hidden="true"></span>
+                  </button>
+                </h3>
+                <div class="acc__panel" id={`fwv-${i}`} role="region" aria-labelledby={`fwv-${i}-btn`}>
+                  <div class="acc__inner">
+                    <div class="acc__body fwl__body">
+                      <video class="fwl__img fwl__vid" src={v.video} poster={v.poster} preload="none" playsinline controls aria-label={v.alt}></video>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
           <p class="fw__empty" data-empty hidden>No projects under this filter yet.</p>
           <div class="fw__foot">
             <button class="btn glass-button" type="button" data-show-more hidden>Show More</button>
@@ -356,23 +404,29 @@ const menu = services.flatMap((s) => s.href?.includes('#')
       // Featured work filters: the grid updates in place with a short fade and scale.
       const bar = document.querySelector<HTMLElement>('[data-filters]')!;
       const grid = document.querySelector<HTMLElement>('[data-grid]')!;
-      const items = [...grid.children] as HTMLElement[];
+      const list = document.querySelector<HTMLElement>('[data-list]')!;
+      const views = [[...grid.children], [...list.children]] as HTMLElement[][];
+      const viewBtn = document.querySelector<HTMLButtonElement>('[data-view]')!;
       const more = document.querySelector<HTMLButtonElement>('[data-show-more]')!;
       const empty = document.querySelector<HTMLElement>('[data-empty]')!;
       let current = 'all';
       let all = false;
       const show = () => {
-        const match = items.filter((li) => current === 'all' || li.dataset.filter === current);
-        const shown = all ? match : match.slice(0, 6);
-        items.forEach((li) => { li.hidden = !shown.includes(li); });
+        let match: HTMLElement[] = [];
+        views.forEach((items) => { // the grid and the list filter alike
+          match = items.filter((li) => current === 'all' || li.dataset.filter === current);
+          const shown = all ? match : match.slice(0, 6);
+          items.forEach((li) => { li.hidden = !shown.includes(li); });
+        });
         more.hidden = all || match.length <= 6;
         empty.hidden = match.length > 0;
       };
-      const swap = async () => {
-        if (still) return show();
-        await grid.animate([{ opacity: 1 }, { opacity: 0, transform: 'scale(0.98)' }], { duration: 140, easing: 'ease-in' }).finished;
-        show();
-        grid.animate([{ opacity: 0, transform: 'scale(0.98)' }, { opacity: 1, transform: 'none' }], { duration: 320, easing: ease });
+      const pane = () => (list.hidden ? grid : list); // the view on screen
+      const swap = async (update = show) => {
+        if (still) return update();
+        await pane().animate([{ opacity: 1 }, { opacity: 0, transform: 'scale(0.98)' }], { duration: 140, easing: 'ease-in' }).finished;
+        update();
+        pane().animate([{ opacity: 0, transform: 'scale(0.98)' }, { opacity: 1, transform: 'none' }], { duration: 320, easing: ease });
       };
       bar.hidden = false;
       bar.addEventListener('click', (e) => {
@@ -384,10 +438,17 @@ const menu = services.flatMap((s) => s.href?.includes('#')
         swap();
       });
       more.addEventListener('click', () => { all = true; show(); });
+      viewBtn.addEventListener('click', () => swap(() => {
+        const toList = list.hidden;
+        list.hidden = !toList; grid.hidden = toList;
+        viewBtn.ariaLabel = viewBtn.title = toList ? 'Grid view' : 'List view';
+        viewBtn.toggleAttribute('data-list-on', toList);
+        document.querySelectorAll<HTMLVideoElement>('#work video').forEach((v) => v.pause());
+      }));
       show();
 
       // Social media videos play in their card on click, with controls from then on; one plays at a time.
-      const vids = [...grid.querySelectorAll('video')];
+      const vids = [...document.querySelectorAll<HTMLVideoElement>('#work video')];
       grid.querySelectorAll<HTMLButtonElement>('[data-play]').forEach((btn) => btn.addEventListener('click', () => {
         const v = btn.previousElementSibling as HTMLVideoElement;
         btn.remove();
@@ -397,18 +458,22 @@ const menu = services.flatMap((s) => s.href?.includes('#')
       vids.forEach((v) => v.addEventListener('play', () => vids.forEach((o) => o !== v && o.pause())));
 
       // Services accordion: one row open at a time; closed rows are inert so focus skips them.
-      const rows = [...document.querySelectorAll<HTMLElement>('[data-acc] .acc__row')];
+      // The work list (list view) uses the same rows: one open at a time within each list.
       const setRow = (row: HTMLElement, open: boolean) => {
         row.querySelector('.acc__btn')!.setAttribute('aria-expanded', String(open));
         const panel = row.querySelector<HTMLElement>('.acc__panel')!;
         panel.toggleAttribute('data-closed', !open);
         panel.inert = !open;
       };
-      rows.forEach((row) => {
-        setRow(row, false); // all closed on load (Josh, 28 Oct)
-        row.querySelector('.acc__btn')!.addEventListener('click', () => {
-          const open = row.querySelector('.acc__btn')!.getAttribute('aria-expanded') !== 'true';
-          rows.forEach((r) => setRow(r, r === row && open));
+      document.querySelectorAll('[data-acc]').forEach((acc) => {
+        const rows = [...acc.querySelectorAll<HTMLElement>('.acc__row')];
+        rows.forEach((row) => {
+          setRow(row, false); // all closed on load (Josh, 28 Oct)
+          row.querySelector('.acc__btn')!.addEventListener('click', () => {
+            const open = row.querySelector('.acc__btn')!.getAttribute('aria-expanded') !== 'true';
+            rows.forEach((r) => setRow(r, r === row && open));
+            if (!open) row.querySelector('video')?.pause();
+          });
         });
       });
 
@@ -558,6 +623,25 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .fw__empty { margin-top: 32px; font-size: 20px; }
   .fw__foot [hidden] { display: none; }
   .fw__foot { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; margin-top: 28px; font-size: 20px; }
+  /* Grid or list view (Josh, 2 Nov). The list is the Services accordion: title, tags and year, opening to the brief. */
+  /* The toggle is its own glass circle beside the filters, so the filters can scroll on phones without hiding it. */
+  .fw__tools { display: flex; align-items: center; gap: 10px; margin-top: var(--sp-head); }
+  .fw__tools .filterbar { margin-top: 0; min-width: 0; }
+  .fw__view { position: relative; flex: none; display: grid; place-items: center; width: 56px; height: 56px; padding: 0; border: 0; border-radius: 50%; color: inherit; cursor: pointer; }
+  @media (hover: hover) { .fw__view:hover { color-scheme: light; background: color-mix(in srgb, var(--paper) 90%, transparent); color: var(--ink); } }
+  .fw__view:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+  .fw__view .fw__tiles, .fw__view[data-list-on] .fw__list { display: none; }
+  .fw__view[data-list-on] .fw__tiles { display: block; }
+  .fw__grid[hidden], .fw__list-view[hidden], .fw__list-view > [hidden] { display: none; }
+  .fw__list-view { margin-top: var(--sp-gap); }
+  .fwl__t { flex: 1 1 auto; min-width: 0; }
+  .fwl__tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .fw__list-view [aria-expanded='true'] > .acc__from { opacity: 1; } /* the year stays: nothing inside repeats it */
+  .fwl__body { grid-template-columns: minmax(0, 1fr) 360px; align-items: start; }
+  .fwl__body .acc__text { grid-row: 1; }
+  .fwl__body .acc__go { grid-column: 1; justify-self: start; }
+  .fwl__img { grid-column: 2; grid-row: 1 / span 2; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 16px; }
+  .fwl__vid { grid-column: 1; grid-row: 1; width: 220px; aspect-ratio: 9 / 16; background: #000; } /* social videos play in the open row */
 
   /* Services: the same heading as Featured Work, then full-width rows that open one at a time. */
   .services { padding-top: var(--sp-section); }
@@ -679,7 +763,14 @@ const menu = services.flatMap((s) => s.href?.includes('#')
     .stat__n { font-size: 9.6vw; } /* 20,000+ fits a phone-width card */
     .stat__l { font-size: 15px; }
     .filterbar { gap: 0; padding: 4px; }
-    .filterbar .glass-pill { min-height: 40px; padding: 0 9px; font-size: 14px; letter-spacing: -0.02em; }
+    .filterbar .glass-pill { flex: none; min-height: 44px; padding: 0 14px; font-size: 15px; letter-spacing: -0.01em; } /* pills never shrink (Josh, 2 Nov: All was squashed); the row scrolls */
+    .fw__view { width: 52px; height: 52px; }
+    .fw__list-view .acc__btn { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 10px 14px; }
+    .fwl__tags { grid-row: 2; grid-column: 1 / -1; }
+    .fwl__tags:empty { display: none; }
+    .fwl__body { grid-template-columns: 1fr; }
+    .fwl__img { grid-column: 1; grid-row: auto; }
+    .fwl__vid { width: 200px; }
     .fw__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .fw__grid > li { grid-column: span 2; }
     .fw__grid > .fw__vid { grid-column: span 1; }
