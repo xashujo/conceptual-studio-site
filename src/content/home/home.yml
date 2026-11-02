@@ -54,15 +54,10 @@ approach:
 results:
   - src/content/projects/oxford-school-of-english.yml
   - src/content/projects/new-city-college-strategic-intent.yml
-workImage: "@assets/art/engraved/apotheosis-work.jpg"
-proofImage: "@assets/art/engraved/apotheosis-proof.jpg"
 howHeading: How We Work
 howIntro: Four stages, each ending in a clear decision, so you always know where your project stands.
 aboutLead: Conceptual Studio was founded in London in 2024 to make complex ideas clear. Strategies, mergers and annual figures become identities, charts and pages that people take in at a glance and remember.
 aboutText: We enjoy the problems that look dry on paper, like a merger to explain, a year of figures to present or an identity that has to hold together across a whole college. We start every project from one idea and judge it by whether people understand it. Because the studio is small and focused, you work directly with the person doing the design, and your project gets full attention.
-servicesImage: "@assets/art/engraved/apotheosis-services.jpg"
-howImage: "@assets/art/engraved/apotheosis-how.jpg"
-aboutImage: "@assets/art/engraved/apotheosis-about.jpg"
 steps:
   - title: Discovery
     text: Send us a short note and you'll get a reply {reply time}. On a free 20-minute
@@ -88,3 +83,4 @@ values:
     text: You talk to the person doing the work, from the first call to the final
       files.
 closeText: Tell us a little about what you're working on, and we'll be in touch to discuss the next steps.
+pageImage: "@assets/art/engraved/jardin-quiet.jpg"
