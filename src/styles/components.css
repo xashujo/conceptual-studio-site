@@ -33,7 +33,7 @@ a { color: inherit; }
   position: relative; display: inline-flex; align-items: center; gap: 10px;
   min-height: var(--btn-h); padding: 0 var(--btn-px); border: 0; border-radius: var(--pill);
   background: var(--fill); color: var(--ink);
-  font: 500 18px/1 var(--text); letter-spacing: -0.01em; text-decoration: none; white-space: nowrap; cursor: pointer;
+  font: 500 var(--btn-fs)/1 var(--text); letter-spacing: -0.01em; text-decoration: none; white-space: nowrap; cursor: pointer;
   transition: background-color 300ms ease-out, color 300ms ease-out, transform 160ms var(--ease-out);
   -webkit-tap-highlight-color: transparent;
 }

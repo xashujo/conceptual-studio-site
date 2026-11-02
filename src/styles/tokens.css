@@ -25,8 +25,10 @@
   --radius-fine: 4px;    /* case study photos and focus rings */
   --btn-h: 48px;         /* button height */
   --btn-px: 22px;        /* button side padding */
+  --btn-fs: 18px;        /* button type size: every button in a row shares it, the solid one included (Josh, 2 Nov) */
   --btn-h-sm: 44px;      /* the compact size: hero buttons and the availability pill */
   --btn-px-sm: 18px;
+  --btn-fs-sm: 16px;
   --btn-gap: 12px;       /* between buttons in a row */
   --btn-space: 32px;     /* above a button or a row of buttons */
 }

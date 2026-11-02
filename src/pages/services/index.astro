@@ -96,7 +96,7 @@ const steps = home.steps.map((s) => ({ title: s.title, text: s.text.replaceAll('
   .lane__tiers li { display: flex; justify-content: space-between; gap: 16px; padding-block: 9px; border-top: 1px solid color-mix(in srgb, var(--ink) 14%, transparent); }
   .lane__tiers li span:last-child { font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
   .lane__go { margin-top: auto; align-self: flex-start; }
-  .terms { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-gap); margin: var(--sp-head) 0 0; padding-top: 24px; border-top: 1px solid color-mix(in srgb, var(--ink) 22%, transparent); }
+  .terms { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-gap); margin: var(--sp-head) 0 0; padding-top: var(--sp-head); border-top: 1px solid color-mix(in srgb, var(--ink) 22%, transparent); }
   .terms dt { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
   .terms dd { margin: 0; font-size: 17px; line-height: 1.5; color: var(--ink-2); max-width: 36ch; }
   @media (max-width: 1099.98px) { .lanes, .terms { grid-template-columns: 1fr; } }

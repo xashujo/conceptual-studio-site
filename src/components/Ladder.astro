@@ -28,12 +28,13 @@ const rungs = [...s.tiers.map((t) => ({ ...t, value: `${s.id}:${t.id}` })), ...(
 </div>
 
 <style>
-  .ladder { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); border-top: 1px solid var(--ink); }
+  .ladder { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); border-top: 1px solid var(--ink); padding-top: var(--sp-head, 40px); }
+  /* The rule sits in the middle: the same space above it (the heading's gap) as below it, so it never rests on the cards (Josh, 2 Nov). */
   .rung { display: flex; flex-direction: column; gap: 10px; padding: 24px 24px 28px; }
   .rung:first-child { padding-left: 0; }
   .rung + .rung { border-left: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); }
   /* Custom is a tone step, not another box, with Framer's 25px corner at the bottom. */
-  .rung--custom { background: var(--paper-2); border-radius: 0 0 25px 25px; border-left-color: transparent !important; }
+  .rung--custom { background: var(--paper-2); border-radius: var(--radius); border-left-color: transparent !important; }
   /* The badged rung: a piece of glass with Framer's 25px corners, its button filled ink like Custom's. */
   .rung--pick { border-radius: var(--radius); border-color: transparent !important; padding-left: 24px !important; }
   .rung--pick + .rung { border-left-color: transparent; }
@@ -51,9 +52,10 @@ const rungs = [...s.tiers.map((t) => ({ ...t, value: `${s.id}:${t.id}` })), ...(
 
   /* Phones and small tablets: one rung per swipe, the next one peeking in. */
   @media (max-width: 1099.98px) {
-    .ladder { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: min(78%, 340px); overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--margin); margin-inline: calc(-1 * var(--margin)); padding-inline: var(--margin); border-top: 0; scrollbar-width: none; }
+    .ladder { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: min(78%, 340px); overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--margin); margin-inline: calc(-1 * var(--margin)); padding-inline: var(--margin); border-top: 0; scrollbar-width: none;
+      background: linear-gradient(var(--ink), var(--ink)) var(--margin) 0 / calc(100% - 2 * var(--margin)) 1px no-repeat; } /* the same rule, inside the margins while the rungs swipe under it */
     .ladder::-webkit-scrollbar { display: none; }
-    .rung { scroll-snap-align: start; border-top: 1px solid var(--ink); padding-left: 20px; }
+    .rung { scroll-snap-align: start; padding-left: 20px; }
     .rung:first-child { padding-left: 0; }
     .rung--custom { padding-left: 20px !important; }
   }

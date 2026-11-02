@@ -55,8 +55,7 @@ html { scroll-behavior: smooth; }
 .ph__p { max-width: 52ch; font-size: 20px; line-height: 1.5; text-wrap: pretty; }
 .ph__plate .acts { justify-content: center; margin-top: 4px; }
 .ph__plate .avail, .ph__plate .btn:not(.btn--solid) { --fill: color-mix(in srgb, var(--paper) 55%, transparent); }
-.ph__plate .btn { min-height: var(--btn-h-sm); padding: 0 var(--btn-px-sm); font-size: 16px; }
-.ph__plate .btn--solid { min-height: 56px; padding: 0 30px; font-size: 18px; }
+.ph__plate .btn { min-height: var(--btn-h-sm); padding: 0 var(--btn-px-sm); font-size: var(--btn-fs-sm); } /* one size for the whole row, the solid button too (Josh, 2 Nov) */
 
 /* Heading over a section, with an optional intro beside or under it. */
 .head { display: grid; gap: 20px; }
