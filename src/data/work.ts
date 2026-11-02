@@ -13,7 +13,7 @@ export const filters = [
 ] as const;
 export type Filter = (typeof filters)[number][0];
 // The home page's own filters (Josh, 28 Oct). A project without a Home page filter in the CMS follows its Work page filter.
-export const homeFilters = ['Branding', 'Data Visualisation', 'Social Media'] as const;
+export const homeFilters = ['Branding', 'Data Visualisation', 'Video & Motion'] as const;
 export type HomeFilter = (typeof homeFilters)[number];
 const homeFromWork: Partial<Record<string, HomeFilter>> = { 'Brand identity': 'Branding', 'Data visualisation': 'Data Visualisation' };
 const filterKey: Record<string, Filter> = { 'Brand identity': 'brand', 'Data visualisation': 'data', '3D and motion': 'motion' };

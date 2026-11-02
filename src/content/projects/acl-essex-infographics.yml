@@ -15,5 +15,20 @@ cover:
   caption: Heat map of enrolments by local authority, 2024
 coverFocus: 50% 0%
 featured: true
-featuredOrder: 5
-hasPage: false
+featuredOrder: 3
+hasPage: true
+outcome: Learner data from seven delivery centres, compared at a glance.
+problem: |
+  ACL Essex runs adult learning across seven delivery centres. It needed its 2024 learner data presented clearly: who its learners are, where they live, and whether they are in work or claiming Universal Credit. The figures sat in complex internal data sets, and they had to be compared centre by centre by a wide audience.
+whatIDid: |
+  I sorted the data first, then designed a series of infographics and regional maps covering employment status, Universal Credit enrolment, ethnicity and where learners live.
+
+  Each piece follows the same structure, so any centre can be set beside another. Pie charts carry the splits, heat maps show the geographic spread by local authority, and the type is set for accessibility. Everything sits within ACL's own visual identity.
+gallery:
+- layout: One large
+  images:
+  - src: '@assets/work/acl-essex-infographics/03.webp'
+    alt: Heat map of Essex showing ACL enrolments by local authority in 2024, in five shades of blue
+    caption: Heat map of enrolments by local authority, 2024
+whatHappened: |
+  [TBC: where the infographics were used, for example the strategic intent document, and anything that followed]

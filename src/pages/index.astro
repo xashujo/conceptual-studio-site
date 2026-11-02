@@ -8,7 +8,7 @@ import { glassStyle } from '../lib/site';
 import '../styles/tokens.css';
 import '../styles/components.css';
 import { Image, getImage } from 'astro:assets';
-import { email, startHref, quoteHref, sentence, trustedBy } from '../data/site';
+import { email, phone, booking, startHref, quoteHref, sentence, trustedBy } from '../data/site';
 import { availability, homeQuote, responseTime, home } from '../lib/site';
 import { featured, projectHref, homeFilters, bySlug } from '../data/work';
 import { services } from '../data/services';
@@ -34,7 +34,7 @@ const cards = featured.map((p) => ({
   title: p.title, year: p.year, href: projectHref(p), image: p.image, alt: p.alt,
   position: p.homePosition ?? p.position, filter: p.homeFilter, student: p.student, outcome: p.outcome, brief: p.summary,
 }));
-// Social media videos (Pages CMS: Home page > Social media videos), after the projects under Social Media.
+// Video and motion clips (Pages CMS: Home page > Video and motion clips), after the projects under Video & Motion.
 const videos = await Promise.all(home.socialVideos.map(async (v) => ({ ...v, poster: (await getImage({ src: v.poster, width: 720, format: 'webp' })).src })));
 // Why clients choose us (pass 2): the two case studies' own summaries from the CMS, beside the quote.
 const results = home.results.map(bySlug) // Pages CMS: Home page > Why Clients Choose Us
@@ -85,8 +85,8 @@ const menu = services.flatMap((s) => s.href?.includes('#')
           <h1 class="hero__h">{headline}</h1>
           <p class="hero__p">{sentence}</p>
           <div class="acts">
-            <a class="btn btn--solid hero__start" href={startHref}><span class="swap"><span>{home.startButton}</span><span aria-hidden="true">Contact Us ↗</span></span></a>
-            {availability.on && <a class="avail" href={`mailto:${email}`}><span class="avail__dot" aria-hidden="true"></span><span class="swap"><span>{titleCase(availability.text)}</span><span aria-hidden="true">↗ Email Us</span></span></a>}
+            <a class="btn btn--solid hero__start" href={booking}><span class="swap" data-alt="Book a Free Call ↗"><span>{home.startButton}</span></span></a>
+            {availability.on && <a class="avail" href={booking}><span class="avail__dot" aria-hidden="true"></span><span class="swap" data-alt="↗ Book a Call"><span>{titleCase(availability.text)}</span></span></a>}
             <a class="btn hero__work" href="#work">{home.workButton} <span class="hero__down" aria-hidden="true">→</span></a>
           </div>
         </div>
@@ -95,7 +95,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
           <ul class="stats__list">
             {stats.map((s, i) => (
               <li class="stat glass" data-lens style={`--i: ${i}`}>
-                <p class="stat__n"><span aria-hidden="true"><span data-count={s.n} data-i={i}>{s.n.toLocaleString('en-GB')}</span><span class={s.after === '+' ? 'stat__plus' : undefined}>{s.after}</span></span><span class="sr-only">{s.n.toLocaleString('en-GB')}{s.after}</span></p>
+                <p class="stat__n" role="img" aria-label={`${s.n.toLocaleString('en-GB')}${s.after}`}><span data-count={s.n} data-i={i}>{s.n.toLocaleString('en-GB')}</span><span class={s.after === '+' ? 'stat__plus' : undefined}>{s.after}</span></p>
                 <p class="stat__l">{s.label}</p>
               </li>
             ))}
@@ -153,7 +153,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
               </li>
             ))}
             {videos.map((v) => (
-              <li class="fw__vid" data-filter="Social Media" data-more="">
+              <li class="fw__vid" data-filter="Video & Motion" data-more="">
                 <div class="card glass" data-lens>
                   <div class="vid">
                     <video class="card__img vid__v" src={v.video} poster={v.poster} preload="none" playsinline aria-label={v.alt}></video>
@@ -161,8 +161,10 @@ const menu = services.flatMap((s) => s.href?.includes('#')
                   </div>
                   <span class="card__row">
                     <span class="card__t">{v.title}</span>
-                    <span class="card__y">{v.year}</span>
+                    <span class="card__y">{v.client ? `${v.client}, ${v.year}` : v.year}</span>
                   </span>
+                  {v.description && <span class="card__out">{v.description}</span>}
+                  {v.link && <a class="link vid__link" href={v.link} rel="noopener">{v.linkLabel || 'See the post'} ↗</a>}
                 </div>
               </li>
             ))}
@@ -190,11 +192,11 @@ const menu = services.flatMap((s) => s.href?.includes('#')
               </div>
             ))}
             {videos.map((v, i) => (
-              <div class="acc__row" data-filter="Social Media" data-more="">
+              <div class="acc__row" data-filter="Video & Motion" data-more="">
                 <h3 class="acc__h">
                   <button class="acc__btn" type="button" id={`fwv-${i}-btn`} aria-controls={`fwv-${i}`} aria-expanded="true">
                     <span class="fwl__t">{v.title}</span>
-                    <span class="fwl__tags"><span class="tag">Social Media</span></span>
+                    <span class="fwl__tags"><span class="tag">Video & Motion</span></span>
                     <span class="acc__from">{v.year}</span><span class="acc__icon" aria-hidden="true"></span>
                   </button>
                 </h3>
@@ -202,6 +204,8 @@ const menu = services.flatMap((s) => s.href?.includes('#')
                   <div class="acc__inner">
                     <div class="acc__body fwl__body">
                       <video class="fwl__img fwl__vid" src={v.video} poster={v.poster} preload="none" playsinline controls aria-label={v.alt}></video>
+                      {v.description && <p class="acc__text">{v.client && <>{v.client}. </>}{v.description}</p>}
+                      {v.link && <a class="btn glass-button acc__go" href={v.link} rel="noopener">{v.linkLabel || 'See the post'} <span class="arrow" aria-hidden="true">↗</span></a>}
                     </div>
                   </div>
                 </div>
@@ -220,7 +224,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
         <div class="band__art" aria-hidden="true"><Image src={home.pageImage} alt="" widths={[1100, 2200]} sizes="100vw" /></div>
         <section class="services wrap" id="services" aria-labelledby="services-h">
           <h2 class="big services__h" id="services-h">Services</h2>
-          <p class="services__intro">Every project is priced on its scope, so these are starting points. You'll get a fixed quote after our first call.</p>
+          <p class="services__intro">{home.servicesIntro}</p>
           <!-- One open at a time. Without script every row stays open. -->
           <div class="acc glass" data-lens data-acc>
             {menu.map((s) => (
@@ -256,7 +260,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
         <!-- Why clients choose us (pass 2): one client's words in the large pane, two results stacked beside it.
              Inside the field so the glass has the etching behind it. -->
         <section class="proof wrap" aria-labelledby="proof-h">
-          <h2 class="big proof__h" id="proof-h">Why Clients Choose Us</h2>
+          <h2 class="big proof__h" id="proof-h">{home.proofHeading}</h2>
           <!-- Credibility, then what sets us apart, then the proof (Josh, 2 Nov). The clients stay small and quiet:
                a logo if one is uploaded in Clients, toned to one cream, otherwise the name. -->
           {trustedBy.length > 0 && (
@@ -285,7 +289,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
               </a>
             ))}
           </div>
-          <a class="btn glass-button proof__go" href={startHref}>Start a Project <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="btn glass-button proof__go" href={booking}>Start a Project <span class="arrow" aria-hidden="true">→</span></a>
         </section>
         </div>
 
@@ -332,10 +336,11 @@ const menu = services.flatMap((s) => s.href?.includes('#')
         <div class="close__body glass" data-lens>
           <p class="close__p">{home.closeText}</p>
           <div class="acts">
-            <a class="btn btn--solid" href={startHref}><span class="swap"><span>{home.startButton}</span><span aria-hidden="true">Email Us ↗</span></span></a>
+            <a class="btn btn--solid" href={booking}><span class="swap" data-alt="Book a Free Call ↗"><span>{home.startButton}</span></span></a>
             <button class="btn" type="button" data-copy={email}><span data-label>Copy Email</span></button>
             <span class="sr-only" aria-live="polite" data-status></span>
           </div>
+          <p class="close__direct"><a href={`mailto:${email}`}>{email}</a>{phone && <><span aria-hidden="true"> · </span><a href={`tel:${phone.replace(/[^+\d]/g, '')}`}>{phone}</a></>}</p>
         </div>
       </section>
       <!-- Footer links and the garden engraving removed (Josh, 28 Oct): only the copyright stays, centred under the close. -->
@@ -722,6 +727,9 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .close__h { grid-column: 1 / span 6; margin-top: -0.18em; } /* cap tops, not the line box, level with the panel */
   .close__body { grid-column: 7 / -1; justify-self: end; width: min(680px, 100%); box-sizing: border-box; display: grid; gap: 24px; padding: var(--sp-card); border-radius: var(--radius); } /* dark glass so it reads over the Lemoyne (Josh, 28 Oct) */
   .close__p { font-size: 20px; line-height: 1.5; }
+  .close__direct { margin-top: 18px; font-size: 18px; overflow-wrap: anywhere; }
+  .close__direct a { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+  .vid__link { padding: 0 8px; font-size: 16px; }
   .footer { padding: 0 var(--margin) 40px; text-align: center; font-size: 16px; color: #F1DFC8; }
 
   /* Phone menu sheet: the shared glass, under the nav. */

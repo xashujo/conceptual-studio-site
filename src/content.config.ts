@@ -29,7 +29,7 @@ export const collections = {
         coverFocus: z.string().nullish(),
         featured: z.boolean().nullish().transform((v) => !!v),
         featuredOrder: z.number().nullish(),
-        homeFilter: z.enum(['Branding', 'Data Visualisation', 'Social Media']).nullish(),
+        homeFilter: z.enum(['Branding', 'Data Visualisation', 'Video & Motion']).nullish(),
         homeFocus: z.string().nullish(),
         homeCharts: z.array(z.object({ src: image(), alt: z.string().min(1), title: z.string(), caption: z.string() })).nullish().transform((v) => v ?? []),
         hasPage: z.boolean().nullish().transform((v) => !!v),
@@ -99,10 +99,14 @@ export const collections = {
       stats: z.array(z.object({ number: z.number(), after: z.string().nullish().transform((s) => s ?? ''), label: z.string().min(1) })),
       workHeading: z.string().min(1),
       allProjects: z.string().min(1),
-      // Vertical videos under the Social Media filter; the file path is under public/ (Pages CMS: Short videos).
-      socialVideos: z.array(z.object({ title: z.string().min(1), year: z.number().int(), video: z.string().min(1), poster: image(), alt: z.string().min(1) }))
+      // Vertical clips under the Video & Motion filter; the file path is under public/ (Pages CMS: Short videos).
+      // client/description/link (feedback, 2 Nov): who it was for, one line on it, and the post it came from.
+      socialVideos: z.array(z.object({ title: z.string().min(1), year: z.number().int(), video: z.string().min(1), poster: image(), alt: z.string().min(1),
+        client: z.string().nullish(), description: z.string().nullish(), link: z.string().url().nullish(), linkLabel: z.string().nullish() }))
         .nullish().transform((v) => v ?? []),
       // Why Clients Choose Us (Josh, 2 Nov): what's distinctive about the studio, between the clients and the proof.
+      proofHeading: z.string().min(1),
+      servicesIntro: z.string().min(1),
       approach: z.array(z.object({ title: z.string().min(1), text: z.string().min(1) })),
       results: z.array(ref),
       pageImage: image(),
@@ -121,6 +125,10 @@ export const collections = {
       availability: z.boolean(),
       availabilityText: z.string(),
       email: z.string().email(),
+      // Shown as plain text beside the email in the close (feedback, 2 Nov). Empty hides it.
+      phone: z.string().nullish().transform((v) => v ?? ''),
+      // The free 20-minute call (Josh's plan, 2 Nov): replaces "Email Us". Empty falls back to email.
+      bookingUrl: z.string().url().nullish().transform((v) => v ?? ''),
       responseTime: z.string(),
       nextSteps: text,
       socialLinks: z.array(z.object({ label: z.string(), url: z.string().url() })).nullish().transform((v) => v ?? []),

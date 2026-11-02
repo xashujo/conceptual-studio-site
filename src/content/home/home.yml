@@ -1,9 +1,8 @@
-headline: Brands & Data, Made Clear
-intro: We turn complex ideas into clear, compelling visuals, helping organisations
-  build recognisable brands, communicate with confidence and make information
-  easier to understand.
+headline: Brands, Data & Video, Made Clear
+intro: Conceptual Studio designs brands, data graphics and video for colleges,
+  venues and growing businesses, so they're recognised, understood and watched.
 startButton: Start a Project
-workButton: Explore Our Work
+workButton: Explore the Work
 trustedByLabel: Trusted By
 stats:
   - number: 25
@@ -23,64 +22,74 @@ allProjects: All Projects
 socialVideos:
   - title: Blob Tracking Tutorial
     year: 2026
+    client: Studio experiment
+    description: A tutorial post on adding a blob tracking effect to footage.
     video: /media/video/blob-tracking-tutorial.mp4
     poster: "@assets/work/social/blob-tracking-tutorial.jpg"
     alt: A short tutorial showing how to add the blob tracking effect to footage.
   - title: Blob Tracking
     year: 2026
+    client: Studio experiment
+    description: Blob tracking on archive footage of a Mongolian warrior.
     video: /media/video/mongolia-blob-tracking.mp4
     poster: "@assets/work/social/mongolia-blob-tracking.jpg"
     alt: Black and white footage of a Mongolian warrior, with blob tracking boxes and lines following the movement.
   - title: ASCII Tutorial
     year: 2026
+    client: Studio experiment
+    description: A tutorial post on turning footage into moving ASCII characters.
     video: /media/video/ascii-tutorial.mp4
     poster: "@assets/work/social/ascii-tutorial.jpg"
     alt: A short tutorial showing how to turn footage into moving ASCII characters.
   - title: Font Archive
     year: 2026
+    client: Studio experiment
+    description: A run through the typefaces in the studio's font archive.
     video: /media/video/font-archive.mp4
     poster: "@assets/work/social/font-archive.jpg"
     alt: Goldfish swim over the words my font archive as a design studio, then a run through the typefaces in it.
+proofHeading: Why Clients Work With Me
+servicesIntro: Every project is priced on its scope, so these are starting points. You'll get a fixed quote after the first call.
 approach:
   - title: Education Specialists
-    text: Most of our work is in education, for further education colleges, adult
-      learning services and a language school in Oxford.
+    text: Most of the studio's work is in education, for further education colleges,
+      adult learning services and a language school in Oxford.
   - title: Brand & Data Together
     text: Brand identity and data visualisation under one roof, so your reports and
       infographics look like the rest of your brand.
-  - title: One Studio, Brief to Files
-    text: One studio takes your project from the first call to the final files, with
-      no hand-offs along the way.
+  - title: One Designer, Brief to Files
+    text: You work with me, Joshua, from the first call to the final files, with no
+      hand-offs along the way.
 results:
   - src/content/projects/oxford-school-of-english.yml
   - src/content/projects/new-city-college-strategic-intent.yml
-howHeading: How We Work
+howHeading: How I Work
 howIntro: Four stages, each ending in a clear decision, so you always know where your project stands.
 aboutLead: Conceptual Studio was founded in London in 2024 to make complex ideas clear. Strategies, mergers and annual figures become identities, charts and pages that people take in at a glance and remember.
-aboutText: We enjoy the problems that look dry on paper, like a merger to explain, a year of figures to present or an identity that has to hold together across a whole college. We start every project from one idea and judge it by whether people understand it. Because the studio is small and focused, you work directly with the person doing the design, and your project gets full attention.
+aboutText: I'm Joshua, and you'll work with me directly. I enjoy the problems that look dry on paper, like a merger to explain, a year of figures to present or an identity that has to hold together across a whole college. I start every project from one idea and judge it by whether people understand it. There are no hand-offs, so your project gets my full attention.
 steps:
   - title: Discovery
-    text: Send us a short note and you'll get a reply {reply time}. On a free 20-minute
-      call we agree the audience, formats and budget, then send a fixed quote, so
-      the cost is settled before any work begins.
+    text: Book a free 20-minute call or send me a short note, and you'll get a reply
+      {reply time}. On the call we agree the audience, formats and budget, then I
+      send a fixed quote, so the cost is settled before any work begins.
   - title: Direction
-    text: We show you early ideas before anything is polished. You choose the one to
+    text: I show you early ideas before anything is polished. You choose the one to
       take forward, and that decision sets the course for everything after it.
   - title: Development
-    text: We build out the full set of pages, charts or assets and share work in
+    text: I build out the full set of pages, charts or assets and share work in
       progress as it takes shape. Your feedback comes in the rounds set out in your
       quote, so you always know what is changing and what comes next.
   - title: Delivery
-    text: Nothing is final until you sign it off. We check every detail, then hand
+    text: Nothing is final until you sign it off. I check every detail, then hand
       over the files in the formats your team needs.
 values:
   - title: Clarity First
     text: If a chart or a page needs explaining, it isn't finished yet.
   - title: Made to Be Used
     text: Files and guidelines your own team can work from, without coming back to
-      us every time.
+      me every time.
   - title: Small and Focused
     text: You talk to the person doing the work, from the first call to the final
       files.
-closeText: Tell us a little about what you're working on, and we'll be in touch to discuss the next steps.
+closeText: Book a free 20-minute call, or tell me a little about what you're working on and I'll be in touch about next steps.
 pageImage: "@assets/art/engraved/apotheosis-strip.jpg"

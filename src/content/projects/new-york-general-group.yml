@@ -13,5 +13,7 @@ cover:
   src: '@assets/work/new-york-general-group/01.webp'
   alt: NYGG lettering in white on a black starfield
   caption: Title frame from the video
-featured: false
+featured: true
+featuredOrder: 6
+homeFilter: Video & Motion
 hasPage: false

@@ -15,5 +15,20 @@ cover:
   caption: Campus map, BSix and New City College
 coverFocus: 0% 0%
 featured: true
-featuredOrder: 6
-hasPage: false
+featuredOrder: 4
+hasPage: true
+outcome: Maps and charts for the BSix merger consultation.
+problem: |
+  BSix Sixth Form College was consulting on a merger with New City College London. The consultation document had to give students, parents, staff and other stakeholders the essential facts quickly: where the campuses are, how people travel between them, and how many students each serves. It also had to look like New City College.
+whatIDid: |
+  Working closely with the college, I designed a set of infographics for the consultation document: detailed maps of the campuses and travel routes, and charts of student numbers.
+
+  Clean layouts, simple icons and accessible colour coding kept the data legible without crowding the text, and every piece follows New City College's brand.
+gallery:
+- layout: One large
+  images:
+  - src: '@assets/work/new-city-college-infographics/02.webp'
+    alt: Consultation page with a map of London boroughs marking the BSix and New City College campuses
+    caption: Campus map, BSix and New City College
+whatHappened: |
+  [TBC: whether the merger went ahead, and where the document was published]

@@ -53,6 +53,19 @@ a { color: inherit; }
 @media (hover: hover) {
   .btn:hover, .btn.is-hover { background: var(--fill-hover); }
   .link:hover, .link.is-hover { text-decoration-color: currentColor; }
+
+/* data-alt: the hover label is drawn by CSS from the attribute, so it isn't page text and the page never reads
+   "Start a ProjectContact Us" when it's read as text (feedback, 2 Nov). Use <span class="swap" data-alt="Email me ↗"><span>Start a project</span></span>. */
+.swap[data-alt]::after { content: attr(data-alt); content: attr(data-alt) / ""; grid-area: 1 / 1; transform: translateX(12px); opacity: 0; transition: transform 560ms var(--ease-out), opacity 300ms ease-out; }
+.swap[data-alt] > span:only-child { transform: none; opacity: 1; }
+.avail .swap[data-alt]::after { transform: translateY(100%); }
+@media (hover: hover) {
+  .btn:hover .swap[data-alt] > span:only-child { transform: translateX(-12px); opacity: 0; }
+  .avail:hover .swap[data-alt] > span:only-child { transform: translateY(-100%); opacity: 0; }
+  :is(.btn, .avail):hover .swap[data-alt]::after { transform: none; opacity: 1; }
+}
+.btn.is-hover .swap[data-alt] > span:only-child { transform: translateX(-12px); opacity: 0; }
+.btn.is-hover .swap[data-alt]::after { transform: none; opacity: 1; }
   :is(.btn, .link):hover .arrow, :is(.btn, .link).is-hover .arrow { transform: rotate(-45deg); }
   .btn:hover .swap > :first-child, .btn.is-hover .swap > :first-child { transform: translateX(-12px); opacity: 0; }
   .btn:hover .swap > :last-child, .btn.is-hover .swap > :last-child { transform: none; opacity: 1; }

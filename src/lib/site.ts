@@ -8,6 +8,9 @@ const settings = (await getEntry('settings', 'site'))!.data;
 export const home = (await getEntry('home', 'home'))!.data;
 
 export const email = settings.email;
+export const phone = settings.phone;
+/** Book the free 20-minute call; an email until the booking link is set in Site settings. */
+export const booking = settings.bookingUrl || `mailto:${settings.email}?subject=New%20project`;
 export const startHref = `mailto:${email}?subject=New%20project`; // shortcut: email until the enquiry form exists
 export const quoteHref = `mailto:${email}?subject=Custom%20quote`;
 export const replyTime = `I reply ${settings.responseTime}.`;
