@@ -571,8 +571,8 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .band.night { --ink-2: color-mix(in srgb, var(--ink) 86%, var(--paper)); } /* secondary text 5:1 or better over the art */
   /* One painting runs down the whole field (Josh, 2 Nov): every band holds the same image, sized to the opening plus the field
      and shifted up by the band's own offset (--y, set below), so each shows the next stretch of it. */
-  .band__art img { position: absolute; left: 0; top: calc(-1 * var(--y, 0px)); width: 100%; height: var(--run-h, 100%); object-fit: cover; object-position: 50% 0; opacity: 0.45; filter: url(#tone-day); } /* quieter (Josh, 2 Nov: less cluttered) */
-  .band.night .band__art img { opacity: 0.4; filter: url(#tone-night); }
+  .band__art img { position: absolute; left: 0; top: calc(-1 * var(--y, 0px)); width: 100%; height: var(--run-h, 100%); object-fit: cover; object-position: 50% 0; opacity: 0.25; filter: url(#tone-day); } /* 25%, day and night (Josh, 2 Nov) */
+  .band.night .band__art img { opacity: 0.25; filter: url(#tone-night); }
   /* Plain canvas (Josh, 2 Nov: simpler): the weave only, toned per band like the painting. A tile, so nothing zooms. */
   /* Soft-light over the band's own paper, so the weave reads on cream and on warm black without shifting either
      colour: a tactile ground for the glass to bend (Josh, 2 Nov: "plain colour... glass just falls apart"). */

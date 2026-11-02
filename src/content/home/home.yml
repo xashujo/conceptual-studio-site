@@ -83,6 +83,6 @@ values:
     text: You talk to the person doing the work, from the first call to the final
       files.
 closeText: Tell us a little about what you're working on, and we'll be in touch to discuss the next steps.
-backdrop: canvas
+backdrop: painting
 canvasImage: "@assets/art/engraved/canvas-texture.jpg"
 pageImage: "@assets/art/engraved/apotheosis-strip.jpg"
