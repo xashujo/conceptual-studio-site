@@ -9,7 +9,7 @@ import '../styles/tokens.css';
 import '../styles/components.css';
 import { Image, getImage } from 'astro:assets';
 import { email, startHref, quoteHref, sentence, trustedBy } from '../data/site';
-import { availability, homeQuote, responseTime, nextSteps, home } from '../lib/site';
+import { availability, homeQuote, responseTime, home } from '../lib/site';
 import { featured, projectHref, homeFilters, bySlug } from '../data/work';
 import { services } from '../data/services';
 import heroArt from '../assets/art/engraved/jardin-quiet.jpg';
@@ -41,7 +41,7 @@ const videos = await Promise.all(home.socialVideos.map(async (v) => ({ ...v, pos
 const results = home.results.map(bySlug) // Pages CMS: Home page > Why Clients Choose Us
   .map((p) => ({ client: p.client, title: p.title, line: p.summary, href: projectHref(p) }));
 // How we work (pass 2, "we" voice).
-const steps = home.steps.map((s) => [s.title, s.text]); // Pages CMS: Home page > How We Work
+const steps = home.steps.map((s) => [s.title, s.text.replaceAll('{reply time}', responseTime)]); // Pages CMS: Home page > How We Work
 // About: three working principles, each resting on something the site already promises.
 const values = home.values.map((v) => [v.title, v.text.replaceAll('{reply time}', responseTime)]); // Pages CMS: Home page > About
 // A service without a page of its own (the retainers) gets one row per tier, so each shows without opening a group.
@@ -259,12 +259,12 @@ const menu = services.flatMap((s) => s.href?.includes('#')
 
         <div class="band">
         <div class="band__art" aria-hidden="true"><Image src={home.aboutImage} alt="" widths={[800, 1600, 2400]} sizes="100vw" /></div>
-        <!-- About (pass 2): what we do for clients, not a CV. -->
+        <!-- About: who the studio is and why it exists; the process lives in How We Work. -->
         <section class="about wrap" id="about" aria-labelledby="about-h">
           <h2 class="big about__h" id="about-h">About</h2>
           <div class="about__text">
-            <p class="about__lead">We make complex ideas clear. Strategies, mergers and annual figures become charts, maps and pages that people take in at a glance and remember.</p>
-            <p>We build brands that get recognised before anyone reads the name, with a system clear enough to hold together from a bus shelter poster to a student ID card.</p>
+            <p class="about__lead">{home.aboutLead}</p>
+            <p>{home.aboutText}</p>
             <a class="btn glass-button" href="/about/">More About the Studio <span class="arrow" aria-hidden="true">→</span></a>
           </div>
           <ul class="about__values">
@@ -289,7 +289,6 @@ const menu = services.flatMap((s) => s.href?.includes('#')
             <button class="btn" type="button" data-copy={email}><span data-label>Copy Email</span></button>
             <span class="sr-only" aria-live="polite" data-status></span>
           </div>
-          {nextSteps && <p class="close__next">{nextSteps}</p>}
         </div>
       </section>
       <!-- Footer links and the garden engraving removed (Josh, 28 Oct): only the copyright stays, centred under the close. -->
@@ -642,7 +641,6 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .close__h { grid-column: 1 / span 6; margin-top: -0.18em; } /* cap tops, not the line box, level with the panel */
   .close__body { grid-column: 7 / -1; justify-self: end; width: min(680px, 100%); box-sizing: border-box; display: grid; gap: 24px; padding: var(--sp-card); border-radius: 28px; } /* dark glass so it reads over the Lemoyne (Josh, 28 Oct) */
   .close__p { font-size: 20px; line-height: 1.5; }
-  .close__next { font-size: 16px; line-height: 1.5; opacity: 0.85; }
   .footer { padding: 0 var(--margin) 40px; text-align: center; font-size: 16px; color: #F1DFC8; }
 
   /* Phone menu sheet: the shared glass, under the nav. */

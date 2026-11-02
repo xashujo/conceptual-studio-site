@@ -319,6 +319,8 @@ content:
         options: { media: images }
       - { name: howHeading, label: How We Work heading, type: string, required: true }
       - { name: howIntro, label: How We Work intro, type: text, required: true }
+      - { name: aboutLead, label: About opening line, type: text, required: true }
+      - { name: aboutText, label: About text, type: text, required: true }
       - { name: closeText, label: Start a Project text, type: text, required: true }
       - name: howImage
         label: How We Work background
@@ -336,6 +338,7 @@ content:
         label: How We Work
         type: object
         list: true
+        description: "Write {reply time} to drop in the Reply time from Site settings."
         fields:
           - { name: title, label: Step, type: string, required: true }
           - { name: text, label: Text, type: text, required: true }
@@ -358,7 +361,7 @@ content:
       - { name: availabilityText, label: Availability text, type: string, required: true }
       - { name: email, label: Email, type: string, required: true }
       - { name: responseTime, label: Reply time, type: string, required: true, description: "Finishes the sentence \"I reply...\", e.g. within three working days" }
-      - { name: nextSteps, label: What happens next, type: text, description: "One line under the enquiry buttons and the form. {reply time} becomes the Reply time above. Empty hides it." }
+      - { name: nextSteps, label: What happens next, type: text, description: "One short line under the enquiry form. {reply time} becomes the Reply time above. Empty hides it." }
       - name: socialLinks
         label: Social links
         type: object

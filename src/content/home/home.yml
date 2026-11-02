@@ -57,28 +57,34 @@ results:
 workImage: "@assets/art/engraved/apotheosis-work.jpg"
 proofImage: "@assets/art/engraved/apotheosis-proof.jpg"
 howHeading: How We Work
-howIntro: How a project runs, from the first call to the files you keep.
+howIntro: Four stages, each ending in a clear decision, so you always know where your project stands.
+aboutLead: Conceptual Studio was founded in London in 2024 to make complex ideas clear. Strategies, mergers and annual figures become identities, charts and pages that people take in at a glance and remember.
+aboutText: We enjoy the problems that look dry on paper, like a merger to explain, a year of figures to present or an identity that has to hold together across a whole college. We start every project from one idea and judge it by whether people understand it. Because the studio is small and focused, you work directly with the person doing the design, and your project gets full attention.
 servicesImage: "@assets/art/engraved/apotheosis-services.jpg"
 howImage: "@assets/art/engraved/apotheosis-how.jpg"
 aboutImage: "@assets/art/engraved/apotheosis-about.jpg"
 steps:
-  - title: Call & Brief
-    text: We talk through what you need, your budget, the formats and what the work
-      has to achieve, so you know exactly what to expect before we start.
-  - title: Design & Feedback
-    text: We share work in progress and refine it with you, so nothing in the final
-      round comes as a surprise.
-  - title: Revisions & Finishing
-    text: We make your changes and finish every detail before anything is signed off.
-  - title: Handover
-    text: You get the final files in the formats your team needs, delivered however
-      suits you.
+  - title: Discovery
+    text: Send us a short note and you'll get a reply {reply time}. On a free 20-minute
+      call we agree the audience, formats and budget, then send a fixed quote, so
+      the cost is settled before any work begins.
+  - title: Direction
+    text: We show you early ideas before anything is polished. You choose the one to
+      take forward, and that decision sets the course for everything after it.
+  - title: Development
+    text: We build out the full set of pages, charts or assets and share work in
+      progress as it takes shape. Your feedback comes in the rounds set out in your
+      quote, so you always know what is changing and what comes next.
+  - title: Delivery
+    text: Nothing is final until you sign it off. We check every detail, then hand
+      over the files in the formats your team needs.
 values:
   - title: Clarity First
     text: If a chart or a page needs explaining, it isn't finished yet.
   - title: Made to Be Used
     text: Files and guidelines your own team can work from, without coming back to
       us every time.
-  - title: Straight Answers
-    text: A fixed quote after our first call, and a reply {reply time}.
-closeText: If you're collecting quotes for a project, we'd be glad to be one of them. Send us a short note.
+  - title: Small and Focused
+    text: You talk to the person doing the work, from the first call to the final
+      files.
+closeText: Tell us a little about what you're working on, and we'll be in touch to discuss the next steps.
