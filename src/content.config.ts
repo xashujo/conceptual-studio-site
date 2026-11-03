@@ -148,13 +148,9 @@ export const collections = {
       backdrop: z.enum(['canvas', 'painting']).default('canvas'),
       canvasImage: image(),
       pageImage: image(),
-      howHeading: z.string().min(1),
-      howIntro: z.string().min(1),
       aboutLead: z.string().min(1),
-      aboutText: z.string().min(1),
       closeText: z.string().min(1),
       steps: z.array(z.object({ title: z.string().min(1), text: z.string().min(1) })),
-      values: z.array(z.object({ title: z.string().min(1), text: z.string().min(1) })),
     }),
   }),
   settings: defineCollection({

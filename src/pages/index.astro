@@ -18,7 +18,7 @@ const painting = home.backdrop === 'painting';
 const canvas = `url(${(await getImage({ src: home.canvasImage, format: 'webp' })).src})`;
 
 const headline = home.headline; // Pages CMS: Home page (option 3, Josh, 26 Oct)
-const links = [['Work', '#work'], ['Services', '#services'], ['About', '#about'], ['Contact', '#contact']];
+const links = [['Work', '#work'], ['Services', '#services'], ['About', '#about'], ['Start a Project', '#contact']];
 
 // Title Case for headings, buttons and labels (Josh, 28 Oct): every word capitalised except the small
 // ones, never the first or last; "and" becomes "&". Capitals already there (KUT) are kept.
@@ -42,14 +42,9 @@ const videos = await Promise.all(home.socialVideos.map(async (v) => ({ ...v, pos
 // Why clients choose us (pass 2): the two case studies' own summaries from the CMS, beside the quote.
 const results = home.results.map(bySlug) // Pages CMS: Home page > Why Clients Choose Us
   .map((p) => ({ client: p.client, title: p.title, line: p.summary, href: projectHref(p) }));
-// How we work (pass 2, "we" voice).
-const steps = home.steps.map((s) => [s.title, s.text.replaceAll('{reply time}', responseTime)]); // Pages CMS: Home page > How We Work
-// About: three working principles, each resting on something the site already promises.
-const values = home.values.map((v) => [v.title, v.text.replaceAll('{reply time}', responseTime)]); // Pages CMS: Home page > About
-// A service without a page of its own (the retainers) gets one row per tier, so each shows without opening a group.
-const menu = services.flatMap((s) => s.href?.includes('#')
-  ? s.tiers.map((t) => ({ id: `${s.id}-${t.id}`, name: t.name, badge: t.badge, price: t.price, time: t.time, href: s.href!, link: `${t.name} prices`, text: t.lead || s.line }))
-  : [{ id: s.id, name: titleCase(s.name), badge: undefined, price: s.home.price, time: s.home.time, href: s.href ?? '/services/', link: titleCase(s.home.link), text: s.line }]);
+// The lanes are the services with a page of their own; the rest (monthly plans, video) sit in a short row under them.
+const lanes = services.filter((s) => s.href && !s.href.includes('#'));
+const more = services.filter((s) => !lanes.includes(s));
 ---
 <!doctype html>
 <html lang="en-GB" style={glassStyle}>
@@ -82,7 +77,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
       <!-- Opening: the etching fills the screen; the hero plate is glass over it. -->
       <header class="hero" id="top">
         {painting ? <Image class="hero__art" src={home.pageImage} alt="" widths={[1100, 2200]} sizes="100vw" loading="eager" fetchpriority="high" /> : <div class="hero__art canvas" style={`--canvas: ${canvas}`} aria-hidden="true" />}
-        <!-- Landing view (Josh, 2 Nov): one plate that says what clients get, with the big Start a Project; the stats follow. -->
+        <!-- Landing view (Josh, 2 Nov): one plate that says what clients get, with the big Start a Project. The stats moved to the proof (Josh, 3 Nov). -->
         <div class="hero__bento">
         <div class="hero__plate glass" data-lens>
           <h1 class="hero__h">{headline}</h1>
@@ -92,18 +87,10 @@ const menu = services.flatMap((s) => s.href?.includes('#')
             {availability.on && <a class="avail" href={`mailto:${email}`}><span class="avail__dot" aria-hidden="true"></span><span class="swap"><span>{titleCase(availability.text)}</span><span aria-hidden="true">↗ Email Us</span></span></a>}
             <a class="btn hero__work" href="#work">{home.workButton} <span class="hero__down" aria-hidden="true">→</span></a>
           </div>
+          <!-- Tags (Design Laboratory, Josh 2 Nov): what the studio does at a glance; each opens the work filtered to it. -->
+          <ul class="tags">{homeFilters.map((f) => <li><a class="glass-pill" href="#work" data-tag={f}>{f}</a></li>)}</ul>
         </div>
         </div>
-        <section class="stats" aria-label="The studio in numbers">
-          <ul class="stats__list">
-            {stats.map((s, i) => (
-              <li class="stat glass" data-lens style={`--i: ${i}`}>
-                <p class="stat__n"><span aria-hidden="true"><span data-count={s.n} data-i={i}>{s.n.toLocaleString('en-GB')}</span><span class={s.after === '+' ? 'stat__plus' : undefined}>{s.after}</span></span><span class="sr-only">{s.n.toLocaleString('en-GB')}{s.after}</span></p>
-                <p class="stat__l">{s.label}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
       </header>
 
       <!-- Art behind the glass, so every pane has something to bend (Josh, 28 Oct). Two bands that scroll with
@@ -122,7 +109,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
           </filter>
         </svg>
         <!-- The sections alternate night and day (Josh, 28 Oct): Work night, Services day, Why Clients night,
-             How We Work and About day, then the close at night to the end. Each night band has its own night engraving. -->
+             About day, then the close at night to the end. Each night band has its own night engraving. -->
         <div class="band night">
         <div class:list={["band__art", { canvas: !painting }]} style={painting ? undefined : `--canvas: ${canvas}`} aria-hidden="true">{painting && <Image src={home.pageImage} alt="" widths={[1100, 2200]} sizes="100vw" />}</div>
 
@@ -224,27 +211,25 @@ const menu = services.flatMap((s) => s.href?.includes('#')
         <section class="services wrap" id="services" aria-labelledby="services-h">
           <h2 class="big services__h" id="services-h">Services</h2>
           <p class="services__intro">Every project is priced on its scope, so these are starting points. You'll get a fixed quote after our first call.</p>
-          <!-- One open at a time. Without script every row stays open. -->
-          <div class="acc glass" data-lens data-acc>
-            {menu.map((s) => (
-              <div class="acc__row">
-                <h3 class="acc__h">
-                  <button class="acc__btn" type="button" id={`svc-${s.id}-btn`} aria-controls={`svc-${s.id}`} aria-expanded="true">
-                    <span>{s.name}{s.badge && <span class="acc__badge badge">{s.badge}</span>}</span><span class="acc__from">{s.price}</span><span class="acc__icon" aria-hidden="true"></span>
-                  </button>
-                </h3>
-                <div class="acc__panel" id={`svc-${s.id}`} role="region" aria-labelledby={`svc-${s.id}-btn`}>
-                  <div class="acc__inner">
-                    <div class="acc__body">
-                      <p class="acc__text">{s.text}</p>
-                      <p class="acc__price">{s.price}{s.time && <span>{s.time}</span>}</p>
-                      <a class="btn glass-button acc__go" href={s.href} aria-label={s.link}>View Prices <span class="arrow" aria-hidden="true">→</span></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
+          <!-- The two lanes in large type; hovering or focusing one shows its first example beside the list (WECOMEET,
+               Josh 2 Nov). Without hover the example sits under each lane. Examples: Pages CMS > Services and prices. -->
+          <div class="svc">
+            <ul class="svc__list">
+              {lanes.map((s) => (
+                <li class="svc__row">
+                  <a class="svc__link" href={s.href}>
+                    <span class="svc__name">{titleCase(s.name)}</span>
+                    <span class="svc__line">{s.line}</span>
+                    <span class="svc__price">{s.home.price}{s.home.time && <span>, {s.home.time}</span>}</span>
+                  </a>
+                  {s.examples[0] && <Image class="svc__ex" src={s.examples[0].img} alt={s.examples[0].alt} widths={[600, 1100]} sizes="(min-width: 960px) 520px, calc(100vw - 32px)" style={`object-position: ${s.examples[0].pos ?? '50% 50%'}`} />}
+                </li>
+              ))}
+            </ul>
           </div>
+          <ul class="svc__more">
+            {more.map((s) => <li><a href={s.href ?? '/services/'}><b>{titleCase(s.name)}</b> <span>{s.home.price}{s.home.time && `, ${s.home.time}`}</span> <span class="arrow" aria-hidden="true">→</span></a></li>)}
+          </ul>
           <div class="quote glass" data-lens>
             <h3 class="quote__h">Need Something Else?</h3>
             <p class="quote__p">A mix of these, or something we haven't listed? Tell us what you need and we'll send a fixed quote {responseTime}.</p>
@@ -270,6 +255,16 @@ const menu = services.flatMap((s) => s.href?.includes('#')
               </ul>
             </div>
           )}
+          <section class="stats" aria-label="The studio in numbers">
+            <ul class="stats__list">
+              {stats.map((s, i) => (
+                <li class="stat glass" data-lens style={`--i: ${i}`}>
+                  <p class="stat__n"><span aria-hidden="true"><span data-count={s.n} data-i={i}>{s.n.toLocaleString('en-GB')}</span><span class={s.after === '+' ? 'stat__plus' : undefined}>{s.after}</span></span><span class="sr-only">{s.n.toLocaleString('en-GB')}{s.after}</span></p>
+                  <p class="stat__l">{s.label}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
           <ul class="approach">
             {home.approach.map((a) => <li><h3 class="approach__t">{a.title}</h3><p>{a.text}</p></li>)}
           </ul>
@@ -292,21 +287,6 @@ const menu = services.flatMap((s) => s.href?.includes('#')
         </section>
         </div>
 
-        <!-- How we work: a real ordered list, the order carried by position, not numerals. Its own painting behind
-             the glass tiles, so they have something to bend (Josh, 28 Oct). -->
-        <div class="band">
-        <div class:list={["band__art", { canvas: !painting }]} style={painting ? undefined : `--canvas: ${canvas}`} aria-hidden="true">{painting && <Image src={home.pageImage} alt="" widths={[1100, 2200]} sizes="100vw" />}</div>
-        <section class="how wrap" aria-labelledby="how-h">
-          <div class="how__head">
-            <h2 class="big how__h" id="how-h">{home.howHeading}</h2>
-            <p>{home.howIntro}</p>
-          </div>
-          <ol class="how__list">
-            {steps.map(([t, d]) => <li class="glass" data-lens><h3 class="how__t">{t}</h3><p>{d}</p></li>)}
-          </ol>
-        </section>
-        </div>
-
         <div class="band">
         <div class:list={["band__art", { canvas: !painting }]} style={painting ? undefined : `--canvas: ${canvas}`} aria-hidden="true">{painting && <Image src={home.pageImage} alt="" widths={[1100, 2200]} sizes="100vw" />}</div>
         <!-- About: who the studio is and why it exists; the process lives in How We Work. -->
@@ -314,12 +294,8 @@ const menu = services.flatMap((s) => s.href?.includes('#')
           <h2 class="big about__h" id="about-h">About</h2>
           <div class="about__text">
             <p class="about__lead">{home.aboutLead}</p>
-            <p>{home.aboutText}</p>
             <a class="btn glass-button" href="/about/">More About the Studio <span class="arrow" aria-hidden="true">→</span></a>
           </div>
-          <ul class="about__values">
-            {values.map(([t, d]) => <li><h3>{t}</h3><p>{d}</p></li>)}
-          </ul>
         </section>
         </div>
       </div>
@@ -453,6 +429,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
         swap();
       });
       more.addEventListener('click', () => { all = true; show(); });
+      document.querySelectorAll<HTMLAnchorElement>('[data-tag]').forEach((a) => a.addEventListener('click', () => bar.querySelector<HTMLButtonElement>(`[data-filter="${a.dataset.tag}"]`)?.click()));
       viewBtn.addEventListener('click', () => swap(() => {
         const toList = list.hidden;
         list.hidden = !toList; grid.hidden = toList;
@@ -543,7 +520,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .nav__menu { display: none; }
 
   /* Opening: the quiet etching fills the screen, the plate centred over the trees and sky. */
-  .hero { position: relative; isolation: isolate; min-height: 100svh; padding: 116px var(--margin) 40px; display: grid; align-content: center; } /* the bento and stats as one centred block */
+  .hero { position: relative; isolation: isolate; min-height: 100svh; padding: 116px var(--margin) 40px; display: grid; align-content: center; } /* the bento as one centred block */
   /* The opening is the first stretch of the running painting (Josh, 2 Nov), toned and quiet like the bands. */
   .hero { overflow: clip; }
   .hero__art { position: absolute; top: 0; left: 0; z-index: -1; width: 100%; height: var(--run-h, 100%); object-fit: cover; object-position: 50% 0; opacity: 0.45; filter: url(#tone-day); }
@@ -587,7 +564,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .band > section { box-sizing: content-box; max-width: 1140px; margin-inline: auto; }
 
   /* Stats: four glass cards, a large number over a short label, straight under the hero plate (Josh, 28 Oct). */
-  .stats { justify-self: center; box-sizing: border-box; width: min(1140px, 100%); padding-top: var(--sp-gap); } /* the bento's gap, so plate, quote and stats read as one grid */
+  .stats { margin-top: var(--sp-head); } /* in the proof, beside the clients (Josh, 3 Nov) */
   .stats__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-gap); }
   .stat { position: relative; display: grid; align-content: space-between; gap: 20px; min-height: 160px; padding: 26px 28px 24px; border-radius: var(--radius); }
   /* After the hero has landed, the stat cards rise in one by one, left to right (Josh, 2 Nov). Delay matches STAT_IN in the script. */
@@ -661,6 +638,36 @@ const menu = services.flatMap((s) => s.href?.includes('#')
 
   /* Services: the same heading as Featured Work, then full-width rows that open one at a time. */
   .services { padding-top: var(--sp-section); }
+  .tags { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .tags a { display: inline-block; padding: 8px 16px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--ink) 22%, transparent); font-size: 16px; text-decoration: none; color: inherit; }
+  /* Services as a ruled list in large type (WECOMEET): the row in hand turns full ink and its example shows to the
+     right; with none in hand the first shows. Plain CSS, so it works without script. */
+  .svc { position: relative; margin-top: var(--sp-head); }
+  .svc__list { list-style: none; margin: 0; padding: 0; width: 56%; }
+  .svc__row { border-top: 1px solid color-mix(in srgb, var(--ink) 22%, transparent); }
+  .svc__row:last-child { border-bottom: 1px solid color-mix(in srgb, var(--ink) 22%, transparent); }
+  .svc__link { display: grid; gap: 10px; padding: 28px 0 30px; color: color-mix(in srgb, var(--ink) 55%, transparent); text-decoration: none; transition: color 200ms ease-out, transform 300ms var(--ease-out); }
+  .svc__name { font-family: var(--display); font-weight: 500; font-size: clamp(44px, 5vw, 76px); line-height: 1; letter-spacing: -0.01em; }
+  .svc__line { font-size: 20px; line-height: 1.45; max-width: 44ch; color: var(--ink); }
+  .svc__price { font-size: 18px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .svc__price span { font-weight: 400; color: var(--ink-2); }
+  .svc__ex { position: absolute; top: 0; right: 0; width: 40%; height: 100%; max-height: 520px; object-fit: cover; border-radius: var(--radius); opacity: 0; transition: opacity 300ms ease-out; pointer-events: none; }
+  .svc__row:is(:hover, :focus-within) .svc__link { color: var(--ink); transform: translateX(8px); }
+  .svc:not(:has(.svc__row:is(:hover, :focus-within))) .svc__row:first-child .svc__link { color: var(--ink); }
+  .svc__row:is(:hover, :focus-within) .svc__ex,
+  .svc:not(:has(.svc__row:is(:hover, :focus-within))) .svc__row:first-child .svc__ex { opacity: 1; }
+  .svc__link:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; border-radius: 8px; }
+  .svc__more { list-style: none; margin: 20px 0 0; padding: 0; display: grid; gap: 6px; }
+  .svc__more a { font-size: 18px; color: inherit; text-decoration: none; }
+  .svc__more span { color: var(--ink-2); }
+  @media (hover: hover) { .svc__more a:hover .arrow { transform: rotate(-45deg); } }
+  @media (max-width: 959.98px) {
+    .svc__list { width: auto; }
+    .svc__link { color: var(--ink); }
+    .svc__row:is(:hover, :focus-within) .svc__link { transform: none; }
+    .svc__ex { position: static; display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; margin-bottom: 28px; opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) { .svc__link, .svc__ex { transition: none; } .svc__row:is(:hover, :focus-within) .svc__link { transform: none; } }
   .services__intro { margin-top: 20px; max-width: 46ch; font-size: 20px; line-height: 1.45; }
   .acc { position: relative; margin-top: var(--sp-head); padding: 4px var(--sp-card); border-radius: var(--radius); }
   .acc__row + .acc__row { border-top: 1px solid color-mix(in srgb, var(--ink) 16%, transparent); }
@@ -713,15 +720,7 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .proof__go { margin-top: var(--btn-space); }
 
   /* How we work: the same heading as the sections above, then the bento. */
-  .how { box-sizing: content-box; max-width: 1140px; margin-inline: auto; padding-block: var(--sp-section) 0; display: grid; gap: var(--sp-head); }
-  .how__head { display: grid; gap: 20px; }
-  .how__head p { max-width: 46ch; font-size: 20px; line-height: 1.45; }
   /* Bento (Josh, 26 Oct): two rows of unequal tiles, wide then narrow, then narrow then wide. Title at the top, text at the foot. */
-  .how__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--sp-gap); }
-  .how__list li { position: relative; display: flex; flex-direction: column; gap: 14px; padding: var(--sp-card); border-radius: var(--radius); } /* title straight over its text, no empty middle (Josh, 28 Oct) */
-  .how__list li { grid-column: span 6; } /* even 2×2 (Josh, 28 Oct) */
-  .how__t { font-family: var(--display); font-size: 30px; line-height: 1.1; font-weight: 500; letter-spacing: -0.01em; } /* Agatho, like the headings (Josh, 28 Oct) */
-  .how__list p { font-size: 20px; line-height: 1.5; max-width: 40ch; }
 
   /* About: two short paragraphs, then three principles under one hairline. */
   .about { box-sizing: content-box; max-width: 1140px; margin-inline: auto; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--sp-gap); padding-block: var(--sp-section) 160px; }
@@ -729,9 +728,6 @@ const menu = services.flatMap((s) => s.href?.includes('#')
   .about__text { grid-column: 1 / span 8; display: grid; justify-items: start; gap: 20px; margin-top: var(--sp-head); }
   .about__text p { font-size: 20px; line-height: 1.5; max-width: 52ch; }
   .about__text .about__lead { font-size: 28px; line-height: 1.32; letter-spacing: -0.02em; max-width: 34ch; }
-  .about__values { grid-column: 1 / -1; list-style: none; margin: 56px 0 0; padding: 56px 0 0; border-top: 1px solid color-mix(in srgb, var(--ink) 22%, transparent); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
-  .about__values h3 { font-size: 22px; line-height: 1.2; font-weight: 600; letter-spacing: -0.02em; }
-  .about__values p { margin-top: 10px; font-size: 18px; line-height: 1.5; max-width: 32ch; color: var(--ink-2); }
 
   /* Close and footer, on warm black. */
   .end { position: relative; isolation: isolate; background: var(--paper); }
@@ -814,18 +810,11 @@ const menu = services.flatMap((s) => s.href?.includes('#')
     .result__who { font-size: 15px; }
     .result__line { font-size: 19px; }
     .result__go { font-size: 16px; }
-    .how__head p, .close__p { font-size: 17px; }
-    .how__list { grid-template-columns: 1fr; }
-    .how__list li:nth-child(n) { grid-column: auto; gap: 12px; border-radius: var(--radius); }
-    .how__list p { font-size: 17px; }
-    .how__t { font-size: 25px; }
+    .close__p { font-size: 17px; }
     .about { padding-block: var(--sp-section); }
     .about__text { gap: 16px; }
     .about__text p { font-size: 17px; }
     .about__text .about__lead { font-size: 22px; }
-    .about__values { grid-template-columns: 1fr; gap: 20px; margin-top: 40px; padding-top: 24px; }
-    .about__values h3 { font-size: 19px; }
-    .about__values p { margin-top: 6px; font-size: 16px; }
     .close { padding-block: 300px 80px; }
     .close__art img { object-position: 42% 30%; }
     .footer { font-size: 14px; padding-bottom: 28px; }

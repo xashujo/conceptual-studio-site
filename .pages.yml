@@ -341,26 +341,15 @@ content:
         required: true
         description: "One painting that runs down the page behind every section from Selected Work to About, toned gold or dark per section. A tall, narrow painting works best. The Start a Project art is separate."
         options: { media: images }
-      - { name: howHeading, label: How We Work heading, type: string, required: true }
-      - { name: howIntro, label: How We Work intro, type: text, required: true }
       - { name: aboutLead, label: About opening line, type: text, required: true }
-      - { name: aboutText, label: About text, type: text, required: true }
       - { name: closeText, label: Start a Project text, type: text, required: true }
       - name: steps
         label: How We Work
         type: object
         list: true
-        description: "Write {reply time} to drop in the Reply time from Site settings."
+        description: "Shown on the Services page and each service's own page. Write {reply time} to drop in the Reply time from Site settings."
         fields:
           - { name: title, label: Step, type: string, required: true }
-          - { name: text, label: Text, type: text, required: true }
-      - name: values
-        label: About
-        type: object
-        list: true
-        description: "The working principles in the About section. Write {reply time} to drop in the Reply time from Site settings."
-        fields:
-          - { name: title, label: Title, type: string, required: true }
           - { name: text, label: Text, type: text, required: true }
 
   - name: workPage
