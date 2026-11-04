@@ -23,9 +23,9 @@ const sizes = { full: '(min-width: 1200px) 1140px, 95vw', pair: '(min-width: 760
 // field still shows on the home page's Selected Work cards.
 const credits = [[t.clientLabel, p.client], [t.disciplinesLabel, p.disciplines.join(', ')]].filter(([, v]) => v);
 // Opener: the project's title graphic when it has one (Josh, 4 Nov: a photo of the work in a street is a weak
-// opener), else the cover.
+// opener), else the cover. The title graphic gets no second caption line (Josh, 4 Nov: "(Title graphic)" said nothing).
 const lead = p.thumb
-  ? { image: p.thumb, alt: `${p.title} title graphic`, medium: 'Title graphic' }
+  ? { image: p.thumb, alt: `${p.title} title graphic`, medium: '' }
   : { image: p.image, alt: p.alt, medium: p.medium };
 ---
 <Studio title={p.title} description={p.summary} current="/work/" closeText={t.closeText}>
