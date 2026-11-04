@@ -40,7 +40,7 @@ a { color: inherit; }
      Pressing pushes the button down onto the page, so the lift goes. */
   --depth:
     inset 0 1px 0 rgb(255 252 245 / 0.7), inset 0 -1px 0 rgb(40 24 8 / 0.10),
-    0 1px 2px rgb(40 24 8 / 0.16), 0 6px 14px -6px rgb(40 24 8 / 0.32);
+    var(--lift-sm);
   box-shadow: var(--depth);
   transition: background-color 300ms ease-out, color 300ms ease-out, transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
   -webkit-tap-highlight-color: transparent;
@@ -123,9 +123,7 @@ a { color: inherit; }
     inset 1px 1px 0 rgb(255 250 240 / calc(0.9 * var(--g-shine))), /* fine rim, brightest top left (TASTE 4), warm not white (TASTE 11) */
     inset 0 -1px 0 rgb(110 80 36 / 0.12), /* the lower edge turns away from the light */
     inset 0 0 0 1px rgb(110 80 36 / 0.16), /* iOS 27's darkened edge, in gold so the edge catches on cream */
-    0 1px 2px rgb(40 24 8 / 0.12),
-    0 6px 14px -4px rgb(40 24 8 / 0.14),
-    2px 22px 44px -16px rgb(40 24 8 / 0.36);
+    var(--lift);
   background: var(--glass-bg);
   -webkit-backdrop-filter: var(--glass-filter);
   backdrop-filter: var(--glass-filter);
@@ -142,8 +140,7 @@ a { color: inherit; }
     inset 1px 1px 0 rgb(237 220 180 / calc(0.45 * var(--g-shine))), /* cream-gold rim (TASTE 11) */
     inset 0 -1px 0 rgb(0 0 0 / 0.35),
     inset 0 0 0 1px rgb(241 223 200 / 0.08),
-    0 1px 2px rgb(0 0 0 / 0.5),
-    0 18px 40px -14px rgb(0 0 0 / 0.75);
+    var(--lift-night);
 }
 /* The nav's glass (Josh, 2 Nov): one look in every browser and at every scroll position, CSS only (no SVG
    filter, no WebGL). Blur and saturate over a light tint, a lit rim, and a faint red and blue fringe at the
@@ -158,7 +155,7 @@ a { color: inherit; }
     inset -3px 0 4px -2px rgb(40 110 255 / 0.22),
     inset 0 0 14px rgb(255 252 246 / calc(0.3 * var(--g-shine))),
     inset 0 0 0 1px rgb(110 80 36 / 0.14),
-    3px 10px 28px -16px rgb(40 24 8 / 0.32);
+    var(--lift);
   transition: color 300ms ease-out, background-color 300ms ease-out, box-shadow 300ms ease-out;
 }
 .glass.glass--nav.is-dark {
@@ -168,7 +165,8 @@ a { color: inherit; }
     inset -1px -1px 0 -0.5px rgb(237 220 180 / calc(0.35 * var(--g-shine))),
     inset 3px 0 4px -2px rgb(255 90 60 / 0.2),
     inset -3px 0 4px -2px rgb(70 140 255 / 0.2),
-    inset 0 0 14px rgb(237 220 180 / calc(0.1 * var(--g-shine)));
+    inset 0 0 14px rgb(237 220 180 / calc(0.1 * var(--g-shine))),
+    var(--lift-night);
   color: #F1DFC8;
 }
 /* Glass button: a .btn made of the glass. Hover and press deepen the glass rather than replace it. */
@@ -187,18 +185,18 @@ a { color: inherit; }
 @media (hover: hover) { .glass-pill:hover { background: color-mix(in srgb, var(--ink) 6%, transparent); } }
 .glass-pill:is([aria-current], [aria-pressed='true']) {
   background: color-mix(in srgb, #FFFAF0 62%, transparent);
-  box-shadow: inset 1px 1px 0 rgb(255 250 240 / calc(0.9 * var(--g-shine))), 0 0 0 0.5px rgb(110 80 36 / 0.14), 2px 4px 12px -6px rgb(40 24 8 / 0.28);
+  box-shadow: inset 1px 1px 0 rgb(255 250 240 / calc(0.9 * var(--g-shine))), inset 0 -1px 0 rgb(110 80 36 / 0.10), 0 0 0 0.5px rgb(110 80 36 / 0.14), var(--lift-sm);
 }
 :is(.night, .is-dark) .glass-pill:is([aria-current], [aria-pressed='true']) {
   background: color-mix(in srgb, #D9BE91 22%, transparent); /* warm gold lift, not grey */
-  box-shadow: inset 1px 1px 0 rgb(237 220 180 / calc(0.35 * var(--g-shine))), 2px 4px 12px -6px rgb(0 0 0 / 0.5);
+  box-shadow: inset 1px 1px 0 rgb(237 220 180 / calc(0.35 * var(--g-shine))), inset 0 -1px 0 rgb(0 0 0 / 0.35), 0 1px 2px rgb(0 0 0 / 0.5), 0 6px 14px -6px rgb(0 0 0 / 0.6);
 }
 .glass-pill:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 /* A small tag such as "Most Popular": the chosen dark-nav pill (gold lift on the nav's warm black, cream text), so it reads as the same system on any ground. */
 .badge {
   display: inline-block; padding: 7px 13px; border-radius: var(--pill); font: 600 14px/1 var(--text); letter-spacing: 0; color: #F1DFC8;
   background: linear-gradient(color-mix(in srgb, #D9BE91 22%, transparent) 0 0), rgb(34 29 23 / 0.88);
-  box-shadow: inset 1px 1px 0 rgb(237 220 180 / calc(0.35 * var(--g-shine))), 2px 4px 12px -6px rgb(0 0 0 / 0.5);
+  box-shadow: inset 1px 1px 0 rgb(237 220 180 / calc(0.35 * var(--g-shine))), inset 0 -1px 0 rgb(0 0 0 / 0.35), 0 1px 2px rgb(0 0 0 / 0.5), 0 6px 14px -6px rgb(0 0 0 / 0.6);
 }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .glass, .glass-button { background: color-mix(in srgb, var(--paper) 92%, transparent); }
@@ -224,7 +222,7 @@ a { color: inherit; }
     inset -1.5px -1.5px 0 -0.5px rgb(255 250 240 / calc(0.8 * var(--g-shine))),
     inset 0 0 0 1px rgb(110 80 36 / 0.14),
     inset 0 0 calc(14px + 10px * max(0, var(--g-shine) - 1)) rgb(255 252 246 / calc(0.16 * var(--g-shine) + 0.3 * max(0, var(--g-shine) - 1))), /* above 100, Shine also widens and brightens the inner glow, like iOS's lit edge */
-    3px 10px 28px -16px rgb(40 24 8 / 0.32);
+    var(--lift);
 }
 .glass.is-lens::before {
   content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
@@ -253,7 +251,8 @@ a { color: inherit; }
   box-shadow:
     inset 1.5px 1.5px 0 -0.5px rgb(237 220 180 / calc(0.7 * var(--g-shine))),
     inset -1px -1px 0 -0.5px rgb(237 220 180 / calc(0.35 * var(--g-shine))),
-    inset 0 0 14px rgb(237 220 180 / calc(0.1 * var(--g-shine)));
+    inset 0 0 14px rgb(237 220 180 / calc(0.1 * var(--g-shine))),
+    var(--lift-night);
 }
 .night .glass.is-lens::before, .glass.is-lens.is-dark::before { background: color-mix(in srgb, var(--paper-2) min(96%, calc(30% * var(--g-frost))), transparent); }
 
@@ -275,7 +274,8 @@ a { color: inherit; }
   backdrop-filter: blur(calc(16px * var(--g-blur) + 24px * var(--up-blur))) saturate(1.3);
 }
 .night .glass[data-lens].is-pane, .glass[data-lens].is-pane.is-dark { background: color-mix(in srgb, var(--paper-2) min(96%, calc(34% * var(--g-frost))), transparent); }
-.glass[data-lens].has-liquid { box-shadow: inset 0 0 0 1px rgb(110 80 36 / 0.14), 3px 10px 28px -16px rgb(40 24 8 / 0.32); } /* the shader draws its own rim */
+.glass[data-lens].has-liquid { box-shadow: inset 0 0 0 1px rgb(110 80 36 / 0.14), var(--lift); } /* the shader draws its own rim */
+:is(.night .glass, .glass.is-dark)[data-lens].has-liquid { box-shadow: inset 0 0 0 1px rgb(241 223 200 / 0.08), var(--lift-night); }
 :is(.night .glass, .glass.is-dark)[data-lens]:not(.is-lens):not(.has-liquid) { background: color-mix(in srgb, var(--paper-2) min(96%, calc(30% * var(--g-frost))), transparent); }
 
 /* Tier A, plate glass: the WebGL canvas replaces the backdrop once it has drawn. */

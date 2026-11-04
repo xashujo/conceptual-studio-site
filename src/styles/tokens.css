@@ -2,6 +2,11 @@
    chapter with class "night", and light-dark() swaps the tokens inside it. */
 :root {
   color-scheme: light;
+  /* Depth (Josh, 4 Nov: glass should sit on the page, not look flat). A tight contact shadow where it meets
+     the page, then two soft ones for the lift; on night bands, deeper and neutral. Every glass piece uses these. */
+  --lift: 0 1px 2px rgb(40 24 8 / 0.12), 0 6px 14px -4px rgb(40 24 8 / 0.14), 2px 22px 44px -16px rgb(40 24 8 / 0.36);
+  --lift-night: 0 1px 2px rgb(0 0 0 / 0.5), 0 6px 14px -4px rgb(0 0 0 / 0.35), 0 18px 40px -14px rgb(0 0 0 / 0.75);
+  --lift-sm: 0 1px 2px rgb(40 24 8 / 0.16), 0 6px 14px -6px rgb(40 24 8 / 0.32);
 
   --paper: light-dark(#F1DFC8, #14110D); /* night is warm black, never #000 */
   --paper-2: light-dark(#E8D3B8, #221D17);
