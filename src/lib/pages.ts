@@ -28,3 +28,5 @@ const small = new Set(['a', 'an', 'the', 'of', 'to', 'in', 'on', 'for', 'at', 'b
 export const titleCase = (s: string) => s.replace(/\band\b/gi, '&').split(' ')
   .map((w, i, all) => (i > 0 && i < all.length - 1 && small.has(w.toLowerCase()) ? w.toLowerCase() : w.charAt(0).toUpperCase() + w.slice(1)))
   .join(' ');
+// Large headings: a word joiner after a hyphen stops "In-House" breaking as "In- / House" (Josh, 4 Nov). It's invisible and zero-width.
+export const keepHyphens = (s: string) => s.replace(/(\p{L})-(?=\p{L})/gu, '$1-\u2060');

@@ -8,7 +8,7 @@ import Ladder from '../../components/Ladder.astro';
 import Enquiry from '../../components/Enquiry.astro';
 import { services, isLane } from '../../data/services';
 import { home, responseTime } from '../../lib/site';
-import { servicesPage as sp, titleCase } from '../../lib/pages';
+import { servicesPage as sp, titleCase, keepHyphens } from '../../lib/pages';
 
 // The lanes are the services with a page of their own; the rest (no page, e.g. video) sit in a short row below.
 // One price ladder per lane keeps the range a buyer sees tight (Josh, 2 Nov).
@@ -42,7 +42,7 @@ const steps = home.steps.map((s) => ({ title: s.title, text: s.text.replaceAll('
       {lanes.map((s, i) => (
         <li class="lane glass" data-lens data-reveal style={`--i: ${i}`}>
           <p class="lane__k">{s.lane}</p>
-          <h3 class="lane__h">{titleCase(s.name)}</h3>
+          <h3 class="lane__h">{keepHyphens(titleCase(s.name))}</h3>
           <p class="lane__p">{s.line}</p>
           <p class="lane__first"><span>{sp.firstStepLabel}</span> {s.tiers[0].name}, <b>{s.tiers[0].price}</b></p>
           <ul class="lane__tiers">

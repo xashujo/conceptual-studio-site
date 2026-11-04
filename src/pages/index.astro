@@ -12,7 +12,7 @@ import { email, startHref, quoteHref, sentence, trustedBy } from '../data/site';
 import { availability, homeQuotes, responseTime, home } from '../lib/site';
 import { featured, projectHref, homeFilters, bySlug } from '../data/work';
 import { services, isLane } from '../data/services';
-import { servicesPage } from '../lib/pages';
+import { servicesPage, keepHyphens } from '../lib/pages';
 import closeArt from '../assets/art/engraved/lemoyne-night.jpg';
 // Behind the sections: plain canvas, or the running painting (CMS "Background", Josh 2 Nov).
 const painting = home.backdrop === 'painting';
@@ -220,7 +220,7 @@ const more = services.filter((s) => !lanes.includes(s));
               {lanes.map((s) => (
                 <li class="svc__row">
                   <a class="svc__link" href={s.href ?? '/services/'}>
-                    <span class="svc__name">{titleCase(s.name)}</span>
+                    <span class="svc__name">{keepHyphens(titleCase(s.name))}</span>
                     <span class="svc__line">{s.line}</span>
                     <span class="svc__price">{s.home.price}{s.home.time && <span>, {s.home.time}</span>}</span>
                   </a>
