@@ -46,7 +46,7 @@ const logoHeight = (ratio: number) => Math.round(Math.min(34, Math.max(18, 28 * 
 // Clients ticked "Show in Trusted By" in Pages CMS, in their set order, for Why Clients Choose Us on the home page.
 export const trustedBy = (await getCollection('clients', (c) => c.data.homeTrusted))
   .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99) || a.data.name.localeCompare(b.data.name))
-  .map((c) => ({ name: c.data.name, logo: c.data.logo, logoHeight: c.data.logo && logoHeight(c.data.logo.width / c.data.logo.height) }));
+  .map((c) => ({ name: c.data.name, label: c.data.logoLabel, logo: c.data.logo, logoHeight: c.data.logo && logoHeight(c.data.logo.width / c.data.logo.height) }));
 export const clientGroups = (['Education', 'Companies and international'] as const)
   .map((kind) => ({ kind, names: shown.filter((c) => (c.data.group ?? 'Companies and international') === kind).map((c) => c.data.name) }))
   .filter((g) => g.names.length);
