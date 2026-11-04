@@ -85,11 +85,6 @@ const outcomePieces: Piece[] = [
   ...cs.outcomeImages.map((pl) => ({ kind: 'image', plate: pl, label: pl.medium } as const)),
 ];
 const outcomes = await layout(outcomePieces, cs.chapters.length % 2 === 1);
-// Words never sit on a blank tile (Josh, 4 Nov, after Apple's "Always-On display"): each gets a close crop
-// of the project's own work behind it, darkened towards the text so it stays readable.
-const textures = [p.thumb, ...cs.chapters.flatMap((ch) => ch.plates.map((pl) => pl.image)), p.image].filter((x): x is ImageMetadata => !!x);
-let nextTexture = 0;
-const texture = () => textures[nextTexture++ % textures.length];
 // What Happened sits beside the heading, like a chapter's words, unless it only repeats the outcome line.
 const happened = cs.happened.filter((x) => !same(x, cs.outcome));
 const credits = [[t.clientLabel, p.client], [t.disciplinesLabel, p.disciplines.join(', ')]].filter(([, v]) => v);
@@ -181,7 +176,6 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
           );
           return (
             <div class:list={['tile', 'glass', 'tile--words', `tile--${pc.kind}`]} style={area}>
-              <div class="tile__texture" aria-hidden="true"><Image src={texture()} alt="" widths={[600, 1200]} sizes={`(min-width: 760px) ${Math.round((w / 6) * 1140)}px, 100vw`} /></div>
               {pc.kind === 'headline' && <p class="tile__headline">{pc.text}</p>}
               {pc.kind === 'stat' && <p class="tile__stat"><b>{pc.value}</b><span>{pc.label}</span></p>}
               {pc.kind === 'quote' && <blockquote class="tile__quote"><p>{pc.quote}</p><footer>{pc.by}</footer></blockquote>}
@@ -261,12 +255,8 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
   .tile :global(.plate span) { font-weight: 600; color: inherit; }
   .tile :global(.plate span::before), .tile :global(.plate span::after) { content: none; }
   /* Words tiles: the outcome, a figure, a quote, a paragraph. Type scales with the tile. */
-  .tile--words { justify-content: flex-end; padding: clamp(28px, 7cqmin, 48px); container-type: size; color: #f1dfc8; }
-  .tile--words > :not(.tile__texture) { position: relative; }
-  /* The texture: the work up close, inside the glass like any picture, fading to warm black under the words. */
-  .tile__texture { position: absolute; inset: var(--in); overflow: hidden; border-radius: calc(24px - var(--in)); -webkit-mask-image: linear-gradient(205deg, rgb(0 0 0 / 0.6), rgb(0 0 0 / 0.2) 50%, transparent 85%); mask-image: linear-gradient(205deg, rgb(0 0 0 / 0.6), rgb(0 0 0 / 0.2) 50%, transparent 85%); }
-  .tile__texture img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.4); transform-origin: 75% 30%; filter: blur(1.5px); }
-  .tile--words :is(.tile__stat span, .tile__quote footer) { color: rgb(241 223 200 / 0.72); }
+  /* Words tiles are plain glass (Josh, 4 Nov: no pictures behind words). */
+  .tile--words { justify-content: flex-end; padding: clamp(28px, 7cqmin, 48px); container-type: size; }
   .tile--words p, .tile__quote { margin: 0; }
   .tile--headline { justify-content: center; }
   .tile__headline { font-family: var(--display); font-size: clamp(30px, min(30cqh, 7cqw), 92px); line-height: 1.02; letter-spacing: -0.01em; max-width: 22ch; }
