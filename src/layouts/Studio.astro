@@ -4,6 +4,7 @@
 // with Start a Project on Lemoyne's ceiling. The painting is the Home page's "Page painting" in Pages CMS.
 import Tune from '../components/Tune.astro';
 import Logo from '../components/Logo.astro';
+import Favicons from '../components/Favicons.astro';
 import { Image } from 'astro:assets';
 import { glassStyle, email, startHref, home, company, responseTime } from '../lib/site';
 import '../styles/tokens.css';
@@ -33,6 +34,7 @@ const isCurrent = (h: string) => h === current || (h !== '/' && current?.startsW
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <Favicons />
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="preload" href="/fonts/agatho-medium-subset.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/inter-4-variable.woff2" as="font" type="font/woff2" crossorigin />
