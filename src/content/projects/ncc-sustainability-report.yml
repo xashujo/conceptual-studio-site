@@ -13,16 +13,21 @@ cover:
   src: "@assets/work/ncc-sustainability-report/01.webp"
   alt: A donut chart of the college carbon footprint beside three labelled scopes, with the numbers blurred
   caption: Carbon footprint (numbers blurred)
+thumb: "@assets/work/ncc-sustainability-report/thumb.webp"
 coverFocus: 0% 20%
 featured: true
 featuredOrder: 8
 homeFilter: Data Visualisation
 hasPage: true
-outcome: "[TBC: result, for example where the report was published]"
+outcome: Reviewed by the college's consultant; the charts improved the report's narrative.
 problem: |
-  [TBC: what the college needed from the report]
+  New City College's annual report on environmental sustainability for 2025-26 had to look professional, meet the college's brand rules and make its figures easy to follow.
+
+  [TBC: who the report was for, and what it covered]
 whatIDid: |
-  I designed the charts and the report around them. It came out as print files for coated and uncoated paper, a digital PDF, an accessible PDF and an interactive PDF, with every chart also supplied as a PNG and a PDF.
+  I redrew the charts in Illustrator and laid out the 16-page A4 report in InDesign, in the college's brand and its Euclid Circular typeface. It was scoped at about two days and stretched to three.
+
+  No file formats were specified, so I made the print files (coated & uncoated), a digital PDF, an accessible PDF and an interactive PDF myself. The accessible version was my own addition.
 
   The numbers in the images on this page are blurred to protect the college's figures.
 gallery:
@@ -45,5 +50,7 @@ gallery:
         alt: Bars of energy use by campus against a good practice line, with the numbers blurred
         caption: Energy use against good practice (numbers blurred)
 whatHappened: |
-  [TBC: what followed]
+  The report was finished and reviewed by RV Ed Consulting, who found the charts improved the report's narrative.
+
+  [TBC: where it was published or used]
 next: src/content/projects/usp-freeport-skills.yml

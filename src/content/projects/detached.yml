@@ -12,5 +12,6 @@ cover:
   src: '@assets/work/detached/02.webp'
   alt: Two transparent figures floating on a violet and orange background
   caption: Student work. 3D render
+thumb: "@assets/work/detached/thumb.webp"
 featured: false
 hasPage: false

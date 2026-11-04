@@ -13,6 +13,7 @@ cover:
   src: "@assets/work/doubleshot-studio/01.webp"
   alt: A cream tote bag printed with the DoubleShot wordmark and two red star characters, hanging on a dark wooden chair
   caption: Visual identity, on a tote bag
+thumb: "@assets/work/doubleshot-studio/thumb.webp"
 coverFocus: 50% 40%
 featured: true
 featuredOrder: 4

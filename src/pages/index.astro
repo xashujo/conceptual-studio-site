@@ -34,8 +34,8 @@ const stats = home.stats.map((s) => ({ n: s.number, after: s.after, label: s.lab
 // The first six by home page position show (two rows of three); any more wait behind "Show More".
 const SHOWN = 6;
 const cards = featured.map((p) => ({
-  title: p.title, year: p.year, href: projectHref(p), image: p.image, alt: p.alt,
-  position: p.homePosition ?? p.position, filter: p.homeFilter, student: p.student, outcome: p.outcome, brief: p.summary,
+  title: p.title, year: p.year, href: projectHref(p), image: p.thumb ?? p.image, alt: p.alt,
+  position: p.thumb ? undefined : p.homePosition ?? p.position, filter: p.homeFilter, student: p.student, outcome: p.outcome, brief: p.summary,
 }));
 // Social media videos (Pages CMS: Home page > Social media videos), after the projects under Social Media.
 const videos = await Promise.all(home.socialVideos.map(async (v) => ({ ...v, poster: (await getImage({ src: v.poster, width: 720, format: 'webp' })).src })));

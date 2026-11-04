@@ -14,6 +14,7 @@ cover:
   src: "@assets/work/cmd-inc/01.webp"
   alt: The CMD Inc. wordmark and star icon in white on black, with glowing curved lines around them
   caption: Visual identity, cover of the guidelines
+thumb: "@assets/work/cmd-inc/thumb.webp"
 coverFocus: 50% 50%
 featured: true
 featuredOrder: 7
