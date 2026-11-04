@@ -88,7 +88,7 @@ const more = services.filter((s) => !lanes.includes(s));
             <a class="btn hero__work" href="#work">{home.workButton} <span class="hero__down" aria-hidden="true">→</span></a>
           </div>
           <!-- Tags (Design Laboratory, Josh 2 Nov): what the studio does at a glance; each opens the work filtered to it. -->
-          <ul class="tags">{homeFilters.map((f) => <li><a class="glass-pill" href="#work" data-tag={f}>{f}</a></li>)}</ul>
+          <ul class="tags">{homeFilters.map((f) => <li><a class="btn tag-btn" href="#work" data-tag={f}>{f}</a></li>)}</ul>
         </div>
         </div>
       </header>
@@ -640,7 +640,7 @@ const more = services.filter((s) => !lanes.includes(s));
   /* Services: the same heading as Featured Work, then full-width rows that open one at a time. */
   .services { padding-top: var(--sp-section); }
   .tags { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-  .tags a { padding: 0 16px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--ink) 22%, transparent); font-size: 16px; text-decoration: none; color: inherit; }
+  .tag-btn { --fill: transparent; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 22%, transparent); } /* outlined at rest, dark on hover like every .btn (Josh, 4 Nov) */
   /* Services as a ruled list in large type (WECOMEET): the row in hand turns full ink and its example shows to the
      right; with none in hand the first shows. Plain CSS, so it works without script. */
   .svc { position: relative; margin-top: var(--sp-head); }
