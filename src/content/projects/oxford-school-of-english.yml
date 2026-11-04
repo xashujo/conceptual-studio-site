@@ -51,16 +51,19 @@ outcomeImages:
 - src: '@assets/work/oxford-school-of-english/bus-shelter.webp'
   alt: Oxford School of English poster in a bus shelter on an Oxford street, beside a red double-decker bus
   caption: Bus shelter poster
+- src: '@assets/work/oxford-school-of-english/sign.webp'
+  alt: Mockup of a square gold sign with the lion shield and Oxford wordmark on a white wall
+  caption: Wall sign mockup
 - src: '@assets/work/oxford-school-of-english/10.webp'
   alt: Oxford School of English poster with a photograph of an Oxford college, in a station frame
   caption: Poster in a station
 before:
-  src: '@assets/work/oxford-school-of-english/02.webp'
-  alt: The school's shopfront with its old sign above the door
-  caption: 'Before: the old sign on the shopfront'
+  src: '@assets/work/oxford-school-of-english/old-logo.webp'
+  alt: The school's old logo, Oxford School of English in white serif type on navy
+  caption: The old logo
 after:
-  src: '@assets/work/oxford-school-of-english/sign.webp'
-  alt: A square gold sign with the lion shield and Oxford wordmark on a white wall
-  caption: 'After: the new sign'
+  src: '@assets/work/oxford-school-of-english/02.webp'
+  alt: The school's shopfront with its new sign above the door
+  caption: The new shopfront sign
 whatHappened: |
   The new identity is now a UK-registered trademark.
