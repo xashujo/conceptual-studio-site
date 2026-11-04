@@ -248,7 +248,7 @@ content:
       - { name: name, label: Name, type: string, required: true }
       - { name: role, label: Role, type: string, required: true }
       - { name: organisation, label: Organisation, type: string, required: true }
-      - { name: onHomePage, label: Show on the home page, type: boolean, description: "Tick one quote only." }
+      - { name: onHomePage, label: Show on the home page, type: boolean, description: "Tick up to two. Two quotes sit side by side above the case studies." }
 
   - name: clients
     label: Clients

@@ -9,7 +9,7 @@ import '../styles/tokens.css';
 import '../styles/components.css';
 import { Image, getImage } from 'astro:assets';
 import { email, startHref, quoteHref, sentence, trustedBy } from '../data/site';
-import { availability, homeQuote, responseTime, home } from '../lib/site';
+import { availability, homeQuotes, responseTime, home } from '../lib/site';
 import { featured, projectHref, homeFilters, bySlug } from '../data/work';
 import { services } from '../data/services';
 import closeArt from '../assets/art/engraved/lemoyne-night.jpg';
@@ -268,13 +268,14 @@ const more = services.filter((s) => !lanes.includes(s));
           <ul class="approach">
             {home.approach.map((a) => <li><h3 class="approach__t">{a.title}</h3><p>{a.text}</p></li>)}
           </ul>
-          <div class="proof__grid">
-            {homeQuote && (
+          <!-- One quote: the large pane beside the two results. Two quotes: a row of quotes over a row of results. -->
+          <div class:list={["proof__grid", { 'proof__grid--two': homeQuotes.length > 1 }]}>
+            {homeQuotes.map((q) => (
               <figure class="proof__quote glass" data-lens>
-                <blockquote><p>“{homeQuote.quote}”</p></blockquote>
-                <figcaption><b>{homeQuote.name}</b>{homeQuote.role}, {homeQuote.organisation}</figcaption>
+                <blockquote><p>“{q.quote}”</p></blockquote>
+                <figcaption><b>{q.name}</b>{q.role}, {q.organisation}</figcaption>
               </figure>
-            )}
+            ))}
             {results.map((r) => (
               <a class="result glass" href={r.href} data-lens>
                 <span class="result__who">{r.client}</span>
@@ -710,6 +711,9 @@ const more = services.filter((s) => !lanes.includes(s));
   .proof__quote p { font-size: 28px; line-height: 1.36; letter-spacing: -0.02em; font-weight: 450; text-wrap: pretty; text-indent: -0.4em; } /* hang the opening quote mark */
   .proof__quote figcaption { font-size: 18px; line-height: 1.45; }
   .proof__quote figcaption b { display: block; font-weight: 600; }
+  .proof__grid--two { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+  .proof__grid--two .proof__quote { grid-row: auto; }
+  .proof__grid--two .proof__quote p { font-size: 24px; }
   .result { position: relative; display: flex; flex-direction: column; gap: 14px; padding: var(--sp-card); border-radius: var(--radius); text-decoration: none; transition: background-color 300ms ease-out, color 300ms ease-out; }
   .result__who { font-size: 17px; color: var(--ink-2); }
   .result__line { font-size: 21px; line-height: 1.38; font-weight: 500; letter-spacing: -0.015em; text-wrap: balance; hyphens: none; }

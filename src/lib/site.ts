@@ -48,8 +48,8 @@ export const clientGroups = (['Education', 'Companies and international'] as con
   .map((kind) => ({ kind, names: shown.filter((c) => (c.data.group ?? 'Companies and international') === kind).map((c) => c.data.name) }))
   .filter((g) => g.names.length);
 
-// The quote shown on the home page (ticked "Show on the home page" in Testimonials).
-export const homeQuote = (await getCollection('testimonials', (t) => t.data.onHomePage))[0]?.data;
+// The quotes shown on the home page (ticked "Show on the home page" in Testimonials), up to two (Josh, 4 Nov).
+export const homeQuotes = (await getCollection('testimonials', (t) => t.data.onHomePage)).slice(0, 2).map((t) => t.data);
 
 // Every artwork on the site, with the credit the colophon and the plate captions use.
 export const art = {
