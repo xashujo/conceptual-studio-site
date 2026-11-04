@@ -13,9 +13,8 @@ summary: CGI worlds for Sherman Poon's music video, shown on billboards
   including Times Square in Hong Kong.
 cover:
   src: "@assets/work/sherman-poon-pandora-forever/01.webp"
-  alt: A red CGI room with a round window, from Sherman Poon's Pandora Forever
-    music video
-  caption: CGI, a still from the music video
+  alt: Title graphic for Pandora Forever, the Chinese and English titles inside a glowing ring on red and violet
+  caption: Title graphic
 thumb: "@assets/work/sherman-poon-pandora-forever/thumb.webp"
 coverFocus: 50% 50%
 featured: false
