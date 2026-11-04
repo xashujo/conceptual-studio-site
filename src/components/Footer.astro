@@ -1,12 +1,13 @@
 ---
 // Footer, after wecomeet.com (Josh, 4 Nov), turned typographic (footer.design "Typographic", 4 Nov):
-// one line on what the studio does with the email set as the headline, the links, the address,
-// colophon and small print, then the studio's name set margin to margin in Agatho, standing on the
-// garden engraving in one gold ink (TASTE 15). Words are in Pages CMS > Site settings; the big
-// name is the company name without "Limited".
+// one line on what the studio does with a Copy Email button, the links, then the studio's name set
+// margin to margin in Agatho on a short strip of the garden engraving, in one gold ink (TASTE 15).
+// Josh, 4 Nov: kept short, no registered office, company number or colophon here (they're on
+// Privacy and Procurement). Words are in Pages CMS > Site settings; the big name is the company
+// name without "Limited".
 import { Image } from 'astro:assets';
 import land from '../assets/art/engraved/garden.webp';
-import { nav, social, email, company, footerText, colophon } from '../lib/site';
+import { nav, social, email, company, footerText } from '../lib/site';
 const year = new Date().getFullYear();
 const words = company.name.replace(/\s+(limited|ltd\.?)$/i, '').split(/\s+/);
 ---
@@ -14,7 +15,8 @@ const words = company.name.replace(/\s+(limited|ltd\.?)$/i, '').split(/\s+/);
   <div class="wrap foot__top">
     <div class="foot__brand">
       <p class="foot__line">{footerText}</p>
-      <a class="foot__mail" href={`mailto:${email}`}>{email}</a>
+      <button class="btn foot__copy" type="button" data-copy={email}><span data-copy-label>Copy Email</span></button>
+      <p class="foot__legal">© {year} {company.name}</p>
     </div>
     <div class="foot__cols">
       <div>
@@ -35,17 +37,6 @@ const words = company.name.replace(/\s+(limited|ltd\.?)$/i, '').split(/\s+/);
       </div>
     </div>
   </div>
-  <div class="wrap foot__base">
-    <div>
-      <h2 class="foot__h">Registered office</h2>
-      <address>{company.office}</address>
-    </div>
-    <div id="colophon">
-      <h2 class="foot__h">Colophon</h2>
-      <p>{colophon}</p>
-    </div>
-  </div>
-  <p class="wrap foot__legal">© {year} {company.name}. Registered in {company.registeredIn}, company number {company.number}.</p>
   <a class="wrap foot__mark" href="/" aria-label={`${words.join(' ')}, home`}>
     <span class="foot__word" aria-hidden="true">{words.map((w) => <span>{w}</span>)}</span>
   </a>
@@ -54,46 +45,41 @@ const words = company.name.replace(/\s+(limited|ltd\.?)$/i, '').split(/\s+/);
 
 <style>
   /* One ink for art and text: the dark end of the gold duotone (#6E5024, 5.7:1 on paper). */
-  .foot { --foot-ink: #6E5024; position: relative; isolation: isolate; background: #F1DFC8; color: var(--foot-ink); padding-top: 120px; }
+  .foot { --foot-ink: #6E5024; position: relative; isolation: isolate; background: #F1DFC8; color: var(--foot-ink); padding-top: 72px; }
   .foot__top { display: grid; grid-template-columns: 5fr 7fr; gap: 24px; align-items: start; }
-  .foot__line { max-width: 24em; font-size: 18px; line-height: 1.45; }
-  /* The email is the footer's headline: statement-sized, still one line at every width. */
-  .foot__mail { display: inline-block; margin-top: 20px; font-family: var(--display); font-weight: 500; font-size: clamp(22px, 2.9vw, 44px); line-height: 1.1; letter-spacing: -0.02em; text-decoration: none; white-space: nowrap; }
+  .foot__line { max-width: 24em; font-size: 16px; line-height: 1.45; }
+  .foot__copy { margin-top: 20px; }
   .foot__cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
   .foot__h { font-size: 16px; line-height: 1.4; font-weight: 600; margin-bottom: 10px; }
   .foot ul { list-style: none; margin: 0; padding: 0; }
-  .foot li a { display: inline-block; padding-block: 5px; font-family: var(--display); font-size: 24px; line-height: 1.2; letter-spacing: -0.01em; text-decoration: none; }
-  .foot li a, .foot__mail { background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size 300ms var(--ease-out); }
-  .foot li a:hover, .foot__mail:hover { background-size: 100% 1px; }
+  .foot li a { display: inline-block; padding-block: 4px; font-family: var(--display); font-size: 20px; line-height: 1.2; letter-spacing: -0.01em; text-decoration: none; }
+  .foot li a { background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size 300ms var(--ease-out); }
+  .foot li a:hover { background-size: 100% 1px; }
   .foot a:focus-visible { outline: 2px solid var(--foot-ink); outline-offset: 3px; border-radius: 2px; }
-  .foot__base { display: grid; grid-template-columns: 5fr 7fr; gap: 24px; margin-top: 64px; font-size: 14px; line-height: 1.5; }
-  .foot__base address { font-style: normal; }
-  .foot__base p { max-width: 44em; }
-  .foot__legal { margin-top: 32px; font-size: 14px; line-height: 1.5; max-width: 60em; }
+  .foot__legal { margin-top: 24px; font-size: 14px; line-height: 1.5; }
   /* The studio's name, set margin to margin. 100cqi is the space inside the margins, so the fit is exact
      at any width. 6.32 is "Conceptual Studio" in ems of Agatho Medium at this tracking (3.90 + 0.25 gap
      + 2.17, measured in Chromium, 4 Nov); re-measure if the company name changes. */
-  .foot__mark { display: block; position: relative; z-index: 1; margin-top: 72px; container-type: inline-size; text-decoration: none; color: var(--foot-ink); }
+  .foot__mark { display: block; position: relative; z-index: 1; margin-top: 48px; container-type: inline-size; text-decoration: none; color: var(--foot-ink); }
   .foot__word { display: flex; justify-content: space-between; gap: 0.25em; padding-top: 0.06em; border-top: 1px solid currentColor; font-family: var(--display); font-weight: 500; font-size: calc(100cqi / 6.32); line-height: 0.86; letter-spacing: -0.035em; white-space: nowrap; }
   .foot__mark:focus-visible { outline-offset: 6px; }
   /* The engraving fills the bottom of the footer, no top edge. */
-  .foot__land { position: relative; z-index: -1; margin-top: -3vw; height: clamp(300px, 36vw, 560px); pointer-events: none; }
+  /* A short strip of the engraving under the name: a horizon, not a second page. */
+  .foot__land { position: relative; z-index: -1; margin-top: -3vw; height: clamp(120px, 13vw, 200px); pointer-events: none; }
   .foot__land img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 78%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 55%); mask-image: linear-gradient(to bottom, transparent, #000 55%); }
 
   @media (max-width: 759.98px) {
-    .foot { padding-top: 80px; }
-    .foot__top { grid-template-columns: 1fr; gap: 40px; }
+    .foot { padding-top: 56px; }
+    .foot__top { grid-template-columns: 1fr; gap: 32px; }
     .foot__line { font-size: 17px; }
-    .foot__mail { font-size: min(22px, 5.6vw); }
+
     .foot__cols { grid-template-columns: 1fr 1fr; row-gap: 32px; }
-    .foot li a { font-size: 22px; }
-    .foot__base { grid-template-columns: 1fr; gap: 24px; margin-top: 48px; font-size: 13px; }
-    .foot__legal { margin-top: 24px; font-size: 13px; }
+    .foot li a { font-size: 19px; }
     /* On a phone the name stacks, each word fitted to the longest ("Conceptual", 3.90em). */
-    .foot__mark { margin-top: 48px; }
+    .foot__mark { margin-top: 36px; }
     .foot__word { flex-direction: column; gap: 0; font-size: calc(100cqi / 3.91); line-height: 0.88; }
     /* On a phone, crop to the reclining figure and the flowers. */
-    .foot__land { height: 300px; margin-top: -24px; }
+    .foot__land { height: 120px; margin-top: -16px; }
     .foot__land img { object-position: 22% 88%; }
   }
 </style>
