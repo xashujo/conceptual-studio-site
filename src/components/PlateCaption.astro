@@ -1,6 +1,7 @@
 ---
 // TASTE 8: two lines under every image. Title, client and year in bold; the medium in brackets, light.
+// The brackets are drawn in CSS (components.css) so the phone gallery can show the medium without them.
 interface Props { title: string; medium: string; }
 const { title, medium } = Astro.props;
 ---
-<figcaption class="plate"><b>{title}</b><span>({medium})</span></figcaption>
+<figcaption class="plate"><b>{title}</b><span>{medium}</span></figcaption>

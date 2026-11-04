@@ -21,6 +21,8 @@ a { color: inherit; }
 .plate { margin-top: 14px; font-size: 12px; line-height: 1.55; letter-spacing: 0.06em; text-transform: uppercase; font-variant-numeric: tabular-nums; }
 .plate b { display: block; font-weight: 600; }
 .plate span { display: block; font-weight: 400; color: var(--ink-2); }
+.plate span::before { content: '('; }
+.plate span::after { content: ')'; }
 
 /* ---------- Buttons and links ---------- */
 /* One change per hover (22). Arrows turn → to ↗ in 180ms ease-out (DECISIONS).

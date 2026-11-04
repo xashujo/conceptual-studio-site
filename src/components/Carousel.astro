@@ -1,0 +1,176 @@
+---
+// Phone gallery (Josh, 4 Nov: "how Apple does this with its images"). On a phone every figure in the slot
+// becomes one card in a swipeable row, with its caption on top; under it sit a pill of dots and a round
+// pause button. The active dot stretches into a bar that fills while the slide shows, then the row moves on.
+// From 760px up nothing changes: the wrapper is a plain block and the controls are hidden.
+// No library: native scroll-snap for the swipe, a CSS animation on the dot for the timer (it pauses itself
+// while the controls are hidden, so desktop never auto-plays). Reduced motion: no auto-play, no fill.
+interface Props { label: string }
+const { label } = Astro.props;
+---
+<div class="carousel" data-carousel role="region" aria-roledescription="carousel" aria-label={label}>
+  <div class="carousel__track" aria-live="off"><slot /></div>
+  <div class="carousel__controls" hidden>
+    <div class="carousel__dots"></div>
+    <button class="carousel__play" type="button" aria-label="Pause">
+      <svg class="i-pause" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><rect x="5" y="4" width="3.4" height="12" rx="1.2" /><rect x="11.6" y="4" width="3.4" height="12" rx="1.2" /></svg>
+      <svg class="i-play" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><path d="M6.5 4.6v10.8a.9.9 0 0 0 1.37.77l8.6-5.4a.9.9 0 0 0 0-1.54l-8.6-5.4a.9.9 0 0 0-1.37.77Z" /></svg>
+      <svg class="i-replay" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><path d="M10 4.2a5.8 5.8 0 1 1-5.6 4.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /><path d="M3.2 4.4 4.4 8.6l4.1-1.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+  const phone = matchMedia('(max-width: 759.98px)');
+  const still = matchMedia('(prefers-reduced-motion: reduce)');
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-carousel]')) {
+    const track = root.querySelector<HTMLElement>('.carousel__track')!;
+    const controls = root.querySelector<HTMLElement>('.carousel__controls')!;
+    const dotsEl = root.querySelector<HTMLElement>('.carousel__dots')!;
+    const play = root.querySelector<HTMLButtonElement>('.carousel__play')!;
+    const slides = [...track.querySelectorAll<HTMLElement>('figure')];
+    if (slides.length < 2) continue;
+
+    const n = slides.length;
+    slides.forEach((s, i) => { s.setAttribute('aria-roledescription', 'slide'); s.setAttribute('aria-label', `${i + 1} of ${n}`); });
+    const dots = slides.map((_, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'carousel__dot';
+      b.setAttribute('aria-label', `Show image ${i + 1} of ${n}`);
+      b.addEventListener('click', () => go(i));
+      dotsEl.append(b);
+      return b;
+    });
+    controls.hidden = false;
+
+    let active = -1;
+    // playing: the timer runs. ended: it reached the last slide, so the button offers a replay (as Apple's does).
+    let state: 'playing' | 'paused' | 'ended' = still.matches ? 'paused' : 'playing';
+
+    const setState = (s: typeof state) => {
+      state = s;
+      root.dataset.state = s;
+      play.setAttribute('aria-label', s === 'playing' ? 'Pause' : s === 'ended' ? 'Play again' : 'Play');
+      track.setAttribute('aria-live', s === 'playing' ? 'off' : 'polite');
+    };
+
+    const mark = (i: number) => {
+      if (i === active) return;
+      dots[active]?.removeAttribute('aria-current');
+      active = i;
+      dots[i].setAttribute('aria-current', 'true');
+    };
+
+    let target = -1; // while a tap or the timer is scrolling, ignore the slides passed on the way
+    const go = (i: number) => {
+      mark(i);
+      target = i;
+      // Centre the slide inside the track only (scrollIntoView would also scroll the page).
+      const s = slides[i];
+      const left = s.offsetLeft - (track.clientWidth - s.offsetWidth) / 2;
+      if (Math.abs(track.scrollLeft - left) < 2) target = -1;
+      track.scrollTo({ left, behavior: still.matches ? 'auto' : 'smooth' });
+    };
+
+    // A swipe or scroll settles on the slide nearest the centre; that slide's dot takes over the timer.
+    let raf = 0;
+    track.addEventListener('scroll', () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const mid = track.scrollLeft + track.clientWidth / 2;
+        let best = 0;
+        slides.forEach((s, i) => { if (Math.abs(s.offsetLeft + s.offsetWidth / 2 - mid) < Math.abs(slides[best].offsetLeft + slides[best].offsetWidth / 2 - mid)) best = i; });
+        if (target === -1) mark(best);
+        else if (best === target) target = -1;
+      });
+    }, { passive: true });
+
+    // The fill on the active dot is the timer: when it finishes, move on, or stop at the last slide.
+    dotsEl.addEventListener('animationend', (e) => {
+      if (state !== 'playing' || e.target !== dots[active]) return;
+      if (active < n - 1) go(active + 1); else setState('ended');
+    });
+
+    play.addEventListener('click', () => {
+      if (state === 'playing') return setState('paused');
+      if (state === 'ended') go(0);
+      setState('playing');
+    });
+
+    // Keyboard focus inside the gallery stops it moving under the reader (WCAG 2.2.2).
+    root.addEventListener('focusin', (e) => { if (state === 'playing' && e.target !== play && (e.target as HTMLElement).matches(':focus-visible')) setState('paused'); });
+
+    // Only run while the gallery is on screen.
+    new IntersectionObserver(([e]) => root.toggleAttribute('data-away', !e.isIntersecting), { threshold: 0.35 }).observe(root);
+
+    still.addEventListener('change', () => { if (still.matches && state === 'playing') setState('paused'); });
+    phone.addEventListener('change', () => { if (phone.matches) go(active); });
+
+    setState(state);
+    mark(0);
+  }
+</script>
+
+<style is:global>
+  .carousel__controls { display: none; }
+
+  @media (max-width: 759.98px) {
+    /* The track runs edge to edge so the next card peeks in, and snaps one card at a time. */
+    .carousel[data-carousel] .carousel__track {
+      position: relative; display: flex; gap: 12px; margin-top: var(--sp-head);
+      margin-inline: calc(-1 * var(--margin)); padding-inline: var(--margin); scroll-padding-inline: var(--margin);
+      overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none;
+    }
+    .carousel[data-carousel] .carousel__track::-webkit-scrollbar { display: none; }
+    /* The page's own row layout drops away, so every figure in every row is one card in a single row. */
+    .carousel[data-carousel] .carousel__track > * { display: contents; }
+
+    .carousel[data-carousel] .carousel__track figure {
+      /* A night card on either band: warm black, the work lit inside it, the caption on top (Apple's order). */
+      color-scheme: dark; background: var(--paper); color: var(--ink);
+      flex: 0 0 calc(100% - 28px); scroll-snap-align: center; scroll-snap-stop: always;
+      display: flex; flex-direction: column; gap: 20px; aspect-ratio: 4 / 5; margin: 0; padding: 26px 18px 18px;
+      border-radius: var(--radius); overflow: hidden;
+    }
+    .carousel[data-carousel] .carousel__track figure .plate { order: -1; margin: 0; text-align: center; text-transform: none; letter-spacing: -0.01em; }
+    /* Title, client and year are the same on every card, so only the line about this image shows. */
+    .carousel[data-carousel] .carousel__track figure .plate b { display: none; }
+    .carousel[data-carousel] .carousel__track figure .plate span { color: var(--ink); font-size: 17px; line-height: 1.35; font-weight: 500; text-wrap: balance; }
+    .carousel[data-carousel] .carousel__track figure .plate span::before, .carousel[data-carousel] .carousel__track figure .plate span::after { content: none; }
+    .carousel[data-carousel] .carousel__track figure img {
+      flex: 1 1 0; min-height: 0; width: 100%; height: 100%; max-height: none;
+      aspect-ratio: auto; object-fit: contain; border-radius: var(--radius-fine); margin: 0;
+    }
+
+    .carousel__controls { display: flex; justify-content: center; gap: 12px; margin-top: 18px; }
+    .carousel__dots, .carousel__play { background: color-mix(in srgb, var(--ink) 9%, var(--paper)); border-radius: var(--pill); }
+    .carousel__dots { display: flex; align-items: center; padding-inline: 12px; height: 56px; }
+    /* Each dot is a 44px-tall target; the visible dot is drawn inside it. */
+    .carousel__dot { position: relative; width: 22px; height: 44px; padding: 0; border: 0; background: none; cursor: pointer; transition: width 400ms var(--ease-out); }
+    .carousel__dot::before, .carousel__dot::after { content: ''; position: absolute; left: 7px; right: 7px; top: 50%; height: 8px; margin-top: -4px; border-radius: 4px; }
+    .carousel__dot::before { background: color-mix(in srgb, var(--ink) 34%, transparent); }
+    .carousel__dot::after { right: auto; width: 0; background: var(--ink); }
+    .carousel__dot[aria-current] { width: 62px; }
+    .carousel__dot[aria-current]::after { width: calc(100% - 14px); animation: carousel-fill 5s linear both; }
+    [data-state='paused'] .carousel__dot[aria-current]::after, [data-away] .carousel__dot[aria-current]::after { animation-play-state: paused; }
+    [data-state='ended'] .carousel__dot[aria-current]::after { animation: none; }
+    .carousel__dot:focus-visible { outline: none; }
+    .carousel__dot:focus-visible::before { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+    .carousel__play { display: grid; place-items: center; width: 56px; height: 56px; padding: 0; border: 0; color: var(--ink); cursor: pointer; }
+    .carousel__play svg { fill: currentColor; }
+    .carousel__play :is(.i-play, .i-replay), [data-state='paused'] .i-pause, [data-state='ended'] .i-pause { display: none; }
+    [data-state='paused'] .i-play, [data-state='ended'] .i-replay { display: block; }
+    .carousel__play:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+    @media (hover: hover) { .carousel__play:hover { background: var(--ink); color: var(--paper); } }
+  }
+  @keyframes carousel-fill { from { width: 0; } }
+
+  /* Reduced motion: no timer, no button; the active dot is simply a full bar. */
+  @media (prefers-reduced-motion: reduce) {
+    .carousel__dot, .carousel__dot[aria-current]::after { transition: none; animation: none !important; }
+    .carousel__play { display: none !important; }
+  }
+</style>
