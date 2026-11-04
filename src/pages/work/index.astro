@@ -17,7 +17,7 @@ const items = projects.map((p) => ({
 }));
 const videos = await Promise.all(home.socialVideos.map(async (v) => ({ ...v, poster: (await getImage({ src: v.poster, width: 720, format: 'webp' })).src })));
 ---
-<Studio title="Work | Conceptual Studio" description={w.intro} current="/work/" closeText={w.closeText}>
+<Studio title="Work" description={w.intro} current="/work/" closeText={w.closeText}>
   <Band opening labelledby="work-h">
     <div class="ph__plate glass" data-lens>
       <h1 class="ph__h" id="work-h">{w.heading}</h1>

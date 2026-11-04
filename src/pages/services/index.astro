@@ -17,7 +17,7 @@ const extras = services.filter((s) => !s.href && !s.card);
 const retainer = services.find((s) => s.href?.includes('#'));
 const steps = home.steps.map((s) => ({ title: s.title, text: s.text.replaceAll('{reply time}', responseTime) })); // Pages CMS: Home page > How We Work
 ---
-<Studio title="Services and Prices | Conceptual Studio" description={sp.intro} current="/services/" turnstile closeText={sp.closeText}>
+<Studio title="Services" description={sp.intro} current="/services/" turnstile closeText={sp.closeText}>
   <Band opening labelledby="svc-h">
     <div class="ph__plate glass" data-lens>
       <h1 class="ph__h" id="svc-h">{sp.heading}</h1>

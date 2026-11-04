@@ -14,6 +14,7 @@ import '../styles/studio.css';
 import closeArt from '../assets/art/engraved/lemoyne-night.jpg';
 
 interface Props {
+  /** The page name; the tab reads "Conceptual Studio | {title}" (Josh, 4 Nov). */
   title: string; description: string;
   /** The page's own nav item, e.g. "/work/". The home page passes its section anchors instead. */
   current?: string;
@@ -33,7 +34,7 @@ const isCurrent = (h: string) => h === current || (h !== '/' && current?.startsW
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
+    <title>Conceptual Studio | {title}</title>
     <meta name="description" content={description} />
     <Favicons />
     {noindex && <meta name="robots" content="noindex" />}

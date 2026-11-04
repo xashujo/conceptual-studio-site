@@ -11,7 +11,7 @@ import { email, replyTime, responseTime, social, availability } from '../lib/sit
 import { contactPage as c, titleCase } from '../lib/pages';
 const closeText = c.closeText.replaceAll('{reply time}', responseTime);
 ---
-<Studio title="Contact | Conceptual Studio" description={`${c.intro} ${replyTime}`} current="/contact/" turnstile closeHeading={c.closeHeading}>
+<Studio title="Contact" description={`${c.intro} ${replyTime}`} current="/contact/" turnstile closeHeading={c.closeHeading}>
   <Band opening labelledby="contact-h">
     <div class="ph__plate glass" data-lens>
       <h1 class="ph__h" id="contact-h">{c.heading}</h1>
