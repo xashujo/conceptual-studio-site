@@ -4,6 +4,7 @@
 // plans for clients who want to keep going, how a project runs, and the quote form. Words: Pages CMS > Services page; prices: Services and prices.
 import Studio from '../../layouts/Studio.astro';
 import Band from '../../components/studio/Band.astro';
+import { Image } from 'astro:assets';
 import Ladder from '../../components/Ladder.astro';
 import Enquiry from '../../components/Enquiry.astro';
 import { services, isLane } from '../../data/services';
@@ -40,6 +41,7 @@ const steps = home.steps.map((s) => ({ title: s.title, text: s.text.replaceAll('
     <ul class="lanes">
       {lanes.map((s, i) => (
         <li class="lane glass" data-lens data-reveal style={`--i: ${i}`}>
+          {s.cardImage && <Image class="lane__img" src={s.cardImage.img} alt={s.cardImage.alt} widths={[400, 700, 1000]} sizes="(min-width: 1100px) 45vw, calc(100vw - 32px)" style={s.cardImage.pos ? `object-position: ${s.cardImage.pos}` : undefined} />}
           <p class="lane__k">{s.lane}</p>
           <h3 class="lane__h">{keepHyphens(titleCase(s.name))}</h3>
           <p class="lane__p">{s.line}</p>
@@ -103,6 +105,7 @@ const steps = home.steps.map((s) => ({ title: s.title, text: s.text.replaceAll('
   .sv-quote { margin-top: -4px; font-weight: 600; color: var(--ink); }
   .lanes { list-style: none; margin: var(--sp-head) 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-gap); }
   .lane { position: relative; display: flex; flex-direction: column; gap: 12px; padding: var(--sp-card); border-radius: var(--radius); }
+  .lane__img { width: 100%; aspect-ratio: 16 / 10; height: auto; object-fit: cover; border-radius: var(--radius-inner); display: block; margin-bottom: 8px; }
   .lane__k { font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--ink-2); }
   .lane__h { font-family: var(--display); font-size: 30px; line-height: 1.08; font-weight: 500; letter-spacing: -0.01em; }
   .lane__p { font-size: 17px; line-height: 1.5; }

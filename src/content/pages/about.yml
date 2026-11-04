@@ -9,6 +9,10 @@ story: |
   Conceptual Studio has been my full-time job since January 2026. Most of the work is data: maps of 7,112 learner records for ACL Essex, skills maps and a white paper for the USP College Freeport partnership, merger maps New City College used in its public consultation, and a sustainability report that passed Acrobat's accessibility check. The rest is identity, like the Oxford School of English crest, now a registered trademark, and the Star Note for CMD Inc.
 
   Nearly all of it comes through past clients, or the people they send my way.
+storyImage:
+  src: "@assets/work/cmd-inc/star-note.webp"
+  alt: The Star Note, CMD Inc.'s icon of six white ovals around a bright centre, on black
+  caption: The Star Note, CMD Inc., 2026
 valuesHeading: How I Work
 values:
   - title: One Idea, Made Clear

@@ -10,6 +10,7 @@ export interface Service {
   /** The lane it sits in on /services/ (Video, Colleges & Data, Branding, Monthly) and its own page's words. */
   lane: string; kinds: string; faqs: { q: string; a: string }[];
   examples: { img: ImageMetadata; alt: string; pos?: string; title: string; medium: string }[];
+  cardImage?: { img: ImageMetadata; alt: string; pos?: string };
   demo: { heading: string; text: string };
   home: { price: string; time?: string; link: string };
 }
@@ -28,6 +29,7 @@ export const services: Service[] = (await getCollection('services'))
       id, name: d.name, href: d.page ?? undefined, card: d.card, line: d.summary, tiers,
       lane: d.lane || d.name, kinds: d.kinds, faqs: d.faqs.map((f) => ({ q: f.question, a: f.answer })),
       examples: d.examples.map((e) => ({ img: e.src, alt: e.alt, pos: e.focus ?? undefined, title: e.title, medium: e.caption })),
+      cardImage: d.cardImage ? { img: d.cardImage.src, alt: d.cardImage.alt, pos: d.cardImage.focus ?? undefined } : undefined,
       demo: { heading: d.demoHeading, text: d.demoText },
       home: { price: d.homePrice || tiers[0].price, time: d.homeTime || tiers[0].time, link: d.homeLink || `${d.name} prices` },
     };

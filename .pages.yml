@@ -207,6 +207,14 @@ content:
       - { name: page, label: Page address, type: string, description: "The service's own page, e.g. /services/brand-identity/. Leave empty if it doesn't have one." }
       - { name: card, label: Show as a card, type: boolean, description: "For a service with no page of its own: tick to show it as a full card on the Services page and a row on the home page, not a line under Also Available." }
       - { name: summary, label: Description, type: text, required: true }
+      - name: cardImage
+        label: Card picture
+        type: object
+        description: "A piece of real work shown at the top of this service's card on the Services page. Leave empty for no picture."
+        fields:
+          - { name: src, label: Image, type: image, required: true, options: { media: images } }
+          - { name: alt, label: Image description, type: string, required: true, description: "What the picture shows, for people using screen readers." }
+          - { name: focus, label: Focus point, type: string, description: "Which part stays in view when the picture is cropped, e.g. 50% 40%. Leave empty for the centre." }
       - name: tiers
         label: Pricing ladder
         type: object
@@ -457,6 +465,15 @@ content:
       - { name: intro, label: Intro, type: text, required: true }
       - { name: storyHeading, label: Story heading, type: string, required: true }
       - { name: story, label: Story, type: text, required: true, description: "Leave an empty line between paragraphs. Start lines with - to make a bulleted list." }
+      - name: storyImage
+        label: Story picture
+        type: object
+        description: "One piece of real work shown beside the story. Leave empty for no picture."
+        fields:
+          - { name: src, label: Image, type: image, required: true, options: { media: images } }
+          - { name: alt, label: Image description, type: string, required: true, description: "What the picture shows, for people using screen readers." }
+          - { name: caption, label: Caption, type: string }
+          - { name: focus, label: Focus point, type: string, description: "Which part stays in view when the picture is cropped, e.g. 50% 40%. Leave empty for the centre." }
       - { name: valuesHeading, label: How I work heading, type: string, required: true }
       - name: values
         label: How I work

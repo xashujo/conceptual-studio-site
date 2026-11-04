@@ -19,6 +19,10 @@ examples:
     alt: The CMD Inc. wordmark and star icon in white on black, with glowing curved lines around them
     title: CMD Inc., 2026
     caption: Visual identity, cover of the guidelines
+cardImage:
+  src: '@assets/work/doubleshot-studio/01.webp'
+  alt: A cream tote bag printed with the DoubleShot wordmark and two red star characters, hanging on a dark wooden chair
+  focus: 50% 45%
 faqs:
   - question: Do the prices include VAT?
     answer: No. Conceptual Studio isn't VAT registered, so the quote is what you pay.

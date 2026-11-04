@@ -11,7 +11,13 @@ const text = z.string().nullish().transform((s) => s ?? '');
 
 // The other pages' own words (Josh, 2 Nov): one file each in src/content/pages/, edited in Pages CMS.
 // "{reply time}" in any of them becomes the Reply time from Site settings.
-const page = (file: string, shape: z.ZodRawShape) => defineCollection({ loader: glob({ pattern: `${file}.yml`, base: './src/content/pages' }), schema: z.object(shape) });
+type Shape = z.ZodRawShape | ((h: { image: () => z.ZodTypeAny }) => z.ZodRawShape);
+const page = (file: string, shape: Shape) => defineCollection({
+  loader: glob({ pattern: `${file}.yml`, base: './src/content/pages' }),
+  schema: (h) => z.object(typeof shape === 'function' ? shape(h) : shape),
+});
+// One picture of real work, so a page of words has something to look at (Josh, 4 Nov).
+const picture = (image: () => z.ZodTypeAny) => z.object({ src: image(), alt: s, caption: text, focus: text }).nullish();
 const s = z.string().min(1);
 const items = z.array(z.object({ title: s, text: s }));
 export const pages = {
@@ -25,10 +31,10 @@ export const pages = {
     listNote: text, extrasHeading: text, firstStepLabel: s, terms: items, procurementHeading: s, procurementText: s, procurementButton: s, enquiryHeading: s,
     workHeading: s, pricesHeading: s, pricesNote: text, faqHeading: s, closeText: s, planEmailSubject: s, planEmail: s,
   }),
-  aboutPage: page('about', {
-    heading: s, intro: s, storyHeading: s, story: s, valuesHeading: s, values: items, clientsHeading: s,
+  aboutPage: page('about', ({ image }) => ({
+    heading: s, intro: s, storyHeading: s, story: s, storyImage: picture(image), valuesHeading: s, values: items, clientsHeading: s,
     wantHeading: s, want: s, closeText: s,
-  }),
+  })),
   contactPage: page('contact', {
     heading: s, intro: s, hours: text, elsewhereHeading: s, procurementHeading: s, procurementText: s, procurementButton: s,
     enquiryHeading: s, formHeading: s, enquiryIntro: s, enquiryAlt: text, callLink: text, callButton: s, thanksHeading: s, thanksText: s, closeHeading: s, closeText: s,
@@ -101,6 +107,8 @@ export const collections = {
       lane: text,
       kinds: text,
       examples: z.array(z.object({ src: image(), alt: z.string().min(1), focus: z.string().nullish(), title: z.string(), caption: z.string() })).nullish().transform((v) => v ?? []),
+      // The picture at the top of the service's card on /services/ (Josh, 4 Nov).
+      cardImage: z.object({ src: image(), alt: z.string().min(1), focus: z.string().nullish() }).nullish(),
       faqs: z.array(z.object({ question: z.string().min(1), answer: z.string().min(1) })).nullish().transform((v) => v ?? []),
       demoHeading: text,
       demoText: text,
