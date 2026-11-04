@@ -190,11 +190,6 @@ content:
         label: What happened
         type: text
         description: "Leave an empty line between paragraphs. Start lines with - to make a bulleted list."
-      - name: next
-        label: Next project (optional)
-        type: reference
-        description: "The case study linked at the bottom of the page. Leave empty to use the next one in Work page order."
-        options: { collection: projects, value: "{path}", label: "{title}", search: title }
       - { name: demoLink, label: Live demo link (optional), type: string, description: "A full web address, e.g. https://... Shows a button at the top of the case study page. Empty hides it." }
       - { name: demoButton, label: Live demo button text (optional), type: string, description: "e.g. See the Live Demo." }
 

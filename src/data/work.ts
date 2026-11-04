@@ -3,6 +3,7 @@
 // shapes it for the pages. Anything missing is marked [TBC: ...] in the content itself.
 import type { ImageMetadata } from 'astro';
 import { getCollection } from 'astro:content';
+import { nextChain } from './next-project';
 
 export const filters = [
   ['all', 'All'],
@@ -83,6 +84,9 @@ export const bySlug = (slug: string) => {
   return p;
 };
 
+// Student work never gets a page, so it never enters the chain.
+const chain = nextChain(entries.filter((e) => e.data.hasPage).map(({ data: d }) => d));
+
 export const caseStudies: CaseStudy[] = entries.filter((e) => e.data.hasPage).map(({ data: d }) => ({
   slug: d.slug,
   outcome: d.outcome,
@@ -97,10 +101,9 @@ export const caseStudies: CaseStudy[] = entries.filter((e) => e.data.hasPage).ma
   }, []),
   before: d.before && d.after ? { before: plate(d.before), after: plate(d.after) } : undefined,
   happened: paragraphs(d.whatHappened),
-  // Without a chosen next project, link to the next case study in Work page order.
-  next: d.next ?? '',
+  next: chain[d.slug],
   demo: d.demoLink ? { href: d.demoLink, label: d.demoButton || 'See the Live Demo' } : undefined,
-})).map((cs, i, all) => ({ ...cs, next: cs.next || all[(i + 1) % all.length].slug }));
+}));
 
 /** The home page's featured work, in position order (ties broken by title). */
 export const featured = projects
