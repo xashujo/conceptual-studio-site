@@ -20,7 +20,7 @@ const cap = (pl: Plate) => ({ title: p.client.startsWith(p.title) ? `${p.title},
 const sizes = { full: '(min-width: 1200px) 1140px, 95vw', pair: '(min-width: 760px) 560px, 100vw', trio: '(min-width: 760px) 370px, 100vw', quad: '(min-width: 760px) 560px, 100vw' };
 const credits = [[t.clientLabel, p.client], [t.disciplinesLabel, p.disciplines.join(', ')], [t.outcomeLabel, cs.outcome]].filter(([, v]) => v);
 ---
-<Studio title={`${p.title} | Conceptual Studio`} description={p.summary} current="/work/" closeText={t.closeText}>
+<Studio title={p.title} description={p.summary} current="/work/" closeText={t.closeText}>
   <Band opening class="cs-open" labelledby="cs-h">
     <div class="ph__plate glass cs-plate" data-lens>
       <a class="btn cs-back" href="/work/"><span class="arrow" aria-hidden="true">←</span> {t.backLabel}</a>
