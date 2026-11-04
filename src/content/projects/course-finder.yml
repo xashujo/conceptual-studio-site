@@ -1,0 +1,25 @@
+title: Course Finder
+slug: course-finder
+client: Concept
+year: 2026
+disciplines:
+- Data visualisation
+- Interactive maps
+filters:
+- Data visualisation
+label: Concept
+order: 65
+summary: A phone-first, accessible course finder. Search forgives typos & trade slang, with filters, a map with directions & an Excel upload so staff can keep it up to date.
+cover:
+  src: '@assets/work/course-finder/placeholder.webp'
+  alt: Placeholder until the course finder screenshots are ready
+  caption: "[TBC: Josh to supply neutral screenshots]"
+featured: false
+hasPage: true
+problem: "[TBC: the problem in a line or two, with no college named]"
+whatIDid: |-
+  We designed a course finder for phones first, built to be accessible. The search forgives typos & trade slang, and filters narrow the list down.
+
+  There's a map with directions, and staff keep it up to date by uploading an Excel file.
+demoLink: ""
+demoButton: See the Live Demo

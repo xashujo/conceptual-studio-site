@@ -26,6 +26,8 @@ export interface Project {
   image: ImageMetadata; alt: string; medium: string; position?: string;
   /** Kingston School of Art work: shown only under Archive, labelled as student work. */
   student?: boolean;
+  /** The small label on the card: Student Work, or the project's own label, e.g. Concept. */
+  label?: string;
   /** true when /work/<slug>/ exists */
   caseStudy?: boolean;
   featured: boolean; featuredOrder?: number; homePosition?: string;
@@ -44,6 +46,7 @@ export interface CaseStudy {
   before?: { before: Plate; after: Plate };
   happened: string[];
   next: string;
+  demo?: { href: string; label: string };
 }
 
 const kinds: Record<string, Row['kind']> = { 'One large': 'full', 'Two side by side': 'pair', 'Three in a row': 'trio', 'Four in a grid': 'quad' };
@@ -59,6 +62,7 @@ export const projects: Project[] = entries.map(({ data: d }) => ({
   tags: d.studentWork ? ['archive'] : d.filters.map((f) => filterKey[f]),
   image: d.cover.src, alt: d.cover.alt, medium: d.cover.caption, position: d.coverFocus ?? undefined,
   student: d.studentWork || undefined,
+  label: d.studentWork ? 'Student Work' : d.label || undefined,
   caseStudy: d.hasPage || undefined,
   featured: d.featured, featuredOrder: d.featuredOrder ?? undefined, homePosition: d.homeFocus ?? undefined,
   outcome: d.outcome || undefined,
@@ -82,6 +86,7 @@ export const caseStudies: CaseStudy[] = entries.filter((e) => e.data.hasPage).ma
   happened: paragraphs(d.whatHappened),
   // Without a chosen next project, link to the next case study in Work page order.
   next: d.next ?? '',
+  demo: d.demoLink ? { href: d.demoLink, label: d.demoButton || 'See the Live Demo' } : undefined,
 })).map((cs, i, all) => ({ ...cs, next: cs.next || all[(i + 1) % all.length].slug }));
 
 /** The home page's featured work, in position order (ties broken by title). */

@@ -11,7 +11,8 @@ import { Image, getImage } from 'astro:assets';
 import { email, startHref, quoteHref, sentence, trustedBy } from '../data/site';
 import { availability, homeQuotes, responseTime, home } from '../lib/site';
 import { featured, projectHref, homeFilters, bySlug } from '../data/work';
-import { services } from '../data/services';
+import { services, isLane } from '../data/services';
+import { servicesPage } from '../lib/pages';
 import closeArt from '../assets/art/engraved/lemoyne-night.jpg';
 // Behind the sections: plain canvas, or the running painting (CMS "Background", Josh 2 Nov).
 const painting = home.backdrop === 'painting';
@@ -35,7 +36,7 @@ const stats = home.stats.map((s) => ({ n: s.number, after: s.after, label: s.lab
 const SHOWN = 6;
 const cards = featured.map((p) => ({
   title: p.title, year: p.year, href: projectHref(p), image: p.image, alt: p.alt,
-  position: p.homePosition ?? p.position, filter: p.homeFilter, student: p.student, outcome: p.outcome, brief: p.summary,
+  position: p.homePosition ?? p.position, filter: p.homeFilter, student: p.student, label: p.label, outcome: p.outcome, brief: p.summary,
 }));
 // Social media videos (Pages CMS: Home page > Social media videos), after the projects under Social Media.
 const videos = await Promise.all(home.socialVideos.map(async (v) => ({ ...v, poster: (await getImage({ src: v.poster, width: 720, format: 'webp' })).src })));
@@ -43,7 +44,7 @@ const videos = await Promise.all(home.socialVideos.map(async (v) => ({ ...v, pos
 const results = home.results.map(bySlug) // Pages CMS: Home page > Why Clients Choose Us
   .map((p) => ({ client: p.client, title: p.title, line: p.summary, href: projectHref(p) }));
 // The lanes are the services with a page of their own; the rest (monthly plans, video) sit in a short row under them.
-const lanes = services.filter((s) => s.href && !s.href.includes('#'));
+const lanes = services.filter(isLane);
 const more = services.filter((s) => !lanes.includes(s));
 ---
 <!doctype html>
@@ -135,7 +136,7 @@ const more = services.filter((s) => !lanes.includes(s));
                   <span class="card__row">
                     <span class="card__tags">
                       {c.filter && <span class="tag">{c.filter}</span>}
-                      {c.student && <span class="tag">Student Work</span>}
+                      {c.label && <span class="tag">{c.label}</span>}
                     </span>
                   </span>
                   <span class="card__out">{c.outcome}</span>
@@ -164,7 +165,7 @@ const more = services.filter((s) => !lanes.includes(s));
                 <h3 class="acc__h">
                   <button class="acc__btn" type="button" id={`fwl-${i}-btn`} aria-controls={`fwl-${i}`} aria-expanded="true">
                     <span class="fwl__t">{c.title}</span>
-                    <span class="fwl__tags">{c.filter && <span class="tag">{c.filter}</span>}{c.student && <span class="tag">Student Work</span>}</span>
+                    <span class="fwl__tags">{c.filter && <span class="tag">{c.filter}</span>}{c.label && <span class="tag">{c.label}</span>}</span>
                     <span class="acc__from">{c.year}</span><span class="acc__icon" aria-hidden="true"></span>
                   </button>
                 </h3>
@@ -211,13 +212,14 @@ const more = services.filter((s) => !lanes.includes(s));
         <section class="services wrap" id="services" aria-labelledby="services-h">
           <h2 class="big services__h" id="services-h">Services</h2>
           <p class="services__intro">Every project is priced on its scope, so these are starting points. You'll get a fixed quote after our first call.</p>
+          {servicesPage.quoteNote && <p class="services__intro services__note">{servicesPage.quoteNote}</p>}
           <!-- The two lanes in large type; hovering or focusing one shows its first example beside the list (WECOMEET,
                Josh 2 Nov). Without hover the example sits under each lane. Examples: Pages CMS > Services and prices. -->
           <div class="svc">
             <ul class="svc__list">
               {lanes.map((s) => (
                 <li class="svc__row">
-                  <a class="svc__link" href={s.href}>
+                  <a class="svc__link" href={s.href ?? '/services/'}>
                     <span class="svc__name">{titleCase(s.name)}</span>
                     <span class="svc__line">{s.line}</span>
                     <span class="svc__price">{s.home.price}{s.home.time && <span>, {s.home.time}</span>}</span>
@@ -265,7 +267,7 @@ const more = services.filter((s) => !lanes.includes(s));
               ))}
             </ul>
           </section>
-          <ul class="approach">
+          <ul class="approach" style={`--n: ${home.approach.length}`}>
             {home.approach.map((a) => <li><h3 class="approach__t">{a.title}</h3><p>{a.text}</p></li>)}
           </ul>
           <!-- One quote: the large pane beside the two results. Two quotes: a row of quotes over a row of results. -->
@@ -670,6 +672,7 @@ const more = services.filter((s) => !lanes.includes(s));
   }
   @media (prefers-reduced-motion: reduce) { .svc__link, .svc__ex { transition: none; } .svc__row:is(:hover, :focus-within) .svc__link { transform: none; } }
   .services__intro { margin-top: 20px; max-width: 46ch; font-size: 20px; line-height: 1.45; }
+  .services__note { margin-top: 8px; font-weight: 600; }
   .acc { position: relative; margin-top: var(--sp-head); padding: 4px var(--sp-card); border-radius: var(--radius); }
   .acc__row + .acc__row { border-top: 1px solid color-mix(in srgb, var(--ink) 16%, transparent); }
   .acc__btn { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 24px; padding: 26px 0; border: 0; background: none; color: inherit; font: 600 28px/1.2 var(--text); letter-spacing: -0.02em; text-align: left; cursor: pointer; }
@@ -702,7 +705,8 @@ const more = services.filter((s) => !lanes.includes(s));
   .trusted__l { font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); }
   .trusted__list { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 32px; margin: 0; padding: 0; list-style: none; font-size: 17px; color: var(--ink-2); }
   .trusted__list img { display: block; height: 28px; width: auto; filter: brightness(0) invert(1) sepia(.35); opacity: .7; } /* any logo to one soft cream */
-  .approach { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-gap); margin: 0; margin-top: var(--sp-head); padding: 0; list-style: none; }
+  .approach { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: var(--sp-gap); margin: 0; margin-top: var(--sp-head); padding: 0; list-style: none; }
+  @media (min-width: 760px) and (max-width: 1099.98px) { .approach { grid-template-columns: repeat(2, minmax(0, 1fr)); } } /* four points: two by two on tablets */
   .approach__t { font-family: var(--display); font-weight: 500; font-size: 26px; line-height: 1.1; margin-bottom: 10px; }
   .approach p { font-size: 18px; line-height: 1.5; color: var(--ink-2); text-wrap: pretty; }
   .proof__grid { display: grid; grid-template-columns: 7fr 5fr; grid-template-rows: 1fr 1fr; gap: var(--sp-gap); margin-top: var(--sp-head); }

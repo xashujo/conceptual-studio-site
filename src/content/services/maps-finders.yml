@@ -1,0 +1,11 @@
+name: Interactive Maps & Finders
+order: 6
+lane: Data
+page: /work/course-finder/
+summary: Searchable course finders, maps & tools built into your own website, for example on WordPress. Your staff keep them up to date from Excel.
+homeLink: See the Course Finder concept
+tiers:
+  - name: Finder or map
+    onHome: true
+    price: "[TBC: From £X]"
+    includes: A searchable finder, map or tool built into your own website, which your staff update from an Excel file.

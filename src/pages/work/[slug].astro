@@ -30,6 +30,7 @@ const credits = [[t.clientLabel, p.client], [t.disciplinesLabel, p.disciplines.j
         {credits.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
         <div><dt>Year</dt><dd>{p.year}</dd></div>
       </dl>
+      {cs.demo && <a class="btn btn--solid cs-demo" href={cs.demo.href} target="_blank" rel="noopener">{cs.demo.label} <span class="arrow" aria-hidden="true">↗</span></a>}
     </div>
     <figure class="cs-lead">
       <Image src={p.image} alt={p.alt} widths={[800, 1400, 2000]} sizes="(min-width: 1200px) 1140px, 95vw" loading="eager" fetchpriority="high" />
