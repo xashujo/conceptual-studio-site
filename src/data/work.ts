@@ -30,6 +30,8 @@ export interface Project {
   student?: boolean;
   /** The small label on the card: Student Work, or the project's own label, e.g. Concept. */
   label?: string;
+  /** Pages of a magazine the card opens on the Work page, cover first. */
+  magazine: { image: ImageMetadata; alt: string }[];
   /** true when /work/<slug>/ exists */
   caseStudy?: boolean;
   featured: boolean; featuredOrder?: number; homePosition?: string;
@@ -66,6 +68,7 @@ export const projects: Project[] = entries.map(({ data: d }) => ({
   student: d.studentWork || undefined,
   label: d.studentWork ? 'Student Work' : d.label || undefined,
   caseStudy: d.hasPage || undefined,
+  magazine: d.magazine.map((m) => ({ image: m.src, alt: m.alt })),
   featured: d.featured, featuredOrder: d.featuredOrder ?? undefined, homePosition: d.homeFocus ?? undefined,
   outcome: d.outcome || undefined,
   homeFilter: d.homeFilter ?? d.filters.map((f) => homeFromWork[f]).find(Boolean),
@@ -97,4 +100,5 @@ export const featured = projects
   .sort((a, b) => (a.featuredOrder ?? 99) - (b.featuredOrder ?? 99) || a.title.localeCompare(b.title));
 
 /** Where a project card links: its own page, or the Work page when it has none yet. */
-export const projectHref = (p: Project) => (p.caseStudy ? `/work/${p.slug}/` : '/work/');
+// A magazine opens where it is on the Work page; see Magazine.astro.
+export const projectHref = (p: Project) => (p.caseStudy ? `/work/${p.slug}/` : p.magazine.length ? `/work/#read-${p.slug}` : '/work/');

@@ -1,0 +1,196 @@
+---
+// A printed magazine you can turn the pages of (Josh, 4 Nov), opened from its card on the Work page.
+// Spreads on wide screens, one page at a time on phones. Swipe, click either side, or use the arrow keys.
+// Any link to #read-<slug> opens it. Pages and alt text: Pages CMS > Projects > Magazine pages.
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+interface Props { slug: string; title: string; pages: { image: ImageMetadata; alt: string }[] }
+const { slug, title, pages } = Astro.props;
+const data = await Promise.all(pages.map(async ({ image, alt }) => {
+  const [s, l] = await Promise.all([640, 1100].map((width) => getImage({ src: image, width, format: 'webp' })));
+  return { src: l.src, srcset: `${s.src} 640w, ${l.src} 1100w`, alt };
+}));
+---
+<dialog class="mag night" id={`read-${slug}`} aria-labelledby={`read-${slug}-t`} data-mag={JSON.stringify(data)}>
+  <div class="mag__bar">
+    <h2 class="mag__t" id={`read-${slug}-t`}>{title}</h2>
+    <p class="mag__n" aria-live="polite" data-count></p>
+    <form method="dialog"><button class="mag__btn glass-button is-dark" aria-label="Close" title="Close (Esc)">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button></form>
+  </div>
+  <div class="mag__stage">
+    <button class="mag__btn mag__prev glass-button is-dark" type="button" aria-label="Previous page" data-prev>
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="mag__book" data-book>
+      <img class="mag__page mag__page--l" alt="" decoding="async" />
+      <img class="mag__page mag__page--r" alt="" decoding="async" />
+      <div class="mag__leaf" aria-hidden="true" hidden><img class="mag__face" alt="" /><img class="mag__face mag__face--back" alt="" /></div>
+    </div>
+    <button class="mag__btn mag__next glass-button is-dark" type="button" aria-label="Next page" data-next autofocus>
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 4l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</dialog>
+
+<script>
+  type Page = { src: string; srcset: string; alt: string };
+  const still = matchMedia('(prefers-reduced-motion: reduce)');
+  const wide = matchMedia('(min-width: 700px) and (min-aspect-ratio: 1/1)'); // spreads only when two pages fit side by side
+
+  document.querySelectorAll<HTMLDialogElement>('dialog[data-mag]').forEach((dlg) => {
+    const pages: Page[] = JSON.parse(dlg.dataset.mag!);
+    const n = pages.length;
+    const book = dlg.querySelector<HTMLElement>('[data-book]')!;
+    const [left, right] = book.querySelectorAll<HTMLImageElement>('.mag__page');
+    const leaf = book.querySelector<HTMLElement>('.mag__leaf')!;
+    const [front, back] = leaf.querySelectorAll<HTMLImageElement>('img');
+    const prev = dlg.querySelector<HTMLButtonElement>('[data-prev]')!;
+    const next = dlg.querySelector<HTMLButtonElement>('[data-next]')!;
+    const count = dlg.querySelector<HTMLElement>('[data-count]')!;
+    let spread = wide.matches;
+    let v = 0; // the view: a spread (cover alone, then pairs, back cover alone) or a single page
+    let anim: Animation | undefined;
+    let landed: (() => void) | undefined;
+    // Ends a turn now, so a fast second click or key starts from the page the first one landed on.
+    const settle = () => { const f = landed; landed = undefined; anim?.cancel(); anim = undefined; f?.(); };
+
+    // Page numbers shown in view k; -1 when that side is empty (beside the covers, or on phones).
+    const L = (k: number) => (spread && 2 * k - 1 < n ? 2 * k - 1 : -1);
+    const R = (k: number) => (spread ? (2 * k < n ? 2 * k : -1) : k);
+    const last = () => (spread ? Math.floor(n / 2) : n - 1);
+    const sizes = () => (spread ? 'min(45vw, 62vh)' : 'min(92vw, 62vh)');
+
+    const put = (img: HTMLImageElement, i: number, alt = true) => {
+      img.hidden = i < 0;
+      if (i < 0) return;
+      img.sizes = sizes(); img.srcset = pages[i].srcset; img.src = pages[i].src;
+      img.alt = alt ? pages[i].alt : '';
+    };
+    const warm = (k: number) => [L(k), R(k)].forEach((i) => { if (i >= 0) Object.assign(new Image(), { sizes: sizes(), srcset: pages[i].srcset }); });
+    const label = (k: number) => {
+      const shown = [L(k), R(k)].filter((i) => i >= 0);
+      if (shown[0] === 0) return 'Cover';
+      if (shown[0] === n - 1) return 'Back cover';
+      return shown.length > 1 ? `Pages ${shown[0] + 1}–${shown[1] + 1} of ${n}` : `Page ${shown[0] + 1} of ${n}`;
+    };
+    // A cover on its own slides to the middle, as a closed magazine would sit.
+    const centre = (k: number) => { book.dataset.alone = !spread ? '' : L(k) < 0 ? 'r' : R(k) < 0 ? 'l' : ''; };
+    const render = () => {
+      book.classList.toggle('is-spread', spread);
+      centre(v);
+      put(left, L(v)); put(right, R(v));
+      leaf.hidden = true;
+      prev.disabled = v === 0; next.disabled = v === last();
+      count.textContent = label(v);
+      warm(v + 1); warm(v - 1);
+    };
+
+    const turn = (dir: 1 | -1) => {
+      settle();
+      const to = v + dir;
+      if (to < 0 || to > last()) return;
+      if (still.matches) { v = to; return render(); }
+      // The leaf is the page being turned: its front is what you see now, its back what lands on the other side.
+      const onLeft = spread && dir < 0;
+      leaf.className = `mag__leaf${spread ? (onLeft ? ' is-left' : ' is-right') : ''}`;
+      if (dir > 0) { put(front, R(v), false); put(back, L(to), false); put(right, R(to)); }
+      else if (spread) { put(front, L(v), false); put(back, R(to), false); put(left, L(to)); }
+      else { put(front, R(to), false); back.hidden = true; } // phones: the previous page swings back over this one
+      leaf.hidden = false;
+      centre(to);
+      const keyframes = !spread && dir < 0 ? [{ transform: 'rotateY(-180deg)' }, { transform: 'rotateY(0)' }]
+        : [{ transform: 'rotateY(0)' }, { transform: `rotateY(${onLeft ? 180 : -180}deg)` }];
+      anim = leaf.animate(keyframes, { duration: 700, easing: 'cubic-bezier(0.45, 0.05, 0.2, 1)' });
+      landed = () => { v = to; render(); };
+      anim.onfinish = settle;
+    };
+
+    prev.addEventListener('click', () => turn(-1));
+    next.addEventListener('click', () => turn(1));
+    dlg.addEventListener('keydown', (e) => {
+      const go = ({ ArrowRight: 1, PageDown: 1, ArrowLeft: -1, PageUp: -1 } as Record<string, 1 | -1>)[e.key];
+      if (go) { e.preventDefault(); turn(go); }
+      if (e.key === 'Home' || e.key === 'End') { e.preventDefault(); settle(); v = e.key === 'Home' ? 0 : last(); render(); }
+    });
+
+    // Swipe to turn; a tap or click on the left or right of the book turns back or on.
+    let x0 = 0;
+    book.addEventListener('pointerdown', (e) => { x0 = e.clientX; });
+    book.addEventListener('pointerup', (e) => {
+      const dx = e.clientX - x0;
+      if (Math.abs(dx) > 40) return turn(dx < 0 ? 1 : -1);
+      if (Math.abs(dx) > 6) return;
+      const r = book.getBoundingClientRect();
+      turn(e.clientX - r.left < r.width * (spread ? 0.5 : 0.33) ? -1 : 1);
+    });
+
+    // Keep the same page in view when a phone turns sideways.
+    wide.addEventListener('change', () => {
+      settle();
+      const page = Math.max(L(v), R(v));
+      spread = wide.matches;
+      v = spread ? Math.floor((page + 1) / 2) : page;
+      render();
+    });
+
+    const open = () => { if (!dlg.open) { render(); dlg.showModal(); } };
+    document.addEventListener('click', (e) => {
+      const a = (e.target as HTMLElement).closest('a');
+      if (a?.hash === `#${dlg.id}` && a.pathname === location.pathname) { e.preventDefault(); open(); }
+    });
+    if (location.hash === `#${dlg.id}`) open();
+    dlg.addEventListener('close', () => { settle(); if (location.hash) history.replaceState(null, '', location.pathname + location.search); });
+  });
+</script>
+
+<style>
+  /* Page shape from the print files: 1287 × 1816. */
+  .mag { --page: 0.7087; color-scheme: dark; position: fixed; inset: 0; width: 100%; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0 var(--margin);
+    border: 0; background: var(--paper); color: var(--ink); display: none; grid-template-rows: auto 1fr; overscroll-behavior: contain; }
+  .mag[open] { display: grid; }
+  .mag::backdrop { background: #14110D; }
+  :global(html:has(.mag[open])) { overflow: hidden; }
+
+  .mag__bar { display: flex; align-items: center; gap: 16px; padding: 16px 0; }
+  .mag__t { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; }
+  .mag__n { margin-left: auto; font-size: 17px; font-weight: 500; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .mag__btn { position: relative; flex: none; display: grid; place-items: center; width: 52px; height: 52px; padding: 0; border: 0; border-radius: 50%; color: var(--ink); cursor: pointer; transition: opacity 200ms ease-out; }
+  .mag__btn:disabled { opacity: 0.3; cursor: default; }
+  @media (hover: hover) { .mag__btn:not(:disabled):hover { color-scheme: light; background: color-mix(in srgb, var(--paper) 90%, transparent); color: var(--ink); } }
+  .mag__btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+  .mag__stage { display: flex; align-items: center; justify-content: center; gap: 24px; min-height: 0; padding-bottom: 24px; }
+  .mag__book { position: relative; display: grid; grid-template-columns: 1fr; width: min(100%, calc((100dvh - 180px) * var(--page))); aspect-ratio: var(--page);
+    perspective: 2400px; touch-action: pan-y pinch-zoom; user-select: none; -webkit-user-select: none; cursor: pointer; }
+  .mag__book.is-spread { grid-template-columns: 1fr 1fr; width: min(calc(100vw - 2 * var(--margin) - 160px), calc((100dvh - 140px) * 2 * var(--page))); aspect-ratio: 1.4174; }
+  .mag__page, .mag__face { width: 100%; height: 100%; object-fit: cover; background: #fff; -webkit-user-drag: none; }
+  .mag__page { grid-row: 1; box-shadow: 0 24px 60px -24px rgb(0 0 0 / 0.7); }
+  .mag__page--l { grid-column: 1; }
+  .mag__page--r { grid-column: -2; }
+  .mag__page[hidden] { display: block; visibility: hidden; } /* an empty side keeps its place beside the covers */
+  /* The fold: a soft shadow either side of the spine. */
+  .mag__book.is-spread::after { content: ''; position: absolute; inset: 0 calc(50% - 28px); pointer-events: none;
+    background: linear-gradient(90deg, transparent, rgb(0 0 0 / 0.14) 46%, rgb(0 0 0 / 0.22) 50%, rgb(0 0 0 / 0.14) 54%, transparent); }
+  .mag__book.is-spread:has(.mag__page[hidden])::after { display: none; }
+  .mag__book.is-spread { transition: translate 700ms cubic-bezier(0.45, 0.05, 0.2, 1); }
+  .mag__book[data-alone='r'] { translate: -25% 0; }
+  .mag__book[data-alone='l'] { translate: 25% 0; }
+  @media (prefers-reduced-motion: reduce) { .mag__book.is-spread { transition: none; } }
+
+  .mag__leaf { position: absolute; inset: 0; transform-style: preserve-3d; transform-origin: left center; z-index: 2; pointer-events: none; }
+  .mag__leaf[hidden] { display: none; }
+  .mag__leaf.is-right { left: 50%; }
+  .mag__leaf.is-left { right: 50%; transform-origin: right center; }
+  .mag__face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+  .mag__face--back { transform: rotateY(180deg); }
+
+  @media (max-width: 759.98px) {
+    .mag__stage { flex-wrap: wrap; align-content: center; gap: 16px 24px; }
+    .mag__book { order: -1; flex: 0 0 100%; max-width: calc((100dvh - 200px) * var(--page)); } /* its own row; the arrows sit under it */
+    .mag__bar { padding: 12px 0; }
+    .mag__t { font-size: 18px; }
+    .mag__n { font-size: 15px; }
+  }
+</style>

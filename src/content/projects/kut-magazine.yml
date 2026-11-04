@@ -1,0 +1,127 @@
+title: KUT Magazine
+slug: kut-magazine
+client: Kingston School of Art
+year: 2023
+disciplines:
+- Visual identity
+- Art direction
+- Photography
+studentWork: true
+order: 80
+summary: 'An arts magazine on emerging creatives: identity, interviews, layout and print.'
+cover:
+  src: '@assets/work/kut-magazine/pages/01.webp'
+  alt: 'KUT Magazine cover: Issue No. 01, December 2022, with a painting by Holly Latif'
+  caption: Student work. Magazine
+thumb: "@assets/work/kut-magazine/thumb.webp"
+featured: false
+hasPage: false
+magazine:
+- src: '@assets/work/kut-magazine/pages/01.webp'
+  alt: "Front cover: Issue No. 01, December 2022, with a painting by Holly Latif"
+- src: '@assets/work/kut-magazine/pages/02.webp'
+  alt: "Opening page: what KUT Magazine is"
+- src: '@assets/work/kut-magazine/pages/03.webp'
+  alt: "Contents"
+- src: '@assets/work/kut-magazine/pages/04.webp'
+  alt: "Full-page portrait of the artist Kit Sivers"
+- src: '@assets/work/kut-magazine/pages/05.webp'
+  alt: "Interview: a conversation with Kit Sivers"
+- src: '@assets/work/kut-magazine/pages/06.webp'
+  alt: "Untitled, a painting by Kit Sivers"
+- src: '@assets/work/kut-magazine/pages/07.webp'
+  alt: "Growth, a drawing by Kit Sivers"
+- src: '@assets/work/kut-magazine/pages/08.webp'
+  alt: "Birthday Cake, a painting by Kit Sivers"
+- src: '@assets/work/kut-magazine/pages/09.webp'
+  alt: "Full-page portrait of the artist Ryunosuke Yabe"
+- src: '@assets/work/kut-magazine/pages/10.webp'
+  alt: "Interview: a conversation with Ryunosuke Yabe"
+- src: '@assets/work/kut-magazine/pages/11.webp'
+  alt: "Qilin, digital art by Ryunosuke Yabe"
+- src: '@assets/work/kut-magazine/pages/12.webp'
+  alt: "Tiger, digital art by Ryunosuke Yabe"
+- src: '@assets/work/kut-magazine/pages/13.webp'
+  alt: "Cat, digital art by Ryunosuke Yabe"
+- src: '@assets/work/kut-magazine/pages/14.webp'
+  alt: "Full-page portrait of the artist Saskia Frank"
+- src: '@assets/work/kut-magazine/pages/15.webp'
+  alt: "Interview: a conversation with Saskia Frank"
+- src: '@assets/work/kut-magazine/pages/16.webp'
+  alt: "Estelas en la Mar, a painting by Saskia Frank"
+- src: '@assets/work/kut-magazine/pages/17.webp'
+  alt: "Tolerate It, by Saskia Frank"
+- src: '@assets/work/kut-magazine/pages/18.webp'
+  alt: "Invisible String, digital art by Saskia Frank"
+- src: '@assets/work/kut-magazine/pages/19.webp'
+  alt: "100 Letters, a self-portrait by Saskia Frank"
+- src: '@assets/work/kut-magazine/pages/20.webp'
+  alt: "Full-page portrait of the artist Ellie Hughes"
+- src: '@assets/work/kut-magazine/pages/21.webp'
+  alt: "Interview: a conversation with Ellie Hughes"
+- src: '@assets/work/kut-magazine/pages/22.webp'
+  alt: "Mime, a painting by Ellie Hughes"
+- src: '@assets/work/kut-magazine/pages/23.webp'
+  alt: "Exposure, mixed media by Ellie Hughes"
+- src: '@assets/work/kut-magazine/pages/24.webp'
+  alt: "Untitled, mixed media by Ellie Hughes"
+- src: '@assets/work/kut-magazine/pages/25.webp'
+  alt: "Gunk, mixed media by Ellie Hughes"
+- src: '@assets/work/kut-magazine/pages/26.webp'
+  alt: "Full-page portrait of the artist Holly Latif"
+- src: '@assets/work/kut-magazine/pages/27.webp'
+  alt: "Interview: a conversation with Holly Latif"
+- src: '@assets/work/kut-magazine/pages/28.webp'
+  alt: "Feminine Energy, digital art by Holly Latif"
+- src: '@assets/work/kut-magazine/pages/29.webp'
+  alt: "Statue, digital art by Holly Latif"
+- src: '@assets/work/kut-magazine/pages/30.webp'
+  alt: "Oil Spill, digital art by Holly Latif"
+- src: '@assets/work/kut-magazine/pages/31.webp'
+  alt: "Advert for Glugg super shots"
+- src: '@assets/work/kut-magazine/pages/32.webp'
+  alt: "Full-page portrait of the artist Emily Alice Ashbee"
+- src: '@assets/work/kut-magazine/pages/33.webp'
+  alt: "Interview: a conversation with Emily Ashbee"
+- src: '@assets/work/kut-magazine/pages/34.webp'
+  alt: "Still from the film Oh God, Oh God! Help! I'm Boiling Alive! by Emily Ashbee"
+- src: '@assets/work/kut-magazine/pages/35.webp'
+  alt: "Corporate Clowns, a film still by Emily Ashbee"
+- src: '@assets/work/kut-magazine/pages/36.webp'
+  alt: "News Today, Trash Tomorrow, a film still by Emily Ashbee"
+- src: '@assets/work/kut-magazine/pages/37.webp'
+  alt: "Slob Britain Vol. 2, a film still by Emily Ashbee"
+- src: '@assets/work/kut-magazine/pages/38.webp'
+  alt: "Advert for a candle sale"
+- src: '@assets/work/kut-magazine/pages/39.webp'
+  alt: "Full-page portrait of the artist Zoe Chan"
+- src: '@assets/work/kut-magazine/pages/40.webp'
+  alt: "Interview: a conversation with Zoe Chan"
+- src: '@assets/work/kut-magazine/pages/41.webp'
+  alt: "Self Reflection, tufted work by Zoe Chan"
+- src: '@assets/work/kut-magazine/pages/42.webp'
+  alt: "Portal, tufted work by Zoe Chan"
+- src: '@assets/work/kut-magazine/pages/43.webp'
+  alt: "Advert for Patch & Go"
+- src: '@assets/work/kut-magazine/pages/44.webp'
+  alt: "Full-page portrait of the artist Rosie Fiveash"
+- src: '@assets/work/kut-magazine/pages/45.webp'
+  alt: "Interview: a conversation with Rosie Fiveash"
+- src: '@assets/work/kut-magazine/pages/46.webp'
+  alt: "I <3 U, a crochet top by Rosie Fiveash"
+- src: '@assets/work/kut-magazine/pages/47.webp'
+  alt: "Netted, a crochet top by Rosie Fiveash"
+- src: '@assets/work/kut-magazine/pages/48.webp'
+  alt: "Acid Drip, a crochet bag by Rosie Fiveash"
+- src: '@assets/work/kut-magazine/pages/49.webp'
+  alt: "Petite Floral, a crochet bag by Rosie Fiveash"
+- src: '@assets/work/kut-magazine/pages/50.webp'
+  alt: "Full-page portrait of the artist Emma Leadbetter"
+- src: '@assets/work/kut-magazine/pages/51.webp'
+  alt: "Interview: a conversation with Emma Leadbetter"
+- src: '@assets/work/kut-magazine/pages/52.webp'
+  alt: "Kites Fly in My Room and My Room Is a Beach, a painting by Emma Leadbetter"
+- src: '@assets/work/kut-magazine/pages/53.webp'
+  alt: "Sharing Fries, a painting by Emma Leadbetter"
+- src: '@assets/work/kut-magazine/pages/54.webp'
+  alt: "Back cover"

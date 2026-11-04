@@ -5,6 +5,7 @@ import { getImage } from 'astro:assets';
 import Studio from '../../layouts/Studio.astro';
 import Band from '../../components/studio/Band.astro';
 import WorkBrowser from '../../components/WorkBrowser.astro';
+import Magazine from '../../components/Magazine.astro';
 import { projects, filters, projectHref } from '../../data/work';
 import { home, clientGroups } from '../../lib/site';
 import { workPage as w, titleCase } from '../../lib/pages';
@@ -40,6 +41,8 @@ const videos = await Promise.all(home.socialVideos.map(async (v) => ({ ...v, pos
       ))}
     </div>
   </Band>
+
+  {projects.filter((p) => p.magazine.length).map((p) => <Magazine slug={p.slug} title={p.title} pages={p.magazine} />)}
 </Studio>
 
 <style>

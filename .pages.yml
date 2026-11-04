@@ -134,6 +134,15 @@ content:
           - { name: title, label: Caption line 1, type: string, required: true }
           - { name: caption, label: Caption line 2, type: string, required: true }
 
+      - name: magazine
+        label: Magazine pages (optional)
+        type: object
+        list: true
+        description: "For a magazine or booklet: every page in order, one image per page, front cover first and back cover last. The card then opens a magazine you can turn the pages of, instead of a case study page. Pages are tall single pages, not spreads."
+        fields:
+          - { name: src, label: Page image, type: image, required: true, options: { media: images } }
+          - { name: alt, label: Description (alt text), type: string, required: true }
+
       - name: hasPage
         label: Has its own case study page
         type: boolean
