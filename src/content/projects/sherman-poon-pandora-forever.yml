@@ -18,8 +18,7 @@ cover:
   caption: CGI, a still from the music video
 thumb: "@assets/work/sherman-poon-pandora-forever/thumb.webp"
 coverFocus: 50% 50%
-featured: true
-featuredOrder: 5
+featured: false
 outcome: Shown on billboards including Times Square in Hong Kong.
 homeFilter: Branding
 hasPage: false

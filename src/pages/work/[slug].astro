@@ -18,7 +18,14 @@ const p = bySlug(cs.slug);
 const next = bySlug(cs.next);
 const cap = (pl: Plate) => ({ title: p.client.startsWith(p.title) ? `${p.title}, ${p.year}` : `${p.title}, ${p.client}, ${p.year}`, medium: pl.medium });
 const sizes = { full: '(min-width: 1200px) 1140px, 95vw', pair: '(min-width: 760px) 560px, 100vw', trio: '(min-width: 760px) 370px, 100vw', quad: '(min-width: 760px) 560px, 100vw' };
-const credits = [[t.clientLabel, p.client], [t.disciplinesLabel, p.disciplines.join(', ')], [t.outcomeLabel, cs.outcome]].filter(([, v]) => v);
+// Credits sit on one line each (Josh, 4 Nov: the four-column row with the outcome felt stuffy). The outcome
+// field still shows on the home page's Selected Work cards.
+const credits = [[t.clientLabel, p.client], [t.disciplinesLabel, p.disciplines.join(', ')]].filter(([, v]) => v);
+// Opener: the project's title graphic when it has one (Josh, 4 Nov: a photo of the work in a street is a weak
+// opener), else the cover.
+const lead = p.thumb
+  ? { image: p.thumb, alt: `${p.title} title graphic`, medium: 'Title graphic' }
+  : { image: p.image, alt: p.alt, medium: p.medium };
 ---
 <Studio title={p.title} description={p.summary} current="/work/" closeText={t.closeText}>
   <Band opening class="cs-open" labelledby="cs-h">
@@ -33,8 +40,8 @@ const credits = [[t.clientLabel, p.client], [t.disciplinesLabel, p.disciplines.j
       {cs.demo && <a class="btn btn--solid cs-demo" href={cs.demo.href} target="_blank" rel="noopener">{cs.demo.label} <span class="arrow" aria-hidden="true">↗</span></a>}
     </div>
     <figure class="cs-lead">
-      <Image src={p.image} alt={p.alt} widths={[800, 1400, 2000]} sizes="(min-width: 1200px) 1140px, 95vw" loading="eager" fetchpriority="high" />
-      <PlateCaption {...cap({ image: p.image, alt: p.alt, medium: p.medium })} />
+      <Image src={lead.image} alt={lead.alt} widths={[800, 1400, 2000]} sizes="(min-width: 1200px) 1140px, 95vw" loading="eager" fetchpriority="high" />
+      <PlateCaption {...cap(lead)} />
     </figure>
   </Band>
 
@@ -85,12 +92,14 @@ const credits = [[t.clientLabel, p.client], [t.disciplinesLabel, p.disciplines.j
 
   <Band label={t.nextLabel}>
     <a class="next glass" href={`/work/${next.slug}/`} data-lens data-reveal>
-      <Image class="next__img" src={next.image} alt="" widths={[400, 700]} sizes="(min-width: 760px) 360px, calc(100vw - 76px)" style={next.position ? `object-position: ${next.position}` : undefined} />
+      <Image class="next__img" src={next.thumb ?? next.image} alt="" widths={[400, 700]} sizes="(min-width: 760px) 360px, calc(100vw - 76px)" style={!next.thumb && next.position ? `object-position: ${next.position}` : undefined} />
       <span class="next__text">
         <span class="next__label">{t.nextLabel}</span>
-        <span class="next__title">{next.title}<span class="arrow" aria-hidden="true">→</span></span>
+        <span class="next__title">{next.title}</span>
         <span class="next__line">{next.summary}</span>
       </span>
+      <!-- A small round button instead of a display-size arrow (Josh, 4 Nov); it goes dark on hover like the pills. -->
+      <span class="next__go" aria-hidden="true"><svg viewBox="0 0 20 20" width="20" height="20"><path d="M4 10h11M11 5.5 15.5 10 11 14.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
     </a>
   </Band>
 </Studio>
@@ -100,9 +109,9 @@ const credits = [[t.clientLabel, p.client], [t.disciplinesLabel, p.disciplines.j
   .cs-back { --fill: color-mix(in srgb, var(--paper) 55%, transparent); gap: 8px; }
   @media (hover: hover) { .cs-back:hover .arrow { transform: rotate(45deg); } }
   .cs-h { font-size: clamp(52px, 6.6vw, 104px); max-width: 16ch; }
-  .cs-credits { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px 32px; width: 100%; margin: 10px 0 0; padding-top: 28px; border-top: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); text-align: left; }
+  .cs-credits { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 64px; width: 100%; margin: 10px 0 0; padding-top: 28px; border-top: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); text-align: center; }
   .cs-credits dt { font-size: 15px; color: var(--ink-2); }
-  .cs-credits dd { margin: 4px 0 0; font-size: 19px; line-height: 1.35; font-weight: 500; letter-spacing: -0.01em; }
+  .cs-credits dd { margin: 4px 0 0; white-space: nowrap; font-size: 19px; line-height: 1.35; font-weight: 500; letter-spacing: -0.01em; }
   /* The lead exhibit keeps its own shape (a portrait poster stays portrait), as tall as the screen allows. */
   .cs-lead { margin-top: var(--sp-gap); text-align: center; }
   .cs-lead img { width: auto; max-width: 100%; height: auto; max-height: 86svh; margin-inline: auto; border-radius: var(--radius-inner); }
@@ -124,25 +133,28 @@ const credits = [[t.clientLabel, p.client], [t.disciplinesLabel, p.disciplines.j
   .row--quad img { aspect-ratio: 1.41; object-fit: cover; }
   .cs-ba { margin-top: var(--sp-section); }
 
-  .next { position: relative; display: grid; grid-template-columns: 360px minmax(0, 1fr); gap: 32px; align-items: center; padding: 12px; border-radius: var(--radius); text-decoration: none; transition: background-color 300ms ease-out; }
+  .next { position: relative; display: grid; grid-template-columns: 360px minmax(0, 1fr) auto; gap: 32px; align-items: center; padding: 12px; border-radius: var(--radius); text-decoration: none; transition: background-color 300ms ease-out; }
   .next__img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: var(--radius-inner); }
   .next__text { display: grid; gap: 10px; padding-right: 20px; }
   .next__label { font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--ink-2); }
   .next__title { font-family: var(--display); font-size: clamp(36px, 4.4vw, 64px); line-height: 1; letter-spacing: -0.01em; }
+  .next__go { display: grid; place-items: center; width: 56px; height: 56px; margin-right: 20px; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--ink) 22%, transparent); color: var(--ink); transition: background-color 200ms ease-out, color 200ms ease-out, border-color 200ms ease-out; }
+  .next__go svg { transition: transform 180ms ease-out; }
   .next__line { font-size: 18px; line-height: 1.45; color: var(--ink-2); max-width: 52ch; }
-  @media (hover: hover) { .next:hover { background: color-mix(in srgb, var(--paper) 90%, transparent); } .next:hover .arrow { transform: rotate(-45deg); } }
+  @media (hover: hover) { .next:hover { background: color-mix(in srgb, var(--paper) 90%, transparent); } .next:hover .next__go { background: var(--ink); color: var(--paper); border-color: var(--ink); } .next:hover .next__go svg { transform: rotate(-45deg); } }
   .next:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 
   @media (max-width: 1099.98px) { .cs-two { grid-template-columns: 1fr; } }
   @media (max-width: 759.98px) {
     .cs-h { font-size: 44px; }
     .cs-credits { grid-template-columns: 1fr 1fr; }
-    .cs-credits dd { font-size: 17px; }
+    .cs-credits dd { font-size: 17px; white-space: normal; }
     .cs-lead img { width: 100%; max-height: none; }
     .cs-text p, .cs-list { font-size: 17px; }
     .row--pair, .row--trio, .row--quad { grid-template-columns: 1fr; }
     .next { grid-template-columns: 1fr; gap: 16px; padding: 10px 10px 18px; }
     .next__text { padding: 0 8px; }
+    .next__go { justify-self: end; width: 48px; height: 48px; margin: 0 8px 0 0; }
     .next__line { font-size: 16px; }
   }
 </style>
