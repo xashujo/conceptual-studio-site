@@ -18,7 +18,7 @@ const mailto = (t: (typeof rungs)[number]) =>
 ---
 <div class="ladder" role="list" style={`--n: ${rungs.length}`}>
   {rungs.map((t) => (
-    <article class:list={['rung glass', { 'rung--custom': t.id === 'custom' }]} role="listitem" aria-labelledby={`rung-${t.value.replace(':', '-')}`}>
+    <div class:list={['rung glass', { 'rung--custom': t.id === 'custom' }]} role="listitem" aria-labelledby={`rung-${t.value.replace(':', '-')}`}>
       {t.badge && <p class="rung__badge badge">{t.badge}</p>}
       <h3 class="rung__name" id={`rung-${t.value.replace(':', '-')}`}>{t.name}</h3>
       {t.lead && <p class="rung__lead">{t.lead}</p>}
@@ -29,7 +29,7 @@ const mailto = (t: (typeof rungs)[number]) =>
         : <p class="rung__inc">{t.included}</p>}
       {t.note && <p class="rung__note">{t.note}</p>}
       <a class="btn rung__btn" href={mailto(t)}>{t.button || (t.id === 'custom' ? 'Ask for a quote' : 'Ask about this')}<span class="arrow" aria-hidden="true">→</span></a>
-    </article>
+    </div>
   ))}
 </div>
 

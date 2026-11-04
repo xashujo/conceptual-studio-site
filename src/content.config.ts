@@ -171,7 +171,10 @@ export const collections = {
       nextSteps: text,
       socialLinks: z.array(z.object({ label: z.string(), url: z.string().url() })).nullish().transform((v) => v ?? []),
       companyName: z.string(),
-      companyNumber: z.string().nullish(),
+      companyNumber: z.string().min(1),
+      registeredOffice: z.string().min(1),
+      footerText: z.string().min(1),
+      colophon: z.string().min(1),
       // Glass dials, as percentages of the designed look (100 = as designed).
       glass: z.object({
         bend: z.number().min(0).max(300).default(100),

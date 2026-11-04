@@ -22,11 +22,14 @@ export const glassStyle = `--g-bend:${g.bend / 100};--g-frost:${g.frost / 100};-
 
 export const social = settings.socialLinks.map((l) => ({ label: l.label, href: l.url }));
 
+export const footerText = settings.footerText;
+export const colophon = settings.colophon;
+
 export const company = {
   name: settings.companyName,
   registeredIn: 'England and Wales',
-  number: settings.companyNumber ?? '[TBC]',
-  office: '[TBC: registered office address]', // the law asks for it; Josh to decide which address
+  number: settings.companyNumber,
+  office: settings.registeredOffice,
 };
 
 export const nav = [
@@ -74,13 +77,13 @@ export const art = {
   },
   garden: {
     title: 'Le Jardin Chinois (The Chinese Garden), François Boucher, 1742',
-    medium: 'Oil on canvas, Musée des Beaux-Arts et d’Archéologie, Besançon. Public domain. Engraved and toned in gold. [TBC: where the scan came from]',
+    medium: 'Oil on canvas, Musée des Beaux-Arts et d’Archéologie, Besançon. Public domain. Engraved and toned in gold.',
   },  peche: {
     title: 'La Pêche Chinoise (The Chinese Fishing Party), François Boucher, 1742',
-    medium: 'Oil on canvas, Musée des Beaux-Arts et d’Archéologie, Besançon. Public domain. Toned in gold. [TBC: where the scan came from]',
+    medium: 'Oil on canvas, Musée des Beaux-Arts et d’Archéologie, Besançon. Public domain. Toned in gold.',
   },
   apotheosis: {
     title: 'The Apotheosis of Hercules, François Lemoyne, 1731–1736',
-    medium: 'Ceiling painting, Salon d’Hercule, Château de Versailles. Public domain. Toned in gold. [TBC: where the scan came from]',
+    medium: 'Ceiling painting, Salon d’Hercule, Château de Versailles. Public domain. Toned in gold.',
   },
 };

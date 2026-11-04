@@ -305,7 +305,7 @@ content:
         label: Stats
         type: object
         list: true
-        description: "The figures under the opening. Placeholders until confirmed: replace before launch."
+        description: "The figures under the opening. Only use figures you can back up."
         fields:
           - { name: number, label: Number, type: number, required: true, description: "Counts up to this. Type the number without commas, e.g. 20000: the site adds them (20,000)." }
           - { name: after, label: After the number, type: string, description: "e.g. + or % or hr or M+" }
@@ -545,7 +545,10 @@ content:
           - { name: label, label: Name, type: string, required: true }
           - { name: url, label: Link, type: string, required: true }
       - { name: companyName, label: Company name, type: string, required: true }
-      - { name: companyNumber, label: Company number, type: string }
+      - { name: companyNumber, label: Company number, type: string, required: true }
+      - { name: registeredOffice, label: Registered office, type: string, required: true, description: "As listed on Companies House. Shown in the footer and on the Privacy page." }
+      - { name: footerText, label: Footer line, type: text, required: true, description: "The short line under the logo in the footer." }
+      - { name: colophon, label: Colophon, type: text, required: true, description: "The small note in the footer on the type, the art and how the site is built." }
       - name: glass
         label: Glass
         type: object

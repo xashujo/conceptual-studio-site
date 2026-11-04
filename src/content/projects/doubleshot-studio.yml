@@ -19,13 +19,13 @@ featured: true
 featuredOrder: 6
 homeFilter: Branding
 hasPage: true
-outcome: "[TBC: result, for example where the identity is now in use]"
+outcome: A full identity in about a week, from logo to 3D characters.
 problem: |
-  DoubleShot was a small London creative studio started by a group of friends. They needed an identity with some personality, and I was the designer for it.
+  DoubleShot is a small London creative studio started by friends, built on the idea that two points of view make one stronger voice. They needed an identity that showed that: warm and bold, with a sense of humour, but still serious about the work.
 
-  [TBC: what the studio did, and the brief they gave me]
+  The brief was simple. Two creative points of view, one clear voice.
 whatIDid: |
-  I designed the whole identity: wordmark, colours, type and the two star characters that sit beside it.
+  I designed the whole identity: wordmark, colours, type and the two star characters that sit beside it. The characters, The Duo, stand for those two points of view. Each has its own personality, and they're always stronger side by side.
 
   The palette is three colours used in set amounts: DoubleShot Linen as the main colour, Terracotta as the second and Soot as the accent.
 
@@ -61,5 +61,7 @@ gallery:
         alt: Three bands of colour, cream, red and black, with their codes beside them
         caption: The three colours
 whatHappened: |
-  [TBC: what followed]
+  Everything went into a brand guidelines deck: the wordmark in full and short form, the colour pairings, the type, app icons, a favicon, social profile pictures and 3D renders of The Duo.
+
+  The characters were built to travel. They take on themed accessories and settings, so the studio can use them in campaigns and social posts without the identity losing its shape.
 next: src/content/projects/cmd-inc.yml

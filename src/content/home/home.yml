@@ -4,7 +4,7 @@ startButton: Start a Project
 workButton: Explore Our Work
 trustedByLabel: Trusted By
 stats:
-  - number: 25
+  - number: 20
     after: +
     label: Projects Delivered
   - number: 20000
