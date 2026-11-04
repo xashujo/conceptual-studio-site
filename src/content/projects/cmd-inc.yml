@@ -11,9 +11,9 @@ filters:
 order: 25
 summary: A black & white identity built on one mark, the Star Note.
 cover:
-  src: "@assets/work/cmd-inc/01.webp"
-  alt: The CMD Inc. wordmark and star icon in white on black, with glowing curved lines around them
-  caption: Visual identity, cover of the guidelines
+  src: "@assets/work/cmd-inc/title-render.webp"
+  alt: 3D render of the CMD Inc. title, chrome lettering ringed by mirrored star shapes on black
+  caption: The main 3D title render
 thumb: "@assets/work/cmd-inc/thumb.webp"
 coverFocus: 50% 50%
 featured: true

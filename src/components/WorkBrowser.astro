@@ -39,7 +39,7 @@ const key = (fs: string[]) => fs.join('|');
     {items.map((c) => (
       <li data-filter={key(c.archive ? [archive!] : c.filters)} data-archive={c.archive ? '' : undefined}>
         <a class="card glass" href={c.href} data-lens>
-          <Image class="card__img" src={c.image} alt={c.alt} widths={[400, 700, 1100]} sizes="(min-width: 1100px) 380px, (min-width: 760px) 47vw, calc(100vw - 32px)" style={c.position ? `object-position: ${c.position}` : undefined} />
+          <span class="card__media"><Image class="card__img" src={c.image} alt={c.alt} widths={[400, 700, 1100, 1600]} sizes="(min-width: 1100px) 580px, (min-width: 760px) 47vw, calc(100vw - 32px)" style={c.position ? `object-position: ${c.position}` : undefined} /></span>
           <span class="card__head"><span class="card__t" title={c.title}>{c.title}</span><span class="card__y">{c.year}</span></span>
           <span class="card__row">
             <span class="card__tags">
@@ -137,6 +137,13 @@ const key = (fs: string[]) => fs.join('|');
         const shown = all ? match : match.slice(0, limit);
         items.forEach((li) => { li.hidden = !shown.includes(li); });
       });
+      // Rhythm (Josh, 4 Nov: the grid felt flat): in each run of five shown projects, two wide then three.
+      // A last run of four becomes two wide pairs, and of two a wide pair, so no row is left half empty.
+      const cards = views[0].filter((li) => !li.hidden && !li.classList.contains('wb__vid'));
+      cards.forEach((li, i) => {
+        const run = i - (i % 5), left = cards.length - run;
+        li.toggleAttribute('data-wide', left >= 5 ? i % 5 < 2 : left === 4 || left === 2);
+      });
       more.hidden = all || match.length <= limit;
       empty.hidden = match.length > 0;
       if (note) note.hidden = current !== wb.dataset.archiveName;
@@ -197,6 +204,8 @@ const key = (fs: string[]) => fs.join('|');
   .wb__grid { list-style: none; margin: var(--sp-gap) 0 0; padding: 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--sp-gap); }
   .wb__grid > li { grid-column: span 4; }
   .wb__grid > .wb__vid { grid-column: span 3; }
+  .wb__grid > li[data-wide] { grid-column: span 6; }
+  .wb__grid > li[data-wide] .card__t { font-size: 24px; }
   .wb__grid[hidden], .wb__grid > [hidden], .wb__rows[hidden], .wb__rows > [hidden] { display: none; }
   .wb__vid .card__row { flex-direction: column; align-items: start; gap: 2px; }
   .wb__vid .card__y { margin-left: 0; }
@@ -211,6 +220,10 @@ const key = (fs: string[]) => fs.join('|');
      then the outcome held to two lines (space kept even when empty), so rows line up and stay short. */
   .card { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; gap: 12px; height: 100%; padding: 12px 12px 16px; border-radius: var(--radius); text-decoration: none; transition: background-color 300ms ease-out, color 300ms ease-out; }
   .card__img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: var(--radius-inner); }
+  /* Depth: the image sits on a soft shadow and eases in slightly on hover; the card itself never moves. */
+  .card__media { display: block; overflow: hidden; border-radius: var(--radius-inner); box-shadow: 0 1px 2px rgb(0 0 0 / .18), 0 12px 32px -12px rgb(0 0 0 / .45); }
+  .card__media .card__img { display: block; transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1); }
+  @media (hover: hover) { .card:hover .card__media .card__img { transform: scale(1.035); } }
   .card__row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 0 8px 2px; }
   .card__head { display: flex; align-items: baseline; gap: 12px; padding: 0 8px; }
   .card__t { font-size: 20px; line-height: 1.2; font-weight: 600; letter-spacing: -0.02em; }
@@ -238,7 +251,7 @@ const key = (fs: string[]) => fs.join('|');
   .wb__foot [hidden] { display: none; }
   .wb__foot:not(:has(> :not([hidden]))) { display: none; }
 
-  @media (max-width: 1099.98px) { .wb__grid > li { grid-column: span 6; } }
+  @media (max-width: 1099.98px) { .wb__grid > li, .wb__grid > li[data-wide] { grid-column: span 6; } }
   @media (max-width: 759.98px) {
     .filterbar { gap: 0; padding: 4px; }
     .filterbar .glass-pill { flex: none; min-height: 44px; padding: 0 14px; font-size: 15px; letter-spacing: -0.01em; } /* pills never shrink; the row scrolls */
@@ -250,7 +263,7 @@ const key = (fs: string[]) => fs.join('|');
     .wbl__img { grid-column: 1; grid-row: auto; }
     .wbl__vid { width: 200px; }
     .wb__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .wb__grid > li { grid-column: span 2; }
+    .wb__grid > li, .wb__grid > li[data-wide] { grid-column: span 2; }
     .wb__grid > .wb__vid { grid-column: span 1; }
     .vid__icon { width: 52px; height: 52px; }
     .wb__vid .card__t { font-size: 17px; }

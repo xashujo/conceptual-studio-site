@@ -15,7 +15,8 @@ cover:
   caption: Map and timeline of the college mergers, 1990 to 2024
 thumb: "@assets/work/new-city-college-strategic-intent/thumb.webp"
 coverFocus: 0% 0%
-featured: false
+featured: true
+featuredOrder: 5
 homeFilter: Data Visualisation
 homeFocus: 50% 8%
 homeCharts:
