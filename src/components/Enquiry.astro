@@ -201,7 +201,8 @@ const [altBefore, altAfter] = (c.enquiryAlt || '').split('{email}');
   .f :is(input, select, textarea):hover { border-color: color-mix(in srgb, var(--ink) 25%, transparent); }
   .f :is(input, select, textarea):focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
   .f [aria-invalid] { border-color: #A3341F; }
-  .f__err { font-size: 15px; line-height: 1.4; color: light-dark(#A3341F, #F08A72); font-weight: 500; }
+  .f__err { font-size: 15px; line-height: 1.4; color: #A3341F; color: light-dark(#A3341F, #F08A72); font-weight: 500; }
+  @supports not (color: light-dark(#000, #fff)) { .night .f__err { color: #F08A72; } } /* older browsers, on the night close */
   .f__help { font-size: 15px; line-height: 1.4; color: var(--ink-2); }
   /* Purchase-order buyers tick the box and get one extra field (a spending limit). Pure CSS, so it works without JS. */
   .f .f__check { display: flex; align-items: center; gap: 12px; font-weight: 400; cursor: pointer; }

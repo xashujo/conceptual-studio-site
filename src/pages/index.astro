@@ -328,6 +328,7 @@ const more = services.filter((s) => !lanes.includes(s));
         <script>
       import { mountLens } from '../scripts/lens.js';
       import { reveal } from '../scripts/reveal.js';
+      import '../scripts/fallbacks.js'; // popover menu and background drift for older browsers
       const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
       const ease = 'cubic-bezier(0.16, 1, 0.3, 1)';
 

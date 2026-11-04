@@ -278,10 +278,15 @@ a { color: inherit; }
 .band.ph { --py: 0%; } /* a page opening shows the top of the painting, as the home page's does */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .band__art img { animation: band-drift linear both; animation-timeline: --band; animation-range: contain; }
+    .band__art img { animation: band-drift linear both; }
+    /* A separate rule on purpose: the build's CSS minifier folds a timeline into the animation shorthand,
+       which Chrome and Safari reject, so the drift silently never ran. */
+    .band__art > img { animation-timeline: --band; animation-range: contain; }
   }
 }
 @keyframes band-drift { to { transform: translateY(-25vh); } }
+/* Browsers without the Popover API: the menu stays hidden until src/scripts/fallbacks.js opens it. */
+@supports not selector(:popover-open) { [popover]:not(.is-open) { display: none; } }
 .band { --ink-2: color-mix(in srgb, var(--ink) 74%, var(--paper)); } /* secondary text 4.5:1 or better over the art's darkest lines */
 .band.night, .end { --ink-2: color-mix(in srgb, var(--ink) 86%, var(--paper)); }
 .tones { position: absolute; width: 0; height: 0; }

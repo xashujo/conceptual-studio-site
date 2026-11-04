@@ -36,6 +36,19 @@
 
 .night { color-scheme: dark; }
 
+/* Browsers without light-dark() (Safari before 17.5, Firefox before 120, Chrome before 123): the same two
+   palettes set directly, on every element that switches scheme. Keep in step with the tokens above. */
+@supports not (color: light-dark(#000, #fff)) {
+  :root { --paper: #F1DFC8; --paper-2: #E8D3B8; --ink: #000000; --live: #1F9D55; --live-on-ink: #3FD37E; }
+  .night, .is-dark, .mag, .carousel__track figure {
+    --paper: #14110D; --paper-2: #221D17; --ink: #F1DFC8; --live: #3FD37E; --live-on-ink: #1F9D55;
+    --ink-2: color-mix(in srgb, var(--ink) 62%, var(--paper));
+  }
+  :is(.fw__view, .wb__view, .ct-else a, .mag__btn:not(:disabled), .band .result.glass):hover {
+    --paper: #F1DFC8; --paper-2: #E8D3B8; --ink: #000000; --ink-2: color-mix(in srgb, var(--ink) 62%, var(--paper));
+  }
+}
+
 @font-face {
   font-family: 'Agatho';
   src: url('/fonts/agatho-medium-subset.woff2') format('woff2');
