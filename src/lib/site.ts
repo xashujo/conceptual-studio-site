@@ -87,3 +87,8 @@ export const art = {
     medium: 'Ceiling painting, Salon d’Hercule, Château de Versailles. Public domain. Toned in gold.',
   },
 };
+
+// sizes for the background painting (components.css: a screen-wide box, 125% of the screen tall). It sits at
+// 25-45% opacity, toned, so it asks for about 2x density on phones and 1x on desktop: every screen gets a copy
+// at or above its own size without the 2.3MB 2200px one. Shared by the home page and Band, so one download.
+export const ART_SIZES = '(max-width: 759.98px) 35vh, (min-resolution: 1.5dppx) 55vw, (min-width: 1600px) 1600px, 100vw';

@@ -1,6 +1,6 @@
 # Working contract for this site
 
-Adapted from Josh's working contract (trimmed core of github.com/jbarbier/CLAUDE.md), fitted to this repo: an Astro 7 + GSAP site with plain CSS tokens, edited by Josh in Pages CMS. Pairs with the karpathy-guidelines skill: "do the whole thing" means the whole thing the task needs, never more.
+Adapted from Josh's working contract (trimmed core of github.com/jbarbier/CLAUDE.md), fitted to this repo: an Astro 7 site with plain CSS tokens (no animation library: CSS plus small scripts), edited by Josh in Pages CMS. Pairs with the karpathy-guidelines skill: "do the whole thing" means the whole thing the task needs, never more.
 
 ## How to work
 

@@ -263,6 +263,52 @@ a { color: inherit; }
 .lg-canvas { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; border-radius: inherit; pointer-events: none; }
 .has-liquid { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; background: transparent !important; }
 
+/* The painting behind the bands (Josh, 2 Nov: hard-edged, "like separate paintings"). Each band holds the
+   same image at screen size, held on screen while its band scrolls past, so it's never stretched past its
+   pixels (it used to be stretched down the whole page, which zoomed it 2-10x). The art box runs a quarter
+   screen past its band, clipped off, so the painting can drift up a little as you scroll (where the browser
+   supports scroll-linked animation; elsewhere it simply holds). Each band shows a different stretch of it. */
+.band__art { position: absolute; inset: 0 0 -25vh; z-index: -1; clip-path: inset(0 0 25vh); pointer-events: none; view-timeline: --band; }
+.band__art img { position: sticky; top: 0; display: block; width: 100%; height: 125vh; object-fit: cover; object-position: 50% var(--py, 0%); opacity: 0.25; filter: url(#tone-day); }
+.band.night .band__art img { filter: url(#tone-night); }
+.band:nth-of-type(4n + 1) { --py: 25%; }
+.band:nth-of-type(4n + 2) { --py: 50%; }
+.band:nth-of-type(4n + 3) { --py: 75%; }
+.band:nth-of-type(4n + 4) { --py: 100%; }
+.band.ph { --py: 0%; } /* a page opening shows the top of the painting, as the home page's does */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .band__art img { animation: band-drift linear both; animation-timeline: --band; animation-range: contain; }
+  }
+}
+@keyframes band-drift { to { transform: translateY(-25vh); } }
+.band { --ink-2: color-mix(in srgb, var(--ink) 74%, var(--paper)); } /* secondary text 4.5:1 or better over the art's darkest lines */
+.band.night, .end { --ink-2: color-mix(in srgb, var(--ink) 86%, var(--paper)); }
+.tones { position: absolute; width: 0; height: 0; }
+/* Plain canvas (Josh, 2 Nov): a woven tile blended over the band's paper, light or dark. A tile, so nothing zooms. */
+.canvas { background: var(--canvas) 0 0 / 510px repeat; mix-blend-mode: soft-light; opacity: 0.9; }
+.band.night .canvas { opacity: 1; }
+:is(.hero, .band):has(> .canvas) { background: var(--paper); } /* the paper ground the weave blends into */
+
+/* The copyright sits on the brightest part of the ceiling: a soft dark backing keeps it 4.5:1 or better. */
+.end > .footer p { display: inline-block; padding: 4px 14px; border-radius: var(--pill); background: color-mix(in srgb, var(--paper) 70%, transparent); }
+
+/* Fade-ins (Josh, 4 Nov). The page opening rises in on load, in CSS, so it needs no script. Further down,
+   src/scripts/reveal.js gives .rv to pieces that start off screen and .is-in as they scroll into view;
+   it removes both when done, so each piece's own transitions come back. Transform and opacity only. */
+@media (prefers-reduced-motion: no-preference) {
+  :is(.hero__plate, .ph__plate) { animation: fade-in 600ms ease-out backwards; }
+  :is(.hero__plate, .ph__plate) > * { animation: rise-in 800ms var(--ease-out) backwards; }
+  :is(.hero__plate, .ph__plate) > :nth-child(2) { animation-delay: 80ms; }
+  :is(.hero__plate, .ph__plate) > :nth-child(3) { animation-delay: 160ms; }
+  :is(.hero__plate, .ph__plate) > :nth-child(4) { animation-delay: 240ms; }
+  :is(.hero__plate, .ph__plate) > :nth-child(n + 5) { animation-delay: 320ms; }
+  .rv { transition: opacity 700ms var(--ease-out), transform 700ms var(--ease-out) !important; transition-delay: calc(var(--i, 0) * 90ms) !important; } /* over a piece's own transitions, only while it rises */
+  .rv:not(.is-in) { opacity: 0; transform: translateY(24px); }
+}
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes rise-in { from { opacity: 0; transform: translateY(14px); } }
+
 @media (prefers-reduced-transparency: reduce) {
   .glass, .glass-button, .plate-glass:not(.has-liquid) { background: var(--paper); -webkit-backdrop-filter: none; backdrop-filter: none; }
 }

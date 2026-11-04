@@ -90,23 +90,11 @@ const isCurrent = (h: string) => h === current || (h !== '/' && current?.startsW
 
     <script>
       import { mountLens } from '../scripts/lens.js';
-      document.documentElement.classList.add('js');
-      const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      import { reveal } from '../scripts/reveal.js';
 
       // Glass: small chrome may bend (lens.js keeps it to three pieces); big panes are plain blurred glass.
       document.querySelector<HTMLElement>('[data-filters]')?.removeAttribute('hidden'); // shown before the lens counts its height
       document.querySelectorAll<HTMLElement>('[data-lens]').forEach((el) => mountLens(el, null));
-
-      // The running painting (when the CMS Background is the painting): each band's slice starts where it sits.
-      const run = document.querySelector<HTMLElement>('[data-run]')!;
-      const bands = [...run.querySelectorAll<HTMLElement>(':scope > .band')];
-      let width = 0;
-      const place = () => {
-        // Sized once per page width, with room to spare, so opening a row never zooms it (as on the home page).
-        if (innerWidth !== width) { width = innerWidth; document.documentElement.style.setProperty('--run-h', `${Math.round(run.offsetHeight * 1.25)}px`); }
-        bands.forEach((b) => b.style.setProperty('--y', `${b.offsetTop}px`));
-      };
-      if (run.querySelector('.band__art img')) new ResizeObserver(place).observe(run);
 
       // Nav: light over the night chapters, dark over day. Watches a 1px line across the nav's middle.
       const nav = document.querySelector<HTMLElement>('[data-nav]')!;
@@ -176,15 +164,7 @@ const isCurrent = (h: string) => h === current || (h !== '/' && current?.startsW
         });
       });
 
-      // Below the fold, pieces rise in as they near the screen (CSS does nothing without the .js class).
-      const reveal = [...document.querySelectorAll<HTMLElement>('[data-reveal]')];
-      if (still || !('IntersectionObserver' in window)) reveal.forEach((el) => el.classList.add('is-in'));
-      else {
-        const io = new IntersectionObserver((entries) => entries.forEach((e) => {
-          if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
-        }), { rootMargin: '0px 0px -8% 0px' });
-        reveal.forEach((el) => io.observe(el));
-      }
+      reveal();
 
       // The London clock: hours and minutes, London time, whatever the visitor's own zone.
       const clocks = document.querySelectorAll<HTMLElement>('[data-clock]');

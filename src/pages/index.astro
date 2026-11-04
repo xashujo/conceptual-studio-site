@@ -10,7 +10,7 @@ import '../styles/tokens.css';
 import '../styles/components.css';
 import { Image, getImage } from 'astro:assets';
 import { email, startHref, quoteHref, sentence, trustedBy } from '../data/site';
-import { availability, homeQuotes, responseTime, home } from '../lib/site';
+import { availability, homeQuotes, responseTime, home, ART_SIZES } from '../lib/site';
 import { featured, projectHref, homeFilters, bySlug } from '../data/work';
 import { services, isLane } from '../data/services';
 import { servicesPage } from '../lib/pages';
@@ -79,7 +79,7 @@ const more = services.filter((s) => !lanes.includes(s));
     <main>
       <!-- Opening: the etching fills the screen; the hero plate is glass over it. -->
       <header class="hero" id="top">
-        {painting ? <Image class="hero__art" src={home.pageImage} alt="" widths={[1100, 1600]} quality={55} sizes="100vw" loading="eager" fetchpriority="high" /> : <div class="hero__art canvas" style={`--canvas: ${canvas}`} aria-hidden="true" />}
+        {painting ? <Image class="hero__art" src={home.pageImage} alt="" widths={[800, 1100, 1600]} quality={55} sizes={ART_SIZES} loading="eager" fetchpriority="high" /> : <div class="hero__art canvas" style={`--canvas: ${canvas}`} aria-hidden="true" />}
         <!-- Landing view (Josh, 2 Nov): one plate that says what clients get, with the big Start a Project. The stats moved to the proof (Josh, 3 Nov). -->
         <div class="hero__bento">
         <div class="hero__plate glass" data-lens>
@@ -96,8 +96,8 @@ const more = services.filter((s) => !lanes.includes(s));
         </div>
       </header>
 
-      <!-- Art behind the glass, so every pane has something to bend (Josh, 28 Oct). Two bands that scroll with
-           the page, each its own etching (pass 2, Josh: the held image made the page feel like it wasn't moving). -->
+      <!-- Art behind the glass, so every pane has something to bend (Josh, 28 Oct). Each band shows the painting at
+           screen size, drifting slowly as you scroll (components.css). The same file as the opening, so one download. -->
       <div class="field">
         <!-- The site's two duotones, so any background uploaded in the CMS comes out toned like the rest:
              gold on the light bands, the close's warm dark on the night ones. Same colours as the toning script. -->
@@ -114,7 +114,7 @@ const more = services.filter((s) => !lanes.includes(s));
         <!-- The sections alternate night and day (Josh, 28 Oct): Work night, Services day, Why Clients night,
              About day, then the close at night to the end. Each night band has its own night engraving. -->
         <div class="band night">
-        <div class:list={["band__art", { canvas: !painting }]} style={painting ? undefined : `--canvas: ${canvas}`} aria-hidden="true">{painting && <Image src={home.pageImage} alt="" widths={[1100, 1600]} quality={55} sizes="100vw" />}</div>
+        <div class:list={["band__art", { canvas: !painting }]} style={painting ? undefined : `--canvas: ${canvas}`} aria-hidden="true">{painting && <Image src={home.pageImage} alt="" widths={[800, 1100, 1600]} quality={55} sizes={ART_SIZES} />}</div>
 
         <section class="fw wrap" id="work" aria-labelledby="fw-h">
           <h2 class="fw__h big" id="fw-h">{home.workHeading}</h2>
@@ -210,7 +210,7 @@ const more = services.filter((s) => !lanes.includes(s));
         </div>
 
         <div class="band">
-        <div class:list={["band__art", { canvas: !painting }]} style={painting ? undefined : `--canvas: ${canvas}`} aria-hidden="true">{painting && <Image src={home.pageImage} alt="" widths={[1100, 1600]} quality={55} sizes="100vw" />}</div>
+        <div class:list={["band__art", { canvas: !painting }]} style={painting ? undefined : `--canvas: ${canvas}`} aria-hidden="true">{painting && <Image src={home.pageImage} alt="" widths={[800, 1100, 1600]} quality={55} sizes={ART_SIZES} />}</div>
         <section class="services wrap" id="services" aria-labelledby="services-h">
           <h2 class="big services__h" id="services-h">Services</h2>
           <p class="services__intro">Every project is priced on its scope, so these are starting points. You'll get a fixed quote after our first call.</p>
@@ -244,7 +244,7 @@ const more = services.filter((s) => !lanes.includes(s));
         </div>
 
         <div class="band night">
-        <div class:list={["band__art", { canvas: !painting }]} style={painting ? undefined : `--canvas: ${canvas}`} aria-hidden="true">{painting && <Image src={home.pageImage} alt="" widths={[1100, 1600]} quality={55} sizes="100vw" />}</div>
+        <div class:list={["band__art", { canvas: !painting }]} style={painting ? undefined : `--canvas: ${canvas}`} aria-hidden="true">{painting && <Image src={home.pageImage} alt="" widths={[800, 1100, 1600]} quality={55} sizes={ART_SIZES} />}</div>
         <!-- Why clients choose us (pass 2): one client's words in the large pane, two results stacked beside it.
              Inside the field so the glass has the etching behind it. -->
         <section class="proof wrap" aria-labelledby="proof-h">
@@ -292,7 +292,7 @@ const more = services.filter((s) => !lanes.includes(s));
         </div>
 
         <div class="band">
-        <div class:list={["band__art", { canvas: !painting }]} style={painting ? undefined : `--canvas: ${canvas}`} aria-hidden="true">{painting && <Image src={home.pageImage} alt="" widths={[1100, 1600]} quality={55} sizes="100vw" />}</div>
+        <div class:list={["band__art", { canvas: !painting }]} style={painting ? undefined : `--canvas: ${canvas}`} aria-hidden="true">{painting && <Image src={home.pageImage} alt="" widths={[800, 1100, 1600]} quality={55} sizes={ART_SIZES} />}</div>
         <!-- About: who the studio is and why it exists; the process lives in How We Work. -->
         <section class="about wrap" id="about" aria-labelledby="about-h">
           <h2 class="big about__h" id="about-h">About</h2>
@@ -322,11 +322,12 @@ const more = services.filter((s) => !lanes.includes(s));
         </div>
       </section>
       <!-- Footer links and the garden engraving removed (Josh, 28 Oct): only the copyright stays, centred under the close. -->
-      <footer class="footer"><p>© 2026 Conceptual Studio Limited</p></footer>
+      <footer class="footer"><p>© {new Date().getFullYear()} Conceptual Studio Limited</p></footer>
     </div>
 
         <script>
       import { mountLens } from '../scripts/lens.js';
+      import { reveal } from '../scripts/reveal.js';
       const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
       const ease = 'cubic-bezier(0.16, 1, 0.3, 1)';
 
@@ -337,25 +338,6 @@ const more = services.filter((s) => !lanes.includes(s));
       document.querySelector<HTMLElement>('[data-filters]')!.hidden = false; // shown before the lens counts its height
       mountLens(document.querySelector('.hero__plate'), null); // over the running painting, so CSS glass like the panes
       document.querySelectorAll<HTMLElement>('.field [data-lens], .stat, .close__body').forEach((el) => mountLens(el, null));
-
-      // The running painting: it starts at the top of the opening, and each band's slice starts where the band sits.
-      const hero = document.querySelector<HTMLElement>('.hero')!;
-      const field = document.querySelector<HTMLElement>('.field')!;
-      let width = 0;
-      const place = () => {
-        // Sized once per page width, with room to spare, so opening a service never zooms it (Josh, 2 Nov).
-        // All reads, then all writes: one layout instead of one per band.
-        const top = hero.offsetHeight - field.offsetTop;
-        const ys = [...field.querySelectorAll<HTMLElement>('.band')].map((b) => [b, top + b.offsetTop] as const);
-        if (innerWidth !== width) {
-          width = innerWidth;
-          document.documentElement.style.setProperty('--run-h', `${Math.round((hero.offsetHeight + field.offsetHeight) * 1.25)}px`);
-        }
-        ys.forEach(([b, y]) => b.style.setProperty('--y', `${y}px`));
-      };
-      const ro = new ResizeObserver(place);
-      ro.observe(hero);
-      ro.observe(field);
 
       // Nav: light over the night chapters, dark over paper. Watches a 1px line across the nav's middle.
       const nav = document.querySelector<HTMLElement>('[data-nav]')!;
@@ -375,9 +357,9 @@ const more = services.filter((s) => !lanes.includes(s));
       watchNav();
       addEventListener('resize', watchNav);
 
-      // Stats count up once, when they come into view, each starting as its card fades in (STAT_IN, as in the CSS).
+      // Stats count up once, when they come into view, each starting as its card rises in (90ms apart, as .rv in the CSS).
       // The final figure is in the page for screen readers.
-      const STAT_IN = (i: number) => 500 + i * 140;
+      const STAT_IN = (i: number) => i * 90;
       if (!still) {
         const counter = new IntersectionObserver((entries) => entries.forEach((e) => {
           if (!e.isIntersecting) return;
@@ -442,6 +424,7 @@ const more = services.filter((s) => !lanes.includes(s));
         document.querySelectorAll<HTMLVideoElement>('#work video').forEach((v) => v.pause());
       }));
       show();
+      reveal(); // after the filters have hidden what they hide
 
       // Social media videos play in their card on click, with controls from then on; one plays at a time.
       const vids = [...document.querySelectorAll<HTMLVideoElement>('#work video')];
@@ -525,9 +508,9 @@ const more = services.filter((s) => !lanes.includes(s));
 
   /* Opening: the quiet etching fills the screen, the plate centred over the trees and sky. */
   .hero { position: relative; isolation: isolate; min-height: 100svh; padding: 116px var(--margin) 40px; display: grid; align-content: center; } /* the bento as one centred block */
-  /* The opening is the first stretch of the running painting (Josh, 2 Nov), toned and quiet like the bands. */
+  /* The opening shows the top of the painting at screen size, toned and quiet like the bands. */
   .hero { overflow: clip; }
-  .hero__art { position: absolute; top: 0; left: 0; z-index: -1; width: 100%; height: var(--run-h, 100%); object-fit: cover; object-position: 50% 0; opacity: 0.45; filter: url(#tone-day); }
+  .hero__art { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; opacity: 0.45; filter: url(#tone-day); }
   .hero__bento { align-self: center; justify-self: center; width: min(1140px, 100%); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-gap); }
   .hero__plate { position: relative; grid-column: 1 / -1; padding: 64px 56px 56px; display: grid; justify-items: center; gap: 26px; border-radius: var(--radius); text-align: center; } /* type and space carry it: one centred statement */
   .hero__h { font-family: var(--display); font-weight: 500; font-size: clamp(44px, 5.2vw, 76px); line-height: 1.06; letter-spacing: -0.01em; text-wrap: balance; }
@@ -544,24 +527,8 @@ const more = services.filter((s) => !lanes.includes(s));
     .hero__work:hover .hero__down { --turn: 90deg; }
   }
 
-  /* The field: an etching behind each band of glass, scrolling with it. */
+  /* The field: the painting behind each band of glass (shared rules in components.css). */
   .band { position: relative; isolation: isolate; padding-bottom: 160px; }
-  /* Each band is its own painting with a clean edge (Josh, 2 Nov: "hard lines, like separate paintings",
-     as Apple's pages do). The art fills its band edge to edge and stops there; no fades between sections. */
-  .band__art { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
-  .band.night { --ink-2: color-mix(in srgb, var(--ink) 86%, var(--paper)); } /* secondary text 5:1 or better over the art */
-  /* One painting runs down the whole field (Josh, 2 Nov): every band holds the same image, sized to the opening plus the field
-     and shifted up by the band's own offset (--y, set below), so each shows the next stretch of it. */
-  .band__art img { position: absolute; left: 0; top: 0; transform: translateY(calc(-1 * var(--y, 0px))); width: 100%; height: var(--run-h, 100%); object-fit: cover; object-position: 50% 0; opacity: 0.25; filter: url(#tone-day); } /* 25%, day and night (Josh, 2 Nov) */
-  .band.night .band__art img { opacity: 0.25; filter: url(#tone-night); }
-  /* Plain canvas (Josh, 2 Nov: simpler): the weave only, toned per band like the painting. A tile, so nothing zooms. */
-  /* Soft-light over the band's own paper, so the weave reads on cream and on warm black without shifting either
-     colour: a tactile ground for the glass to bend (Josh, 2 Nov: "plain colour... glass just falls apart"). */
-  .canvas { background: var(--canvas) 0 0 / 510px repeat; mix-blend-mode: soft-light; opacity: 0.9; }
-  .hero__art.canvas { height: 100%; }
-  .hero:has(.canvas), .band:has(> .canvas) { background: var(--paper); } /* the paper the weave blends into */
-  .band.night .canvas { opacity: 1; }
-  .tones { position: absolute; width: 0; height: 0; }
 
   /* One centred column for everything under the opening (Josh, 28 Oct: "centred to the page").
      Headings stay left-aligned inside it. 1140px lets both rows of work fit one screen at 1440. */
@@ -571,9 +538,6 @@ const more = services.filter((s) => !lanes.includes(s));
   .stats { margin-top: var(--sp-head); } /* in the proof, beside the clients (Josh, 3 Nov) */
   .stats__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-gap); }
   .stat { position: relative; display: grid; align-content: space-between; gap: 20px; min-height: 160px; padding: 26px 28px 24px; border-radius: var(--radius); }
-  /* After the hero has landed, the stat cards rise in one by one, left to right (Josh, 2 Nov). Delay matches STAT_IN in the script. */
-  @media (prefers-reduced-motion: no-preference) { .stat { animation: stat-in 700ms var(--ease-out) calc(500ms + var(--i) * 140ms) both; } }
-  @keyframes stat-in { from { opacity: 0; transform: translateY(18px); } }
   .stat__n { font-family: var(--display); font-weight: 500; font-size: clamp(48px, 4.2vw, 62px); line-height: 0.9; letter-spacing: 0.01em; font-variant-numeric: tabular-nums; }
   .stat__plus { margin-left: 0.12em; -webkit-text-stroke: 0.03em currentColor; } /* half a space off the figure, and stroked to the digits' weight: Agatho has no bolder cut (Josh, 28 Oct) */
   .stat__l { font-size: 18px; line-height: 1.35; font-weight: 500; text-wrap: balance; }
@@ -663,7 +627,7 @@ const more = services.filter((s) => !lanes.includes(s));
   .svc:not(:has(.svc__row:is(:hover, :focus-within))) .svc__row:first-child .svc__ex { opacity: 1; }
   .svc__link:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; border-radius: 8px; }
   .svc__more { list-style: none; margin: 20px 0 0; padding: 0; display: grid; gap: 6px; }
-  .svc__more a { font-size: 18px; color: inherit; text-decoration: none; }
+  .svc__more a { display: inline-block; padding-block: 2px; font-size: 18px; color: inherit; text-decoration: none; } /* 24px+ tall to tap (WCAG 2.5.8) */
   .svc__more span { color: var(--ink-2); }
   @media (hover: hover) { .svc__more a:hover .arrow { --turn: -45deg; } }
   @media (max-width: 959.98px) {

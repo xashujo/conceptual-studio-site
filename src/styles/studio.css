@@ -30,20 +30,9 @@ html { scroll-behavior: smooth; }
 .menu ul { list-style: none; margin: 0; padding: 0; display: grid; }
 .menu .glass-pill { width: 100%; min-height: 52px; padding: 0 18px; font-size: 20px; }
 
-/* The running painting (Josh, 2 Nov): one painting down the whole page. Every band holds the same image,
-   sized to the run's height and shifted up by the band's own offset (--y, set by the layout script), so each
-   shows the next stretch of it. Each band is its own section with a clean edge, no fades between them. */
+/* The painting behind the bands: the rules live in components.css, shared with the home page. */
 .run { position: relative; }
 .band { position: relative; isolation: isolate; padding-bottom: 160px; }
-.band__art { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
-.band__art img { position: absolute; left: 0; top: 0; transform: translateY(calc(-1 * var(--y, 0px))); width: 100%; height: var(--run-h, 100%); object-fit: cover; object-position: 50% 0; opacity: 0.25; filter: url(#tone-day); }
-.band.night { --ink-2: color-mix(in srgb, var(--ink) 86%, var(--paper)); } /* secondary text 5:1 or better over the art */
-.band.night .band__art img { opacity: 0.25; filter: url(#tone-night); }
-.tones { position: absolute; width: 0; height: 0; }
-/* Plain canvas (Josh, 2 Nov): a woven tile blended over the band's paper, light or dark, as on the home page. A tile, so nothing zooms. */
-.canvas { background: var(--canvas) 0 0 / 510px repeat; mix-blend-mode: soft-light; opacity: 0.9; }
-.band.night .canvas { opacity: 1; }
-.band:has(> .canvas) { background: var(--paper); } /* the paper ground the weave blends into */
 /* One centred column for everything under the opening (Josh, 28 Oct: "centred to the page"). */
 .band > :is(section, header) { box-sizing: content-box; max-width: 1140px; margin-inline: auto; padding-top: var(--sp-section); }
 
@@ -110,13 +99,6 @@ html { scroll-behavior: smooth; }
 /* A centred call-out, set like the hero plate (Need Something Else?). */
 .quote { position: relative; display: grid; justify-items: center; gap: 18px; width: min(640px, 100%); margin: 56px auto 0; padding: 40px 44px; border-radius: var(--radius); text-align: center; }
 .quote__p { max-width: 44ch; font-size: 18px; line-height: 1.5; text-wrap: pretty; }
-
-/* Below-the-fold pieces rise in as they near the screen. Only with script and motion allowed, so the
-   content is always there if the script fails. Transform and opacity only. */
-@media (prefers-reduced-motion: no-preference) {
-  .js [data-reveal] { opacity: 0; transform: translateY(18px); transition: opacity 700ms var(--ease-out), transform 700ms var(--ease-out); transition-delay: calc(var(--i, 0) * 90ms); }
-  .js [data-reveal].is-in { opacity: 1; transform: none; }
-}
 
 /* Close and footer, on warm black: Lemoyne's ceiling to the very bottom. */
 .end { position: relative; isolation: isolate; background: var(--paper); }
