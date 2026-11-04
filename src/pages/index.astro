@@ -713,6 +713,8 @@ const more = services.filter((s) => !lanes.includes(s));
   /* Close and footer, on warm black. */
   .end { position: relative; isolation: isolate; background: var(--paper); }
   .close { position: relative; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-block: min(560px, 40vw) 96px; align-items: start; } /* heading top level with the glass panel (Josh, 28 Oct) */
+  /* The close's tall top padding is art, not content: land the nav link on the heading, not the empty sky above it. */
+  #contact { scroll-margin-top: calc(96px - min(560px, 40vw)); }
   .close__art { position: absolute; inset: 0; z-index: -1; overflow: hidden; }
   .close__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%); mask-image: linear-gradient(to bottom, transparent, #000 14%); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
   .close__h { grid-column: 1 / span 6; margin-top: -0.18em; } /* cap tops, not the line box, level with the panel */
@@ -802,6 +804,7 @@ const more = services.filter((s) => !lanes.includes(s));
     .about__text p { font-size: 17px; }
     .about__text .about__lead { font-size: 22px; }
     .close { padding-block: 300px 80px; }
+    #contact { scroll-margin-top: -220px; } /* 80px nav clearance minus the 300px art padding */
     .close__art img { object-position: 42% 30%; }
     .footer { font-size: 14px; padding-bottom: 28px; }
   }
