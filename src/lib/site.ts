@@ -40,10 +40,13 @@ export const nav = [
 const shown = (await getCollection('clients', (c) => c.data.trustedBy))
   .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99) || a.data.name.localeCompare(b.data.name));
 export const clients = shown.map((c) => c.data.name);
+// Logos of every shape look the same size (Josh, 4 Nov): a 3:1 logo is 28px tall, wider ones shorter,
+// squarer ones taller, so the long NCC wordmark and the compact Fou Answer eye carry the same weight.
+const logoHeight = (ratio: number) => Math.round(Math.min(34, Math.max(18, 28 * (3 / ratio) ** 0.4)));
 // Clients ticked "Show in Trusted By" in Pages CMS, in their set order, for Why Clients Choose Us on the home page.
 export const trustedBy = (await getCollection('clients', (c) => c.data.homeTrusted))
   .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99) || a.data.name.localeCompare(b.data.name))
-  .map((c) => ({ name: c.data.name, logo: c.data.logo }));
+  .map((c) => ({ name: c.data.name, logo: c.data.logo, logoHeight: c.data.logo && logoHeight(c.data.logo.width / c.data.logo.height) }));
 export const clientGroups = (['Education', 'Companies and international'] as const)
   .map((kind) => ({ kind, names: shown.filter((c) => (c.data.group ?? 'Companies and international') === kind).map((c) => c.data.name) }))
   .filter((g) => g.names.length);
