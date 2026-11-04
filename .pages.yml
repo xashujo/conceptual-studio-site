@@ -248,6 +248,11 @@ content:
         type: string
         description: "Leave empty to use the first rung's time."
       - { name: homeLink, label: Home page link text, type: string, description: "e.g. Brand identity prices" }
+      - name: icon
+        label: Icon (home page)
+        type: select
+        description: "The small line icon beside the service's name in the home page list."
+        options: { values: [ { value: chart, label: Chart }, { value: identity, label: Identity }, { value: team, label: Team }, { value: video, label: Video }, { value: calendar, label: Calendar } ] }
       - { name: lane, label: Lane, type: string, description: "The group it sits in on the Services page, e.g. Video, Colleges & Data, Branding. Its first rung is shown as the easy first step." }
       - { name: kinds, label: Kinds of work (own page), type: text, description: "One or two lines on the service's own page, under the description." }
       - name: examples

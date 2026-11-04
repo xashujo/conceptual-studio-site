@@ -4,6 +4,7 @@
 // all in the shared glass, over the etching carried down behind them.
 import Tune from '../components/Tune.astro';
 import Logo from '../components/Logo.astro';
+import ServiceIcon from '../components/ServiceIcon.astro';
 import Favicons from '../components/Favicons.astro';
 import { glassStyle } from '../lib/site';
 import '../styles/tokens.css';
@@ -222,7 +223,7 @@ const more = services.filter((s) => !lanes.includes(s));
               {lanes.map((s) => (
                 <li class="svc__row">
                   <a class="svc__link" href={s.href ?? '/services/'}>
-                    <span class="svc__name">{keepHyphens(titleCase(s.name))}</span>
+                    <span class="svc__head"><ServiceIcon name={s.icon} /><span class="svc__name">{keepHyphens(titleCase(s.name))}</span></span>
                     <span class="svc__line">{s.line}</span>
                     <span class="svc__price">{s.home.price}{s.home.time && <span>, {s.home.time}</span>}</span>
                   </a>
@@ -617,6 +618,9 @@ const more = services.filter((s) => !lanes.includes(s));
   .svc__link { width: 56%; border-top: 1px solid color-mix(in srgb, var(--ink) 22%, transparent); }
   .svc__row:last-child .svc__link { border-bottom: 1px solid color-mix(in srgb, var(--ink) 22%, transparent); }
   .svc__link { display: grid; gap: 10px; padding: 28px 0 30px; color: color-mix(in srgb, var(--ink) 55%, transparent); text-decoration: none; transition: color 200ms ease-out, transform 300ms var(--ease-out); }
+  .svc__head { display: flex; align-items: center; gap: 18px; }
+  .svc__head :global(.icon) { flex: none; width: clamp(40px, 4vw, 60px); height: auto; color: var(--ink-2); transition: color 200ms ease-out; }
+  .svc__link:is(:hover, :focus-visible) :global(.icon), .svc:not(:has(.svc__row:is(:hover, :focus-within))) .svc__row:first-child :global(.icon) { color: var(--ink); }
   .svc__name { font-family: var(--display); font-weight: 500; font-size: clamp(44px, 5vw, 76px); line-height: 1; letter-spacing: -0.01em; }
   .svc__line { font-size: 20px; line-height: 1.45; max-width: 44ch; color: var(--ink); }
   .svc__price { font-size: 18px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }

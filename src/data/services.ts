@@ -6,7 +6,7 @@ import { getCollection } from 'astro:content';
 export interface Tier { id: string; name: string; price: string; time?: string; included: string; note?: string; lead?: string; badge?: string; button?: string; monthly: boolean; onHome: boolean }
 import type { ImageMetadata } from 'astro';
 export interface Service {
-  id: string; name: string; href?: string; card: boolean; line: string; tiers: Tier[];
+  id: string; name: string; href?: string; card: boolean; icon?: string; line: string; tiers: Tier[];
   /** The lane it sits in on /services/ (Video, Colleges & Data, Branding, Monthly) and its own page's words. */
   lane: string; kinds: string; faqs: { q: string; a: string }[];
   examples: { img: ImageMetadata; alt: string; pos?: string; title: string; medium: string }[];
@@ -26,7 +26,7 @@ export const services: Service[] = (await getCollection('services'))
       monthly: t.monthly ?? false, onHome: t.onHome ?? false,
     }));
     return {
-      id, name: d.name, href: d.page ?? undefined, card: d.card, line: d.summary, tiers,
+      id, name: d.name, href: d.page ?? undefined, card: d.card, icon: d.icon ?? undefined, line: d.summary, tiers,
       lane: d.lane || d.name, kinds: d.kinds, faqs: d.faqs.map((f) => ({ q: f.question, a: f.answer })),
       examples: d.examples.map((e) => ({ img: e.src, alt: e.alt, pos: e.focus ?? undefined, title: e.title, medium: e.caption })),
       cardImage: d.cardImage ? { img: d.cardImage.src, alt: d.cardImage.alt, pos: d.cardImage.focus ?? undefined } : undefined,

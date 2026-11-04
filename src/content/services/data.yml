@@ -1,5 +1,6 @@
 name: Data visualisation and reports
 order: 1
+icon: chart
 lane: Data
 page: /services/data-visualisation/
 summary: Charts, maps & reports, made from your own figures.

@@ -103,6 +103,7 @@ export const collections = {
       page: z.string().nullish(),
       // A service without its own page that still gets a full card, not a line in Also Available (Josh, 4 Nov).
       card: z.boolean().nullish().transform((v) => !!v),
+      icon: z.enum(['chart', 'identity', 'team', 'video', 'calendar']).nullish(), // the line icon beside its name on the home page (Josh, 4 Nov)
       summary: z.string(),
       homePrice: z.string().nullish(),
       homeTime: z.string().nullish(),
