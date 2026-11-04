@@ -19,6 +19,7 @@ export function getStaticPaths() {
 const { cs } = Astro.props;
 const p = bySlug(cs.slug);
 const next = bySlug(cs.next);
+const prev = bySlug(cs.prev);
 const cap = (pl: Plate) => ({ title: p.client.startsWith(p.title) ? `${p.title}, ${p.year}` : `${p.title}, ${p.client}, ${p.year}`, medium: pl.medium });
 const pairSizes = '(min-width: 760px) 560px, 100vw';
 // Credits sit on one line each (Josh, 4 Nov: the four-column row with the outcome felt stuffy). The outcome
@@ -54,10 +55,15 @@ const lead = p.thumb
 // The opening clip plays once and holds its last frame; the poster is that frame, so nothing jumps.
 const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, width: 1080, format: 'webp' })).src : undefined;
 ---
-<Studio title={p.title} description={p.summary} current="/work/" closeText={t.closeText}>
+<Studio title={p.title} description={p.summary} current="/work/" closeText={t.closeText} ground={cs.ground}>
   <Band opening class="cs-open" labelledby="cs-h">
     <div class="ph__plate glass cs-plate" data-lens>
-      <a class="btn cs-back" href="/work/"><span class="arrow arrow--back" aria-hidden="true">←</span> {t.backLabel}</a>
+      <!-- Previous, Next and Close as one row of pills (the old site's case study controls, Josh 4 Nov). -->
+      <nav class="cs-pager" aria-label="Projects">
+        <a class="btn cs-pill" href={`/work/${prev.slug}/`} rel="prev" aria-label={`${t.prevLabel}: ${prev.title}`}><span class="arrow arrow--back" aria-hidden="true">←</span> <span class="cs-pill__label">{t.prevLabel}</span></a>
+        <a class="btn cs-pill" href={`/work/${next.slug}/`} rel="next" aria-label={`${t.nextLabel}: ${next.title}`}><span class="cs-pill__label">{t.nextLabel}</span> <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn cs-pill cs-close" href="/work/">{t.backLabel} <span class="cross" aria-hidden="true"></span></a>
+      </nav>
       <h1 class="ph__h cs-h" id="cs-h">{p.title}</h1>
       <p class="ph__p">{p.summary}</p>
       <dl class="cs-credits">
@@ -157,8 +163,20 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
 
 <style>
   .cs-plate { gap: 18px; }
-  .cs-back { --fill: color-mix(in srgb, var(--paper) 55%, transparent); gap: 8px; }
-  @media (hover: hover) { .cs-back:hover .arrow { --turn: -45deg; } }
+  .cs-plate > .cs-pager { justify-self: stretch; }
+  .cs-pager { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+  .cs-pill { --fill: color-mix(in srgb, var(--ink) 7%, transparent); gap: 8px; min-height: var(--btn-h-sm); padding: 0 var(--btn-px-sm); font-size: var(--btn-fs-sm); }
+  .cs-close { margin-left: auto; }
+  .cs-pager .arrow { transition: transform 180ms ease-out, translate 240ms var(--ease-out); }
+  /* Previous and Next lean the way they go instead of tipping up, and Close's cross turns a quarter. */
+  @media (hover: hover) {
+    .cs-pager .btn:hover .arrow { --turn: 0deg; translate: 3px 0; }
+    .cs-pager .btn:hover .arrow--back { translate: -3px 0; }
+    .cs-close:hover .cross { rotate: 90deg; }
+  }
+  .cross { position: relative; width: 0.8em; height: 0.8em; flex: none; transition: rotate 320ms var(--ease-out); }
+  .cross::before, .cross::after { content: ''; position: absolute; left: 50%; top: 50%; width: 1em; height: 2px; margin: -1px 0 0 -0.5em; border-radius: 1px; background: currentColor; rotate: 45deg; }
+  .cross::after { rotate: -45deg; }
   .cs-h { font-size: clamp(52px, 6.6vw, 104px); max-width: 16ch; }
   .cs-credits { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 64px; width: 100%; margin: 10px 0 0; padding-top: 28px; border-top: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); text-align: center; }
   .cs-credits dt { font-size: 15px; color: var(--ink-2); }
@@ -208,6 +226,9 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
   @media (max-width: 1099.98px) { .cs-two { grid-template-columns: 1fr; } }
   @media (max-width: 759.98px) {
     .cs-h { font-size: 44px; }
+    /* Phones: Previous and Next become round arrow buttons so the row fits; their names stay for screen readers. */
+    .cs-pill:not(.cs-close) { width: var(--btn-h-sm); padding: 0; justify-content: center; }
+    .cs-pill__label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
     .cs-credits { grid-template-columns: 1fr 1fr; }
     .cs-credits dd { font-size: 17px; white-space: normal; }
     .cs-lead img, .cs-lead__video { width: 100%; max-height: none; }

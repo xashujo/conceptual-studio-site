@@ -17,6 +17,7 @@ cover:
 thumb: '@assets/work/course-finder/thumb.webp'
 coverFocus: 50% 0%
 featured: false
+ground: "#DCC59A"
 hasPage: true
 outcome: A working prototype, live online with sample providers.
 problem: |-

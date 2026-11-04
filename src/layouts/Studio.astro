@@ -22,15 +22,17 @@ interface Props {
   turnstile?: boolean; noindex?: boolean;
   /** The close: its heading, the words over the buttons, or a slot named "close" in place of the panel. */
   closeHeading?: string; closeText?: string;
+  /** A case study's ground colour (TASTE 14): the page's paper takes it, and its night chapters a deep shade of it. */
+  ground?: string;
 }
-const { title, description, current, turnstile = false, noindex = false, closeHeading = 'Start a Project' } = Astro.props;
+const { title, description, current, turnstile = false, noindex = false, closeHeading = 'Start a Project', ground } = Astro.props;
 const closeText = (Astro.props.closeText ?? home.closeText).replaceAll('{reply time}', responseTime);
 const pages: [string, string][] = [['Home', '/'], ['Work', '/work/'], ['Services', '/services/'], ['About', '/about/'], ['Contact', '/contact/']];
 const links = Astro.props.links ?? pages;
 const isCurrent = (h: string) => h === current || (h !== '/' && current?.startsWith(h));
 ---
 <!doctype html>
-<html lang="en-GB" style={glassStyle}>
+<html lang="en-GB" class:list={{ 'has-ground': ground }} style={ground ? `${glassStyle};--ground:${ground}` : glassStyle}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -43,6 +45,8 @@ const isCurrent = (h: string) => h === current || (h !== '/' && current?.startsW
     {turnstile && turnstileSiteKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
   </head>
   <body>
+    <!-- The top edge: whatever scrolls up under the nav softens into a blur first (the old site's glass top). -->
+    <div class="edge" aria-hidden="true"></div>
     <nav class="nav glass glass--nav" aria-label="Main" data-nav>
       <Logo />
       <ul class="nav__links">

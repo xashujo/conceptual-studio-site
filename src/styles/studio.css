@@ -25,6 +25,40 @@ html { scroll-behavior: smooth; }
 .nav.is-dark { color: #F1DFC8; }
 .nav__links { list-style: none; display: flex; gap: 2px; margin: 0; padding: 0; }
 .nav__menu { display: none; }
+/* The top edge (Josh, 4 Nov: the old site's glass top): a strip behind the nav where the page blurs as it scrolls
+   under, strongest at the very top and easing out above the nav's bottom edge, so the bar sits in frosted air. */
+.edge { position: fixed; z-index: 49; inset: 0 0 auto; height: 96px; pointer-events: none; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); -webkit-mask-image: linear-gradient(#000 35%, transparent); mask-image: linear-gradient(#000 35%, transparent); } /* taste-skill-ignore: a scroll edge, not a fade between sections */
+@media (max-width: 759.98px) { .edge { height: 80px; } }
+@media (prefers-reduced-transparency: reduce) { .edge { display: none; } }
+
+/* Moving between pages (Josh, 4 Nov: the old site's transitions): the page cross-fades and the nav holds still.
+   Browsers without cross-page view transitions just load the page; reduced motion turns it off. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+  .nav { view-transition-name: nav; }
+  ::view-transition-old(root) { animation: 220ms ease-out both vt-out; }
+  ::view-transition-new(root) { animation: 420ms var(--ease-out) 60ms both vt-in; }
+}
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(10px); } }
+
+/* A case study's own ground (TASTE 14; the old site's sky blue for NCC, gold for Oxford). The colour comes from the
+   project's "Page colour" in Pages CMS. Day bands, glass and the nav take it as their paper; night chapters, the
+   close included, take a deep shade of it, so the page still alternates and still ends dark. */
+:root.has-ground {
+  --paper: light-dark(var(--ground), var(--ground-night));
+  --paper-2: light-dark(color-mix(in oklab, var(--ground) 90%, #000), var(--ground-night-2));
+  /* Night: the ground's own hue taken down to near black (sky blue becomes the deep navy of NCC's covers). */
+  --ground-night: oklch(from var(--ground) 0.2 calc(c * 0.4) h);
+  --ground-night-2: oklch(from var(--ground) 0.26 calc(c * 0.45) h);
+}
+@supports not (color: oklch(from red l c h)) { :root.has-ground { --ground-night: #14110D; --ground-night-2: #221D17; } }
+.has-ground .band { background: var(--paper); }
+.has-ground .glass.glass--nav.is-dark { --glass-bg: color-mix(in srgb, var(--ground-night-2) calc(62% * var(--g-frost)), transparent); } /* the dark nav in the same deep shade, not warm brown */
+/* The painting turns to plain light and shade so it takes the ground's colour instead of the gold duotone. */
+.has-ground .band__art img { filter: grayscale(1) contrast(1.1); mix-blend-mode: multiply; opacity: 0.13; }
+.has-ground .band.night .band__art img { filter: grayscale(1); mix-blend-mode: screen; opacity: 0.07; }
+
 /* Phone menu sheet: the shared glass, under the nav. */
 .menu { position: fixed; inset: 74px var(--margin) auto; margin: 0; width: auto; padding: 8px; border: 0; border-radius: var(--radius); color: var(--ink); }
 .menu ul { list-style: none; margin: 0; padding: 0; display: grid; }

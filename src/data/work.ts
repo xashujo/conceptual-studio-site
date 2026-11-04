@@ -53,6 +53,10 @@ export interface CaseStudy {
   before?: { before: Plate; after: Plate };
   happened: string[];
   next: string;
+  /** The one before it in the same chain, for the Previous pill. */
+  prev: string;
+  /** The page's ground colour, taken from the work (TASTE 14); empty keeps the paper. */
+  ground?: string;
   demo?: { href: string; label: string };
   heroVideo?: { video: string; poster: ImageMetadata; alt: string };
 }
@@ -102,6 +106,8 @@ export const caseStudies: CaseStudy[] = entries.filter((e) => e.data.hasPage).ma
   happened: paragraphs(d.whatHappened),
   next: chain[d.slug],
   heroVideo: d.heroVideo ?? undefined,
+  prev: Object.keys(chain).find((k) => chain[k] === d.slug)!,
+  ground: d.ground ?? undefined,
   demo: d.demoLink ? { href: d.demoLink, label: d.demoButton || 'See the Live Demo' } : undefined,
 }));
 

@@ -101,6 +101,13 @@ content:
         options:
           media: images
         description: "The picture on the Work page and home page cards. Leave empty to use the cover. Best as a 4:3 image with the work shown whole in the middle, on a warm black ground, with space round it so it survives being cropped."
+      - name: ground
+        label: Page colour (optional)
+        type: string
+        pattern:
+          regex: "^#[0-9a-fA-F]{6}$"
+          message: "A colour code like #5BBDF6"
+        description: "The case study's background colour, picked from the work so the page complements it (sky blue for NCC, gold for Oxford). A light colour, so black text reads on it; the dark sections take a deep shade of it. Leave empty for the usual cream."
       - name: coverFocus
         label: Cover crop (optional)
         type: string
@@ -409,7 +416,8 @@ content:
     format: yaml
     description: "The headings every case study page shares. Each project's own words are in Projects. Write {reply time} to drop in the Reply time from Site settings."
     fields:
-      - { name: backLabel, label: Back button, type: string, required: true }
+      - { name: backLabel, label: Close button, type: string, required: true, description: "The pill that goes back to the Work page, e.g. Close." }
+      - { name: prevLabel, label: Previous button, type: string, required: true, description: "The pill to the project before. The Next button uses Next label below." }
       - { name: clientLabel, label: Client label, type: string, required: true }
       - { name: disciplinesLabel, label: Disciplines label, type: string, required: true }
       - { name: outcomeLabel, label: Outcome label, type: string, required: true }

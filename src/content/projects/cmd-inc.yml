@@ -19,6 +19,7 @@ coverFocus: 50% 50%
 featured: true
 featuredOrder: 2
 homeFilter: Branding
+ground: "#D8D8D5"
 hasPage: true
 heroVideo:
   video: /media/video/cmd-logo-reveal.mp4

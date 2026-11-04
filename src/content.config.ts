@@ -23,7 +23,7 @@ const items = z.array(z.object({ title: s, text: s }));
 export const pages = {
   workPage: page('work', { heading: s, intro: s, archiveFilter: s, archiveNote: text, clientsHeading: s, closeText: s }),
   caseStudyPage: page('case-study', {
-    backLabel: s, clientLabel: s, disciplinesLabel: s, outcomeLabel: s, problemHeading: s, didHeading: s, workHeading: s,
+    backLabel: s, prevLabel: s, clientLabel: s, disciplinesLabel: s, outcomeLabel: s, problemHeading: s, didHeading: s, workHeading: s,
     beforeAfterHeading: s, happenedHeading: s, nextLabel: s, closeText: s,
   }),
   servicesPage: page('services', {
@@ -68,6 +68,8 @@ export const collections = {
         cover: pic,
         thumb: image().nullish(),
         coverFocus: z.string().nullish(),
+        // The case study's ground, a colour from the work itself (TASTE 14; the old site's NCC sky blue, Oxford gold).
+        ground: z.string().regex(/^#[0-9a-fA-F]{6}$/, 'A colour like #5BBDF6').nullish(),
         featured: z.boolean().nullish().transform((v) => !!v),
         featuredOrder: z.number().nullish(),
         homeFilter: z.enum(['Branding', 'Data Visualisation', 'Social Media']).nullish(),
