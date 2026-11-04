@@ -160,17 +160,19 @@ content:
         type: text
         description: "Leave an empty line between paragraphs. Start lines with - to make a bulleted list."
       - name: gallery
-        label: The work (image rows)
+        label: The work (images)
         type: object
         list: true
-        description: "Each row is one line of images on the page, top to bottom."
+        description: "Each chapter's images are laid out as one bento grid, in this order. The first image gets the large tile; each of the others goes to the tile nearest its shape."
         fields:
-          - name: layout
-            label: Layout
-            type: select
-            required: true
-            options:
-              values: [One large, Two side by side, Three in a row, Four in a grid]
+          - name: heading
+            label: Chapter heading (optional)
+            type: string
+            description: "Starts a new chapter of the story at this group, e.g. The Star Note. Shown big above its images. Leave empty to carry on the chapter above."
+          - name: text
+            label: Chapter text (optional)
+            type: text
+            description: "A short paragraph beside the chapter heading. Two or three sentences."
           - name: images
             label: Images
             component: picture
@@ -182,11 +184,14 @@ content:
         label: What happened
         type: text
         description: "Leave an empty line between paragraphs. Start lines with - to make a bulleted list."
-      - name: next
-        label: Next project (optional)
-        type: reference
-        description: "The case study linked at the bottom of the page. Leave empty to use the next one in Work page order."
-        options: { collection: projects, value: "{path}", label: "{title}", search: title }
+      - name: heroVideo
+        label: Opening video (optional)
+        type: object
+        description: "A short silent clip shown at the top of the case study in place of the title graphic, e.g. a logo reveal. It plays once and stops on its last frame. Square or landscape MP4, under 2 MB."
+        fields:
+          - { name: video, label: Video file (MP4), type: file, required: true, options: { media: videos } }
+          - { name: poster, label: Last frame (still), type: image, required: true, options: { media: images }, description: "A still of the clip's final frame. Shown before it plays and to visitors who turn motion off." }
+          - { name: alt, label: Description (alt text), type: string, required: true }
       - { name: demoLink, label: Live demo link (optional), type: string, description: "A full web address, e.g. https://... Shows a button at the top of the case study page. Empty hides it." }
       - { name: demoButton, label: Live demo button text (optional), type: string, description: "e.g. See the Live Demo." }
 
@@ -506,6 +511,9 @@ content:
       - { name: formHeading, label: Form heading (Contact page), type: string, required: true }
       - { name: enquiryIntro, label: Form intro, type: text, required: true }
       - { name: enquiryAlt, label: Email line under the intro, type: string, description: "{email} becomes the email address. Empty hides it." }
+      - { name: poLabel, label: Purchase order tick box, type: string, required: true, description: "The tick box on the form. Ticking it shows the spending limit field below." }
+      - { name: poLimitLabel, label: Spending limit field, type: string, required: true, description: "Only shows once the purchase order box is ticked." }
+      - { name: poHelp, label: Spending limit help, type: string, required: true, description: "One line under the spending limit field. A link to the Procurement page follows it." }
       - { name: callLink, label: Booking link, type: string, description: "The free 20-minute call, e.g. your Google Calendar booking page. Empty hides the button." }
       - { name: callButton, label: Booking button, type: string, required: true }
       - { name: thanksHeading, label: Thank-you heading, type: string, required: true }
@@ -548,8 +556,8 @@ content:
         fields:
           - { name: title, label: Title, type: string, required: true }
           - { name: text, label: Text, type: text, required: true }
-      - { name: packButton, label: Supplier pack button, type: string, required: true }
-      - { name: packText, label: Supplier pack text, type: text, required: true }
+      - { name: emailButton, label: Email button, type: string, required: true, description: "The main button at the top of the page. It opens an email to you." }
+      - { name: emailSubject, label: Email subject, type: string, required: true, description: "The subject line the email button fills in." }
       - { name: closeText, label: Start a Project text, type: text, required: true, description: "The words in the glass panel at the end of the page." }
 
   - name: settings

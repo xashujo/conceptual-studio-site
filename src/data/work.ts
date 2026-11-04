@@ -3,6 +3,7 @@
 // shapes it for the pages. Anything missing is marked [TBC: ...] in the content itself.
 import type { ImageMetadata } from 'astro';
 import { getCollection } from 'astro:content';
+import { nextChain } from './next-project';
 
 export const filters = [
   ['all', 'All'],
@@ -19,7 +20,9 @@ const homeFromWork: Partial<Record<string, HomeFilter>> = { 'Brand identity': 'B
 const filterKey: Record<string, Filter> = { 'Brand identity': 'brand', 'Data visualisation': 'data', '3D and motion': 'motion' };
 
 export interface Plate { image: ImageMetadata; alt: string; medium: string; }
-export interface Row { kind: 'full' | 'pair' | 'trio' | 'quad'; plates: Plate[]; }
+/** A run of images under one optional heading and paragraph (Katseye-style chapters, Josh 4 Nov). The case
+ *  study page lays each chapter's images out as one bento (lib/bento.ts). */
+export interface Chapter { heading?: string; text: string[]; plates: Plate[]; }
 export interface Project {
   slug: string; title: string; client: string; year: number;
   disciplines: string[]; summary: string; tags: Filter[];
@@ -46,14 +49,14 @@ export interface CaseStudy {
   outcome: string;
   problem: string[];
   did: string[];
-  rows: Row[];
+  chapters: Chapter[];
   before?: { before: Plate; after: Plate };
   happened: string[];
   next: string;
   demo?: { href: string; label: string };
+  heroVideo?: { video: string; poster: ImageMetadata; alt: string };
 }
 
-const kinds: Record<string, Row['kind']> = { 'One large': 'full', 'Two side by side': 'pair', 'Three in a row': 'trio', 'Four in a grid': 'quad' };
 const paragraphs = (s: string) => s.split(/\n\s*\n/).map((t) => t.trim()).filter(Boolean);
 const plate = (p: { src: ImageMetadata; alt: string; caption: string }): Plate => ({ image: p.src, alt: p.alt, medium: p.caption });
 
@@ -81,18 +84,26 @@ export const bySlug = (slug: string) => {
   return p;
 };
 
+// Student work never gets a page, so it never enters the chain.
+const chain = nextChain(entries.filter((e) => e.data.hasPage).map(({ data: d }) => d));
+
 export const caseStudies: CaseStudy[] = entries.filter((e) => e.data.hasPage).map(({ data: d }) => ({
   slug: d.slug,
   outcome: d.outcome,
   problem: paragraphs(d.problem),
   did: paragraphs(d.whatIDid),
-  rows: d.gallery.map((r) => ({ kind: kinds[r.layout], plates: r.images.map(plate) })),
+  // A group with a heading opens a new chapter; groups without one join the chapter above.
+  chapters: d.gallery.reduce<Chapter[]>((all, r) => {
+    if (r.heading || all.length === 0) all.push({ heading: r.heading || undefined, text: paragraphs(r.text ?? ''), plates: [] });
+    all[all.length - 1].plates.push(...r.images.map(plate));
+    return all;
+  }, []),
   before: d.before && d.after ? { before: plate(d.before), after: plate(d.after) } : undefined,
   happened: paragraphs(d.whatHappened),
-  // Without a chosen next project, link to the next case study in Work page order.
-  next: d.next ?? '',
+  next: chain[d.slug],
+  heroVideo: d.heroVideo ?? undefined,
   demo: d.demoLink ? { href: d.demoLink, label: d.demoButton || 'See the Live Demo' } : undefined,
-})).map((cs, i, all) => ({ ...cs, next: cs.next || all[(i + 1) % all.length].slug }));
+}));
 
 /** The home page's featured work, in position order (ties broken by title). */
 export const featured = projects

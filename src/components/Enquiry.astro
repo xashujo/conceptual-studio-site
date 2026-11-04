@@ -3,6 +3,8 @@
 // what you need are required; budget, deadline, a link and a note are optional (Josh, 2 Nov: lane, budget band,
 // deadline, link). "What you need" is preset from the page and from any ladder or lane button. Inline validation
 // and an inline thank-you, no reload. Without JavaScript it still posts straight to Web3Forms.
+// Purchase-order tick box (Josh, 4 Nov): ticking it shows a spending-limit field, so organisations with a
+// single-quote limit can say so without the site printing a price ceiling for everyone.
 // Words: Pages CMS > Contact page (the enquiry form fields).
 import { services, budgets } from '../data/services';
 import { email, web3formsKey, turnstileSiteKey } from '../site';
@@ -39,6 +41,14 @@ const [altBefore, altAfter] = (c.enquiryAlt || '').split('{email}');
     <div class="f f--wide">
       <label for="enq-org">Organisation</label>
       <input id="enq-org" name="organisation" type="text" autocomplete="organization" required data-msg="Please tell me who the work is for." />
+    </div>
+    <div class="f f--wide f--po">
+      <label class="f__check" for="enq-po"><input id="enq-po" name="purchase_order" type="checkbox" value="Yes" aria-controls="enq-po-more" />{c.poLabel}</label>
+    </div>
+    <div class="f f--wide f--po-more" id="enq-po-more">
+      <label for="enq-limit">{c.poLimitLabel} <span>optional</span></label>
+      <input id="enq-limit" name="spending_limit" type="text" aria-describedby="enq-limit-help" />
+      <p class="f__help" id="enq-limit-help">{c.poHelp} <a href="/procurement/">{c.procurementButton}</a></p>
     </div>
     <div class="f f--wide">
       <label for="enq-need">What you need</label>
@@ -193,6 +203,15 @@ const [altBefore, altAfter] = (c.enquiryAlt || '').split('{email}');
   .f [aria-invalid] { border-color: #A3341F; }
   .f__err { font-size: 15px; line-height: 1.4; color: light-dark(#A3341F, #F08A72); font-weight: 500; }
   .f__help { font-size: 15px; line-height: 1.4; color: var(--ink-2); }
+  /* Purchase-order buyers tick the box and get one extra field (a spending limit). Pure CSS, so it works without JS. */
+  .f .f__check { display: flex; align-items: center; gap: 12px; font-weight: 400; cursor: pointer; }
+  .f .f__check input { width: 22px; height: 22px; min-height: 0; padding: 0; flex: none; border-radius: 6px; display: grid; place-content: center; cursor: pointer; }
+  .f .f__check input::before { content: ""; width: 12px; height: 12px; background: var(--paper); clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0, 43% 62%); transform: scale(0); transition: transform 120ms ease-out; }
+  .f .f__check input:checked { background: var(--ink); border-color: var(--ink); }
+  .f .f__check input:checked::before { transform: scale(1); }
+  .f--po-more { display: none; }
+  .f--po:has(input:checked) + .f--po-more { display: flex; }
+  .f__help a { color: var(--ink); text-underline-offset: 4px; text-decoration-thickness: 1px; }
   .enq__trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
   .enq__send { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-top: 6px; }
   .enq__status { font-size: 16px; line-height: 1.4; }

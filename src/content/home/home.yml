@@ -54,6 +54,7 @@ approach:
 results:
   - src/content/projects/oxford-school-of-english.yml
   - src/content/projects/new-city-college-strategic-intent.yml
+  - src/content/projects/cmd-inc.yml
 aboutLead: I set up Conceptual Studio in London in 2024. I turn reports, plans and spreadsheets into charts, maps and identities that make sense on first read.
 steps:
   - title: Discovery

@@ -20,46 +20,119 @@ featured: true
 featuredOrder: 2
 homeFilter: Branding
 hasPage: true
+heroVideo:
+  video: /media/video/cmd-logo-reveal.mp4
+  poster: "@assets/work/cmd-inc/reveal-poster.webp"
+  alt: The chrome Star Note appears out of the dark, then the CMD Inc. wordmark settles underneath
 outcome: Identity and 3D assets handed over in March 2026.
 problem: |
-  CMD Inc. makes sound for film & games, and was planning a website built around its soundscapes. It needed an identity that looked like its sound, plus 3D and motion pieces for the site.
+  CMD Inc. is a music company working across film, games, healthcare & music therapy. It was planning a website built around its soundscapes, and needed an identity that looked like its sound, plus 3D & motion pieces for the site.
 
   The brief: a look that moves like spatial audio, with a sci-fi feel and an interface that's easy on the eye.
 whatIDid: |
-  I started with the wordmark. The client's first font was pixelated, so my first version made the type look like stardust moving with the sound. The final identity is set in SF Pro Semibold.
+  I started with the wordmark. The client's first font was pixelated, so my early versions made the type look like stardust moving with the sound. The final wordmark is set in SF Pro Semibold, inside a rounded outline.
 
-  The icon, the Star Note, followed: six ovals around a bright centre, drawn from the shape of a musical note. Radial halftone lines on the marks echo movement in sound. The colours are black & white, kept close to the client's reference site.
-
-  Then I built what the website needed: a logo reveal, 3D social icons, mockups, a favicon, app icon styles and web-ready video for each browser. It all went into a visual identity guide and a shared folder for the developer.
+  Then came the icon, the Star Note, and every 3D, motion & web file the developer needed. It all went into a visual identity guide and one shared folder.
 gallery:
   - layout: One large
+    heading: The Star Note
+    text: |
+      The mark starts with a quarter note. I took it apart: the oval became the building block and the stem became a ray.
+
+      Six ovals now sit around one bright centre, joined by the rays.
     images:
+      - src: "@assets/work/cmd-inc/04.webp"
+        alt: The quarter note taken apart into a note head, a stem and ovals, across six windows
+        caption: Taking the note apart
+  - layout: Two side by side
+    images:
+      - src: "@assets/work/cmd-inc/geometry.webp"
+        alt: Thin construction lines showing the ovals and rays of the Star Note
+        caption: The geometry
       - src: "@assets/work/cmd-inc/03.webp"
-        alt: The CMD Inc. star icon in white on black
+        alt: The CMD Inc. Star Note in white on black
         caption: The Star Note
   - layout: Two side by side
+    heading: Black, white & one grey
+    text: |
+      The colours stay close to the client's reference site: black, an off-white and one cool grey. Headings are SF Pro Semibold and body text is SF Pro Regular.
     images:
-      - src: "@assets/work/cmd-inc/02.webp"
-        alt: The CMD Inc. star icon and wordmark in white on black
-        caption: Icon & wordmark
-      - src: "@assets/work/cmd-inc/04.webp"
-        alt: The star icon taken apart into a note, a line and ovals across six windows
-        caption: How the mark was built
-  - layout: Two side by side
-    images:
-      - src: "@assets/work/cmd-inc/05.webp"
-        alt: Two app icons with the star in light and dark halftone
-        caption: App icons
-      - src: "@assets/work/cmd-inc/06.webp"
-        alt: A row of six app icon styles on a dark desktop
-        caption: Icon styles
+      - src: "@assets/work/cmd-inc/palette.webp"
+        alt: The colour palette, black, off-white and a cool grey, with their colour codes
+        caption: Colour palette
+      - src: "@assets/work/cmd-inc/type.webp"
+        alt: SF Pro Semibold and Regular type specimens on black
+        caption: Typography
   - layout: One large
     images:
+      - src: "@assets/work/cmd-inc/02.webp"
+        alt: The Star Note and CMD Inc. wordmark in white on black
+        caption: Icon & wordmark
+  - layout: Two side by side
+    heading: Sound you can see
+    text: |
+      Halftone points & lines spread out from the centre of the mark to echo how sound moves. I also drew a topographic version and six alternative styles for the app icon, from liquid glass to a cosmic gradient.
+    images:
+      - src: "@assets/work/cmd-inc/05.webp"
+        alt: Two app icons with the Star Note in light and dark halftone points
+        caption: Halftone points
+      - src: "@assets/work/cmd-inc/topographic.webp"
+        alt: Two app icons with the Star Note drawn as topographic contour lines
+        caption: Topographic Star Note
+  - layout: One large
+    images:
+      - src: "@assets/work/cmd-inc/06.webp"
+        alt: A row of six alternative Star Note app icon styles on a dark desktop
+        caption: App icon styles
+  - layout: One large
+    heading: Built for the website
+    text: |
+      The developer got a logo reveal, an icon & wordmark animation, favicons in three colours, app icons from 16 to 256 pixels and 3D models of the Star Note, meteorites & social icons, all as web-ready files.
+    images:
       - src: "@assets/work/cmd-inc/07.webp"
-        alt: A laptop on a dark surface showing the CMD Inc. star
-        caption: Website reveal
+        alt: A laptop on a dark surface showing the Star Note reveal
+        caption: Star Note reveal
+  - layout: Two side by side
+    images:
+      - src: "@assets/work/cmd-inc/08.webp"
+        alt: Browser tabs in light and dark mode with the CMD Inc. favicon
+        caption: Favicon
+      - src: "@assets/work/cmd-inc/star-3d.webp"
+        alt: A 3D model of the Star Note in soft white on black
+        caption: 3D Star Note
+  - layout: Two side by side
+    images:
+      - src: "@assets/work/cmd-inc/meteorites.webp"
+        alt: Five 3D meteorite models in dark viewer windows
+        caption: 3D meteorites
+      - src: "@assets/work/cmd-inc/social-icons.webp"
+        alt: 3D Instagram, X, TikTok and LinkedIn icons in grey
+        caption: 3D social icons
+  - layout: One large
+    heading: Out in the world
+    text: |
+      Mockups to check the mark holds up off screen, from business cards to a billboard.
+    images:
+      - src: "@assets/work/cmd-inc/billboard.webp"
+        alt: Mockup of a billboard on a concrete wall showing the chrome CMD Inc. title
+        caption: Billboard mockup
+  - layout: Two side by side
+    images:
+      - src: "@assets/work/cmd-inc/cards.webp"
+        alt: Mockup of black and white CMD Inc. business cards
+        caption: Business cards
+      - src: "@assets/work/cmd-inc/name-tags.webp"
+        alt: Mockup of two CMD Inc. lanyard name tags, one light and one dark
+        caption: Name tags
+  - layout: Two side by side
+    images:
+      - src: "@assets/work/cmd-inc/posters.webp"
+        alt: Mockup of three framed CMD Inc. posters on a concrete wall
+        caption: Posters
+      - src: "@assets/work/cmd-inc/iphone.webp"
+        alt: Mockup of an iPhone home screen with the CMD Inc. app icon
+        caption: App icon on iPhone
 whatHappened: |
-  I handed the identity & assets over in March 2026. A separate developer is building the website.
+  I handed everything over in March 2026. A separate developer is building the website.
 
-  "It looks very polished and professional." Chucks, founder, CMD Inc.
-next: src/content/projects/oxford-school-of-english.yml
+  "Their work reflects a strong narrative sensitivity, where branding, 3D visuals, and digital design are not isolated outputs but interconnected expressions of a larger story." Chucks, CMD Inc.

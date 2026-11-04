@@ -1,5 +1,5 @@
 heading: Procurement
-intro: Everything your finance team needs to set me up as a supplier.
+intro: Everything your finance team needs to set me up as a supplier, on one page.
 orgHeading: Working with Organisations
 org:
   - title: A Registered Company
@@ -24,6 +24,8 @@ details:
     value: Net 30. Invoices are due 30 days from the invoice date.
   - label: Purchase orders
     value: Send the PO number before work starts and it goes on every invoice.
+  - label: Spending limits
+    value: If your organisation has a limit for single quotes, tell me and I'll scope the work to fit.
   - label: How to pay
     value: Bank transfer, with details on every invoice. No card payments.
   - label: Invoices
@@ -38,6 +40,6 @@ steps:
     text: I invoice against the PO at the stages agreed in the quote, by email as a PDF.
   - title: Payment
     text: You pay by bank transfer within 30 days of the invoice date.
-packButton: Ask for the Supplier Pack
-packText: Everything your finance team needs to set me up, in one email.
-closeText: Need the supplier pack, or a quote for your PO? Email me and I'll reply {reply time}.
+emailButton: Email Me
+emailSubject: Setting you up as a supplier
+closeText: Need a quote for your PO? Email me and I'll reply {reply time}.

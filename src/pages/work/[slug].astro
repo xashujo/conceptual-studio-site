@@ -3,13 +3,15 @@
 // night: the opening plate with the credits and the lead image; the problem and what I did; the work;
 // what happened; the next project; then the close. The project's own words and images come from
 // Pages CMS > Projects; the headings from Pages CMS > Case study pages.
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import Studio from '../../layouts/Studio.astro';
 import Band from '../../components/studio/Band.astro';
 import PlateCaption from '../../components/PlateCaption.astro';
 import Carousel from '../../components/Carousel.astro';
 import { caseStudies, bySlug, type Plate } from '../../data/work';
 import { caseStudyPage as t } from '../../lib/pages';
+import { bento, ratioOf } from '../../lib/bento';
+import sharp from 'sharp';
 
 export function getStaticPaths() {
   return caseStudies.map((cs) => ({ params: { slug: cs.slug }, props: { cs } }));
@@ -18,15 +20,39 @@ const { cs } = Astro.props;
 const p = bySlug(cs.slug);
 const next = bySlug(cs.next);
 const cap = (pl: Plate) => ({ title: p.client.startsWith(p.title) ? `${p.title}, ${p.year}` : `${p.title}, ${p.client}, ${p.year}`, medium: pl.medium });
-const sizes = { full: '(min-width: 1200px) 1140px, 95vw', pair: '(min-width: 760px) 560px, 100vw', trio: '(min-width: 760px) 370px, 100vw', quad: '(min-width: 760px) 560px, 100vw' };
+const pairSizes = '(min-width: 760px) 560px, 100vw';
 // Credits sit on one line each (Josh, 4 Nov: the four-column row with the outcome felt stuffy). The outcome
 // field still shows on the home page's Selected Work cards.
+// Each chapter's images form one bento grid (lib/bento.ts). Artwork sits whole in its tile, and the tile is
+// filled with the artwork's own edge colour. A photograph (its edges vary) fills its tile instead when that
+// trims less than 30%, since bands of a colour picked from a photo read as letterboxing.
+const edge = async (img: ImageMetadata) => {
+  const { data, info } = await sharp((img as ImageMetadata & { fsPath: string }).fsPath).resize(48, 48, { fit: 'fill' }).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+  const ring: number[][] = [[], [], []];
+  for (let y = 0; y < info.height; y++) for (let x = 0; x < info.width; x++) {
+    if (x > 1 && y > 1 && x < info.width - 2 && y < info.height - 2) continue;
+    for (let c = 0; c < 3; c++) ring[c].push(data[(y * info.width + x) * 3 + c]);
+  }
+  const spread = ring.reduce((sum, v) => { const m = v.reduce((a, b) => a + b, 0) / v.length; return sum + Math.sqrt(v.reduce((a, b) => a + (b - m) ** 2, 0) / v.length); }, 0) / 3;
+  return { bg: `rgb(${ring.map((v) => v.sort((a, b) => a - b)[v.length >> 1]).join(' ')})`, photo: spread > 12 };
+};
+const layout = (plates: Plate[], flip: boolean) => {
+  const ratios = plates.map((pl) => pl.image.width / pl.image.height);
+  return Promise.all(bento(ratios, flip).map(async (tile) => {
+    const { bg, photo } = await edge(plates[tile.index].image);
+    const fit = ratios[tile.index] / ratioOf(tile);
+    return { ...tile, plate: plates[tile.index], bg, fill: photo && Math.min(fit, 1 / fit) > 0.7 };
+  }));
+};
+const chapters = await Promise.all(cs.chapters.map(async (ch, i) => ({ ...ch, tiles: await layout(ch.plates, i % 2 === 1) })));
 const credits = [[t.clientLabel, p.client], [t.disciplinesLabel, p.disciplines.join(', ')]].filter(([, v]) => v);
 // Opener: the project's title graphic when it has one (Josh, 4 Nov: a photo of the work in a street is a weak
-// opener), else the cover.
+// opener), else the cover. The title graphic gets no second caption line (Josh, 4 Nov: "(Title graphic)" said nothing).
 const lead = p.thumb
-  ? { image: p.thumb, alt: `${p.title} title graphic`, medium: 'Title graphic' }
+  ? { image: p.thumb, alt: `${p.title} title graphic`, medium: '' }
   : { image: p.image, alt: p.alt, medium: p.medium };
+// The opening clip plays once and holds its last frame; the poster is that frame, so nothing jumps.
+const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, width: 1080, format: 'webp' })).src : undefined;
 ---
 <Studio title={p.title} description={p.summary} current="/work/" closeText={t.closeText}>
   <Band opening class="cs-open" labelledby="cs-h">
@@ -41,7 +67,13 @@ const lead = p.thumb
       {cs.demo && <a class="btn btn--solid cs-demo" href={cs.demo.href} target="_blank" rel="noopener">{cs.demo.label} <span class="arrow arrow--out" aria-hidden="true">↗</span></a>}
     </div>
     <figure class="cs-lead">
-      <Image src={lead.image} alt={lead.alt} widths={[800, 1400, 2000]} sizes="(min-width: 1200px) 1140px, 95vw" loading="eager" fetchpriority="high" />
+      {cs.heroVideo ? (
+        <video class="cs-lead__video" data-reveal-video muted playsinline preload="metadata" poster={heroPoster} aria-label={cs.heroVideo.alt} width={cs.heroVideo.poster.width} height={cs.heroVideo.poster.height}>
+          <source src={cs.heroVideo.video} type="video/mp4" />
+        </video>
+      ) : (
+        <Image src={lead.image} alt={lead.alt} widths={[800, 1400, 2000]} sizes="(min-width: 1200px) 1140px, 95vw" loading="eager" fetchpriority="high" />
+      )}
       <PlateCaption {...cap(lead)} />
     </figure>
   </Band>
@@ -57,26 +89,35 @@ const lead = p.thumb
 
   <Band labelledby="the-work">
     <h2 class="big" id="the-work">{t.workHeading}</h2>
-    <!-- On a phone the rows become one swipeable gallery (Carousel.astro); on desktop they stay as laid out. -->
-    <Carousel label={`${t.workHeading}: gallery`}>
-      {cs.rows.map((row) => (
-        <div class:list={['row', `row--${row.kind}`]}>
-          {row.plates.map((pl) => (
-            <figure>
-              <Image src={pl.image} alt={pl.alt} widths={[600, 1000, 1600, 2200]} sizes={sizes[row.kind]} />
-              <PlateCaption {...cap(pl)} />
-            </figure>
-          ))}
-        </div>
-      ))}
-    </Carousel>
+    <!-- Chapters (Katseye-style, Josh 4 Nov): a short heading and paragraph, then that chapter's images.
+         On a phone each chapter's images become one swipeable gallery (Carousel.astro); from 760px up, a bento. -->
+    {chapters.map((ch, i) => (
+      <section class:list={['cs-chapter', { 'cs-chapter--titled': ch.heading }]} aria-label={ch.heading ?? undefined}>
+        {ch.heading && (
+          <div class="cs-chapter__head" data-reveal>
+            <h3 class="mid">{ch.heading}</h3>
+            {ch.text.length > 0 && <div class="flow cs-text">{ch.text.map((x) => <p>{x}</p>)}</div>}
+          </div>
+        )}
+        <Carousel label={`${ch.heading ?? t.workHeading}: gallery`}>
+          <div class="bento">
+            {ch.tiles.map(({ plate: pl, bg, fill, col, row, w, h }) => (
+              <figure class:list={['tile', { 'tile--fill': fill }]} style={`grid-area: ${row} / ${col} / span ${h} / span ${w}; --tile: ${bg}`}>
+                <div class="tile__art"><Image src={pl.image} alt={pl.alt} widths={[600, 1000, 1600, 2200]} sizes={`(min-width: 760px) ${Math.round((w / 12) * 1140)}px, 100vw`} /></div>
+                <PlateCaption {...cap(pl)} />
+              </figure>
+            ))}
+          </div>
+        </Carousel>
+      </section>
+    ))}
     {cs.before && (
       <>
         <h3 class="mid cs-ba">{t.beforeAfterHeading}</h3>
         <div class="row row--pair">
           {[cs.before.before, cs.before.after].map((pl) => (
             <figure>
-              <Image src={pl.image} alt={pl.alt} widths={[600, 1000, 1600]} sizes={sizes.pair} />
+              <Image src={pl.image} alt={pl.alt} widths={[600, 1000, 1600]} sizes={pairSizes} />
               <PlateCaption {...cap(pl)} />
             </figure>
           ))}
@@ -108,6 +149,12 @@ const lead = p.thumb
   </Band>
 </Studio>
 
+<script>
+  // Play the opening clip once, unless the visitor has asked for less motion (they keep the still).
+  const v = document.querySelector<HTMLVideoElement>('[data-reveal-video]');
+  if (v && !matchMedia('(prefers-reduced-motion: reduce)').matches) v.play().catch(() => {});
+</script>
+
 <style>
   .cs-plate { gap: 18px; }
   .cs-back { --fill: color-mix(in srgb, var(--paper) 55%, transparent); gap: 8px; }
@@ -118,6 +165,7 @@ const lead = p.thumb
   .cs-credits dd { margin: 4px 0 0; white-space: nowrap; font-size: 19px; line-height: 1.35; font-weight: 500; letter-spacing: -0.01em; }
   /* The lead exhibit keeps its own shape (a portrait poster stays portrait), as tall as the screen allows. */
   .cs-lead { margin-top: var(--sp-gap); text-align: center; }
+  .cs-lead__video { display: block; width: auto; max-width: 100%; height: auto; max-height: 86svh; margin-inline: auto; border-radius: var(--radius-inner); background: #000; }
   .cs-lead img { width: auto; max-width: 100%; height: auto; max-height: 86svh; margin-inline: auto; border-radius: var(--radius-inner); }
 
   .cs-two { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-gap); align-items: start; }
@@ -127,15 +175,24 @@ const lead = p.thumb
   .cs-list { margin: 0; padding-left: 1.2em; display: grid; gap: 8px; }
   .cs-happened { max-width: 820px; }
 
+  /* Bento (lib/bento.ts places every tile). Rows track the column width, so tile shapes hold at any width. */
+  .bento { --u: calc((100cqi - 11 * var(--sp-gap)) / 12); display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-auto-rows: calc(3 * var(--u) + 52px); gap: var(--sp-gap); }
+  @media (min-width: 760px) { :global(.carousel):has(> .carousel__track > .bento) { container-type: inline-size; margin-top: var(--sp-head); } }
+  .tile { display: flex; flex-direction: column; min-height: 0; margin: 0; }
+  .tile__art { position: relative; flex: 1 1 0; min-height: 0; background: var(--tile); border-radius: var(--radius-inner); overflow: hidden; }
+  .tile__art img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: contain; }
+  .tile--fill .tile__art img { object-fit: cover; }
+  .tile :global(.plate) { flex: none; }
   .row { display: grid; gap: var(--sp-gap); margin-top: var(--sp-head); }
   .row img { display: block; width: 100%; height: auto; border-radius: var(--radius-inner); }
-  .row--full img { width: auto; max-width: 100%; max-height: 86svh; margin-inline: auto; }
-  .row--full :global(.plate) { text-align: center; }
-  .row--pair, .row--quad { grid-template-columns: 1fr 1fr; align-items: start; }
-  .row--trio { grid-template-columns: repeat(3, 1fr); align-items: start; }
-  .row--pair img, .row--trio img { aspect-ratio: 4 / 3; object-fit: cover; }
-  .row--quad img { aspect-ratio: 1.41; object-fit: cover; }
+  .row--pair { grid-template-columns: 1fr 1fr; align-items: start; }
+  .row--pair img { aspect-ratio: 4 / 3; object-fit: cover; }
   .cs-ba { margin-top: var(--sp-section); }
+  /* A titled chapter: heading left, a short paragraph right, on one hairline, then its images. */
+  .cs-chapter--titled { margin-top: clamp(80px, 9vw, 120px); }
+  .big + .cs-chapter--titled { margin-top: var(--sp-head); }
+  .cs-chapter__head { display: grid; grid-template-columns: 5fr 7fr; gap: var(--sp-gap); align-items: baseline; padding-top: 24px; border-top: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); }
+  .cs-chapter__head .mid { margin: 0; }
 
   .next { position: relative; display: grid; grid-template-columns: 360px minmax(0, 1fr) auto; gap: 32px; align-items: center; padding: 12px; border-radius: var(--radius); text-decoration: none; transition: background-color 300ms ease-out; }
   .next__img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: var(--radius-inner); }
@@ -153,9 +210,12 @@ const lead = p.thumb
     .cs-h { font-size: 44px; }
     .cs-credits { grid-template-columns: 1fr 1fr; }
     .cs-credits dd { font-size: 17px; white-space: normal; }
-    .cs-lead img { width: 100%; max-height: none; }
+    .cs-lead img, .cs-lead__video { width: 100%; max-height: none; }
     .cs-text p, .cs-list { font-size: 17px; }
-    .row--pair, .row--trio, .row--quad { grid-template-columns: 1fr; }
+    .cs-chapter__head { grid-template-columns: 1fr; gap: 12px; }
+    .row--pair { grid-template-columns: 1fr; }
+    .tile__art { display: contents; }
+    .tile__art img { position: static; }
     .next { grid-template-columns: 1fr; gap: 16px; padding: 10px 10px 18px; }
     .next__text { padding: 0 8px; }
     .next__go { justify-self: end; width: 48px; height: 48px; margin: 0 8px 0 0; }

@@ -38,10 +38,11 @@ export const pages = {
   contactPage: page('contact', {
     heading: s, intro: s, hours: text, elsewhereHeading: s, procurementHeading: s, procurementText: s, procurementButton: s,
     enquiryHeading: s, formHeading: s, enquiryIntro: s, enquiryAlt: text, callLink: text, callButton: s, thanksHeading: s, thanksText: s, closeHeading: s, closeText: s,
+    poLabel: s, poLimitLabel: s, poHelp: s,
   }),
   procurementPage: page('procurement', {
     heading: s, intro: s, orgHeading: s, org: items, detailsHeading: s, details: z.array(z.object({ label: s, value: s })), stepsHeading: s, steps: items,
-    packButton: s, packText: s, closeText: s,
+    emailButton: s, emailSubject: s, closeText: s,
   }),
 };
 
@@ -80,12 +81,15 @@ export const collections = {
         whatIDid: text,
         whatHappened: text,
         gallery: z.array(z.object({
-          layout: z.enum(['One large', 'Two side by side', 'Three in a row', 'Four in a grid']),
+          layout: z.string().nullish(), // retired: each chapter's images are laid out as one bento
+          heading: z.string().nullish(),
+          text: z.string().nullish(),
           images: z.array(pic).min(1),
         })).nullish().transform((v) => v ?? []),
         before: pic.nullish(),
         after: pic.nullish(),
-        next: ref.nullish(),
+        // Optional moving title graphic at the top of the case study (Josh, 4 Nov: the CMD logo reveal).
+        heroVideo: z.object({ video: z.string().min(1), poster: image(), alt: z.string().min(1) }).nullish(),
         demoLink: text,
         demoButton: text,
       });

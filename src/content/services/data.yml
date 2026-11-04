@@ -7,12 +7,12 @@ kinds: Charts for a document you're laying out yourself, a whole annual, strateg
 demoHeading: A Table Becomes a Chart
 demoText: Real Department for Education figures, as you'd get them in a spreadsheet. Press the button to see what I do with them.
 examples:
-  - src: '@assets/work/usp-freeport-skills/thumb.webp'
-    alt: The Skills Heat Map for the Freeport Skills Partnership, printed and lit on a dark surface
+  - src: '@assets/work/usp-freeport-skills/skill-gaps.webp'
+    alt: Bar chart of the top skill gaps across the Freeport Skills Network, with the figures blurred
     title: Freeport Skills Partnership, USP College, 2026
-    caption: Visuals for a workforce skills analysis
+    caption: The skill gaps chart from a workforce analysis
   - src: '@assets/work/ncc-sustainability-report/thumb.webp'
-    alt: The cover of New City College's Environmental Sustainability report, printed and lit on a dark surface
+    alt: Title graphic for New City College's Environmental Sustainability report, with the college's N roundel
     title: Sustainability Report, New City College London, 2026
     caption: Charts and layout for the 2025-26 report
 cardImage:

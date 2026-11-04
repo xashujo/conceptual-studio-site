@@ -273,7 +273,7 @@ const more = services.filter((s) => !lanes.includes(s));
             {home.approach.map((a) => <li><h3 class="approach__t">{a.title}</h3><p>{a.text}</p></li>)}
           </ul>
           <!-- One quote: the large pane beside the two results. Two or three quotes: a row of quotes over a row of results. -->
-          <div class:list={["proof__grid", { 'proof__grid--two': homeQuotes.length === 2, 'proof__grid--three': homeQuotes.length > 2 }]}>
+          <div class:list={["proof__grid", { 'proof__grid--two': homeQuotes.length === 2, 'proof__grid--three': homeQuotes.length > 2, 'proof__grid--r3': results.length === 3 }]} style={`--r: ${Math.max(results.length, 1)}`}>
             {homeQuotes.map((q) => (
               <figure class="proof__quote glass" data-lens>
                 <blockquote><p>“{q.quote}”</p></blockquote>
@@ -678,8 +678,8 @@ const more = services.filter((s) => !lanes.includes(s));
   @media (min-width: 760px) and (max-width: 1099.98px) { .approach { grid-template-columns: repeat(2, minmax(0, 1fr)); } } /* four points: two by two on tablets */
   .approach__t { font-family: var(--display); font-weight: 500; font-size: 26px; line-height: 1.1; margin-bottom: 10px; }
   .approach p { font-size: 18px; line-height: 1.5; color: var(--ink-2); text-wrap: pretty; }
-  .proof__grid { display: grid; grid-template-columns: 7fr 5fr; grid-template-rows: 1fr 1fr; gap: var(--sp-gap); margin-top: var(--sp-head); }
-  .proof__quote { position: relative; grid-row: span 2; display: flex; flex-direction: column; justify-content: space-between; gap: 40px; margin: 0; padding: var(--sp-card); border-radius: var(--radius); }
+  .proof__grid { display: grid; grid-template-columns: 7fr 5fr; grid-template-rows: repeat(var(--r, 2), 1fr); gap: var(--sp-gap); margin-top: var(--sp-head); }
+  .proof__quote { position: relative; grid-row: span var(--r, 2); display: flex; flex-direction: column; justify-content: space-between; gap: 40px; margin: 0; padding: var(--sp-card); border-radius: var(--radius); }
   .proof__quote blockquote { margin: 0; }
   .proof__quote p { font-size: 28px; line-height: 1.36; letter-spacing: -0.02em; font-weight: 450; text-wrap: pretty; text-indent: -0.4em; } /* hang the opening quote mark */
   .proof__quote figcaption { font-size: 18px; line-height: 1.45; }
@@ -692,6 +692,10 @@ const more = services.filter((s) => !lanes.includes(s));
   .proof__grid--three .proof__quote { grid-row: auto; grid-column: span 2; }
   .proof__grid--three .proof__quote p { font-size: 21px; }
   .proof__grid--three .result { grid-column: span 3; }
+  /* Three case study links (Josh, 4 Nov: CMD Inc. joined Oxford and Strategic Intent): one row of three thirds under the quotes. */
+  .proof__grid--two.proof__grid--r3 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .proof__grid--two.proof__grid--r3 .proof__quote { grid-column: span 3; }
+  .proof__grid--r3:is(.proof__grid--two, .proof__grid--three) .result { grid-column: span 2; }
   .result { position: relative; display: flex; flex-direction: column; gap: 14px; padding: var(--sp-card); border-radius: var(--radius); text-decoration: none; transition: background-color 300ms ease-out, color 300ms ease-out; }
   .result__who { font-size: 17px; color: var(--ink-2); }
   .result__line { font-size: 21px; line-height: 1.38; font-weight: 500; letter-spacing: -0.015em; text-wrap: balance; hyphens: none; }
@@ -713,6 +717,8 @@ const more = services.filter((s) => !lanes.includes(s));
   /* Close and footer, on warm black. */
   .end { position: relative; isolation: isolate; background: var(--paper); }
   .close { position: relative; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-block: min(560px, 40vw) 96px; align-items: start; } /* heading top level with the glass panel (Josh, 28 Oct) */
+  /* The close's tall top padding is art, not content: land the nav link on the heading, not the empty sky above it. */
+  #contact { scroll-margin-top: calc(96px - min(560px, 40vw)); }
   .close__art { position: absolute; inset: 0; z-index: -1; overflow: hidden; }
   .close__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%); mask-image: linear-gradient(to bottom, transparent, #000 14%); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
   .close__h { grid-column: 1 / span 6; margin-top: -0.18em; } /* cap tops, not the line box, level with the panel */
@@ -740,6 +746,9 @@ const more = services.filter((s) => !lanes.includes(s));
     .proof__grid--three .proof__quote { grid-column: 1 / -1; }
     .proof__grid--three .proof__quote p { font-size: 24px; }
     .proof__grid--three .result { grid-column: auto; }
+    .proof__grid--two.proof__grid--r3 { grid-template-columns: 1fr 1fr; }
+    .proof__grid--r3:is(.proof__grid--two, .proof__grid--three) .result { grid-column: auto; }
+    .proof__grid--r3 .result:last-child { grid-column: 1 / -1; } /* three links on a tablet: two, then one across */
     .close__h, .close__body { grid-column: 1 / -1; }
     .close__body { margin-top: var(--sp-head); justify-self: start; }
   }
@@ -802,6 +811,7 @@ const more = services.filter((s) => !lanes.includes(s));
     .about__text p { font-size: 17px; }
     .about__text .about__lead { font-size: 22px; }
     .close { padding-block: 300px 80px; }
+    #contact { scroll-margin-top: -220px; } /* 80px nav clearance minus the 300px art padding */
     .close__art img { object-position: 42% 30%; }
     .footer { font-size: 14px; padding-bottom: 28px; }
   }
