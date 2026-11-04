@@ -112,10 +112,10 @@ a { color: inherit; }
 :root { --g-bend: 1; --g-frost: 1; --g-blur: 1; --g-shine: 1; --g-reach: 1; }
 /* Layer 1 (brief 7.2), every browser: blur and saturate over a paper tint, a fine rim, a soft lift.
    Based on 2a7589f's phone menu sheet. Also the fallback for Tier A.
-   Tint is 66%: AA for ink text even over pure black or white underneath (brief 7.2 asks 55% or more). */
+   Tint is 48% (Josh, 4 Nov: clearer glass, with the new depth carrying the edge). The painting sits at 25% opacity, so ink text keeps AA over it. */
 /* The glass, defined once as variables so panels (.glass) and buttons (.glass-button) share it exactly. */
 .glass, .glass-button {
-  --glass-bg: color-mix(in srgb, var(--paper) min(96%, calc(66% * var(--g-frost))), transparent);
+  --glass-bg: color-mix(in srgb, var(--paper) min(96%, calc(48% * var(--g-frost))), transparent);
   --glass-filter: blur(calc(24px * var(--g-blur))) saturate(1.3); /* 24px diffuses the etching's lines; above 1.3 saturate the paper turns peach (TASTE 13) */
   /* Depth (Josh, 4 Nov: "glass sat on a page", not flat): a lit top rim, a faint shaded lower edge, then three
      stacked shadows, a tight contact one where it touches the page and two soft ones for the lift. */
@@ -135,7 +135,7 @@ a { color: inherit; }
 .night :is(.glass, .glass-button), :is(.glass, .glass-button).is-dark {
   color-scheme: dark;
   color: var(--ink);
-  --glass-bg: color-mix(in srgb, var(--paper-2) min(96%, calc(72% * var(--g-frost))), transparent); /* one step above the ground, so it has a body over plain black */
+  --glass-bg: color-mix(in srgb, var(--paper-2) min(96%, calc(52% * var(--g-frost))), transparent); /* one step above the ground, so it has a body over plain black */
   --glass-shadow:
     inset 1px 1px 0 rgb(237 220 180 / calc(0.45 * var(--g-shine))), /* cream-gold rim (TASTE 11) */
     inset 0 -1px 0 rgb(0 0 0 / 0.35),
@@ -146,7 +146,7 @@ a { color: inherit; }
    filter, no WebGL). Blur and saturate over a light tint, a lit rim, and a faint red and blue fringe at the
    ends standing in for the lens's colour split. The tint stays light enough to see the page move behind it. */
 .glass.glass--nav {
-  --glass-bg: color-mix(in srgb, var(--paper) min(96%, calc(52% * var(--g-frost))), transparent);
+  --glass-bg: color-mix(in srgb, var(--paper) min(96%, calc(40% * var(--g-frost))), transparent);
   --glass-filter: blur(calc(14px * var(--g-blur))) saturate(1.6);
   --glass-shadow:
     inset 1.5px 1.5px 0 -0.5px rgb(255 250 240 / calc(0.95 * var(--g-shine))),
@@ -226,7 +226,7 @@ a { color: inherit; }
 }
 .glass.is-lens::before {
   content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
-  background: color-mix(in srgb, var(--paper) min(96%, calc(8% * var(--g-frost) + 34% * var(--up-frost))), transparent);
+  background: color-mix(in srgb, var(--paper) min(96%, calc(8% * var(--g-frost) + 17% * var(--up-frost))), transparent);
   /* The rim stays sharp at Blur 100 so the bend reads; above 100 it softens too, nearly matching the
      middle at 200 (Josh, 27 Oct: an unblurred edge round a blurred middle looked odd). */
   --rim-blur: calc(1px * var(--g-blur) + 22px * var(--up-blur));
@@ -262,21 +262,21 @@ a { color: inherit; }
 /* A lens piece Firefox or Safari can't bend (nothing known behind it): the same clear glass,
    a slight blur and a whisper of tint, with the lens rims. */
 .glass[data-lens]:not(.is-lens):not(.has-liquid) {
-  background: color-mix(in srgb, var(--paper) min(96%, calc(18% * var(--g-frost) + 30% * var(--up-frost))), transparent);
+  background: color-mix(in srgb, var(--paper) min(96%, calc(12% * var(--g-frost) + 15% * var(--up-frost))), transparent);
   -webkit-backdrop-filter: blur(calc(5px * var(--g-blur) + 24px * var(--up-blur))) saturate(1.3);
   backdrop-filter: blur(calc(5px * var(--g-blur) + 24px * var(--up-blur))) saturate(1.3);
 }
 /* A pane (big glass, or past the page's three bends): no bend, more blur, so it reads as soft glass
    and costs only one CSS backdrop blur (Josh, 28 Oct: lighter to render). Follows the blur and frost dials. */
 .glass[data-lens].is-pane {
-  background: color-mix(in srgb, var(--paper) min(96%, calc(22% * var(--g-frost) + 30% * var(--up-frost))), transparent);
+  background: color-mix(in srgb, var(--paper) min(96%, calc(14% * var(--g-frost) + 15% * var(--up-frost))), transparent);
   -webkit-backdrop-filter: blur(calc(16px * var(--g-blur) + 24px * var(--up-blur))) saturate(1.3);
   backdrop-filter: blur(calc(16px * var(--g-blur) + 24px * var(--up-blur))) saturate(1.3);
 }
-.night .glass[data-lens].is-pane, .glass[data-lens].is-pane.is-dark { background: color-mix(in srgb, var(--paper-2) min(96%, calc(34% * var(--g-frost))), transparent); }
+.night .glass[data-lens].is-pane, .glass[data-lens].is-pane.is-dark { background: color-mix(in srgb, var(--paper-2) min(96%, calc(24% * var(--g-frost))), transparent); }
 .glass[data-lens].has-liquid { box-shadow: inset 0 0 0 1px rgb(110 80 36 / 0.14), var(--lift); } /* the shader draws its own rim */
 :is(.night .glass, .glass.is-dark)[data-lens].has-liquid { box-shadow: inset 0 0 0 1px rgb(241 223 200 / 0.08), var(--lift-night); }
-:is(.night .glass, .glass.is-dark)[data-lens]:not(.is-lens):not(.has-liquid) { background: color-mix(in srgb, var(--paper-2) min(96%, calc(30% * var(--g-frost))), transparent); }
+:is(.night .glass, .glass.is-dark)[data-lens]:not(.is-lens):not(.has-liquid) { background: color-mix(in srgb, var(--paper-2) min(96%, calc(22% * var(--g-frost))), transparent); }
 
 /* Tier A, plate glass: the WebGL canvas replaces the backdrop once it has drawn. */
 .plate-glass { position: relative; border-radius: var(--radius); }

@@ -18,7 +18,7 @@ colophon: Set in Agatho Medium by AndFonts and Inter by Rasmus Andersson. The ar
 favicon: "@assets/brand/favicon.png"
 glass:
   bend: 50
-  frost: 150
+  frost: 100
   blur: 65
   shine: 65
   reach: 50
