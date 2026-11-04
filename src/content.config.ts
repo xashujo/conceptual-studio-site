@@ -185,6 +185,8 @@ export const collections = {
       registeredOffice: z.string().min(1),
       footerText: z.string().min(1),
       colophon: z.string().min(1),
+      // The tab icon; src/pages/[icon].ts makes every favicon size from it.
+      favicon: z.string().regex(/^@assets\/.+\.(png|jpe?g|webp|svg)$/i, 'Upload a PNG, JPEG, WebP or SVG').default('@assets/brand/favicon.png'),
       // Glass dials, as percentages of the designed look (100 = as designed).
       glass: z.object({
         bend: z.number().min(0).max(300).default(100),

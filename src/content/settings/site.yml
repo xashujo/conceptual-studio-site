@@ -15,6 +15,7 @@ companyNumber: "15410582"
 registeredOffice: 63 Heathwood Gardens, London, SE7 8ET
 footerText: Data visualisation & brand identity for colleges, public bodies & growing businesses, from a studio in London.
 colophon: Set in Agatho Medium by AndFonts and Inter by Rasmus Andersson. The art is out-of-copyright prints and paintings after Boucher, Lemoyne, Marlow and Canaletto, toned in gold. Built with Astro and hosted on Cloudflare.
+favicon: "@assets/brand/favicon.png"
 glass:
   bend: 50
   frost: 150

@@ -575,6 +575,13 @@ content:
       - { name: registeredOffice, label: Registered office, type: string, required: true, description: "As listed on Companies House. Shown in the footer and on the Privacy page." }
       - { name: footerText, label: Footer line, type: text, required: true, description: "The short line under the logo in the footer." }
       - { name: colophon, label: Colophon, type: text, required: true, description: "The small note in the footer on the type, the art and how the site is built." }
+      - name: favicon
+        label: Favicon
+        type: image
+        required: true
+        description: "The little icon in the browser tab and on phone home screens. Upload a square-ish PNG or SVG, at least 512px, on a transparent background. Empty edges are trimmed so the mark fills the tab. The site makes every size from it."
+        options:
+          media: images
       - name: glass
         label: Glass
         type: object
