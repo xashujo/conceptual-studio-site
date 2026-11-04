@@ -128,6 +128,7 @@ export const collections = {
     schema: ({ image }) => z.object({
       name: z.string(),
       logo: image().nullish(),
+      logoLabel: z.string().nullish(),
       trustedBy: z.boolean().nullish().transform((v) => !!v),
       homeTrusted: z.boolean().nullish().transform((v) => !!v),
       group: z.enum(['Education', 'Companies and international']).nullish(),
