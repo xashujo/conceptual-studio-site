@@ -87,6 +87,8 @@ export const collections = {
         })).nullish().transform((v) => v ?? []),
         before: pic.nullish(),
         after: pic.nullish(),
+        // Optional moving title graphic at the top of the case study (Josh, 4 Nov: the CMD logo reveal).
+        heroVideo: z.object({ video: z.string().min(1), poster: image(), alt: z.string().min(1) }).nullish(),
         demoLink: text,
         demoButton: text,
       });

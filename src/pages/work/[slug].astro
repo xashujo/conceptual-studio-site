@@ -3,7 +3,7 @@
 // night: the opening plate with the credits and the lead image; the problem and what I did; the work;
 // what happened; the next project; then the close. The project's own words and images come from
 // Pages CMS > Projects; the headings from Pages CMS > Case study pages.
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import Studio from '../../layouts/Studio.astro';
 import Band from '../../components/studio/Band.astro';
 import PlateCaption from '../../components/PlateCaption.astro';
@@ -27,6 +27,8 @@ const credits = [[t.clientLabel, p.client], [t.disciplinesLabel, p.disciplines.j
 const lead = p.thumb
   ? { image: p.thumb, alt: `${p.title} title graphic`, medium: '' }
   : { image: p.image, alt: p.alt, medium: p.medium };
+// The opening clip plays once and holds its last frame; the poster is that frame, so nothing jumps.
+const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, width: 1080, format: 'webp' })).src : undefined;
 ---
 <Studio title={p.title} description={p.summary} current="/work/" closeText={t.closeText}>
   <Band opening class="cs-open" labelledby="cs-h">
@@ -41,7 +43,13 @@ const lead = p.thumb
       {cs.demo && <a class="btn btn--solid cs-demo" href={cs.demo.href} target="_blank" rel="noopener">{cs.demo.label} <span class="arrow arrow--out" aria-hidden="true">↗</span></a>}
     </div>
     <figure class="cs-lead">
-      <Image src={lead.image} alt={lead.alt} widths={[800, 1400, 2000]} sizes="(min-width: 1200px) 1140px, 95vw" loading="eager" fetchpriority="high" />
+      {cs.heroVideo ? (
+        <video class="cs-lead__video" data-reveal-video muted playsinline preload="metadata" poster={heroPoster} aria-label={cs.heroVideo.alt} width={cs.heroVideo.poster.width} height={cs.heroVideo.poster.height}>
+          <source src={cs.heroVideo.video} type="video/mp4" />
+        </video>
+      ) : (
+        <Image src={lead.image} alt={lead.alt} widths={[800, 1400, 2000]} sizes="(min-width: 1200px) 1140px, 95vw" loading="eager" fetchpriority="high" />
+      )}
       <PlateCaption {...cap(lead)} />
     </figure>
   </Band>
@@ -119,6 +127,12 @@ const lead = p.thumb
   </Band>
 </Studio>
 
+<script>
+  // Play the opening clip once, unless the visitor has asked for less motion (they keep the still).
+  const v = document.querySelector<HTMLVideoElement>('[data-reveal-video]');
+  if (v && !matchMedia('(prefers-reduced-motion: reduce)').matches) v.play().catch(() => {});
+</script>
+
 <style>
   .cs-plate { gap: 18px; }
   .cs-back { --fill: color-mix(in srgb, var(--paper) 55%, transparent); gap: 8px; }
@@ -129,6 +143,7 @@ const lead = p.thumb
   .cs-credits dd { margin: 4px 0 0; white-space: nowrap; font-size: 19px; line-height: 1.35; font-weight: 500; letter-spacing: -0.01em; }
   /* The lead exhibit keeps its own shape (a portrait poster stays portrait), as tall as the screen allows. */
   .cs-lead { margin-top: var(--sp-gap); text-align: center; }
+  .cs-lead__video { display: block; width: auto; max-width: 100%; height: auto; max-height: 86svh; margin-inline: auto; border-radius: var(--radius-inner); background: #000; }
   .cs-lead img { width: auto; max-width: 100%; height: auto; max-height: 86svh; margin-inline: auto; border-radius: var(--radius-inner); }
 
   .cs-two { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-gap); align-items: start; }
@@ -169,7 +184,7 @@ const lead = p.thumb
     .cs-h { font-size: 44px; }
     .cs-credits { grid-template-columns: 1fr 1fr; }
     .cs-credits dd { font-size: 17px; white-space: normal; }
-    .cs-lead img { width: 100%; max-height: none; }
+    .cs-lead img, .cs-lead__video { width: 100%; max-height: none; }
     .cs-text p, .cs-list { font-size: 17px; }
     .cs-chapter__head { grid-template-columns: 1fr; gap: 12px; }
     .row--pair, .row--trio, .row--quad { grid-template-columns: 1fr; }

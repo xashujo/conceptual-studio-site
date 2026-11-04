@@ -54,6 +54,7 @@ export interface CaseStudy {
   happened: string[];
   next: string;
   demo?: { href: string; label: string };
+  heroVideo?: { video: string; poster: ImageMetadata; alt: string };
 }
 
 const kinds: Record<string, Row['kind']> = { 'One large': 'full', 'Two side by side': 'pair', 'Three in a row': 'trio', 'Four in a grid': 'quad' };
@@ -102,6 +103,7 @@ export const caseStudies: CaseStudy[] = entries.filter((e) => e.data.hasPage).ma
   before: d.before && d.after ? { before: plate(d.before), after: plate(d.after) } : undefined,
   happened: paragraphs(d.whatHappened),
   next: chain[d.slug],
+  heroVideo: d.heroVideo ?? undefined,
   demo: d.demoLink ? { href: d.demoLink, label: d.demoButton || 'See the Live Demo' } : undefined,
 }));
 

@@ -20,6 +20,10 @@ featured: true
 featuredOrder: 2
 homeFilter: Branding
 hasPage: true
+heroVideo:
+  video: /media/video/cmd-logo-reveal.mp4
+  poster: "@assets/work/cmd-inc/reveal-poster.webp"
+  alt: The chrome Star Note appears out of the dark, then the CMD Inc. wordmark settles underneath
 outcome: Identity and 3D assets handed over in March 2026.
 problem: |
   CMD Inc. is a music company working across film, games, healthcare & music therapy. It was planning a website built around its soundscapes, and needed an identity that looked like its sound, plus 3D & motion pieces for the site.
