@@ -14,6 +14,7 @@ cover:
   src: '@assets/work/course-finder/desktop.webp'
   alt: A course finder for construction courses in London, with a search box, filters, a list of courses and a map of providers
   caption: The finder on a desktop screen, with sample courses
+thumb: '@assets/work/course-finder/thumb.webp'
 coverFocus: 50% 0%
 featured: false
 hasPage: true
