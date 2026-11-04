@@ -433,6 +433,8 @@ content:
       - { name: pricesNote, label: Prices note (service pages), type: text }
       - { name: faqHeading, label: Questions heading (service pages), type: string, required: true }
       - { name: closeText, label: Start a Project text, type: text, required: true, description: "The words in the glass panel at the end of the page." }
+      - { name: planEmailSubject, label: Plan email subject, type: string, required: true, description: "The subject of the email a price card's button opens. {plan} becomes the plan's name, {price} its price." }
+      - { name: planEmail, label: Plan email, type: text, required: true, description: "The email a price card's button opens, ready for the client to fill in. {plan} and {price} work here too." }
 
   - name: aboutPage
     label: About page
@@ -468,7 +470,6 @@ content:
     fields:
       - { name: heading, label: Heading, type: string, required: true }
       - { name: intro, label: Intro, type: text, required: true }
-      - { name: emailLabel, label: Email label (for screen readers), type: string, required: true }
       - { name: hours, label: Hours, type: string }
       - { name: elsewhereHeading, label: Social links heading, type: string, required: true, description: "The links themselves are in Site settings." }
       - { name: procurementHeading, label: Procurement box heading, type: string, required: true }
@@ -482,6 +483,8 @@ content:
       - { name: callButton, label: Booking button, type: string, required: true }
       - { name: thanksHeading, label: Thank-you heading, type: string, required: true }
       - { name: thanksText, label: Thank-you text, type: text, required: true }
+      - { name: closeHeading, label: End of page heading, type: string, required: true, description: "The big heading over the last panel, e.g. Prefer to Talk?" }
+      - { name: closeText, label: End of page text, type: text, required: true, description: "The words over the Booking and Copy Email buttons at the end of the page." }
 
   - name: procurementPage
     label: Procurement page

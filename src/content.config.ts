@@ -23,15 +23,15 @@ export const pages = {
   servicesPage: page('services', {
     heading: s, intro: s, note: s, quoteNote: text, listHeading: s, retainersHeading: s, retainersNote: text, howHeading: s,
     listNote: text, extrasHeading: text, firstStepLabel: s, terms: items, procurementHeading: s, procurementText: s, procurementButton: s, enquiryHeading: s,
-    workHeading: s, pricesHeading: s, pricesNote: text, faqHeading: s, closeText: s,
+    workHeading: s, pricesHeading: s, pricesNote: text, faqHeading: s, closeText: s, planEmailSubject: s, planEmail: s,
   }),
   aboutPage: page('about', {
     heading: s, intro: s, storyHeading: s, story: s, valuesHeading: s, values: items, clientsHeading: s,
     wantHeading: s, want: s, closeText: s,
   }),
   contactPage: page('contact', {
-    heading: s, intro: s, emailLabel: s, hours: text, elsewhereHeading: s, procurementHeading: s, procurementText: s, procurementButton: s,
-    enquiryHeading: s, formHeading: s, enquiryIntro: s, enquiryAlt: text, callLink: text, callButton: s, thanksHeading: s, thanksText: s,
+    heading: s, intro: s, hours: text, elsewhereHeading: s, procurementHeading: s, procurementText: s, procurementButton: s,
+    enquiryHeading: s, formHeading: s, enquiryIntro: s, enquiryAlt: text, callLink: text, callButton: s, thanksHeading: s, thanksText: s, closeHeading: s, closeText: s,
   }),
   procurementPage: page('procurement', {
     heading: s, intro: s, orgHeading: s, org: items, detailsHeading: s, details: z.array(z.object({ label: s, value: s })), stepsHeading: s, steps: items,

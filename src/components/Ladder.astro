@@ -1,16 +1,24 @@
 ---
 // The pricing ladder (brief 6.4): three rungs plus Custom, side by side on desktop, swiped on phones.
 // Columns under one margin-to-margin hairline (TASTE 18), not boxed cards (TASTE never-do).
-// Each button opens the enquiry form below with that rung chosen. A rung with a badge is glass.
+// Josh, 4 Nov: every rung lifts into glass on hover, not just the badged one, and each button opens an
+// email already written for that plan (Services page > "Plan email" in Pages CMS), one quiet button per rung.
 import { serviceById, custom } from '../data/services';
+import { email } from '../lib/site';
+import { servicesPage as sp } from '../lib/pages';
 interface Props { service: string; custom?: boolean }
 const { service, custom: withCustom = true } = Astro.props;
 const s = serviceById(service);
 const rungs = [...s.tiers.map((t) => ({ ...t, value: `${s.id}:${t.id}` })), ...(withCustom ? [{ ...custom, value: `${s.id}:custom` }] : [])];
+// Monthly plans are named on their own ("Creative Partner"); one-off rungs carry the service ("Brand Identity: Custom").
+const plan = (t: (typeof rungs)[number]) => (t.monthly ? t.name : `${s.name}: ${t.name}`);
+const fill = (v: string, t: (typeof rungs)[number]) => v.replaceAll('{plan}', plan(t)).replaceAll('{price}', t.price);
+const mailto = (t: (typeof rungs)[number]) =>
+  `mailto:${email}?subject=${encodeURIComponent(fill(sp.planEmailSubject, t))}&body=${encodeURIComponent(fill(sp.planEmail, t))}`;
 ---
 <div class="ladder" role="list" style={`--n: ${rungs.length}`}>
   {rungs.map((t) => (
-    <article class:list={['rung', { 'rung--custom': t.id === 'custom', 'rung--pick glass': t.badge }]} role="listitem" aria-labelledby={`rung-${t.value.replace(':', '-')}`}>
+    <article class:list={['rung glass', { 'rung--custom': t.id === 'custom' }]} role="listitem" aria-labelledby={`rung-${t.value.replace(':', '-')}`}>
       {t.badge && <p class="rung__badge badge">{t.badge}</p>}
       <h3 class="rung__name" id={`rung-${t.value.replace(':', '-')}`}>{t.name}</h3>
       {t.lead && <p class="rung__lead">{t.lead}</p>}
@@ -20,9 +28,7 @@ const rungs = [...s.tiers.map((t) => ({ ...t, value: `${s.id}:${t.id}` })), ...(
         ? <ul class="rung__inc">{t.included.split('\n').filter(Boolean).map((i) => <li>{i}</li>)}</ul>
         : <p class="rung__inc">{t.included}</p>}
       {t.note && <p class="rung__note">{t.note}</p>}
-      <a class="btn rung__btn" href={`?need=${t.value}#enquire`} data-need={t.value}>
-        <span class="swap"><span>{t.button || (t.id === 'custom' ? 'Ask for a quote' : 'Choose this')}</span><span aria-hidden="true">Open the form</span></span><span class="arrow" aria-hidden="true">→</span>
-      </a>
+      <a class="btn rung__btn" href={mailto(t)}>{t.button || (t.id === 'custom' ? 'Ask for a quote' : 'Ask about this')}<span class="arrow" aria-hidden="true">→</span></a>
     </article>
   ))}
 </div>
@@ -30,14 +36,16 @@ const rungs = [...s.tiers.map((t) => ({ ...t, value: `${s.id}:${t.id}` })), ...(
 <style>
   .ladder { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); border-top: 1px solid var(--ink); padding-top: var(--sp-head, 40px); }
   /* The rule sits in the middle: the same space above it (the heading's gap) as below it, so it never rests on the cards (Josh, 2 Nov). */
-  .rung { display: flex; flex-direction: column; gap: 10px; padding: 24px 24px 28px; }
-  .rung:first-child { padding-left: 0; }
+  .rung { display: flex; flex-direction: column; gap: 10px; padding: 24px 24px 28px; border-radius: var(--radius); transition: background-color 300ms ease-out, box-shadow 300ms ease-out, transform 300ms var(--ease-out); }
   .rung + .rung { border-left: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); }
-  /* Custom is a tone step, not another box, with Framer's 25px corner at the bottom. */
-  .rung--custom { background: var(--paper-2); border-radius: var(--radius); border-left-color: transparent !important; }
-  /* The badged rung: a piece of glass with Framer's 25px corners, its button filled ink like Custom's. */
-  .rung--pick { border-radius: var(--radius); border-color: transparent !important; padding-left: 24px !important; }
-  .rung--pick + .rung { border-left-color: transparent; }
+  /* At rest every rung is plain paper between hairlines; hovered (or tabbed into), it lifts into the glass the
+     badged rung used to wear all the time. The hairlines either side step aside for it. */
+  .rung.glass:not(:hover, :focus-within) { background: transparent; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .rung:is(:hover, :focus-within), .rung:is(:hover, :focus-within) + .rung { border-left-color: transparent; }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) { .rung:hover { transform: translateY(-4px); } }
+  /* Custom is a tone step, not another box, with Framer's 25px corner. */
+  .rung--custom.glass:not(:hover, :focus-within) { background: var(--paper-2); }
+  .rung--custom { border-left-color: transparent !important; }
   .rung__badge { align-self: flex-start; }
   .rung__lead { font-size: 18px; line-height: 1.45; color: var(--ink-2); }
   ul.rung__inc { margin: 14px 0 0; padding-left: 1.1em; display: grid; gap: 6px; }
@@ -46,10 +54,13 @@ const rungs = [...s.tiers.map((t) => ({ ...t, value: `${s.id}:${t.id}` })), ...(
   .rung__time { font-size: 20px; line-height: 1.3; color: var(--ink-2); }
   .rung__inc { font-size: 18px; line-height: 1.5; margin-top: 14px; }
   .rung__note { font-size: 16px; line-height: 1.5; color: var(--ink-2); }
-  .rung__btn { margin-top: auto; align-self: flex-start; }
+  .rung__btn { margin-top: auto; align-self: flex-start; gap: 8px; }
   .rung > :nth-last-child(2) { margin-bottom: 24px; }
-  :is(.rung--custom, .rung--pick) .rung__btn { --fill: var(--ink); color: var(--paper); }
 
+  /* Desktop: the rungs' text lines up with the heading above; the padding the glass needs hangs into the margin. */
+  @media (min-width: 1100px) {
+    .ladder { margin-left: -24px; border-top: 0; background: linear-gradient(var(--ink), var(--ink)) 24px 0 / calc(100% - 24px) 1px no-repeat; }
+  }
   /* Phones and small tablets: one rung per swipe, the next one peeking in. */
   @media (max-width: 1099.98px) {
     .ladder { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: min(78%, 340px); overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--margin); margin-inline: calc(-1 * var(--margin)); padding-inline: var(--margin); border-top: 0; scrollbar-width: none;
@@ -58,6 +69,9 @@ const rungs = [...s.tiers.map((t) => ({ ...t, value: `${s.id}:${t.id}` })), ...(
     .rung { scroll-snap-align: start; padding-left: 20px; }
     .rung:first-child { padding-left: 0; }
     .rung--custom { padding-left: 20px !important; }
+    /* No hover on touch: the rungs stay plain, so a tap never leaves one stuck in glass. */
+    .rung.glass:not(.rung--custom) { background: transparent; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+    .rung--custom.glass { background: var(--paper-2); box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
   }
   @media (max-width: 759.98px) {
     .rung { padding: 20px 16px 24px; }

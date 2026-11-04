@@ -41,7 +41,17 @@ a { color: inherit; }
   --fill: var(--ink);
   color: var(--paper); /* already ink, so its hover is the label swap alone (22) */
 }
-.arrow { display: inline-block; margin-left: 0.35em; font-weight: 400; transition: transform 180ms ease-out; }
+/* The arrow (Josh, 4 Nov): a rounded, SF Symbols-style arrow.right drawn in the text colour, whatever glyph the
+   markup holds (→, ← or ↗ stay in the HTML as the fallback). Hover tips it up to arrow.up.right. */
+.arrow {
+  display: inline-block; width: 0.8em; height: 0.8em; margin-left: 0.35em; vertical-align: -0.04em; flex: none;
+  overflow: hidden; text-indent: 1.5em; white-space: nowrap; color: inherit; background-color: currentColor;
+  -webkit-mask: var(--arrow) center / contain no-repeat; mask: var(--arrow) center / contain no-repeat;
+  transform: scaleX(var(--flip, 1)) rotate(var(--turn, 0deg)); transition: transform 180ms ease-out;
+  --arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12h15.5M13.5 5.5 20 12l-6.5 6.5'/%3E%3C/svg%3E");
+}
+.arrow--back { --flip: -1; }
+.arrow--out { --turn: -45deg; }
 .btn .arrow { margin-left: 0; }
 .link { display: inline-block; padding-block: 10px; border-radius: var(--radius-fine); font-weight: 500; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 5px; text-decoration-color: color-mix(in srgb, var(--ink) 35%, transparent); transition: text-decoration-color 300ms ease-out; }
 
@@ -53,11 +63,11 @@ a { color: inherit; }
 @media (hover: hover) {
   .btn:hover, .btn.is-hover { background: var(--fill-hover); }
   .link:hover, .link.is-hover { text-decoration-color: currentColor; }
-  :is(.btn, .link):hover .arrow, :is(.btn, .link).is-hover .arrow { transform: rotate(-45deg); }
+  :is(.btn, .link):hover .arrow, :is(.btn, .link).is-hover .arrow { --turn: -45deg; }
   .btn:hover .swap > :first-child, .btn.is-hover .swap > :first-child { transform: translateX(-12px); opacity: 0; }
   .btn:hover .swap > :last-child, .btn.is-hover .swap > :last-child { transform: none; opacity: 1; }
 }
-.is-hover .arrow { transform: rotate(-45deg); }
+.is-hover .arrow { --turn: -45deg; }
 .btn.is-hover { background: var(--fill-hover); }
 .btn.is-hover .swap > :first-child { transform: translateX(-12px); opacity: 0; }
 .btn.is-hover .swap > :last-child { transform: none; opacity: 1; }

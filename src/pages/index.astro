@@ -84,9 +84,9 @@ const more = services.filter((s) => !lanes.includes(s));
           <h1 class="hero__h">{headline}</h1>
           <p class="hero__p">{sentence}</p>
           <div class="acts">
-            <a class="btn btn--solid hero__start" href={startHref}><span class="swap"><span>{home.startButton}</span><span aria-hidden="true">Contact Us ↗</span></span></a>
-            {availability.on && <a class="avail" href={`mailto:${email}`}><span class="avail__dot" aria-hidden="true"></span><span class="swap"><span>{titleCase(availability.text)}</span><span aria-hidden="true">↗ Email Us</span></span></a>}
-            <a class="btn hero__work" href="#work">{home.workButton} <span class="hero__down" aria-hidden="true">→</span></a>
+            <a class="btn btn--solid hero__start" href={startHref}><span class="swap"><span>{home.startButton}</span><span aria-hidden="true">Contact Us</span></span></a>
+            {availability.on && <a class="avail" href={`mailto:${email}`}><span class="avail__dot" aria-hidden="true"></span><span class="swap"><span>{titleCase(availability.text)}</span><span aria-hidden="true">Email Us</span></span></a>}
+            <a class="btn hero__work" href="#work">{home.workButton} <span class="arrow hero__down" aria-hidden="true">→</span></a>
           </div>
           <!-- Tags (Design Laboratory, Josh 2 Nov): what the studio does at a glance; each opens the work filtered to it. -->
           <ul class="tags">{homeFilters.map((f) => <li><a class="btn tag-btn" href="#work" data-tag={f}>{f}</a></li>)}</ul>
@@ -286,7 +286,6 @@ const more = services.filter((s) => !lanes.includes(s));
               </a>
             ))}
           </div>
-          <a class="btn glass-button proof__go" href={startHref}>Start a Project <span class="arrow" aria-hidden="true">→</span></a>
         </section>
         </div>
 
@@ -314,7 +313,7 @@ const more = services.filter((s) => !lanes.includes(s));
         <div class="close__body glass" data-lens>
           <p class="close__p">{home.closeText}</p>
           <div class="acts">
-            <a class="btn btn--solid" href={startHref}><span class="swap"><span>{home.startButton}</span><span aria-hidden="true">Email Us ↗</span></span></a>
+            <a class="btn btn--solid" href={startHref}><span class="swap"><span>{home.startButton}</span><span aria-hidden="true">Email Us</span></span></a>
             <button class="btn" type="button" data-copy={email}><span data-label>Copy Email</span></button>
             <span class="sr-only" aria-live="polite" data-status></span>
           </div>
@@ -537,10 +536,10 @@ const more = services.filter((s) => !lanes.includes(s));
   .hero__plate .btn { min-height: var(--btn-h-sm); padding: 0 var(--btn-px-sm); font-size: 16px; } /* the availability pill's size, so all three fit one row */
   .hero__work { --fill: color-mix(in srgb, var(--paper) 55%, transparent); gap: 8px; }
   /* The arrow points down where there's no hover (phones, tablets); with a mouse it points right and turns down on hover. */
-  .hero__down { display: inline-block; transform: rotate(90deg); transition: transform 280ms var(--ease-out); }
+  .hero__down { --turn: 90deg; margin-left: 0; transition-duration: 280ms; }
   @media (hover: hover) {
-    .hero__down { transform: none; }
-    .hero__work:hover .hero__down { transform: rotate(90deg); }
+    .hero__down { --turn: 0deg; }
+    .hero__work:hover .hero__down { --turn: 90deg; }
   }
 
   /* The field: an etching behind each band of glass, scrolling with it. */
@@ -664,7 +663,7 @@ const more = services.filter((s) => !lanes.includes(s));
   .svc__more { list-style: none; margin: 20px 0 0; padding: 0; display: grid; gap: 6px; }
   .svc__more a { font-size: 18px; color: inherit; text-decoration: none; }
   .svc__more span { color: var(--ink-2); }
-  @media (hover: hover) { .svc__more a:hover .arrow { transform: rotate(-45deg); } }
+  @media (hover: hover) { .svc__more a:hover .arrow { --turn: -45deg; } }
   @media (max-width: 959.98px) {
     .svc__link { width: auto; color: var(--ink); }
     .svc__row:is(:hover, :focus-within) .svc__link { transform: none; }
@@ -723,9 +722,8 @@ const more = services.filter((s) => !lanes.includes(s));
   .result__line { font-size: 21px; line-height: 1.38; font-weight: 500; letter-spacing: -0.015em; text-wrap: balance; hyphens: none; }
   .result__go { margin-top: auto; padding-top: 8px; font-size: 18px; font-weight: 500; }
   /* Hover like the Selected Work cards: no lift (moving blurred glass left seams on phones), the card turns to day glass. */
-  @media (hover: hover) { .band .result.glass:hover { color-scheme: light; background: color-mix(in srgb, var(--paper) 90%, transparent); } .result:hover .arrow { transform: rotate(-45deg); } }
+  @media (hover: hover) { .band .result.glass:hover { color-scheme: light; background: color-mix(in srgb, var(--paper) 90%, transparent); } .result:hover .arrow { --turn: -45deg; } }
   .result:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
-  .proof__go { margin-top: var(--btn-space); }
 
   /* How we work: the same heading as the sections above, then the bento. */
   /* Bento (Josh, 26 Oct): two rows of unequal tiles, wide then narrow, then narrow then wide. Title at the top, text at the foot. */
