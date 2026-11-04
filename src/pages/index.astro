@@ -270,12 +270,12 @@ const more = services.filter((s) => !lanes.includes(s));
           <ul class="approach" style={`--n: ${home.approach.length}`}>
             {home.approach.map((a) => <li><h3 class="approach__t">{a.title}</h3><p>{a.text}</p></li>)}
           </ul>
-          <!-- One quote: the large pane beside the two results. Two quotes: a row of quotes over a row of results. -->
-          <div class:list={["proof__grid", { 'proof__grid--two': homeQuotes.length > 1 }]}>
+          <!-- One quote: the large pane beside the two results. Two or three quotes: a row of quotes over a row of results. -->
+          <div class:list={["proof__grid", { 'proof__grid--two': homeQuotes.length === 2, 'proof__grid--three': homeQuotes.length > 2 }]}>
             {homeQuotes.map((q) => (
               <figure class="proof__quote glass" data-lens>
                 <blockquote><p>“{q.quote}”</p></blockquote>
-                <figcaption><b>{q.name}</b>{q.role}, {q.organisation}</figcaption>
+                <figcaption><b>{q.name}</b>{q.role ? `${q.role}, ` : ''}{q.organisation}</figcaption>
               </figure>
             ))}
             {results.map((r) => (
@@ -718,6 +718,11 @@ const more = services.filter((s) => !lanes.includes(s));
   .proof__grid--two { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
   .proof__grid--two .proof__quote { grid-row: auto; }
   .proof__grid--two .proof__quote p { font-size: 24px; }
+  /* Three quotes: a row of three over the two results, each result half the width. */
+  .proof__grid--three { grid-template-columns: repeat(6, minmax(0, 1fr)); grid-template-rows: auto; }
+  .proof__grid--three .proof__quote { grid-row: auto; grid-column: span 2; }
+  .proof__grid--three .proof__quote p { font-size: 21px; }
+  .proof__grid--three .result { grid-column: span 3; }
   .result { position: relative; display: flex; flex-direction: column; gap: 14px; padding: var(--sp-card); border-radius: var(--radius); text-decoration: none; transition: background-color 300ms ease-out, color 300ms ease-out; }
   .result__who { font-size: 17px; color: var(--ink-2); }
   .result__line { font-size: 21px; line-height: 1.38; font-weight: 500; letter-spacing: -0.015em; text-wrap: balance; hyphens: none; }
@@ -763,6 +768,10 @@ const more = services.filter((s) => !lanes.includes(s));
     .proof__grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
     .proof__quote { grid-column: 1 / -1; grid-row: auto; }
     .proof__quote p { font-size: 24px; }
+    .proof__grid--three { grid-template-columns: 1fr 1fr; }
+    .proof__grid--three .proof__quote { grid-column: 1 / -1; }
+    .proof__grid--three .proof__quote p { font-size: 24px; }
+    .proof__grid--three .result { grid-column: auto; }
     .close__h, .close__body { grid-column: 1 / -1; }
     .close__body { margin-top: var(--sp-head); justify-self: start; }
   }
@@ -813,6 +822,7 @@ const more = services.filter((s) => !lanes.includes(s));
     .trusted, .trusted__list { gap: 8px 20px; }
     .proof__quote { gap: 28px; border-radius: var(--radius); }
     .proof__quote p { font-size: 20px; line-height: 1.4; }
+    .proof__grid--three .proof__quote p { font-size: 20px; }
     .proof__quote figcaption { font-size: 16px; }
     .result { gap: 10px; border-radius: var(--radius); }
     .result__who { font-size: 15px; }

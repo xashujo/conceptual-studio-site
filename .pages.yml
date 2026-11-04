@@ -259,9 +259,9 @@ content:
     fields:
       - { name: quote, label: Quote (word for word), type: text, required: true }
       - { name: name, label: Name, type: string, required: true }
-      - { name: role, label: Role, type: string, required: true }
+      - { name: role, label: Role (optional), type: string }
       - { name: organisation, label: Organisation, type: string, required: true }
-      - { name: onHomePage, label: Show on the home page, type: boolean, description: "Tick up to two. Two quotes sit side by side above the case studies." }
+      - { name: onHomePage, label: Show on the home page, type: boolean, description: "Tick up to three. They sit side by side above the case studies." }
 
   - name: clients
     label: Clients
