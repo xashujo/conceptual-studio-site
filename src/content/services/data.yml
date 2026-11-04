@@ -7,15 +7,14 @@ kinds: That can be a set of charts for a document you're laying out yourself, a 
 demoHeading: A Table Becomes a Chart
 demoText: These are real figures from the Department for Education, shown as the table you'd get in a spreadsheet. Press the button to see what I do with them.
 examples:
-  - src: '@assets/work/new-city-college-strategic-intent/02.webp'
-    alt: Black map of east London boroughs showing the colleges that merged to form New City College, with a timeline from 1990 to 2024
-    title: Strategic Intent, New City College London, 2025
-    caption: Map and timeline of the college mergers, 1990 to 2024
-  - src: '@assets/work/new-city-college-infographics/02.webp'
-    alt: Consultation page with a black map of London marking the BSix and New City College campuses
-    focus: 50% 30%
-    title: New City College London, 2024
-    caption: Maps for the BSix merger consultation
+  - src: '@assets/work/ncc-sustainability-report/thumb.webp'
+    alt: The cover of New City College's Environmental Sustainability report, printed and lit on a dark surface
+    title: Sustainability Report, New City College London, 2026
+    caption: Charts and layout for the 2025-26 report
+  - src: '@assets/work/usp-freeport-skills/thumb.webp'
+    alt: The Skills Heat Map for the Freeport Skills Partnership, printed and lit on a dark surface
+    title: Freeport Skills Partnership, USP College, 2026
+    caption: Visuals for a workforce skills analysis
 faqs:
   - question: Do the prices include VAT?
     answer: No VAT is added. Conceptual Studio isn't VAT registered, so the price you're quoted is the price you pay.
