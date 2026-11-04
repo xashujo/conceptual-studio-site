@@ -10,11 +10,15 @@ examples:
     focus: 50% 40%
     title: Oxford School of English, 2023
     caption: Visual identity, on a bus shelter poster
-  - src: '@assets/work/kut-magazine/04.webp'
-    alt: A printed KUT Magazine page with a portrait of the artist Kit Sivers in front of drawings
-    focus: 0% 50%
-    title: KUT Magazine, 2023
-    caption: Identity and editorial design, a printed page
+  - src: '@assets/work/doubleshot-studio/01.webp'
+    alt: A cream tote bag printed with the DoubleShot wordmark and two red star characters, hanging on a dark wooden chair
+    focus: 50% 40%
+    title: DoubleShot Studio, 2026
+    caption: Visual identity, on a tote bag
+  - src: '@assets/work/cmd-inc/01.webp'
+    alt: The CMD Inc. wordmark and star icon in white on black, with glowing curved lines around them
+    title: CMD Inc., 2026
+    caption: Visual identity, cover of the guidelines
 faqs:
   - question: Do the prices include VAT?
     answer: No VAT is added. Conceptual Studio isn't VAT registered, so the price you're quoted is the price you pay.

@@ -3,6 +3,8 @@
 // what the Home page's "Background" field in Pages CMS chooses, same as the home page: the plain canvas weave,
 // or the running painting (each band shows the next stretch of it). Bands alternate day and night down the
 // page; the layout's close is always night, so the last band before it should be day.
+// On a phone the strip is stretched to the page's height, so only a narrow column of it shows, already
+// magnified: the 800px copy ("260px" in sizes, x3 screens) carries every visible pixel at a fraction of the bytes.
 // `opening` makes it the page's first band: it fills the screen and its art loads first.
 import { Image, getImage } from 'astro:assets';
 import { home } from '../../lib/site';
@@ -14,7 +16,7 @@ const canvas = painting ? '' : `--canvas: url(${(await getImage({ src: home.canv
 ---
 <div class:list={['band', { night, ph: opening }]}>
   <div class:list={['band__art', { canvas: !painting }]} style={canvas || undefined} aria-hidden="true">
-    {painting && <Image src={home.pageImage} alt="" widths={[1100, 2200]} sizes="100vw" loading={opening ? 'eager' : 'lazy'} fetchpriority={opening ? 'high' : undefined} />}
+    {painting && <Image src={home.pageImage} alt="" widths={[800, 1100, 1600]} quality={55} sizes="(max-width: 760px) 260px, 100vw" loading={opening ? 'eager' : 'lazy'} fetchpriority={opening ? 'high' : undefined} />}
   </div>
   <Tag class:list={['wrap', cls]} id={id} aria-label={label} aria-labelledby={labelledby}><slot /></Tag>
 </div>

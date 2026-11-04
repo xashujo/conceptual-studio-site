@@ -59,6 +59,7 @@ export const collections = {
         order: z.number().nullish(),
         summary: z.string(),
         cover: pic,
+        thumb: image().nullish(),
         coverFocus: z.string().nullish(),
         featured: z.boolean().nullish().transform((v) => !!v),
         featuredOrder: z.number().nullish(),

@@ -11,7 +11,7 @@ import { workPage as w, titleCase } from '../../lib/pages';
 
 const label = Object.fromEntries(filters.map(([k, l]) => [k, titleCase(l)]));
 const items = projects.map((p) => ({
-  title: p.title, year: p.year, href: projectHref(p), image: p.image, alt: p.alt, position: p.position,
+  title: p.title, year: p.year, href: projectHref(p), image: p.thumb ?? p.image, alt: p.alt, position: p.thumb ? undefined : p.position,
   filters: p.tags.filter((t) => t !== 'archive').map((t) => label[t]), archive: p.student, student: p.student, label: p.label,
   outcome: p.outcome, brief: p.summary,
 }));

@@ -1,0 +1,67 @@
+title: CMD Inc.
+slug: cmd-inc
+client: CMD Inc.
+year: 2026
+disciplines:
+  - Visual identity
+  - Branding
+  - Motion
+filters:
+  - Brand identity
+order: 25
+summary: A black & white identity built on one mark, the Star Note.
+cover:
+  src: "@assets/work/cmd-inc/01.webp"
+  alt: The CMD Inc. wordmark and star icon in white on black, with glowing curved lines around them
+  caption: Visual identity, cover of the guidelines
+thumb: "@assets/work/cmd-inc/thumb.webp"
+coverFocus: 50% 50%
+featured: true
+featuredOrder: 2
+homeFilter: Branding
+hasPage: true
+outcome: Identity and 3D assets handed over in March 2026.
+problem: |
+  CMD Inc. makes sound for film & games, and was planning a website built around its own soundscapes. It needed an identity that looked like the sound it makes, plus the 3D and motion pieces the site would use.
+
+  The brief was a look that moves like spatial audio, with a sci-fi feel and an interface that is easy on the eye.
+whatIDid: |
+  I started with the wordmark. The client's first font was pixelated, so my first version made the type look like stardust that could move with the sound. The final identity is set in SF Pro Semibold.
+
+  The icon, the Star Note, followed: six ovals around a bright centre, drawn from the shape of a musical note. Radial halftone lines on the marks echo movement in sound. The colours are black & white, kept close to the client's reference site.
+
+  I then built what the website needed: a logo reveal animation, 3D models of the social icons, mockups, a favicon, app icon styles and web-ready video files for each browser. Everything went into a visual identity guide and a shared folder for the web developer.
+gallery:
+  - layout: One large
+    images:
+      - src: "@assets/work/cmd-inc/03.webp"
+        alt: The CMD Inc. star icon in white on black
+        caption: The Star Note
+  - layout: Two side by side
+    images:
+      - src: "@assets/work/cmd-inc/02.webp"
+        alt: The CMD Inc. star icon and wordmark in white on black
+        caption: Icon & wordmark
+      - src: "@assets/work/cmd-inc/04.webp"
+        alt: The star icon taken apart into a note, a line and ovals across six windows
+        caption: How the mark was built
+  - layout: Two side by side
+    images:
+      - src: "@assets/work/cmd-inc/05.webp"
+        alt: Two app icons with the star in light and dark halftone
+        caption: App icons
+      - src: "@assets/work/cmd-inc/06.webp"
+        alt: A row of six app icon styles on a dark desktop
+        caption: Icon styles
+  - layout: One large
+    images:
+      - src: "@assets/work/cmd-inc/07.webp"
+        alt: A laptop on a dark surface showing the CMD Inc. star
+        caption: Website reveal
+whatHappened: |
+  I handed the identity & assets over in March 2026. A separate developer is building the website.
+
+  "It looks very polished and professional." Chucks, founder, CMD Inc.
+
+  [TBC: whether the website has launched]
+next: src/content/projects/oxford-school-of-english.yml

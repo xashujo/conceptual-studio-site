@@ -1,0 +1,43 @@
+title: "Freeport Skills Partnership"
+slug: usp-freeport-skills
+client: USP College
+year: 2026
+disciplines:
+  - Data visualisation
+  - Infographics
+filters:
+  - Data visualisation
+order: 35
+summary: Six visuals for a workforce analysis of the UK Freeport skills network.
+cover:
+  src: "@assets/work/usp-freeport-skills/03.webp"
+  alt: A dark chart called The Skills Heat Map, with four coloured boxes for skills by demand and partner capability
+  caption: The Skills Heat Map
+thumb: "@assets/work/usp-freeport-skills/thumb.webp"
+featured: true
+featuredOrder: 6
+hasPage: true
+outcome: "[TBC: result]"
+problem: |
+  [TBC: what the Freeport Skills Partnership needed to explain, and to whom]
+whatIDid: |
+  I turned the findings of a workforce analysis into a set of visuals: a map of the partner colleges, a maturity spectrum, a skills heat map and a roadmap, plus slides.
+
+  One figure in the images on this page is blurred.
+gallery:
+  - layout: One large
+    images:
+      - src: "@assets/work/usp-freeport-skills/01.webp"
+        alt: A map of the UK beside a list of colleges and the Freeport each one partners with
+        caption: The partner map
+  - layout: Two side by side
+    images:
+      - src: "@assets/work/usp-freeport-skills/02.webp"
+        alt: Three columns, Emerging, Developing and Mature, listing each Freeport's projects
+        caption: The maturity spectrum
+      - src: "@assets/work/usp-freeport-skills/04.webp"
+        alt: A three-lane roadmap called What, How and Voice, with steps joined by arrows
+        caption: The roadmap
+whatHappened: |
+  [TBC: what followed]
+next: src/content/projects/new-city-college-strategic-intent.yml

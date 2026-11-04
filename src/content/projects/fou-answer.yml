@@ -15,5 +15,6 @@ cover:
   src: '@assets/work/fou-answer/01.webp'
   alt: Fou Answer eye symbol drawn in black pixels over rows of binary digits
   caption: Brand symbol
+thumb: "@assets/work/fou-answer/thumb.webp"
 featured: false
 hasPage: false

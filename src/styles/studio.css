@@ -36,7 +36,7 @@ html { scroll-behavior: smooth; }
 .run { position: relative; }
 .band { position: relative; isolation: isolate; padding-bottom: 160px; }
 .band__art { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
-.band__art img { position: absolute; left: 0; top: calc(-1 * var(--y, 0px)); width: 100%; height: var(--run-h, 100%); object-fit: cover; object-position: 50% 0; opacity: 0.25; filter: url(#tone-day); }
+.band__art img { position: absolute; left: 0; top: 0; transform: translateY(calc(-1 * var(--y, 0px))); width: 100%; height: var(--run-h, 100%); object-fit: cover; object-position: 50% 0; opacity: 0.25; filter: url(#tone-day); }
 .band.night { --ink-2: color-mix(in srgb, var(--ink) 86%, var(--paper)); } /* secondary text 5:1 or better over the art */
 .band.night .band__art img { opacity: 0.25; filter: url(#tone-night); }
 .tones { position: absolute; width: 0; height: 0; }

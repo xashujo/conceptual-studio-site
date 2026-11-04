@@ -1,4 +1,4 @@
-title: Internal video
+title: "New York General Group"
 slug: new-york-general-group
 client: New York General Group
 year: 2025
@@ -13,5 +13,6 @@ cover:
   src: '@assets/work/new-york-general-group/01.webp'
   alt: NYGG lettering in white on a black starfield
   caption: Title frame from the video
+thumb: "@assets/work/new-york-general-group/thumb.webp"
 featured: false
 hasPage: false

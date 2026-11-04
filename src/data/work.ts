@@ -24,6 +24,8 @@ export interface Project {
   slug: string; title: string; client: string; year: number;
   disciplines: string[]; summary: string; tags: Filter[];
   image: ImageMetadata; alt: string; medium: string; position?: string;
+  /** Card thumbnail: the whole work on warm black. Falls back to the cover. */
+  thumb?: ImageMetadata;
   /** Kingston School of Art work: shown only under Archive, labelled as student work. */
   student?: boolean;
   /** The small label on the card: Student Work, or the project's own label, e.g. Concept. */
@@ -60,7 +62,7 @@ export const projects: Project[] = entries.map(({ data: d }) => ({
   slug: d.slug, title: d.title, client: d.client, year: d.year,
   disciplines: d.disciplines, summary: d.summary,
   tags: d.studentWork ? ['archive'] : d.filters.map((f) => filterKey[f]),
-  image: d.cover.src, alt: d.cover.alt, medium: d.cover.caption, position: d.coverFocus ?? undefined,
+  image: d.cover.src, alt: d.cover.alt, medium: d.cover.caption, position: d.coverFocus ?? undefined, thumb: d.thumb ?? undefined,
   student: d.studentWork || undefined,
   label: d.studentWork ? 'Student Work' : d.label || undefined,
   caseStudy: d.hasPage || undefined,
