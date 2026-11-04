@@ -58,7 +58,7 @@ const lead = p.thumb
   <Band labelledby="the-work">
     <h2 class="big" id="the-work">{t.workHeading}</h2>
     <!-- On a phone the rows become one swipeable gallery (Carousel.astro); on desktop they stay as laid out. -->
-    <Carousel label={t.workHeading}>
+    <Carousel label={`${t.workHeading}: gallery`}>
       {cs.rows.map((row) => (
         <div class:list={['row', `row--${row.kind}`]}>
           {row.plates.map((pl) => (
