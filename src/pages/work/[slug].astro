@@ -30,6 +30,7 @@ const credits = [[t.clientLabel, p.client], [t.disciplinesLabel, p.disciplines.j
         {credits.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
         <div><dt>Year</dt><dd>{p.year}</dd></div>
       </dl>
+      {cs.demo && <a class="btn btn--solid cs-demo" href={cs.demo.href} target="_blank" rel="noopener">{cs.demo.label} <span class="arrow" aria-hidden="true">↗</span></a>}
     </div>
     <figure class="cs-lead">
       <Image src={p.image} alt={p.alt} widths={[800, 1400, 2000]} sizes="(min-width: 1200px) 1140px, 95vw" loading="eager" fetchpriority="high" />
@@ -40,8 +41,8 @@ const credits = [[t.clientLabel, p.client], [t.disciplinesLabel, p.disciplines.j
   {(cs.problem.length > 0 || cs.did.length > 0) && (
     <Band night label={`${t.problemHeading}, ${t.didHeading}`}>
       <div class="cs-two">
-        {cs.problem.length > 0 && <div class="pane glass" data-lens data-reveal><h2 class="mid">{t.problemHeading}</h2><div class="flow cs-text">{cs.problem.map((x) => <p>{x}</p>)}</div></div>}
-        {cs.did.length > 0 && <div class="pane glass" data-lens data-reveal style="--i: 1"><h2 class="mid">{t.didHeading}</h2><div class="flow cs-text">{cs.did.map((x) => <p>{x}</p>)}</div></div>}
+        {cs.problem.length > 0 && <div class="pane glass" data-lens data-reveal><h2 class="mid">{t.problemHeading}</h2><div class="flow cs-text">{cs.problem.map((x) => (x.startsWith('- ') ? <ul class="cs-list">{x.split('\n').map((l) => <li>{l.replace(/^-\s*/, '')}</li>)}</ul> : <p>{x}</p>))}</div></div>}
+        {cs.did.length > 0 && <div class="pane glass" data-lens data-reveal style="--i: 1"><h2 class="mid">{t.didHeading}</h2><div class="flow cs-text">{cs.did.map((x) => (x.startsWith('- ') ? <ul class="cs-list">{x.split('\n').map((l) => <li>{l.replace(/^-\s*/, '')}</li>)}</ul> : <p>{x}</p>))}</div></div>}
       </div>
     </Band>
   )}
@@ -77,7 +78,7 @@ const credits = [[t.clientLabel, p.client], [t.disciplinesLabel, p.disciplines.j
     <Band night labelledby="happened">
       <div class="pane glass cs-happened" data-lens data-reveal>
         <h2 class="mid" id="happened">{t.happenedHeading}</h2>
-        <div class="flow cs-text">{cs.happened.map((x) => <p>{x}</p>)}</div>
+        <div class="flow cs-text">{cs.happened.map((x) => (x.startsWith('- ') ? <ul class="cs-list">{x.split('\n').map((l) => <li>{l.replace(/^-\s*/, '')}</li>)}</ul> : <p>{x}</p>))}</div>
       </div>
     </Band>
   )}
@@ -108,7 +109,9 @@ const credits = [[t.clientLabel, p.client], [t.disciplinesLabel, p.disciplines.j
 
   .cs-two { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-gap); align-items: start; }
   .cs-two .mid, .cs-happened .mid { margin-bottom: 20px; }
-  .cs-text p { font-size: 19px; line-height: 1.55; max-width: 62ch; }
+  .cs-text p, .cs-list { font-size: 19px; line-height: 1.55; max-width: 62ch; }
+  /* A paragraph whose lines start with "- " is a bulleted list (Josh, 4 Nov). */
+  .cs-list { margin: 0; padding-left: 1.2em; display: grid; gap: 8px; }
   .cs-happened { max-width: 820px; }
 
   .row { display: grid; gap: var(--sp-gap); margin-top: var(--sp-head); }
@@ -136,7 +139,7 @@ const credits = [[t.clientLabel, p.client], [t.disciplinesLabel, p.disciplines.j
     .cs-credits { grid-template-columns: 1fr 1fr; }
     .cs-credits dd { font-size: 17px; }
     .cs-lead img { width: 100%; max-height: none; }
-    .cs-text p { font-size: 17px; }
+    .cs-text p, .cs-list { font-size: 17px; }
     .row--pair, .row--trio, .row--quad { grid-template-columns: 1fr; }
     .next { grid-template-columns: 1fr; gap: 16px; padding: 10px 10px 18px; }
     .next__text { padding: 0 8px; }

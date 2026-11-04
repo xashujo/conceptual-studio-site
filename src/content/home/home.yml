@@ -49,6 +49,9 @@ approach:
   - title: One Studio, Brief to Files
     text: One studio takes your project from the first call to the final files, with
       no hand-offs along the way.
+  - title: Works With Your Team
+    text: Your team knows your systems. We bring the design, the clear wording & a fixed
+      price, so the result looks finished & your team stays free for its core work.
 results:
   - src/content/projects/oxford-school-of-english.yml
   - src/content/projects/new-city-college-strategic-intent.yml

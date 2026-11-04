@@ -81,6 +81,10 @@ content:
         label: Student work
         type: boolean
         description: "Tick for university work. It then only shows under \"Archive: student work\"."
+      - name: label
+        label: Card label (optional)
+        type: string
+        description: "A small label on the project card, e.g. Concept. Student work is labelled Student Work automatically."
       - name: order
         label: Position on the Work page
         type: number
@@ -141,11 +145,11 @@ content:
       - name: problem
         label: The problem
         type: text
-        description: "Leave an empty line between paragraphs."
+        description: "Leave an empty line between paragraphs. Start lines with - to make a bulleted list."
       - name: whatIDid
         label: What I did
         type: text
-        description: "Leave an empty line between paragraphs."
+        description: "Leave an empty line between paragraphs. Start lines with - to make a bulleted list."
       - name: gallery
         label: The work (image rows)
         type: object
@@ -168,12 +172,14 @@ content:
       - name: whatHappened
         label: What happened
         type: text
-        description: "Leave an empty line between paragraphs."
+        description: "Leave an empty line between paragraphs. Start lines with - to make a bulleted list."
       - name: next
         label: Next project (optional)
         type: reference
         description: "The case study linked at the bottom of the page. Leave empty to use the next one in Work page order."
         options: { collection: projects, value: "{path}", label: "{title}", search: title }
+      - { name: demoLink, label: Live demo link (optional), type: string, description: "A full web address, e.g. https://... Shows a button at the top of the case study page. Empty hides it." }
+      - { name: demoButton, label: Live demo button text (optional), type: string, description: "e.g. See the Live Demo." }
 
   - name: services
     label: Services and prices
@@ -190,6 +196,7 @@ content:
       - { name: name, label: Name, type: string, required: true }
       - { name: order, label: Order, type: number, description: "Lower numbers come first." }
       - { name: page, label: Page address, type: string, description: "The service's own page, e.g. /services/brand-identity/. Leave empty if it doesn't have one." }
+      - { name: card, label: Show as a card, type: boolean, description: "For a service with no page of its own: tick to show it as a full card on the Services page and a row on the home page, not a line under Also Available." }
       - { name: summary, label: Description, type: text, required: true }
       - name: tiers
         label: Pricing ladder
@@ -319,7 +326,7 @@ content:
         label: Why Clients Choose Us, what sets us apart
         type: object
         list: true
-        description: "Three short points under the client names: what makes the studio's approach different."
+        description: "Short points under the client names: what makes the studio's approach different. Four fit in one row."
         fields:
           - { name: title, label: Title, type: string, required: true }
           - { name: text, label: Text, type: text, required: true }
@@ -401,6 +408,7 @@ content:
       - { name: heading, label: Heading, type: string, required: true }
       - { name: intro, label: Intro, type: text, required: true }
       - { name: note, label: Note under the intro, type: text, required: true }
+      - { name: quoteNote, label: Fixed-quote line (optional), type: string, description: "One short line in bold under the Services intro, on the Services page and the home page. Empty hides it." }
       - { name: retainersHeading, label: Monthly plans heading, type: string, required: true }
       - { name: retainersNote, label: Monthly plans note, type: text, description: "e.g. what three days a month buys, and the minimum term." }
       - { name: listHeading, label: One-off projects heading, type: string, required: true }
@@ -436,7 +444,7 @@ content:
       - { name: heading, label: Heading, type: string, required: true }
       - { name: intro, label: Intro, type: text, required: true }
       - { name: storyHeading, label: Story heading, type: string, required: true }
-      - { name: story, label: Story, type: text, required: true, description: "Leave an empty line between paragraphs." }
+      - { name: story, label: Story, type: text, required: true, description: "Leave an empty line between paragraphs. Start lines with - to make a bulleted list." }
       - { name: valuesHeading, label: How I work heading, type: string, required: true }
       - name: values
         label: How I work
@@ -448,7 +456,7 @@ content:
           - { name: text, label: Text, type: text, required: true }
       - { name: clientsHeading, label: Clients heading, type: string, required: true }
       - { name: wantHeading, label: The work I want heading, type: string, required: true }
-      - { name: want, label: The work I want, type: text, required: true, description: "Leave an empty line between paragraphs." }
+      - { name: want, label: The work I want, type: text, required: true, description: "Leave an empty line between paragraphs. Start lines with - to make a bulleted list." }
       - { name: closeText, label: Start a Project text, type: text, required: true, description: "The words in the glass panel at the end of the page." }
 
   - name: contactPage

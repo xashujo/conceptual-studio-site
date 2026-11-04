@@ -21,7 +21,7 @@ export const pages = {
     beforeAfterHeading: s, happenedHeading: s, nextLabel: s, closeText: s,
   }),
   servicesPage: page('services', {
-    heading: s, intro: s, note: s, listHeading: s, retainersHeading: s, retainersNote: text, howHeading: s,
+    heading: s, intro: s, note: s, quoteNote: text, listHeading: s, retainersHeading: s, retainersNote: text, howHeading: s,
     listNote: text, extrasHeading: text, firstStepLabel: s, terms: items, procurementHeading: s, procurementText: s, procurementButton: s, enquiryHeading: s,
     workHeading: s, pricesHeading: s, pricesNote: text, faqHeading: s, closeText: s,
   }),
@@ -54,6 +54,8 @@ export const collections = {
         disciplines: z.array(z.string()).min(1),
         filters: z.array(z.enum(['Brand identity', 'Data visualisation', '3D and motion'])).nullish().transform((v) => v ?? []),
         studentWork: z.boolean().nullish().transform((v) => !!v),
+        // A small label on the card, e.g. Concept (Josh, 4 Nov). Student work is always labelled Student Work.
+        label: text,
         order: z.number().nullish(),
         summary: z.string(),
         cover: pic,
@@ -76,6 +78,8 @@ export const collections = {
         before: pic.nullish(),
         after: pic.nullish(),
         next: ref.nullish(),
+        demoLink: text,
+        demoButton: text,
       });
     },
   }),
@@ -85,6 +89,8 @@ export const collections = {
       name: z.string(),
       order: z.number().nullish(),
       page: z.string().nullish(),
+      // A service without its own page that still gets a full card, not a line in Also Available (Josh, 4 Nov).
+      card: z.boolean().nullish().transform((v) => !!v),
       summary: z.string(),
       homePrice: z.string().nullish(),
       homeTime: z.string().nullish(),

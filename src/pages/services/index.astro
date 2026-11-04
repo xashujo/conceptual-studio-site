@@ -6,14 +6,14 @@ import Studio from '../../layouts/Studio.astro';
 import Band from '../../components/studio/Band.astro';
 import Ladder from '../../components/Ladder.astro';
 import Enquiry from '../../components/Enquiry.astro';
-import { services } from '../../data/services';
+import { services, isLane } from '../../data/services';
 import { home, responseTime } from '../../lib/site';
 import { servicesPage as sp, titleCase } from '../../lib/pages';
 
 // The lanes are the services with a page of their own; the rest (no page, e.g. video) sit in a short row below.
 // One price ladder per lane keeps the range a buyer sees tight (Josh, 2 Nov).
-const lanes = services.filter((s) => s.href && !s.href.includes('#'));
-const extras = services.filter((s) => !s.href);
+const lanes = services.filter(isLane);
+const extras = services.filter((s) => !s.href && !s.card);
 const retainer = services.find((s) => s.href?.includes('#'));
 const steps = home.steps.map((s) => ({ title: s.title, text: s.text.replaceAll('{reply time}', responseTime) })); // Pages CMS: Home page > How We Work
 ---
@@ -23,6 +23,7 @@ const steps = home.steps.map((s) => ({ title: s.title, text: s.text.replaceAll('
       <h1 class="ph__h" id="svc-h">{sp.heading}</h1>
       <p class="ph__p">{sp.intro}</p>
       <p class="ph__p sv-note">{sp.note}</p>
+      {sp.quoteNote && <p class="ph__p sv-note sv-quote">{sp.quoteNote}</p>}
       <div class="acts">
         <a class="btn btn--solid" href="#enquire">{sp.enquiryHeading}</a>
         {retainer && <a class="btn" href="#retainers">{sp.retainersHeading}</a>}
@@ -100,6 +101,7 @@ const steps = home.steps.map((s) => ({ title: s.title, text: s.text.replaceAll('
 
 <style>
   .sv-note { font-size: 17px; color: var(--ink-2); }
+  .sv-quote { margin-top: -4px; font-weight: 600; color: var(--ink); }
   .lanes { list-style: none; margin: var(--sp-head) 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-gap); }
   .lane { position: relative; display: flex; flex-direction: column; gap: 12px; padding: var(--sp-card); border-radius: var(--radius); }
   .lane__k { font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--ink-2); }

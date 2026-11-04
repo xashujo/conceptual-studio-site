@@ -1,0 +1,11 @@
+name: Design Support for In-House Teams
+order: 5
+lane: In-House
+card: true
+summary: Your team builds the dashboard, report, Power BI report or web tool. We work alongside them on the design, so it looks & works like a finished product.
+tiers:
+  - name: Design support
+    onHome: true
+    price: From £1,750
+    time: from 1 week
+    includes: Layouts for phone & desktop, charts & maps in your brand, and clear wording for the people using it, handed over as files your team builds from.
