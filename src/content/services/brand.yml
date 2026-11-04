@@ -3,7 +3,7 @@ order: 2
 lane: Brand
 page: /services/brand-identity/
 summary: A logo, colours & type, with guidelines your team can use.
-kinds: That can be a new identity from scratch, guidelines and templates for a team that makes its own material, or a rollout across signage, prospectuses and campaigns.
+kinds: A new identity from scratch, guidelines and templates for a team that makes its own material, or a rollout across signage, prospectuses and campaigns.
 examples:
   - src: '@assets/work/doubleshot-studio/01.webp'
     alt: A cream tote bag printed with the DoubleShot wordmark and two red star characters, hanging on a dark wooden chair
@@ -21,31 +21,31 @@ examples:
     caption: Visual identity, cover of the guidelines
 faqs:
   - question: Do the prices include VAT?
-    answer: No VAT is added. Conceptual Studio isn't VAT registered, so the price you're quoted is the price you pay.
+    answer: No. Conceptual Studio isn't VAT registered, so the quote is what you pay.
   - question: How long does a new identity take?
-    answer: From 4 weeks for a logo and essentials, from 8 for a full identity and from 12 with a rollout. Those are calendar weeks from our first call to your final files, feedback rounds included.
+    answer: From 4 weeks for a logo and essentials, 8 for a full identity and 12 with a rollout. Calendar weeks, from our first call to your final files, feedback included.
   - question: Can my team make new material after you hand over?
-    answer: "Yes. That is what the guidelines and templates are for: your team can make new social posts, letters and presentations in the identity without coming back to me each time."
+    answer: Yes. With the guidelines and templates, your team can make new posts, letters and presentations without coming back to me.
   - question: Can you handle the printing?
-    answer: Yes. On a rollout I handle print through my print partners, so signage and print arrive finished.
+    answer: Yes. On a rollout I handle print through my partners, so everything arrives finished.
 homeLink: Brand identity prices
 tiers:
   - name: Campaign look
     onHome: true
     price: £1,250
     time: from 2 weeks
-    includes: A look for one campaign or event, with a key visual, colours and type, and templates for the posts and posters it needs.
+    includes: A key visual, colours and type for one campaign or event, plus templates for its posts and posters.
   - name: Logo and essentials
     onHome: true
     price: From £4,900
     time: from 4 weeks
-    includes: A logo, colour palette and typefaces, a one-page sheet on how to use them, and mockups showing the identity in use.
+    includes: A logo, colours and typefaces, a one-page guide to using them, and mockups of the identity in use.
   - name: Full identity
     price: From £8,750
     time: from 8 weeks
-    includes: Everything in Logo and essentials, plus a brand guidelines document and templates your team can use, such as social posts, letterheads and presentations.
+    includes: Everything in Logo and essentials, plus brand guidelines and templates for social posts, letterheads and presentations.
   - name: Identity and rollout
     price: From £14,000
     time: from 12 weeks
-    includes: A full identity applied across the things people actually see, such as signage, prospectuses and campaigns, with print handled through my print partners.
+    includes: A full identity on everything people see, from signage to prospectuses and campaigns, with print through my partners.
     note: Quoted per project.

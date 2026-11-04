@@ -41,37 +41,35 @@ socialVideos:
     alt: Goldfish swim over the words my font archive as a design studio, then a run through the typefaces in it.
 approach:
   - title: Education Specialists
-    text: Most of our work is in education, for further education colleges, adult
-      learning services and a language school in Oxford.
+    text: Most of our work is for colleges, adult learning services and a language
+      school in Oxford.
   - title: Brand & Data Together
-    text: Brand identity and data visualisation under one roof, so your reports and
-      infographics look like the rest of your brand.
+    text: One studio does both, so your reports and infographics look like the rest
+      of your brand.
   - title: One Studio, Brief to Files
-    text: One studio takes your project from the first call to the final files, with
-      no hand-offs along the way.
+    text: The same studio from the first call to the final files.
   - title: Works With Your Team
-    text: Your team knows your systems. We bring the design, the clear wording & a fixed
-      price, so the result looks finished & your team stays free for its core work.
+    text: Your team knows your systems. We add the design, the wording & a fixed price,
+      and your team keeps its time for the core work.
 results:
   - src/content/projects/oxford-school-of-english.yml
   - src/content/projects/new-city-college-strategic-intent.yml
-aboutLead: I set up Conceptual Studio in London in 2024. I turn reports, plans and spreadsheets into charts, maps and brand identities that people understand the first time they read them.
+aboutLead: I set up Conceptual Studio in London in 2024. I turn reports, plans and spreadsheets into charts, maps and identities that make sense on first read.
 steps:
   - title: Discovery
-    text: Send us a short note and you'll get a reply {reply time}. On a free 20-minute
-      call we agree the audience, formats and budget, then send a fixed quote, so
-      the cost is settled before any work begins.
+    text: Send a short note and you'll get a reply {reply time}. On a free 20-minute
+      call we agree audience, formats and budget. A fixed quote follows, before any
+      work begins.
   - title: Direction
-    text: We show you early ideas before anything is polished. You choose the one to
-      take forward, and that decision sets the course for everything after it.
+    text: Early ideas, before anything is polished. You pick one, and it sets the
+      course.
   - title: Development
-    text: We build out the full set of pages, charts or assets and share work in
-      progress as it takes shape. Your feedback comes in the rounds set out in your
-      quote, so you always know what is changing and what comes next.
+    text: We build the full set and share it as it takes shape, with feedback rounds
+      set out in your quote.
   - title: Delivery
-    text: Nothing is final until you sign it off. We check every detail, then hand
-      over the files in the formats your team needs.
-closeText: Tell us a little about what you're working on, and we'll be in touch to discuss the next steps.
+    text: We check every detail. Once you sign off, you get the files in the formats
+      your team needs.
+closeText: Tell us what you're working on, and we'll be in touch.
 backdrop: painting
 canvasImage: "@assets/art/engraved/canvas-texture.jpg"
 pageImage: "@assets/art/engraved/apotheosis-strip.jpg"

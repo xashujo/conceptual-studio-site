@@ -21,15 +21,15 @@ homeFilter: Branding
 hasPage: true
 outcome: A full identity in about a week, from logo to 3D characters.
 problem: |
-  DoubleShot is a small London creative studio started by friends, built on the idea that two points of view make one stronger voice. They needed an identity that showed that: warm and bold, with a sense of humour, but still serious about the work.
+  DoubleShot is a small London creative studio started by friends. They wanted an identity that was warm and bold, with a sense of humour, but still serious about the work.
 
-  The brief was simple. Two creative points of view, one clear voice.
+  The brief: two creative points of view, one clear voice.
 whatIDid: |
-  I designed the whole identity: wordmark, colours, type and the two star characters that sit beside it. The characters, The Duo, stand for those two points of view. Each has its own personality, and they're always stronger side by side.
+  I designed the whole identity: wordmark, colours, type and two star characters, The Duo, one for each point of view. Each has its own personality, and they're stronger side by side.
 
-  The palette is three colours used in set amounts: DoubleShot Linen as the main colour, Terracotta as the second and Soot as the accent.
+  Three colours in set amounts: DoubleShot Linen as the main, Terracotta second and Soot as the accent.
 
-  I then showed it on real things, such as business cards, a tote bag, matches, a box sticker and a street banner, so the studio could see it working before it was printed.
+  Then I put it on real things so the studio could see it working before print: business cards, a tote bag, matches, a box sticker and a street banner.
 gallery:
   - layout: One large
     images:
@@ -63,5 +63,5 @@ gallery:
 whatHappened: |
   Everything went into a brand guidelines deck: the wordmark in full and short form, the colour pairings, the type, app icons, a favicon, social profile pictures and 3D renders of The Duo.
 
-  The characters were built to travel. They take on themed accessories and settings, so the studio can use them in campaigns and social posts without the identity losing its shape.
+  The Duo were built to travel. They take on themed props and settings for campaigns and social posts, and the identity keeps its shape.
 next: src/content/projects/cmd-inc.yml

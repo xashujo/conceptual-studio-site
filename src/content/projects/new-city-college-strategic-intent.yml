@@ -35,13 +35,13 @@ homeCharts:
 hasPage: true
 outcome: Used in the college's executive merger communications.
 problem: |
-  New City College needed a strategic intent briefing that senior leaders and institutional stakeholders could read quickly. The material was policy-heavy and the data behind it was complex: demographic forecasts for its boroughs, student numbers split by age, level and support need, and growth across employment sectors.
+  New City College needed a strategic intent briefing that senior leaders and stakeholders could read quickly. The material was policy-heavy and the data complex: borough demographic forecasts, student numbers by age, level and support need, and growth by employment sector.
 
   The college has also grown through a long run of mergers, and the briefing needed to show where it came from.
 whatIDid: |
-  I sorted the data first, then built one visual language for the whole suite, so a forecast, a sector chart and a set of student splits all read as parts of one document.
+  I sorted the data first, then built one visual language for the whole suite, so forecasts, sector charts and student splits read as one document.
 
-  For the history I drew a map and timeline of the college mergers from 1990 to 2024, setting each merger on the borough where it happened. Student numbers by level became a set of matching pie charts with the totals printed beside them, so each group can be compared at a glance.
+  For the history I drew a map and timeline of the college's mergers from 1990 to 2024, each set on its borough. Student numbers by level became matching pie charts with totals beside them, easy to compare at a glance.
 gallery:
 - layout: Two side by side
   images:

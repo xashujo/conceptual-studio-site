@@ -9,7 +9,7 @@ filters:
 - Data visualisation
 label: Concept
 order: 65
-summary: A phone-first course finder for construction courses across London, with search that forgives typos, a map with directions & an Excel upload so staff keep it up to date.
+summary: A phone-first finder for construction courses across London, with typo-proof search, a map with directions & an Excel upload for staff.
 cover:
   src: '@assets/work/course-finder/desktop.webp'
   alt: A course finder for construction courses in London, with a search box, filters, a list of courses and a map of providers
@@ -19,20 +19,20 @@ featured: false
 hasPage: true
 outcome: A working prototype, live online with sample providers.
 problem: |-
-  A London college group wanted a better way for people to find courses online, and later narrowed the focus to construction courses at colleges and training providers across London.
+  A London college group wanted people to find courses online more easily, then narrowed it to construction courses at colleges and training providers across London.
 
-  It needed to work for 16 to 18-year-olds, adults changing career and learners with additional needs, mostly on phones. Staff with no technical background needed to keep it up to date themselves. The college's first idea was to build it in Power BI.
+  It had to work on phones for 16 to 18-year-olds, adults changing career and learners with additional needs. Staff with no technical background had to keep it current. The college's first idea was Power BI.
 whatIDid: |-
-  We compared Power BI with a custom tool and found that Power BI's public reports don't adapt to phones and don't forgive spelling mistakes. So we designed and built a working prototype: a course finder that sits inside the college's own WordPress site and matches its brand.
+  We compared Power BI with a custom tool. Its public reports don't adapt to phones or forgive spelling mistakes, so we built a working prototype: a course finder inside the college's own WordPress site, in its brand.
 
-  - Search that forgives typos and trade slang: "plumming" finds Plumbing, and "sparky" finds Electrical.
-  - An "I am…" choice that shows only the courses meant for each learner, and what each one costs them.
+  - Search that forgives typos and trade slang: "plumming" finds Plumbing, "sparky" finds Electrical.
+  - An "I am…" choice that shows only the courses for each learner, and what they cost.
   - Filters for trade, provider, level and when courses run.
-  - A London map where each location is placed from its postcode, with circles that grow with matching courses and one-tap directions.
-  - An Excel upload that staff use to update courses, with every file checked before it goes live.
-  - Designed to the WCAG 2.2 AA accessibility standard, with a text table alongside the map.
+  - A London map placed by postcode, with circles that grow with matching courses and one-tap directions.
+  - An Excel upload for staff, with every file checked before it goes live.
+  - Built to WCAG 2.2 AA, with a text table alongside the map.
 whatHappened: |-
-  A fully working prototype, live online with sample providers, plus a proposal covering the build, launch and support. It's ready to adapt for any college or training provider.
+  A working prototype, live online with sample providers, plus a proposal for the build, launch and support. It can be adapted for any college or training provider.
 gallery:
   - layout: Two side by side
     images:

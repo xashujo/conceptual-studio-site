@@ -3,9 +3,9 @@ order: 1
 lane: Data
 page: /services/data-visualisation/
 summary: Charts, maps & reports, made from your own figures.
-kinds: That can be a set of charts for a document you're laying out yourself, a whole annual, strategy or sustainability report, or custom maps, like heat maps of London boroughs.
+kinds: Charts for a document you're laying out yourself, a whole annual, strategy or sustainability report, or custom maps, like heat maps of London boroughs.
 demoHeading: A Table Becomes a Chart
-demoText: These are real figures from the Department for Education, shown as the table you'd get in a spreadsheet. Press the button to see what I do with them.
+demoText: Real Department for Education figures, as you'd get them in a spreadsheet. Press the button to see what I do with them.
 examples:
   - src: '@assets/work/usp-freeport-skills/thumb.webp'
     alt: The Skills Heat Map for the Freeport Skills Partnership, printed and lit on a dark surface
@@ -17,26 +17,26 @@ examples:
     caption: Charts and layout for the 2025-26 report
 faqs:
   - question: Do the prices include VAT?
-    answer: No VAT is added. Conceptual Studio isn't VAT registered, so the price you're quoted is the price you pay.
+    answer: No. Conceptual Studio isn't VAT registered, so the quote is what you pay.
   - question: What files do I get?
-    answer: Charts come as PNG and PDF, ready for your own layout. A full report comes as print-ready PDFs for coated and uncoated paper, an accessible PDF and PNGs of every chart.
+    answer: Charts come as PNG and PDF. A full report comes as print-ready PDFs for coated and uncoated paper, an accessible PDF and PNGs of every chart.
   - question: Can the charts match our brand?
-    answer: Yes. They are drawn in your colours and typefaces, so they sit in your documents as if your own team had made them.
+    answer: Yes. They're drawn in your colours and typefaces, as if your own team made them.
   - question: How long does a report take?
-    answer: Charts take from 1 week and a report of around 16 pages from 2 weeks, counted in calendar time from our first call to your final files. Longer reports are quoted.
+    answer: Charts from 1 week, a report of around 16 pages from 2 weeks, from our first call to your final files. Longer reports are quoted.
   - question: Can you design a report we reuse every year?
-    answer: "Yes. That is the top rung: the report is built as a template, so next year's edition starts from your new figures, not a blank page."
+    answer: "Yes. That's the top rung: the report is built as a template, so next year starts from your new figures."
 homeLink: Data visualisation prices
 tiers:
   - name: Charts and infographics
     onHome: true
     price: From £700
     time: from 1 week
-    includes: The charts your document needs, built from your own figures and supplied as PNG and PDF, ready to drop into your own layout.
+    includes: The charts your document needs, from your own figures, as PNG and PDF ready for your layout.
   - name: Charts and full report
     price: From £1,400
     time: from 2 weeks
-    includes: The charts plus the whole report designed around them, such as an annual, strategy or sustainability report. Supplied as print-ready PDFs for coated and uncoated paper, an accessible PDF and PNGs.
+    includes: The charts and the whole report around them, such as an annual, strategy or sustainability report. Print-ready PDFs for coated and uncoated paper, an accessible PDF and PNGs.
     note: Priced for a report of around 16 pages; longer reports are quoted.
   - name: Maps and recurring reports
     price: From £2,800

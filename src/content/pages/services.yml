@@ -1,9 +1,9 @@
 heading: Services
-intro: Data visualisation and brand identity for colleges, public bodies and growing businesses. I turn your figures into charts, maps and reports, and design identities your team can use.
-note: Every project is priced on its scope, so the prices here are starting points. You'll get a fixed quote after our first call.
+intro: I turn your figures into charts, maps and reports, and design identities your team can use.
+note: Prices are starting points. You'll get a fixed quote after our first call.
 quoteNote: ""
 retainersHeading: Monthly Plans
-retainersNote: Three days a month covers your social templates, monthly report graphics and campaign assets, without hiring. Three-month minimum, then month to month with 30 days' notice.
+retainersNote: Social templates, report graphics and campaign assets every month, without hiring. Three-month minimum, then rolling with 30 days' notice.
 listHeading: One-Off Projects
 listNote: Two kinds of project, each with an easy first step.
 extrasHeading: Also Available
@@ -11,20 +11,20 @@ firstStepLabel: Start with
 howHeading: How a Project Runs
 terms:
   - title: Timelines
-    text: The times on these pages are calendar time, from our first call to your final files, feedback rounds included.
+    text: Calendar time, from our first call to your final files, feedback included.
   - title: Quotes
     text: A fixed quote for the agreed scope, sent {reply time} of our call.
   - title: Invoices
     text: Net 30, against your purchase order if you use one. I'm not VAT registered, so no VAT is added.
 procurementHeading: Buying for an Organisation?
-procurementText: Company details, purchase orders, payment terms and how I handle your data, on one page for your finance team.
+procurementText: Company details, purchase orders, payment terms and data handling, on one page for your finance team.
 procurementButton: Working with Organisations
 enquiryHeading: Ask for a Quote
 workHeading: Recent Work
 pricesHeading: Prices
-pricesNote: Every project is priced on its scope, so these are starting points. You'll get a fixed quote after our first call. Times run from that call to your final files, feedback included. I'm not VAT registered, so no VAT is added.
+pricesNote: Starting points, with a fixed quote after our first call. Times run from that call to your final files, feedback included. No VAT is added.
 faqHeading: Questions
-closeText: Not sure which service fits? Tell me what you need and I'll send a fixed quote {reply time}.
+closeText: Not sure which fits? Tell me what you need and I'll send a fixed quote {reply time}.
 planEmailSubject: "Enquiry: {plan}"
 planEmail: |-
   Hi Joshua,
