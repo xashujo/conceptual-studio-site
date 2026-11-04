@@ -7,6 +7,7 @@ import { Image } from 'astro:assets';
 import Studio from '../../layouts/Studio.astro';
 import Band from '../../components/studio/Band.astro';
 import PlateCaption from '../../components/PlateCaption.astro';
+import Carousel from '../../components/Carousel.astro';
 import { caseStudies, bySlug, type Plate } from '../../data/work';
 import { caseStudyPage as t } from '../../lib/pages';
 
@@ -56,16 +57,19 @@ const lead = p.thumb
 
   <Band labelledby="the-work">
     <h2 class="big" id="the-work">{t.workHeading}</h2>
-    {cs.rows.map((row) => (
-      <div class:list={['row', `row--${row.kind}`]}>
-        {row.plates.map((pl) => (
-          <figure>
-            <Image src={pl.image} alt={pl.alt} widths={[600, 1000, 1600, 2200]} sizes={sizes[row.kind]} />
-            <PlateCaption {...cap(pl)} />
-          </figure>
-        ))}
-      </div>
-    ))}
+    <!-- On a phone the rows become one swipeable gallery (Carousel.astro); on desktop they stay as laid out. -->
+    <Carousel label={t.workHeading}>
+      {cs.rows.map((row) => (
+        <div class:list={['row', `row--${row.kind}`]}>
+          {row.plates.map((pl) => (
+            <figure>
+              <Image src={pl.image} alt={pl.alt} widths={[600, 1000, 1600, 2200]} sizes={sizes[row.kind]} />
+              <PlateCaption {...cap(pl)} />
+            </figure>
+          ))}
+        </div>
+      ))}
+    </Carousel>
     {cs.before && (
       <>
         <h3 class="mid cs-ba">{t.beforeAfterHeading}</h3>
