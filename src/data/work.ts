@@ -20,6 +20,8 @@ const filterKey: Record<string, Filter> = { 'Brand identity': 'brand', 'Data vis
 
 export interface Plate { image: ImageMetadata; alt: string; medium: string; }
 export interface Row { kind: 'full' | 'pair' | 'trio' | 'quad'; plates: Plate[]; }
+/** A run of rows under one optional heading and paragraph (Katseye-style chapters, Josh 4 Nov). */
+export interface Chapter { heading?: string; text: string[]; rows: Row[]; }
 export interface Project {
   slug: string; title: string; client: string; year: number;
   disciplines: string[]; summary: string; tags: Filter[];
@@ -46,7 +48,7 @@ export interface CaseStudy {
   outcome: string;
   problem: string[];
   did: string[];
-  rows: Row[];
+  chapters: Chapter[];
   before?: { before: Plate; after: Plate };
   happened: string[];
   next: string;
@@ -86,7 +88,13 @@ export const caseStudies: CaseStudy[] = entries.filter((e) => e.data.hasPage).ma
   outcome: d.outcome,
   problem: paragraphs(d.problem),
   did: paragraphs(d.whatIDid),
-  rows: d.gallery.map((r) => ({ kind: kinds[r.layout], plates: r.images.map(plate) })),
+  // A row with a heading opens a new chapter; rows without one join the chapter above.
+  chapters: d.gallery.reduce<Chapter[]>((all, r) => {
+    const row = { kind: kinds[r.layout], plates: r.images.map(plate) };
+    if (r.heading || all.length === 0) all.push({ heading: r.heading || undefined, text: paragraphs(r.text ?? ''), rows: [] });
+    all[all.length - 1].rows.push(row);
+    return all;
+  }, []),
   before: d.before && d.after ? { before: plate(d.before), after: plate(d.after) } : undefined,
   happened: paragraphs(d.whatHappened),
   // Without a chosen next project, link to the next case study in Work page order.

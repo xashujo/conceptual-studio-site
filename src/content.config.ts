@@ -81,6 +81,8 @@ export const collections = {
         whatHappened: text,
         gallery: z.array(z.object({
           layout: z.enum(['One large', 'Two side by side', 'Three in a row', 'Four in a grid']),
+          heading: z.string().nullish(),
+          text: z.string().nullish(),
           images: z.array(pic).min(1),
         })).nullish().transform((v) => v ?? []),
         before: pic.nullish(),
