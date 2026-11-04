@@ -12,5 +12,6 @@ cover:
   src: '@assets/work/the-other-side/01.webp'
   alt: Floating chrome shapes above a pink liquid surface
   caption: Student work. 3D render
+thumb: "@assets/work/the-other-side/thumb.webp"
 featured: false
 hasPage: false

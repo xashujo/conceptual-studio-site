@@ -13,6 +13,7 @@ cover:
   src: '@assets/work/oxford-school-of-english/bus-shelter.webp'
   alt: Oxford School of English poster in a bus shelter on an Oxford street, beside a red double-decker bus
   caption: Visual identity, on a bus shelter poster
+thumb: "@assets/work/oxford-school-of-english/thumb.webp"
 coverFocus: 50% 46%
 featured: true
 featuredOrder: 1

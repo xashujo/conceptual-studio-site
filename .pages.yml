@@ -95,6 +95,12 @@ content:
         required: true
         description: "Shown on the project card. Say where the work was used."
       - { name: cover, label: Cover image, component: picture, required: true }
+      - name: thumb
+        label: Card thumbnail (optional)
+        type: image
+        options:
+          media: images
+        description: "The picture on the Work page and home page cards. Leave empty to use the cover. Best as a 4:3 image with the work shown whole in the middle, on a warm black ground, with space round it so it survives being cropped."
       - name: coverFocus
         label: Cover crop (optional)
         type: string

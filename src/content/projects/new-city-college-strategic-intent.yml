@@ -1,4 +1,4 @@
-title: Strategic Intent
+title: "NCC Strategic Intent"
 slug: new-city-college-strategic-intent
 client: New City College London
 year: 2025
@@ -13,9 +13,9 @@ cover:
   src: '@assets/work/new-city-college-strategic-intent/02.webp'
   alt: Black map of east London boroughs showing the colleges that merged to form New City College, with a timeline from 1990 to 2024
   caption: Map and timeline of the college mergers, 1990 to 2024
+thumb: "@assets/work/new-city-college-strategic-intent/thumb.webp"
 coverFocus: 0% 0%
-featured: true
-featuredOrder: 2
+featured: false
 homeFilter: Data Visualisation
 homeFocus: 50% 8%
 homeCharts:

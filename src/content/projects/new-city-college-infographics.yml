@@ -1,4 +1,4 @@
-title: BSix merger
+title: "NCC & BSix Merger"
 slug: new-city-college-infographics
 client: New City College London
 year: 2024
@@ -13,7 +13,7 @@ cover:
   src: '@assets/work/new-city-college-infographics/02.webp'
   alt: Map of London boroughs marking the BSix and New City College campuses
   caption: Campus map, BSix and New City College
+thumb: "@assets/work/new-city-college-infographics/thumb.webp"
 coverFocus: 0% 0%
-featured: true
-featuredOrder: 6
+featured: false
 hasPage: false
