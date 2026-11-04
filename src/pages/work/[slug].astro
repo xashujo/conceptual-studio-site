@@ -27,7 +27,7 @@ const lead = p.thumb
   ? { image: p.thumb, alt: `${p.title} title graphic`, medium: 'Title graphic' }
   : { image: p.image, alt: p.alt, medium: p.medium };
 ---
-<Studio title={`${p.title} | Conceptual Studio`} description={p.summary} current="/work/" closeText={t.closeText}>
+<Studio title={p.title} description={p.summary} current="/work/" closeText={t.closeText}>
   <Band opening class="cs-open" labelledby="cs-h">
     <div class="ph__plate glass cs-plate" data-lens>
       <a class="btn cs-back" href="/work/"><span class="arrow" aria-hidden="true">←</span> {t.backLabel}</a>
