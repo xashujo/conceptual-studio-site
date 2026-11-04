@@ -66,6 +66,8 @@ export const collections = {
         homeFilter: z.enum(['Branding', 'Data Visualisation', 'Social Media']).nullish(),
         homeFocus: z.string().nullish(),
         homeCharts: z.array(z.object({ src: image(), alt: z.string().min(1), title: z.string(), caption: z.string() })).nullish().transform((v) => v ?? []),
+        // A printed piece shown as a page-turning magazine on the Work page (Josh, 4 Nov): every page in order, cover first.
+        magazine: z.array(z.object({ src: image(), alt: z.string().min(1) })).nullish().transform((v) => v ?? []),
         hasPage: z.boolean().nullish().transform((v) => !!v),
         outcome: text,
         problem: text,
