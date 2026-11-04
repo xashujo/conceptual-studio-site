@@ -1,0 +1,6 @@
+name: CIDORI
+trustedBy: true
+group: Education
+order: 10
+homeTrusted: true
+logo: "@assets/clients/cidori.svg"

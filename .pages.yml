@@ -287,6 +287,7 @@ content:
         type: image
         description: "Shown in Trusted By on the home page in place of the name, toned to one soft cream so every logo matches, and sized by its shape so wide and square logos look even. Use a one-colour SVG with a transparent background."
         options: { media: images, extensions: [svg] }
+      - { name: logoLabel, label: Name beside the logo, type: string, description: "For a logo that is only a symbol, e.g. Fou Answer's eye. Leave empty to show the logo alone." }
 
   - name: home
     label: Home page
