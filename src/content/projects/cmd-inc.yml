@@ -19,13 +19,17 @@ featured: true
 featuredOrder: 7
 homeFilter: Branding
 hasPage: true
-outcome: "[TBC: result, and the client's own words if they agree]"
+outcome: Identity and 3D assets handed over in March 2026.
 problem: |
-  [TBC: what CMD Inc. does in one line and what the brief was]
-whatIDid: |
-  I built the identity around one mark, the Star Note: six ovals around a bright centre, drawn from the shape of a musical note.
+  CMD Inc. makes sound for film & games, and was planning a website built around its own soundscapes. It needed an identity that looked like the sound it makes, plus the 3D and motion pieces the site would use.
 
-  It comes with a wordmark in a pill shape, set in SF Pro, and works in black on white or white on black. I also made a favicon, app icon styles and an animated reveal for the website.
+  The brief was a look that moves like spatial audio, with a sci-fi feel and an interface that is easy on the eye.
+whatIDid: |
+  I started with the wordmark. The client's first font was pixelated, so my first version made the type look like stardust that could move with the sound. The final identity is set in SF Pro Semibold.
+
+  The icon, the Star Note, followed: six ovals around a bright centre, drawn from the shape of a musical note. Radial halftone lines on the marks echo movement in sound. The colours are black & white, kept close to the client's reference site.
+
+  I then built what the website needed: a logo reveal animation, 3D models of the social icons, mockups, a favicon, app icon styles and web-ready video files for each browser. Everything went into a visual identity guide and a shared folder for the web developer.
 gallery:
   - layout: One large
     images:
@@ -54,5 +58,7 @@ gallery:
         alt: A laptop on a dark surface showing the CMD Inc. star
         caption: Website reveal
 whatHappened: |
-  [TBC: what followed]
+  I handed the identity & assets over in March 2026. A separate developer is building the website.
+
+  [TBC: whether the website has launched, and a line from the client if they agree to be quoted]
 next: src/content/projects/oxford-school-of-english.yml
