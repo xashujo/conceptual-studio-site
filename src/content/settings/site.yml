@@ -19,6 +19,6 @@ favicon: "@assets/brand/favicon.png"
 glass:
   bend: 50
   frost: 100
-  blur: 65
+  blur: 67
   shine: 65
   reach: 50
