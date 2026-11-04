@@ -35,7 +35,7 @@ The first rung's price also shows on the Services page and the home page, so tho
 1. Open **Projects** and click **Add an entry**.
 2. Fill in:
    - **Title**, **Client** and **Year**.
-   - **Web address**: the end of the page address, in lowercase with hyphens, e.g. `southbank-heat-maps`.
+   - **Web address**: the end of the page address, in lowercase with hyphens, e.g. `ncc-sustainability-report`.
    - **Disciplines**: one per line, e.g. Data visualisation.
    - **Work page filters**: which filter buttons it shows under.
    - **Position on the Work page**: lower comes first. Projects go up in tens, so 15 puts it between the first and second.

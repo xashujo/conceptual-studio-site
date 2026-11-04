@@ -51,12 +51,11 @@ Why, briefly (details and sources in the research file): high-growth specialist 
 
 **Repeat moments to write for:** college financial statements (published by 31 January), accountability statements (31 July), strategy and strategic intent documents, sustainability and climate action reports, mergers, prospectuses, campaign launches.
 
-**Clients that can be named (logos or set in type):** New City College London, Southbank College Group, ACL Essex, Oxford School of English, Fou Answer, New York General Group. Testimonials also come from Tower Hamlets College (part of NCC) and Plus Pursuits.
+**Clients that can be named (logos or set in type):** New City College London, ACL Essex, Oxford School of English, Fou Answer, New York General Group. Testimonials also come from Tower Hamlets College (part of NCC) and Plus Pursuits.
 
 **Outcomes that are true and can be used:**
 - An NCC logo Josh designed was formally trademarked and ran across buses, tube and stations in central and east London for months (from the Principal of Tower Hamlets College, see appendix).
 - The Oxford School of English rebrand is now a UK-registered trademark.
-- Ten heat maps of London boroughs for Southbank College Group's CEO, showing learner distribution across adult vocational and apprenticeship subjects.
 - Infographics for NCC's Strategic Intent document, used in executive merger communications.
 - 3D visuals for Sherman Poon's music video "Pandora Forever", shown at Times Square, Hong Kong `[TBC: confirm wording]`.
 
@@ -380,7 +379,7 @@ Notes:
 - [ ] First-frame and final-frame stills of the hero video, with alpha
 - [ ] A recent photo of himself
 - [ ] Case study material for each featured project: brief, what he did, outcomes, images, any before/after, permission to show
-- [ ] Which projects are featured, and in what order (suggested: NCC Strategic Intent, Southbank College Group heat maps, Oxford School of English rebrand, the trademarked NCC logo campaign, NCC sustainability report if it's public, DoubleShot Studio identity, CMD Inc identity, Fou Answer)
+- [ ] Which projects are featured, and in what order (suggested: NCC Strategic Intent, Oxford School of English rebrand, the trademarked NCC logo campaign, NCC sustainability report if it's public, DoubleShot Studio identity, CMD Inc identity, Fou Answer)
 - [ ] Prices for the ladder tiers, and whether they include VAT
 - [ ] Company number, registered office, VAT status, insurance held. The registered office has to appear on the site by law; if it's a home address, consider a registered-office service before launch.
 - [ ] Domain email address

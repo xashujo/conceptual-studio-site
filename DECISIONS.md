@@ -738,7 +738,7 @@ Museum model:
   "centred to the page"). Trusted By sits in the same column.
 - Trusted By replaces Worked with. Its names come from a new optional CMS field on
   Clients, "Show in Trusted By on the home page", in their Order, then "& More":
-  New City College London, Southbank College Group, Oxford School of English,
+  New City College London, Oxford School of English,
   New York General Group (Josh). Static line, no loop.
 - Stats: 50+ Projects Delivered, 1M+ Data Points Visualised, 48hr First-Concept
   Turnaround, 90% of Clients Return for More Work. Josh's placeholders, marked
