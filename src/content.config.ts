@@ -85,7 +85,6 @@ export const collections = {
         })).nullish().transform((v) => v ?? []),
         before: pic.nullish(),
         after: pic.nullish(),
-        next: ref.nullish(),
         demoLink: text,
         demoButton: text,
       });
