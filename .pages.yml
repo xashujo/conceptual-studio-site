@@ -285,7 +285,7 @@ content:
       - name: logo
         label: Logo (SVG)
         type: image
-        description: "Shown in Trusted By on the home page in place of the name, toned to one soft cream so every logo matches. Use the one-colour version if there is one." 
+        description: "Shown in Trusted By on the home page in place of the name, toned to one soft cream so every logo matches, and sized by its shape so wide and square logos look even. Use a one-colour SVG with a transparent background."
         options: { media: images, extensions: [svg] }
 
   - name: home

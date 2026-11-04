@@ -77,7 +77,7 @@ const more = services.filter((s) => !lanes.includes(s));
     <main>
       <!-- Opening: the etching fills the screen; the hero plate is glass over it. -->
       <header class="hero" id="top">
-        {painting ? <Image class="hero__art" src={home.pageImage} alt="" widths={[1100, 2200]} sizes="100vw" loading="eager" fetchpriority="high" /> : <div class="hero__art canvas" style={`--canvas: ${canvas}`} aria-hidden="true" />}
+        {painting ? <Image class="hero__art" src={home.pageImage} alt="" widths={[1100, 1600]} quality={55} sizes="100vw" loading="eager" fetchpriority="high" /> : <div class="hero__art canvas" style={`--canvas: ${canvas}`} aria-hidden="true" />}
         <!-- Landing view (Josh, 2 Nov): one plate that says what clients get, with the big Start a Project. The stats moved to the proof (Josh, 3 Nov). -->
         <div class="hero__bento">
         <div class="hero__plate glass" data-lens>
@@ -112,7 +112,7 @@ const more = services.filter((s) => !lanes.includes(s));
         <!-- The sections alternate night and day (Josh, 28 Oct): Work night, Services day, Why Clients night,
              About day, then the close at night to the end. Each night band has its own night engraving. -->
         <div class="band night">
-        <div class:list={["band__art", { canvas: !painting }]} style={painting ? undefined : `--canvas: ${canvas}`} aria-hidden="true">{painting && <Image src={home.pageImage} alt="" widths={[1100, 2200]} sizes="100vw" />}</div>
+        <div class:list={["band__art", { canvas: !painting }]} style={painting ? undefined : `--canvas: ${canvas}`} aria-hidden="true">{painting && <Image src={home.pageImage} alt="" widths={[1100, 1600]} quality={55} sizes="100vw" />}</div>
 
         <section class="fw wrap" id="work" aria-labelledby="fw-h">
           <h2 class="fw__h big" id="fw-h">{home.workHeading}</h2>
@@ -208,7 +208,7 @@ const more = services.filter((s) => !lanes.includes(s));
         </div>
 
         <div class="band">
-        <div class:list={["band__art", { canvas: !painting }]} style={painting ? undefined : `--canvas: ${canvas}`} aria-hidden="true">{painting && <Image src={home.pageImage} alt="" widths={[1100, 2200]} sizes="100vw" />}</div>
+        <div class:list={["band__art", { canvas: !painting }]} style={painting ? undefined : `--canvas: ${canvas}`} aria-hidden="true">{painting && <Image src={home.pageImage} alt="" widths={[1100, 1600]} quality={55} sizes="100vw" />}</div>
         <section class="services wrap" id="services" aria-labelledby="services-h">
           <h2 class="big services__h" id="services-h">Services</h2>
           <p class="services__intro">Every project is priced on its scope, so these are starting points. You'll get a fixed quote after our first call.</p>
@@ -242,7 +242,7 @@ const more = services.filter((s) => !lanes.includes(s));
         </div>
 
         <div class="band night">
-        <div class:list={["band__art", { canvas: !painting }]} style={painting ? undefined : `--canvas: ${canvas}`} aria-hidden="true">{painting && <Image src={home.pageImage} alt="" widths={[1100, 2200]} sizes="100vw" />}</div>
+        <div class:list={["band__art", { canvas: !painting }]} style={painting ? undefined : `--canvas: ${canvas}`} aria-hidden="true">{painting && <Image src={home.pageImage} alt="" widths={[1100, 1600]} quality={55} sizes="100vw" />}</div>
         <!-- Why clients choose us (pass 2): one client's words in the large pane, two results stacked beside it.
              Inside the field so the glass has the etching behind it. -->
         <section class="proof wrap" aria-labelledby="proof-h">
@@ -253,7 +253,7 @@ const more = services.filter((s) => !lanes.includes(s));
             <div class="trusted">
               <p class="trusted__l">{home.trustedByLabel}</p>
               <ul class="trusted__list">
-                {trustedBy.map((c) => <li>{c.logo ? <img src={c.logo.src} alt={c.name} height="28" loading="lazy" /> : c.name}</li>)}
+                {trustedBy.map((c) => <li>{c.logo ? <img src={c.logo.src} alt={c.name} width={Math.round(c.logoHeight * c.logo.width / c.logo.height)} height={c.logoHeight} style={`--h: ${c.logoHeight}px`} loading="lazy" /> : c.name}</li>)}
               </ul>
             </div>
           )}
@@ -291,7 +291,7 @@ const more = services.filter((s) => !lanes.includes(s));
         </div>
 
         <div class="band">
-        <div class:list={["band__art", { canvas: !painting }]} style={painting ? undefined : `--canvas: ${canvas}`} aria-hidden="true">{painting && <Image src={home.pageImage} alt="" widths={[1100, 2200]} sizes="100vw" />}</div>
+        <div class:list={["band__art", { canvas: !painting }]} style={painting ? undefined : `--canvas: ${canvas}`} aria-hidden="true">{painting && <Image src={home.pageImage} alt="" widths={[1100, 1600]} quality={55} sizes="100vw" />}</div>
         <!-- About: who the studio is and why it exists; the process lives in How We Work. -->
         <section class="about wrap" id="about" aria-labelledby="about-h">
           <h2 class="big about__h" id="about-h">About</h2>
@@ -551,7 +551,7 @@ const more = services.filter((s) => !lanes.includes(s));
   .band.night { --ink-2: color-mix(in srgb, var(--ink) 86%, var(--paper)); } /* secondary text 5:1 or better over the art */
   /* One painting runs down the whole field (Josh, 2 Nov): every band holds the same image, sized to the opening plus the field
      and shifted up by the band's own offset (--y, set below), so each shows the next stretch of it. */
-  .band__art img { position: absolute; left: 0; top: calc(-1 * var(--y, 0px)); width: 100%; height: var(--run-h, 100%); object-fit: cover; object-position: 50% 0; opacity: 0.25; filter: url(#tone-day); } /* 25%, day and night (Josh, 2 Nov) */
+  .band__art img { position: absolute; left: 0; top: 0; transform: translateY(calc(-1 * var(--y, 0px))); width: 100%; height: var(--run-h, 100%); object-fit: cover; object-position: 50% 0; opacity: 0.25; filter: url(#tone-day); } /* 25%, day and night (Josh, 2 Nov) */
   .band.night .band__art img { opacity: 0.25; filter: url(#tone-night); }
   /* Plain canvas (Josh, 2 Nov: simpler): the weave only, toned per band like the painting. A tile, so nothing zooms. */
   /* Soft-light over the band's own paper, so the weave reads on cream and on warm black without shifting either
@@ -704,7 +704,7 @@ const more = services.filter((s) => !lanes.includes(s));
   .trusted { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px 32px; margin-top: var(--sp-head); padding-block: 20px; border-block: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); }
   .trusted__l { font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); }
   .trusted__list { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 32px; margin: 0; padding: 0; list-style: none; font-size: 17px; color: var(--ink-2); }
-  .trusted__list img { display: block; height: 28px; width: auto; filter: brightness(0) invert(1) sepia(.35); opacity: .7; } /* any logo to one soft cream */
+  .trusted__list img { display: block; height: var(--h, 28px); width: auto; filter: brightness(0) invert(1) sepia(.35); opacity: .7; } /* any logo to one soft cream */
   .approach { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: var(--sp-gap); margin: 0; margin-top: var(--sp-head); padding: 0; list-style: none; }
   @media (min-width: 760px) and (max-width: 1099.98px) { .approach { grid-template-columns: repeat(2, minmax(0, 1fr)); } } /* four points: two by two on tablets */
   .approach__t { font-family: var(--display); font-weight: 500; font-size: 26px; line-height: 1.1; margin-bottom: 10px; }
