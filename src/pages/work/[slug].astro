@@ -57,19 +57,30 @@ const lead = p.thumb
 
   <Band labelledby="the-work">
     <h2 class="big" id="the-work">{t.workHeading}</h2>
-    <!-- On a phone the rows become one swipeable gallery (Carousel.astro); on desktop they stay as laid out. -->
-    <Carousel label={`${t.workHeading}: gallery`}>
-      {cs.rows.map((row) => (
-        <div class:list={['row', `row--${row.kind}`]}>
-          {row.plates.map((pl) => (
-            <figure>
-              <Image src={pl.image} alt={pl.alt} widths={[600, 1000, 1600, 2200]} sizes={sizes[row.kind]} />
-              <PlateCaption {...cap(pl)} />
-            </figure>
+    <!-- Chapters (Katseye-style, Josh 4 Nov): a short heading and paragraph, then that chapter's images.
+         On a phone each chapter's rows become one swipeable gallery (Carousel.astro); on desktop they stay as laid out. -->
+    {cs.chapters.map((ch, i) => (
+      <section class:list={['cs-chapter', { 'cs-chapter--titled': ch.heading }]} aria-label={ch.heading ?? undefined}>
+        {ch.heading && (
+          <div class="cs-chapter__head" data-reveal>
+            <h3 class="mid">{ch.heading}</h3>
+            {ch.text.length > 0 && <div class="flow cs-text">{ch.text.map((x) => <p>{x}</p>)}</div>}
+          </div>
+        )}
+        <Carousel label={`${ch.heading ?? t.workHeading}: gallery`}>
+          {ch.rows.map((row) => (
+            <div class:list={['row', `row--${row.kind}`]}>
+              {row.plates.map((pl) => (
+                <figure>
+                  <Image src={pl.image} alt={pl.alt} widths={[600, 1000, 1600, 2200]} sizes={sizes[row.kind]} />
+                  <PlateCaption {...cap(pl)} />
+                </figure>
+              ))}
+            </div>
           ))}
-        </div>
-      ))}
-    </Carousel>
+        </Carousel>
+      </section>
+    ))}
     {cs.before && (
       <>
         <h3 class="mid cs-ba">{t.beforeAfterHeading}</h3>
@@ -136,6 +147,11 @@ const lead = p.thumb
   .row--pair img, .row--trio img { aspect-ratio: 4 / 3; object-fit: cover; }
   .row--quad img { aspect-ratio: 1.41; object-fit: cover; }
   .cs-ba { margin-top: var(--sp-section); }
+  /* A titled chapter: heading left, a short paragraph right, on one hairline, then its images. */
+  .cs-chapter--titled { margin-top: clamp(80px, 9vw, 120px); }
+  .big + .cs-chapter--titled { margin-top: var(--sp-head); }
+  .cs-chapter__head { display: grid; grid-template-columns: 5fr 7fr; gap: var(--sp-gap); align-items: baseline; padding-top: 24px; border-top: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); }
+  .cs-chapter__head .mid { margin: 0; }
 
   .next { position: relative; display: grid; grid-template-columns: 360px minmax(0, 1fr) auto; gap: 32px; align-items: center; padding: 12px; border-radius: var(--radius); text-decoration: none; transition: background-color 300ms ease-out; }
   .next__img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: var(--radius-inner); }
@@ -155,6 +171,7 @@ const lead = p.thumb
     .cs-credits dd { font-size: 17px; white-space: normal; }
     .cs-lead img { width: 100%; max-height: none; }
     .cs-text p, .cs-list { font-size: 17px; }
+    .cs-chapter__head { grid-template-columns: 1fr; gap: 12px; }
     .row--pair, .row--trio, .row--quad { grid-template-columns: 1fr; }
     .next { grid-template-columns: 1fr; gap: 16px; padding: 10px 10px 18px; }
     .next__text { padding: 0 8px; }
