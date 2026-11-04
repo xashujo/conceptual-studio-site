@@ -11,9 +11,10 @@ label: Concept
 order: 65
 summary: A phone-first course finder for construction courses across London, with search that forgives typos, a map with directions & an Excel upload so staff keep it up to date.
 cover:
-  src: '@assets/work/course-finder/placeholder.webp'
-  alt: Placeholder until the course finder screenshots are ready
-  caption: "[TBC: Josh to supply neutral screenshots]"
+  src: '@assets/work/course-finder/desktop.webp'
+  alt: A course finder for construction courses in London, with a search box, filters, a list of courses and a map of providers
+  caption: The finder on a desktop screen, with sample courses
+coverFocus: 50% 0%
 featured: false
 hasPage: true
 outcome: A working prototype, live online with sample providers.
@@ -32,5 +33,14 @@ whatIDid: |-
   - Designed to the WCAG 2.2 AA accessibility standard, with a text table alongside the map.
 whatHappened: |-
   A fully working prototype, live online with sample providers, plus a proposal covering the build, launch and support. It's ready to adapt for any college or training provider.
+gallery:
+  - layout: Two side by side
+    images:
+      - src: '@assets/work/course-finder/phone-search.webp'
+        alt: Phone screen with "sparky" typed in the search box and two electrical installation courses listed
+        caption: Searching "sparky" finds the electrical courses
+      - src: '@assets/work/course-finder/phone-map.webp'
+        alt: Phone screen showing a map of London with circles that grow with the number of matching courses, and a table of providers below
+        caption: The map, with a table of the same providers underneath
 demoLink: ""
 demoButton: See the Live Demo
