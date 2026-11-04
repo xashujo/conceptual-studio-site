@@ -2,7 +2,7 @@ name: Brand identity
 order: 2
 lane: Brand
 page: /services/brand-identity/
-summary: A logo, colours, type, mockups and the rules for using them, so your own team can make new material without coming back to me every time.
+summary: A logo, colours & type, with guidelines your team can use.
 kinds: That can be a new identity from scratch, guidelines and templates for a team that makes its own material, or a rollout across signage, prospectuses and campaigns.
 examples:
   - src: '@assets/work/oxford-school-of-english/bus-shelter.webp'

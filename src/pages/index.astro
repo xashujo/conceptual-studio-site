@@ -639,19 +639,20 @@ const more = services.filter((s) => !lanes.includes(s));
   /* Services: the same heading as Featured Work, then full-width rows that open one at a time. */
   .services { padding-top: var(--sp-section); }
   .tags { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-  .tags a { display: inline-block; padding: 8px 16px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--ink) 22%, transparent); font-size: 16px; text-decoration: none; color: inherit; }
+  .tags a { padding: 0 16px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--ink) 22%, transparent); font-size: 16px; text-decoration: none; color: inherit; }
   /* Services as a ruled list in large type (WECOMEET): the row in hand turns full ink and its example shows to the
      right; with none in hand the first shows. Plain CSS, so it works without script. */
   .svc { position: relative; margin-top: var(--sp-head); }
-  .svc__list { list-style: none; margin: 0; padding: 0; width: 56%; }
-  .svc__row { border-top: 1px solid color-mix(in srgb, var(--ink) 22%, transparent); }
-  .svc__row:last-child { border-bottom: 1px solid color-mix(in srgb, var(--ink) 22%, transparent); }
+  .svc__list { list-style: none; margin: 0; padding: 0; }
+  .svc__row { position: relative; } /* each example sits beside its own row (Josh, 4 Nov) */
+  .svc__link { width: 56%; border-top: 1px solid color-mix(in srgb, var(--ink) 22%, transparent); }
+  .svc__row:last-child .svc__link { border-bottom: 1px solid color-mix(in srgb, var(--ink) 22%, transparent); }
   .svc__link { display: grid; gap: 10px; padding: 28px 0 30px; color: color-mix(in srgb, var(--ink) 55%, transparent); text-decoration: none; transition: color 200ms ease-out, transform 300ms var(--ease-out); }
   .svc__name { font-family: var(--display); font-weight: 500; font-size: clamp(44px, 5vw, 76px); line-height: 1; letter-spacing: -0.01em; }
   .svc__line { font-size: 20px; line-height: 1.45; max-width: 44ch; color: var(--ink); }
   .svc__price { font-size: 18px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
   .svc__price span { font-weight: 400; color: var(--ink-2); }
-  .svc__ex { position: absolute; top: 0; right: 0; width: 40%; height: 100%; max-height: 520px; object-fit: cover; border-radius: var(--radius); opacity: 0; transition: opacity 300ms ease-out; pointer-events: none; }
+  .svc__ex { position: absolute; top: 50%; right: 0; width: 40%; height: auto; aspect-ratio: 4 / 3; translate: 0 -50%; object-fit: cover; border-radius: var(--radius); opacity: 0; transition: opacity 300ms ease-out; pointer-events: none; }
   .svc__row:is(:hover, :focus-within) .svc__link { color: var(--ink); transform: translateX(8px); }
   .svc:not(:has(.svc__row:is(:hover, :focus-within))) .svc__row:first-child .svc__link { color: var(--ink); }
   .svc__row:is(:hover, :focus-within) .svc__ex,
@@ -662,10 +663,9 @@ const more = services.filter((s) => !lanes.includes(s));
   .svc__more span { color: var(--ink-2); }
   @media (hover: hover) { .svc__more a:hover .arrow { transform: rotate(-45deg); } }
   @media (max-width: 959.98px) {
-    .svc__list { width: auto; }
-    .svc__link { color: var(--ink); }
+    .svc__link { width: auto; color: var(--ink); }
     .svc__row:is(:hover, :focus-within) .svc__link { transform: none; }
-    .svc__ex { position: static; display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; margin-bottom: 28px; opacity: 1; }
+    .svc__ex { position: static; translate: none; display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; margin-bottom: 28px; opacity: 1; }
   }
   @media (prefers-reduced-motion: reduce) { .svc__link, .svc__ex { transition: none; } .svc__row:is(:hover, :focus-within) .svc__link { transform: none; } }
   .services__intro { margin-top: 20px; max-width: 46ch; font-size: 20px; line-height: 1.45; }
