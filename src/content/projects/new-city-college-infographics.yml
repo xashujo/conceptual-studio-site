@@ -15,6 +15,5 @@ cover:
   caption: Campus map, BSix and New City College
 thumb: "@assets/work/new-city-college-infographics/thumb.webp"
 coverFocus: 0% 0%
-featured: true
-featuredOrder: 6
+featured: false
 hasPage: false

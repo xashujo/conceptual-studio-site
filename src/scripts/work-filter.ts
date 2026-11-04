@@ -36,7 +36,7 @@ type Cell = [number, number, number, number];
 const BENTO: Record<number, Cell[]> = {
   // Strategic Intent, Oxford, ACL, Fou Answer, NYGG, BSix, Pandora Forever
   7: [[1, 7, 1, 4], [8, 5, 1, 6], [1, 4, 5, 4], [1, 3, 9, 3], [4, 4, 9, 3], [5, 3, 5, 4], [8, 5, 7, 5]],
-  // the archive: KUT, the final major project, then three square renders
+  // the archive: the final major project, then three square renders
   5: [[1, 7, 1, 5], [8, 5, 1, 5], [1, 4, 6, 4], [5, 4, 6, 4], [9, 4, 6, 4]],
   // data and motion: one large, one wide below it, one tall beside both
   3: [[1, 8, 1, 5], [1, 8, 6, 4], [9, 4, 1, 9]],

@@ -15,6 +15,5 @@ cover:
   caption: Heat map of enrolments by local authority, 2024
 thumb: "@assets/work/acl-essex-infographics/thumb.webp"
 coverFocus: 50% 0%
-featured: true
-featuredOrder: 5
+featured: false
 hasPage: false

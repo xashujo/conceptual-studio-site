@@ -14,7 +14,8 @@ cover:
   alt: A dark chart called The Skills Heat Map, with four coloured boxes for skills by demand and partner capability
   caption: The Skills Heat Map
 thumb: "@assets/work/usp-freeport-skills/thumb.webp"
-featured: false
+featured: true
+featuredOrder: 6
 hasPage: true
 outcome: "[TBC: result]"
 problem: |
