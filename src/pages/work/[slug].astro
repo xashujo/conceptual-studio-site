@@ -19,7 +19,7 @@ const next = bySlug(cs.next);
 const cap = (pl: Plate) => ({ title: p.client.startsWith(p.title) ? `${p.title}, ${p.year}` : `${p.title}, ${p.client}, ${p.year}`, medium: pl.medium });
 const sizes = { full: '(min-width: 1200px) 1140px, 95vw', pair: '(min-width: 760px) 560px, 100vw', trio: '(min-width: 760px) 370px, 100vw', quad: '(min-width: 760px) 560px, 100vw' };
 // Credits sit on one line each (Josh, 4 Nov: the four-column row with the outcome felt stuffy). The outcome
-// stays in What Happened.
+// field still shows on the home page's Selected Work cards.
 const credits = [[t.clientLabel, p.client], [t.disciplinesLabel, p.disciplines.join(', ')]].filter(([, v]) => v);
 // Opener: the project's title graphic when it has one (Josh, 4 Nov: a photo of the work in a street is a weak
 // opener), else the cover.
