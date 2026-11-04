@@ -40,5 +40,10 @@ gallery:
       - src: "@assets/work/usp-freeport-skills/04.webp"
         alt: A three-lane roadmap called What, How and Voice, with steps joined by arrows
         caption: The roadmap
+stats:
+  - value: "6"
+    label: Visuals for the report and slides
+  - value: "3"
+    label: Next steps the report ends on
 whatHappened: |
   The visuals went into the partnership's report and slides in April 2026. The report ends on three next steps for the partnership: a hub-and-spoke model, a shared digital library and a national skills manifesto.

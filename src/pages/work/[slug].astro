@@ -20,12 +20,13 @@ const { cs } = Astro.props;
 const p = bySlug(cs.slug);
 const next = bySlug(cs.next);
 const cap = (pl: Plate) => ({ title: p.client.startsWith(p.title) ? `${p.title}, ${p.year}` : `${p.title}, ${p.client}, ${p.year}`, medium: pl.medium });
-const pairSizes = '(min-width: 760px) 560px, 100vw';
 // Credits sit on one line each (Josh, 4 Nov: the four-column row with the outcome felt stuffy). The outcome
 // field still shows on the home page's Selected Work cards.
-// Each chapter's images form one bento grid (lib/bento.ts). Artwork sits whole in its tile, and the tile is
-// filled with the artwork's own edge colour. A photograph (its edges vary) fills its tile instead when that
-// trims less than 30%, since bands of a colour picked from a photo read as letterboxing.
+// Bento (lib/bento.ts, Josh 4 Nov: Apple-style, and the Oxford School of English way across every case study).
+// Artwork sits whole on a flat field of its own edge colour with room around it, never cropped to the tile.
+// A photograph (its edges vary) fills its tile instead when that trims less than 45%.
+// Charts and screens (the data projects) are never cropped (Josh, 4 Nov): they always sit padded.
+const charts = p.tags.includes('data');
 const edge = async (img: ImageMetadata) => {
   const { data, info } = await sharp((img as ImageMetadata & { fsPath: string }).fsPath).resize(48, 48, { fit: 'fill' }).removeAlpha().raw().toBuffer({ resolveWithObject: true });
   const ring: number[][] = [[], [], []];
@@ -34,17 +35,58 @@ const edge = async (img: ImageMetadata) => {
     for (let c = 0; c < 3; c++) ring[c].push(data[(y * info.width + x) * 3 + c]);
   }
   const spread = ring.reduce((sum, v) => { const m = v.reduce((a, b) => a + b, 0) / v.length; return sum + Math.sqrt(v.reduce((a, b) => a + (b - m) ** 2, 0) / v.length); }, 0) / 3;
-  return { bg: `rgb(${ring.map((v) => v.sort((a, b) => a - b)[v.length >> 1]).join(' ')})`, photo: spread > 12 };
+  const photo = !charts && spread > 6;
+  // Artwork: find where the art itself sits inside its flat margin, so every piece gets the same breathing room.
+  let box = { x: 0, y: 0, w: 1, h: 1 };
+  if (!photo) {
+    const small = await sharp((img as ImageMetadata & { fsPath: string }).fsPath).resize(400, 400, { fit: 'inside' }).toBuffer({ resolveWithObject: true });
+    const t = await sharp(small.data).trim({ threshold: 24 }).toBuffer({ resolveWithObject: true }).catch(() => undefined);
+    if (t && t.info.trimOffsetLeft !== undefined) {
+      const W = small.info.width, H = small.info.height;
+      box = { x: -t.info.trimOffsetLeft! / W, y: -t.info.trimOffsetTop! / H, w: t.info.width / W, h: t.info.height / H };
+    }
+  }
+  return { bg: `rgb(${ring.map((v) => v.sort((a, b) => a - b)[v.length >> 1]).join(' ')})`, photo, box };
 };
-const layout = (plates: Plate[], flip: boolean) => {
-  const ratios = plates.map((pl) => pl.image.width / pl.image.height);
-  return Promise.all(bento(ratios, flip).map(async (tile) => {
-    const { bg, photo } = await edge(plates[tile.index].image);
-    const fit = ratios[tile.index] / ratioOf(tile);
-    return { ...tile, plate: plates[tile.index], bg, fill: photo && Math.min(fit, 1 / fit) > 0.7 };
-  }));
+// A tile is a picture (with an optional silent loop) or words: the outcome, a figure, a quote, a paragraph.
+type Words = { kind: 'headline'; text: string } | { kind: 'stat'; value: string; label: string } | { kind: 'quote'; quote: string; by: string };
+type Piece = { kind: 'image'; plate: Plate & { video?: string }; label: string } | Words;
+// The shape each kind of words would like, and how little a poor fit matters to it.
+const wordShape = { headline: [3.2, 1], stat: [1.8, 0.4], quote: [1.5, 0.5] } as const;
+const layout = async (pieces: Piece[], flip = false) => {
+  const looks = await Promise.all(pieces.map((pc) => (pc.kind === 'image' ? edge(pc.plate.image) : undefined)));
+  const items = pieces.map((pc, i) => pc.kind === 'image'
+    ? { ratio: (pc.plate.image.width * looks[i]!.box.w) / (pc.plate.image.height * looks[i]!.box.h), weight: looks[i]!.photo ? 3 : 1 }
+    : { ratio: wordShape[pc.kind][0], weight: wordShape[pc.kind][1] });
+  return bento(items, flip).map((tile) => {
+    const pc = pieces[tile.index], look = looks[tile.index];
+    const fit = items[tile.index].ratio / ratioOf(tile);
+    const fill = !!look?.photo && Math.min(fit, 1 / fit) > 0.55;
+    // CSS for the art: its trimmed box, centred and contained in the tile's padded area (see .tile__art).
+    const b = look?.box ?? { x: 0, y: 0, w: 1, h: 1 };
+    const art = pc.kind === 'image' && !fill
+      ? `--bg: ${look!.bg}; --r: ${items[tile.index].ratio.toFixed(4)}; --R: ${(pc.plate.image.width / pc.plate.image.height).toFixed(4)}; --bx: ${b.x.toFixed(4)}; --by: ${b.y.toFixed(4)}; --bw: ${b.w.toFixed(4)}; --bh: ${b.h.toFixed(4)}`
+      : `--bg: ${look?.bg ?? 'transparent'}`;
+    return { ...tile, pc, art, fill, bg: look?.bg };
+  });
 };
-const chapters = await Promise.all(cs.chapters.map(async (ch, i) => ({ ...ch, tiles: await layout(ch.plates, i % 2 === 1) })));
+const shots = (plates: Plate[]): Piece[] => plates.map((pl) => ({ kind: 'image', plate: pl, label: pl.medium }));
+const chapters = await Promise.all(cs.chapters.map(async (ch, i) => ({ ...ch, tiles: await layout(shots(ch.plates), i % 2 === 1) })));
+// Outcomes (Josh, 4 Nov): one bento of what the work did. The figures lead when there are any (the data
+// projects); otherwise the one-line outcome does. Then feedback, before and after, and the work in the world.
+const bare = (x: string) => x.replace(/\W/g, '').toLowerCase();
+const same = (a: string, b: string) => !!b && (bare(a).includes(bare(b)) || bare(b).includes(bare(a)));
+const [beforeLabel, afterLabel] = t.beforeAfterHeading.split('&').map((x) => x.trim());
+const outcomePieces: Piece[] = [
+  ...(cs.stats.length ? [] : cs.outcome ? [{ kind: 'headline', text: cs.outcome } as const] : []),
+  ...cs.stats.map((x) => ({ kind: 'stat', ...x } as const)),
+  ...cs.quotes.map((q) => ({ kind: 'quote', quote: q.quote, by: [q.name, q.role, q.organisation].filter(Boolean).join(', ') } as const)),
+  ...(cs.before ? [{ kind: 'image', plate: cs.before.before, label: beforeLabel || cs.before.before.medium } as const, { kind: 'image', plate: cs.before.after, label: afterLabel || cs.before.after.medium } as const] : []),
+  ...cs.outcomeImages.map((pl) => ({ kind: 'image', plate: pl, label: pl.medium } as const)),
+];
+const outcomes = await layout(outcomePieces, cs.chapters.length % 2 === 1);
+// What Happened sits beside the heading, like a chapter's words, unless it only repeats the outcome line.
+const happened = cs.happened.filter((x) => !same(x, cs.outcome));
 const credits = [[t.clientLabel, p.client], [t.disciplinesLabel, p.disciplines.join(', ')]].filter(([, v]) => v);
 // Opener: the project's title graphic when it has one (Josh, 4 Nov: a photo of the work in a street is a weak
 // opener), else the cover. The title graphic gets no second caption line (Josh, 4 Nov: "(Title graphic)" said nothing).
@@ -101,37 +143,46 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
         )}
         <Carousel label={`${ch.heading ?? t.workHeading}: gallery`}>
           <div class="bento">
-            {ch.tiles.map(({ plate: pl, bg, fill, col, row, w, h }) => (
-              <figure class:list={['tile', { 'tile--fill': fill }]} style={`grid-area: ${row} / ${col} / span ${h} / span ${w}; --tile: ${bg}`}>
-                <div class="tile__art"><Image src={pl.image} alt={pl.alt} widths={[600, 1000, 1600, 2200]} sizes={`(min-width: 760px) ${Math.round((w / 12) * 1140)}px, 100vw`} /></div>
-                <PlateCaption {...cap(pl)} />
+            {ch.tiles.map(({ pc, bg, art, fill, col, row, w, h }) => pc.kind === 'image' && (
+              <figure class:list={['tile', { 'tile--fill': fill }]} style={`grid-area: ${row} / ${col} / span ${h} / span ${w}; --tile: ${bg}; ${art}`}>
+                <div class="tile__art"><Image src={pc.plate.image} alt={pc.plate.alt} widths={[600, 1000, 1600, 2200]} sizes={`(min-width: 760px) ${Math.round((w / 6) * 1140)}px, 100vw`} /></div>
+                <PlateCaption {...cap(pc.plate)} />
               </figure>
             ))}
           </div>
         </Carousel>
       </section>
     ))}
-    {cs.before && (
-      <>
-        <h3 class="mid cs-ba">{t.beforeAfterHeading}</h3>
-        <div class="row row--pair">
-          {[cs.before.before, cs.before.after].map((pl) => (
-            <figure>
-              <Image src={pl.image} alt={pl.alt} widths={[600, 1000, 1600]} sizes={pairSizes} />
-              <PlateCaption {...cap(pl)} />
-            </figure>
-          ))}
-        </div>
-      </>
-    )}
   </Band>
 
-  {cs.happened.length > 0 && (
-    <Band night labelledby="happened">
-      <div class="pane glass cs-happened" data-lens data-reveal>
-        <h2 class="mid" id="happened">{t.happenedHeading}</h2>
-        <div class="flow cs-text">{cs.happened.map((x) => (x.startsWith('- ') ? <ul class="cs-list">{x.split('\n').map((l) => <li>{l.replace(/^-\s*/, '')}</li>)}</ul> : <p>{x}</p>))}</div>
+  {outcomes.length > 0 && (
+    <Band night labelledby="outcomes">
+      <div class:list={['cs-outcomes__head', { 'cs-outcomes__head--text': happened.length }]}>
+        <h2 class="big" id="outcomes">{t.happenedHeading}</h2>
+        {happened.length > 0 && <div class="flow cs-text" data-reveal>{happened.map((x) => (x.startsWith('- ') ? <ul class="cs-list">{x.split('\n').map((l) => <li>{l.replace(/^-\s*/, '')}</li>)}</ul> : <p>{x}</p>))}</div>}
       </div>
+      <div class="bento-wrap"><div class="bento bento--outcomes">
+        {outcomes.map(({ pc, bg, art, fill, col, row, w, h }) => {
+          const area = `grid-area: ${row} / ${col} / span ${h} / span ${w}`;
+          if (pc.kind === 'image') return (
+            <figure class:list={['tile', { 'tile--fill': fill }]} style={`${area}; --tile: ${bg}; ${art}`}>
+              <div class="tile__art">
+                {pc.plate.video
+                  ? <video data-loop muted loop playsinline preload="none" poster={pc.plate.image.src} aria-label={pc.plate.alt}><source src={pc.plate.video} type="video/mp4" /></video>
+                  : <Image src={pc.plate.image} alt={pc.plate.alt} widths={[600, 1000, 1600, 2200]} sizes={`(min-width: 760px) ${Math.round((w / 6) * 1140)}px, 100vw`} />}
+              </div>
+              {pc.label && <figcaption class="tile__label">{pc.label}</figcaption>}
+            </figure>
+          );
+          return (
+            <div class:list={['tile', 'tile--words', `tile--${pc.kind}`]} style={area}>
+              {pc.kind === 'headline' && <p class="tile__headline">{pc.text}</p>}
+              {pc.kind === 'stat' && <p class="tile__stat"><b>{pc.value}</b><span>{pc.label}</span></p>}
+              {pc.kind === 'quote' && <blockquote class="tile__quote"><p>{pc.quote}</p><footer>{pc.by}</footer></blockquote>}
+            </div>
+          );
+        })}
+      </div></div>
     </Band>
   )}
 
@@ -153,6 +204,11 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
   // Play the opening clip once, unless the visitor has asked for less motion (they keep the still).
   const v = document.querySelector<HTMLVideoElement>('[data-reveal-video]');
   if (v && !matchMedia('(prefers-reduced-motion: reduce)').matches) v.play().catch(() => {});
+  // Outcome loops play like a GIF while on screen, and not at all for visitors who ask for less motion.
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const io = new IntersectionObserver((es) => es.forEach((e) => { const el = e.target as HTMLVideoElement; e.isIntersecting ? el.play().catch(() => {}) : el.pause(); }));
+    document.querySelectorAll<HTMLVideoElement>('[data-loop]').forEach((el) => io.observe(el));
+  }
 </script>
 
 <style>
@@ -175,19 +231,40 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
   .cs-list { margin: 0; padding-left: 1.2em; display: grid; gap: 8px; }
   .cs-happened { max-width: 820px; }
 
-  /* Bento (lib/bento.ts places every tile). Rows track the column width, so tile shapes hold at any width. */
-  .bento { --u: calc((100cqi - 11 * var(--sp-gap)) / 12); display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-auto-rows: calc(3 * var(--u) + 52px); gap: var(--sp-gap); }
-  @media (min-width: 760px) { :global(.carousel):has(> .carousel__track > .bento) { container-type: inline-size; margin-top: var(--sp-head); } }
-  .tile { display: flex; flex-direction: column; min-height: 0; margin: 0; }
-  .tile__art { position: relative; flex: 1 1 0; min-height: 0; background: var(--tile); border-radius: var(--radius-inner); overflow: hidden; }
-  .tile__art img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: contain; }
-  .tile--fill .tile__art img { object-fit: cover; }
-  .tile :global(.plate) { flex: none; }
-  .row { display: grid; gap: var(--sp-gap); margin-top: var(--sp-head); }
-  .row img { display: block; width: 100%; height: auto; border-radius: var(--radius-inner); }
-  .row--pair { grid-template-columns: 1fr 1fr; align-items: start; }
-  .row--pair img { aspect-ratio: 4 / 3; object-fit: cover; }
-  .cs-ba { margin-top: var(--sp-section); }
+  /* Bento (lib/bento.ts places every tile). Six columns, tight even gutters, rows three quarters of a column
+     tall, so tile shapes hold at any width. Captions sit inside the tile as a small pill, as on Apple's grids. */
+  .bento { --g: 12px; --u: calc((100cqi - 5 * var(--g)) / 6); display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-auto-rows: calc(0.75 * var(--u)); gap: var(--g); }
+  @media (min-width: 760px) {
+    :global(.carousel):has(> .carousel__track > .bento) { container-type: inline-size; margin-top: var(--sp-head); }
+    .bento-wrap { container-type: inline-size; }
+  }
+  .bento-wrap { margin-top: var(--sp-head); }
+  .tile { position: relative; display: flex; flex-direction: column; min-width: 0; min-height: 0; margin: 0; border-radius: 22px; overflow: hidden; background: var(--tile); container-type: size; }
+  .tile__art { position: relative; flex: 1 1 0; min-height: 0; }
+  /* The Oxford way: flat colour all round the artwork, never touching the tile's edge. */
+  /* The art's own box (bx, by, bw, bh: fractions of the image) is scaled to fit the area inside the padding,
+     then the whole image is placed so that box sits in the middle. Its margin is the tile's colour anyway. */
+  .tile__art { --p: clamp(22px, 12cqmin, 60px); --lift: 14px; --cw: min(100cqw - 2 * var(--p), (100cqh - 2 * var(--p) - 2 * var(--lift)) * var(--r)); }
+  .tile__art :is(img, video) { position: absolute; display: block; max-width: none; width: calc(var(--cw) / var(--bw)); height: calc(var(--cw) / var(--bw) / var(--R)); left: calc(50% - var(--cw) / var(--bw) * (var(--bx) + var(--bw) / 2)); top: calc(50% - var(--lift) - var(--cw) / var(--bw) / var(--R) * (var(--by) + var(--bh) / 2)); }
+  .tile--fill .tile__art :is(img, video) { inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .tile__art { position: absolute; inset: 0; }
+  .tile :global(.plate), .tile__label { position: absolute; left: 12px; bottom: 12px; margin: 0; padding: 6px 12px; border-radius: 999px; background: rgb(255 255 255 / 0.78); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); color: #1c1a17; font-size: 12px; line-height: 1.3; font-weight: 600; letter-spacing: 0.02em; text-transform: none; }
+  .tile :global(.plate b) { display: none; }
+  .tile :global(.plate span) { font-weight: 600; color: inherit; }
+  .tile :global(.plate span::before), .tile :global(.plate span::after) { content: none; }
+  /* Words tiles: the outcome, a figure, a quote, a paragraph. Type scales with the tile. */
+  .tile--words { justify-content: flex-end; padding: clamp(20px, 7cqmin, 40px); background: color-mix(in srgb, var(--ink) 7%, var(--paper)); }
+  .tile--words p, .tile__quote { margin: 0; }
+  .tile--headline { justify-content: center; }
+  .tile__headline { font-family: var(--display); font-size: clamp(30px, min(30cqh, 7cqw), 92px); line-height: 1.02; letter-spacing: -0.01em; max-width: 22ch; }
+  .tile__stat b { display: block; font-family: var(--display); font-weight: 400; font-size: clamp(56px, 55cqmin, 176px); line-height: 0.95; letter-spacing: -0.02em; font-variant-numeric: lining-nums; }
+  .tile__stat span { display: block; margin-top: 10px; font-size: clamp(15px, 5cqmin, 19px); line-height: 1.35; color: var(--ink-2); max-width: 24ch; }
+  .tile--quote { justify-content: space-between; }
+  .tile__quote p { font-family: var(--display); font-size: clamp(19px, 8cqmin, 34px); line-height: 1.25; }
+  .tile__quote p::before { content: '\201C'; } .tile__quote p::after { content: '\201D'; }
+  .tile__quote footer { margin-top: 16px; font-size: 14px; font-weight: 600; color: var(--ink-2); }
+  .cs-outcomes__head--text { display: grid; grid-template-columns: 5fr 7fr; gap: var(--sp-gap); align-items: end; }
+  .cs-outcomes__head--text .big { margin: 0; }
   /* A titled chapter: heading left, a short paragraph right, on one hairline, then its images. */
   .cs-chapter--titled { margin-top: clamp(80px, 9vw, 120px); }
   .big + .cs-chapter--titled { margin-top: var(--sp-head); }
@@ -212,10 +289,24 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
     .cs-credits dd { font-size: 17px; white-space: normal; }
     .cs-lead img, .cs-lead__video { width: 100%; max-height: none; }
     .cs-text p, .cs-list { font-size: 17px; }
-    .cs-chapter__head { grid-template-columns: 1fr; gap: 12px; }
-    .row--pair { grid-template-columns: 1fr; }
-    .tile__art { display: contents; }
-    .tile__art img { position: static; }
+    .cs-chapter__head, .cs-outcomes__head--text { grid-template-columns: 1fr; gap: 12px; }
+    .bento { display: flex; flex-direction: column; }
+    .tile { container-type: inline-size; }
+    .tile__art { position: static; flex: none; }
+    .tile__art :is(img, video) { position: static; width: 100%; height: auto; padding: 22px; box-sizing: border-box; }
+    .tile .tile__art :is(img, video) { left: auto; top: auto; }
+    /* Phone gallery cards keep the bento's look: the work's own colour, the label as a pill inside. */
+    :global(.carousel[data-carousel] .carousel__track) figure.tile { background: var(--tile); padding: 0; gap: 0; }
+    :global(.carousel[data-carousel] .carousel__track) figure.tile .tile__art { position: relative; flex: 1 1 0; min-height: 0; }
+    :global(.carousel[data-carousel] .carousel__track) figure.tile .tile__art img { position: absolute; inset: 0; padding: 28px 28px 56px; object-fit: contain; border-radius: 0; }
+    :global(.carousel[data-carousel] .carousel__track) figure.tile--fill .tile__art img { padding: 0; object-fit: cover; }
+    :global(.carousel[data-carousel] .carousel__track) figure.tile :global(.plate) { order: 0; text-align: left; }
+    :global(.carousel[data-carousel] .carousel__track) figure.tile :global(.plate span) { color: #1c1a17; font-size: 13px; font-weight: 600; }
+    .tile--fill .tile__art :is(img, video) { padding: 0; }
+    .tile--words { min-height: 0; }
+    .tile__headline { font-size: 34px; }
+    .tile__stat b { font-size: 64px; }
+    .tile__quote p { font-size: 21px; }
     .next { grid-template-columns: 1fr; gap: 16px; padding: 10px 10px 18px; }
     .next__text { padding: 0 8px; }
     .next__go { justify-self: end; width: 48px; height: 48px; margin: 0 8px 0 0; }

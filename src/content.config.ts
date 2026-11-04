@@ -88,6 +88,9 @@ export const collections = {
         })).nullish().transform((v) => v ?? []),
         before: pic.nullish(),
         after: pic.nullish(),
+        // Outcomes bento (Josh, 4 Nov): the work out in the world, and short figures. Every figure must be real.
+        outcomeImages: z.array(pic.extend({ video: z.string().nullish() })).nullish().transform((v) => v ?? []),
+        stats: z.array(z.object({ value: z.string().min(1), label: z.string().min(1) })).nullish().transform((v) => v ?? []),
         // Optional moving title graphic at the top of the case study (Josh, 4 Nov: the CMD logo reveal).
         heroVideo: z.object({ video: z.string().min(1), poster: image(), alt: z.string().min(1) }).nullish(),
         demoLink: text,
@@ -135,6 +138,8 @@ export const collections = {
     schema: z.object({
       quote: z.string(), name: z.string(), role: z.string().nullish(), organisation: z.string(),
       onHomePage: z.boolean().nullish().transform((v) => !!v),
+      // The case study this was said about; it then shows in that project's Outcomes.
+      project: ref.nullish(),
     }),
   }),
   clients: defineCollection({

@@ -180,6 +180,24 @@ content:
             required: true
       - { name: before, label: Before (optional), component: picture }
       - { name: after, label: After (optional), component: picture }
+      - name: outcomeImages
+        label: Outcomes, images (optional)
+        type: object
+        list: true
+        description: "The work out in the world: posters, signs, mockups. They sit in the Outcomes grid with the before and after, the figures and any feedback. Add a short MP4 to play a silent loop in place of the image, like a GIF."
+        fields:
+          - { name: src, label: Image file, type: image, required: true, options: { media: images }, description: "With a video, use its first frame." }
+          - { name: alt, label: Description (alt text), type: string, required: true }
+          - { name: caption, label: Caption, type: string, required: true, description: "A few words, e.g. \"Poster in a station\"." }
+          - { name: video, label: Looping video (optional MP4), type: file, options: { media: videos } }
+      - name: stats
+        label: Outcomes, figures (optional)
+        type: object
+        list: true
+        description: "Short real figures for the Outcomes grid, e.g. 6 / Charts delivered. Only use numbers you can stand behind."
+        fields:
+          - { name: value, label: Figure, type: string, required: true, description: "e.g. 6, 20,000+, 3 weeks" }
+          - { name: label, label: What it counts, type: string, required: true }
       - name: whatHappened
         label: What happened
         type: text
@@ -284,6 +302,11 @@ content:
       - { name: role, label: Role (optional), type: string }
       - { name: organisation, label: Organisation, type: string, required: true }
       - { name: onHomePage, label: Show on the home page, type: boolean, description: "Tick up to three. They sit side by side above the case studies." }
+      - name: project
+        label: Case study (optional)
+        type: reference
+        description: "The project this was said about. The quote then shows in that case study's Outcomes."
+        options: { collection: projects, value: "{path}", label: "{title}", search: title }
 
   - name: clients
     label: Clients
@@ -416,8 +439,8 @@ content:
       - { name: problemHeading, label: The problem heading, type: string, required: true }
       - { name: didHeading, label: What I did heading, type: string, required: true }
       - { name: workHeading, label: The work heading, type: string, required: true }
-      - { name: beforeAfterHeading, label: Before and after heading, type: string, required: true }
-      - { name: happenedHeading, label: What happened heading, type: string, required: true }
+      - { name: beforeAfterHeading, label: Before and after labels, type: string, required: true, description: "Two words split by &, e.g. Before & After. They label the two pictures in Outcomes." }
+      - { name: happenedHeading, label: Outcomes heading, type: string, required: true }
       - { name: nextLabel, label: Next project label, type: string, required: true }
       - { name: closeText, label: Start a Project text, type: text, required: true, description: "The words in the glass panel at the end of the page." }
 

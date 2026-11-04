@@ -31,13 +31,7 @@ whatIDid: |
 
   The two colours, Oxford Gold and Oxford White, come from the stone of the city's buildings. The type pairs a classic serif with a modern sans to keep the prestige without looking dated.
 gallery:
-- layout: One large
-  images:
-  - src: '@assets/work/oxford-school-of-english/10.webp'
-    alt: Oxford School of English poster with a photograph of an Oxford college, in a station frame
-    caption: Poster in a station
-- layout: Three in a row
-  images:
+- images:
   - src: '@assets/work/oxford-school-of-english/01.webp'
     alt: Lion shield beside the word Oxford and School of English, in black on gold
     caption: Primary logo
@@ -47,14 +41,19 @@ gallery:
   - src: '@assets/work/oxford-school-of-english/04.webp'
     alt: Lion shield above the Oxford wordmark, in black on gold
     caption: Stacked logo
-- layout: Two side by side
-  images:
-  - src: '@assets/work/oxford-school-of-english/06.webp'
-    alt: Two gold Oxford School of English lanyards with student ID cards
-    caption: Student lanyards and ID cards
   - src: '@assets/work/oxford-school-of-english/07.webp'
     alt: The lion shield beside a black football kit with the crest on the chest
     caption: Crest and kit
+  - src: '@assets/work/oxford-school-of-english/06.webp'
+    alt: Two gold Oxford School of English lanyards with student ID cards
+    caption: Student lanyards and ID cards
+outcomeImages:
+- src: '@assets/work/oxford-school-of-english/bus-shelter.webp'
+  alt: Oxford School of English poster in a bus shelter on an Oxford street, beside a red double-decker bus
+  caption: Bus shelter poster
+- src: '@assets/work/oxford-school-of-english/10.webp'
+  alt: Oxford School of English poster with a photograph of an Oxford college, in a station frame
+  caption: Poster in a station
 before:
   src: '@assets/work/oxford-school-of-english/02.webp'
   alt: The school's shopfront with its old sign above the door

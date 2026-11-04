@@ -55,11 +55,16 @@ export interface CaseStudy {
   next: string;
   demo?: { href: string; label: string };
   heroVideo?: { video: string; poster: ImageMetadata; alt: string };
+  /** The Outcomes bento: the work out in the world (an optional silent loop), figures and feedback. */
+  outcomeImages: (Plate & { video?: string })[];
+  stats: { value: string; label: string }[];
+  quotes: { quote: string; name: string; role?: string; organisation: string }[];
 }
 
 const paragraphs = (s: string) => s.split(/\n\s*\n/).map((t) => t.trim()).filter(Boolean);
 const plate = (p: { src: ImageMetadata; alt: string; caption: string }): Plate => ({ image: p.src, alt: p.alt, medium: p.caption });
 
+const quotes = (await getCollection('testimonials')).map((t) => t.data);
 const entries = (await getCollection('projects'))
   .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999) || a.data.title.localeCompare(b.data.title));
 
@@ -102,6 +107,9 @@ export const caseStudies: CaseStudy[] = entries.filter((e) => e.data.hasPage).ma
   happened: paragraphs(d.whatHappened),
   next: chain[d.slug],
   heroVideo: d.heroVideo ?? undefined,
+  outcomeImages: d.outcomeImages.map((o) => ({ ...plate(o), video: o.video || undefined })),
+  stats: d.stats,
+  quotes: quotes.filter((q) => q.project === d.slug).map(({ quote, name, role, organisation }) => ({ quote, name, role: role ?? undefined, organisation })),
   demo: d.demoLink ? { href: d.demoLink, label: d.demoButton || 'See the Live Demo' } : undefined,
 }));
 
