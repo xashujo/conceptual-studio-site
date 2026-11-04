@@ -139,11 +139,11 @@ content:
       - name: problem
         label: The problem
         type: text
-        description: "Leave an empty line between paragraphs."
+        description: "Leave an empty line between paragraphs. Start lines with - to make a bulleted list."
       - name: whatIDid
         label: What I did
         type: text
-        description: "Leave an empty line between paragraphs."
+        description: "Leave an empty line between paragraphs. Start lines with - to make a bulleted list."
       - name: gallery
         label: The work (image rows)
         type: object
@@ -166,7 +166,7 @@ content:
       - name: whatHappened
         label: What happened
         type: text
-        description: "Leave an empty line between paragraphs."
+        description: "Leave an empty line between paragraphs. Start lines with - to make a bulleted list."
       - name: next
         label: Next project (optional)
         type: reference
@@ -438,7 +438,7 @@ content:
       - { name: heading, label: Heading, type: string, required: true }
       - { name: intro, label: Intro, type: text, required: true }
       - { name: storyHeading, label: Story heading, type: string, required: true }
-      - { name: story, label: Story, type: text, required: true, description: "Leave an empty line between paragraphs." }
+      - { name: story, label: Story, type: text, required: true, description: "Leave an empty line between paragraphs. Start lines with - to make a bulleted list." }
       - { name: valuesHeading, label: How I work heading, type: string, required: true }
       - name: values
         label: How I work
@@ -450,7 +450,7 @@ content:
           - { name: text, label: Text, type: text, required: true }
       - { name: clientsHeading, label: Clients heading, type: string, required: true }
       - { name: wantHeading, label: The work I want heading, type: string, required: true }
-      - { name: want, label: The work I want, type: text, required: true, description: "Leave an empty line between paragraphs." }
+      - { name: want, label: The work I want, type: text, required: true, description: "Leave an empty line between paragraphs. Start lines with - to make a bulleted list." }
       - { name: closeText, label: Start a Project text, type: text, required: true, description: "The words in the glass panel at the end of the page." }
 
   - name: contactPage
