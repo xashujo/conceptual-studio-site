@@ -119,7 +119,7 @@ export const collections = {
   testimonials: defineCollection({
     loader: yml('testimonials'),
     schema: z.object({
-      quote: z.string(), name: z.string(), role: z.string(), organisation: z.string(),
+      quote: z.string(), name: z.string(), role: z.string().nullish(), organisation: z.string(),
       onHomePage: z.boolean().nullish().transform((v) => !!v),
     }),
   }),
