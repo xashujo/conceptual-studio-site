@@ -1,23 +1,23 @@
 ---
-// Contact (brief 6.6) in the home page's design language (Josh, 2 Nov): the email in plain text, availability,
-// the London clock and reply time; the elsewhere links; the procurement pointer; and the enquiry form in the
-// close. "What happens next" is the one line under the form (Site settings), not a second list of steps.
+// Contact (brief 6.6) in the home page's design language. Josh, 4 Nov: the form comes first, straight under
+// the intro; the email is a Copy Email button rather than a big address; the social cards carry the real
+// logos. Then the procurement pointer, and the close offers a call instead of a second "Start a Project".
 // Words: Pages CMS > Contact page.
 import Studio from '../layouts/Studio.astro';
 import Band from '../components/studio/Band.astro';
 import Enquiry from '../components/Enquiry.astro';
-import { email, replyTime, social, availability } from '../lib/site';
+import SocialIcon from '../components/SocialIcon.astro';
+import { email, replyTime, responseTime, social, availability } from '../lib/site';
 import { contactPage as c, titleCase } from '../lib/pages';
+const closeText = c.closeText.replaceAll('{reply time}', responseTime);
 ---
-<Studio title="Contact | Conceptual Studio" description={`${c.intro} ${replyTime}`} current="/contact/" turnstile closeWide>
+<Studio title="Contact | Conceptual Studio" description={`${c.intro} ${replyTime}`} current="/contact/" turnstile closeHeading={c.closeHeading}>
   <Band opening labelledby="contact-h">
     <div class="ph__plate glass" data-lens>
       <h1 class="ph__h" id="contact-h">{c.heading}</h1>
       <p class="ph__p">{c.intro}</p>
-      <p class="ct-mail"><span class="sr-only">{c.emailLabel}: </span><a href={`mailto:${email}`}>{email}</a></p>
       <div class="acts">
-        <a class="btn btn--solid" href="#enquire">{c.enquiryHeading}</a>
-        <button class="btn" type="button" data-copy={email}><span data-copy-label>Copy Email</span></button>
+        <button class="btn" type="button" data-copy={email} aria-label={`Copy email address, ${email}`}><span data-copy-label>Copy Email</span></button>
         {availability.on && <span class="avail ct-avail"><span class="avail__dot" aria-hidden="true"></span><span>{titleCase(availability.text)}</span></span>}
       </div>
       <div class="ct-meta">
@@ -26,13 +26,18 @@ import { contactPage as c, titleCase } from '../lib/pages';
         <p>{replyTime}</p>
       </div>
     </div>
+    <div class="ct-form"><Enquiry heading={c.formHeading} /></div>
   </Band>
 
   {social.length > 0 && (
     <Band night labelledby="else-h">
       <h2 class="big" id="else-h">{c.elsewhereHeading}</h2>
       <ul class="ct-else">
-        {social.map((s, i) => <li><a class="glass" href={s.href} rel="me noopener" data-lens data-reveal style={`--i: ${i}`}>{s.label}<span class="arrow" aria-hidden="true">→</span></a></li>)}
+        {social.map((s, i) => (
+          <li><a class="glass" href={s.href} rel="me noopener" data-lens data-reveal style={`--i: ${i}`}>
+            <span class="ct-else__name"><SocialIcon href={s.href} />{s.label}</span><span class="arrow" aria-hidden="true">→</span>
+          </a></li>
+        ))}
       </ul>
     </Band>
   )}
@@ -45,20 +50,27 @@ import { contactPage as c, titleCase } from '../lib/pages';
     </div>
   </Band>
 
-  <div slot="close" class="ct-close"><Enquiry night heading={c.formHeading} /></div>
+  <div slot="close" class="close__body glass" data-lens>
+    <p class="close__p">{closeText}</p>
+    <div class="acts">
+      {c.callLink && <a class="btn btn--solid" href={c.callLink}>{c.callButton}</a>}
+      <button class="btn" type="button" data-copy={email}><span data-copy-label>Copy Email</span></button>
+    </div>
+  </div>
 </Studio>
 
 <style>
-  .ct-mail { font-size: clamp(22px, 2.4vw, 32px); font-weight: 500; letter-spacing: -0.02em; overflow-wrap: anywhere; }
-  .ct-mail a { text-underline-offset: 6px; text-decoration-thickness: 1px; }
   .ct-avail { --fill: color-mix(in srgb, var(--paper) 55%, transparent); pointer-events: none; }
   .ct-meta { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 24px; font-size: 16px; line-height: 1.5; color: var(--ink-2); }
   .ct-meta .clock { color: var(--ink); }
+  .ct-form { margin-top: var(--sp-gap); }
   .ct-else { list-style: none; margin: var(--sp-head) 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-gap); }
-  .ct-else a { position: relative; display: flex; justify-content: space-between; align-items: center; padding: 28px var(--sp-card); border-radius: var(--radius); font-family: var(--display); font-size: clamp(30px, 3vw, 44px); line-height: 1.1; letter-spacing: -0.01em; text-decoration: none; transition: background-color 300ms ease-out; }
-  @media (hover: hover) { .ct-else a:hover { color-scheme: light; color: var(--ink); background: color-mix(in srgb, var(--paper) 90%, transparent); } .ct-else a:hover .arrow { transform: rotate(-45deg); } }
+  .ct-else a { position: relative; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 28px var(--sp-card); border-radius: var(--radius); font: 600 clamp(22px, 2vw, 28px)/1.2 var(--text); letter-spacing: -0.02em; text-decoration: none; transition: background-color 300ms ease-out, color 300ms ease-out; }
+  .ct-else__name { display: inline-flex; align-items: center; gap: 14px; }
+  .ct-else :global(.social-icon) { width: 1.1em; height: 1.1em; flex: none; }
+  .ct-else .arrow { width: 0.9em; height: 0.9em; }
+  @media (hover: hover) { .ct-else a:hover { color-scheme: light; color: var(--ink); background: color-mix(in srgb, var(--paper) 90%, transparent); } .ct-else a:hover .arrow { --turn: -45deg; } }
   .ct-else a:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
   .ct-org { margin-top: 0; }
-  .ct-close { grid-column: 1 / -1; margin-top: var(--sp-head); }
-  @media (max-width: 759.98px) { .ct-else { grid-template-columns: 1fr; } }
+  @media (max-width: 759.98px) { .ct-else { grid-template-columns: 1fr; } .ct-else a { padding: 22px var(--sp-card); } }
 </style>

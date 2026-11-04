@@ -126,8 +126,6 @@ html { scroll-behavior: smooth; }
 .close__h { grid-column: 1 / span 6; margin-top: -0.18em; } /* cap tops level with the glass panel */
 .close__body { grid-column: 7 / -1; justify-self: end; width: min(680px, 100%); box-sizing: border-box; display: grid; gap: 24px; padding: var(--sp-card); border-radius: var(--radius); }
 .close__p { font-size: 20px; line-height: 1.5; }
-.close--wide .close__h { grid-column: 1 / -1; }
-.close--wide .close__body { grid-column: 1 / -1; justify-self: stretch; width: auto; margin-top: var(--sp-head); }
 .footer { padding: 0 var(--margin) 40px; text-align: center; font-size: 16px; color: #F1DFC8; }
 
 @media (max-width: 1099.98px) {

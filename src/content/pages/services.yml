@@ -25,3 +25,14 @@ pricesHeading: Prices
 pricesNote: Every project is priced on its scope, so these are starting points. You'll get a fixed quote after our first call. Times run from that call to your final files, feedback included. I'm not VAT registered, so no VAT is added.
 faqHeading: Questions
 closeText: Not sure which service fits? Tell me what you need and I'll send a fixed quote {reply time}.
+planEmailSubject: "Enquiry: {plan}"
+planEmail: |-
+  Hi Joshua,
+
+  I'd like to ask about {plan} ({price}).
+
+  Who we are:
+  What we need help with:
+  When we'd like to start:
+
+  Thanks,

@@ -75,7 +75,7 @@ const [altBefore, altAfter] = (c.enquiryAlt || '').split('{email}');
       <label for="enq-msg">Anything else about the project <span>optional</span></label>
       <textarea id="enq-msg" name="message" rows="4"></textarea>
     </div>
-    <div class="cf-turnstile f--wide" data-sitekey={turnstileSiteKey} data-theme={night ? 'dark' : 'light'}></div>
+    {turnstileSiteKey && <div class="cf-turnstile f--wide" data-sitekey={turnstileSiteKey} data-appearance="interaction-only" data-theme={night ? 'dark' : 'light'}></div>}
     <div class="enq__send f--wide">
       <button class="btn btn--solid" type="submit"><span data-send>Send enquiry</span><span class="arrow" aria-hidden="true">→</span></button>
       <p class="enq__status" role="status" aria-live="polite" data-status></p>

@@ -1,9 +1,9 @@
 ---
 // About (brief 6.5) in the home page's design language (Josh, 2 Nov): who runs the studio, how I work,
-// who I've worked with and the work I want. Words: Pages CMS > About page; clients: Clients.
+// who I've worked with and the work I want. One button up top; the close is the page's one Start a Project. Words: Pages CMS > About page; clients: Clients.
 import Studio from '../layouts/Studio.astro';
 import Band from '../components/studio/Band.astro';
-import { clientGroups, startHref, home } from '../lib/site';
+import { clientGroups } from '../lib/site';
 import { aboutPage as a, paras, titleCase } from '../lib/pages';
 ---
 <Studio title="About | Conceptual Studio" description={a.intro} current="/about/" closeText={a.closeText}>
@@ -11,10 +11,7 @@ import { aboutPage as a, paras, titleCase } from '../lib/pages';
     <div class="ph__plate glass" data-lens>
       <h1 class="ph__h" id="about-h">{a.heading}</h1>
       <p class="ph__p">{a.intro}</p>
-      <div class="acts">
-        <a class="btn btn--solid" href={startHref}><span class="swap" data-alt="Email Me ↗"><span>{home.startButton}</span></span></a>
-        <a class="btn" href="/work/">See the Work</a>
-      </div>
+      <div class="acts"><a class="btn" href="/work/">See the Work <span class="arrow" aria-hidden="true">→</span></a></div>
     </div>
   </Band>
 
@@ -53,15 +50,13 @@ import { aboutPage as a, paras, titleCase } from '../lib/pages';
 </Studio>
 
 <style>
-  .ab-story { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--sp-gap); align-items: start; }
-  .ab-story .big { grid-column: 1 / span 5; }
-  .ab-story .pane { grid-column: 6 / -1; }
+  /* Heading over the pane, as in every other band (Josh, 4 Nov: side by side, the offset read as a mistake). */
+  .ab-story { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--sp-gap); }
+  .ab-story .big { grid-column: 1 / -1; }
+  .ab-story .pane { grid-column: 1 / span 8; margin-top: var(--sp-head); }
   .ab-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-gap); margin-top: var(--sp-head); }
   .ab-groups__h { font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--ink-2); }
   .ab-groups__list { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 6px; font-family: var(--display); font-size: clamp(28px, 2.6vw, 38px); line-height: 1.15; letter-spacing: -0.01em; }
-  @media (max-width: 1099.98px) {
-    .ab-story .big, .ab-story .pane { grid-column: 1 / -1; }
-    .ab-story .pane { margin-top: var(--sp-head); }
-  }
+  @media (max-width: 1099.98px) { .ab-story .pane { grid-column: 1 / -1; } }
   @media (max-width: 759.98px) { .ab-groups { grid-template-columns: 1fr; } .ab-groups__list { font-size: 26px; } }
 </style>
