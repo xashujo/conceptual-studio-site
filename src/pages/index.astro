@@ -28,7 +28,7 @@ const titleCase = (s: string) => s.replace(/\band\b/gi, '&').split(' ')
   .map((w, i, all) => (i > 0 && i < all.length - 1 && small.has(w.toLowerCase()) ? w.toLowerCase() : w.charAt(0).toUpperCase() + w.slice(1)))
   .join(' ');
 
-// Pages CMS: Home page > Stats. Placeholder figures from Josh's brief (28 Oct), not yet confirmed: replace before launch.
+// Pages CMS: Home page > Stats. Figures confirmed by Josh (4 Nov); projects counted from his Client Work folders.
 const stats = home.stats.map((s) => ({ n: s.number, after: s.after, label: s.label }));
 
 // Featured work and the services come from Pages CMS (Projects and Services).

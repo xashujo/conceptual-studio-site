@@ -10,7 +10,7 @@ const rungs = [...s.tiers.map((t) => ({ ...t, value: `${s.id}:${t.id}` })), ...(
 ---
 <div class="ladder" role="list" style={`--n: ${rungs.length}`}>
   {rungs.map((t) => (
-    <article class:list={['rung', { 'rung--custom': t.id === 'custom', 'rung--pick glass': t.badge }]} role="listitem" aria-labelledby={`rung-${t.value.replace(':', '-')}`}>
+    <div class:list={['rung', { 'rung--custom': t.id === 'custom', 'rung--pick glass': t.badge }]} role="listitem" aria-labelledby={`rung-${t.value.replace(':', '-')}`}>
       {t.badge && <p class="rung__badge badge">{t.badge}</p>}
       <h3 class="rung__name" id={`rung-${t.value.replace(':', '-')}`}>{t.name}</h3>
       {t.lead && <p class="rung__lead">{t.lead}</p>}
@@ -23,7 +23,7 @@ const rungs = [...s.tiers.map((t) => ({ ...t, value: `${s.id}:${t.id}` })), ...(
       <a class="btn rung__btn" href={`?need=${t.value}#enquire`} data-need={t.value}>
         <span class="swap"><span>{t.button || (t.id === 'custom' ? 'Ask for a quote' : 'Choose this')}</span><span aria-hidden="true">Open the form</span></span><span class="arrow" aria-hidden="true">→</span>
       </a>
-    </article>
+    </div>
   ))}
 </div>
 

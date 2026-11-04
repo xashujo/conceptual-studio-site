@@ -17,7 +17,7 @@ details:
   - label: Company number
     value: "15410582"
   - label: Registered office
-    value: "[TBC: registered office address]"
+    value: "63 Heathwood Gardens, London, SE7 8ET"
   - label: VAT
     value: Not VAT registered, so no VAT is added to invoices.
   - label: Payment terms
