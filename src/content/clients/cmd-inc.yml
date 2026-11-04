@@ -3,5 +3,4 @@ trustedBy: true
 group: Companies and international
 order: 8
 homeTrusted: true
-logo: "@assets/clients/cmd-inc.svg"
-logoLabel: CMD Inc.
+logo: "@assets/clients/cmd-inc.webp"

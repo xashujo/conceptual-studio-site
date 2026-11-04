@@ -667,9 +667,11 @@ const more = services.filter((s) => !lanes.includes(s));
   /* Why clients choose us: the quote in one large pane, two results stacked beside it (asymmetric, 7 + 5). */
   .proof { padding-top: var(--sp-section); }
   /* Trusted By: a quiet row of names or one-colour logos, no panel, so it never outweighs the proof (Josh, 2 Nov). */
-  .trusted { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 32px; margin-top: var(--sp-head); padding-block: 20px; border-block: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); }
+  /* One tidy row (Josh, 4 Nov: two uneven rows looked messy): label on top, logos spread evenly at equal optical weight. */
+  .trusted { display: grid; justify-items: center; gap: 20px; margin-top: var(--sp-head); padding-block: 24px 28px; border-block: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); }
   .trusted__l { font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); }
-  .trusted__list { flex: 1 1 520px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; margin: 0; padding: 0; list-style: none; font-size: 17px; color: var(--ink-2); }
+  .trusted__list { width: 100%; display: flex; flex-wrap: nowrap; justify-content: space-between; align-items: center; gap: 24px; margin: 0; padding: 0 8px; list-style: none; font-size: 15px; color: var(--ink-2); }
+  @media (max-width: 1099.98px) { .trusted__list { flex-wrap: wrap; justify-content: center; gap: 22px 36px; } }
   .trusted__list li { display: flex; align-items: center; gap: 10px; }
   .trusted__list img { display: block; height: var(--h, 28px); width: auto; filter: brightness(0) invert(1) sepia(.35); opacity: .7; } /* any logo to one soft cream */
   .approach { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: var(--sp-gap); margin: 0; margin-top: var(--sp-head); padding: 0; list-style: none; }
@@ -785,7 +787,7 @@ const more = services.filter((s) => !lanes.includes(s));
     .quote { margin-top: 40px; padding: 28px 22px; border-radius: var(--radius); }
     .quote__p { font-size: 16px; }
     .proof__grid, .approach { grid-template-columns: 1fr; }
-    .trusted, .trusted__list { gap: 8px 20px; }
+    .trusted__list { gap: 18px 28px; }
     .proof__quote { gap: 28px; border-radius: var(--radius); }
     .proof__quote p { font-size: 20px; line-height: 1.4; }
     .proof__grid--three .proof__quote p { font-size: 20px; }

@@ -45,7 +45,8 @@ const shown = (await getCollection('clients', (c) => c.data.trustedBy))
 export const clients = shown.map((c) => c.data.name);
 // Logos of every shape look the same size (Josh, 4 Nov): a 3:1 logo is 28px tall, wider ones shorter,
 // squarer ones taller, so the long NCC wordmark and the compact Fou Answer eye carry the same weight.
-const logoHeight = (ratio: number) => Math.round(Math.min(34, Math.max(18, 28 * (3 / ratio) ** 0.4)));
+// Every logo gets about the same area, so wide wordmarks sit shorter and compact marks taller (equal optical weight).
+const logoHeight = (ratio: number) => Math.round(Math.min(28, Math.max(16, Math.sqrt(1900 / ratio))));
 // Clients ticked "Show in Trusted By" in Pages CMS, in their set order, for Why Clients Choose Us on the home page.
 export const trustedBy = (await getCollection('clients', (c) => c.data.homeTrusted))
   .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99) || a.data.name.localeCompare(b.data.name))
