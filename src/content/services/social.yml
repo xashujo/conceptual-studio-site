@@ -2,7 +2,7 @@ name: Social media editing
 order: 4
 lane: Video
 summary: Short videos cut from your footage, captioned and sized for each platform. Start with a batch of five.
-homePrice: From £200 per video
+homePrice: From £125 per video
 homeTime: or from £360 a month
 homeLink: Social media editing prices
 tiers:
@@ -16,12 +16,12 @@ tiers:
     price: From £360 a month
     includes: Four short edits a month, planned together so they look like a set.
   - name: Single edit
-    price: From £200
+    price: From £125
     time: from 3 days
     includes: One short video from your footage, captioned and sized for each platform, with one round of changes.
   - name: Monthly pack
-    price: From £1,200 a month
+    price: From £1,000 a month
     includes: Eight short edits a month, planned together so they look like a set.
   - name: Monthly retainer
-    price: From £1,800 a month
+    price: From £1,500 a month
     includes: Twelve edits a month, about three a week. Three-month minimum.
