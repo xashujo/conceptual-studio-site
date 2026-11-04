@@ -43,7 +43,7 @@ const isCurrent = (h: string) => h === current || (h !== '/' && current?.startsW
     {turnstile && turnstileSiteKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
   </head>
   <body>
-    <nav class="nav glass glass--nav" aria-label="Main" data-nav>
+    <nav class="nav glass glass--nav glass--ribbed" aria-label="Main" data-nav>
       <Logo />
       <ul class="nav__links">
         {links.map(([l, h]) => <li><a class="glass-pill" href={h} aria-current={isCurrent(h) ? 'page' : undefined}>{l}</a></li>)}
@@ -75,7 +75,7 @@ const isCurrent = (h: string) => h === current || (h !== '/' && current?.startsW
       <section class="close wrap" id={links === pages ? 'start' : 'contact'} aria-labelledby="close-h">
         <h2 class="close__h big" id="close-h">{closeHeading}</h2>
         {Astro.slots.has('close') ? <slot name="close" /> : (
-          <div class="close__body glass" data-lens>
+          <div class="close__body glass glass--ribbed" data-lens><span class="ribs" aria-hidden="true"></span>
             <p class="close__p">{closeText}</p>
             <div class="acts">
               <a class="btn btn--solid" href={startHref}><span class="swap" data-alt="Email Me"><span>{home.startButton}</span></span></a>

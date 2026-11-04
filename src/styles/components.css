@@ -169,6 +169,17 @@ a { color: inherit; }
     var(--lift-night);
   color: #F1DFC8;
 }
+/* Ribbed glass (Josh, 4 Nov: liked on Design Laboratory), only the nav and the Start a Project panel. Fine vertical flutes:
+   each rib is lit on its left edge and shaded on its right, drawn under the content on top of the tint. The panel carries a
+   .ribs span (its own ::before and ::after belong to the lens); the nav uses ::after. --rib is the pitch. */
+.glass--ribbed { --rib: 9px; isolation: isolate; }
+.glass--ribbed > .ribs, .glass--ribbed.glass--nav::after {
+  content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
+  background: repeating-linear-gradient(90deg, rgb(255 250 240 / calc(0.5 * var(--g-shine))) 0, rgb(255 250 240 / 0) 2px, rgb(255 250 240 / 0) calc(var(--rib) - 3px), rgb(110 80 36 / 0.1) var(--rib));
+}
+.night .glass--ribbed > .ribs, .glass--ribbed.is-dark > .ribs, .glass--ribbed.glass--nav.is-dark::after {
+  background: repeating-linear-gradient(90deg, rgb(237 220 180 / calc(0.16 * var(--g-shine))) 0, rgb(237 220 180 / 0) 2px, rgb(0 0 0 / 0) calc(var(--rib) - 3px), rgb(0 0 0 / 0.28) var(--rib));
+}
 /* Glass button: a .btn made of the glass. Hover and press deepen the glass rather than replace it. */
 .btn.glass-button { --fill: var(--glass-bg); text-decoration: none; }
 /* A hovered or pressed button's text is paper. Set after the night glass, whose text colour would otherwise win. */

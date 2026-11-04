@@ -6,7 +6,7 @@ import Logo from './Logo.astro';
 interface Props { current?: string; art: string; tone?: 'light' | 'dark'; }
 const { current, art, tone = 'light' } = Astro.props;
 ---
-<nav class:list={['nav glass glass--nav', { 'is-dark': tone === 'dark' }]} aria-label="Main">
+<nav class:list={['nav glass glass--nav glass--ribbed', { 'is-dark': tone === 'dark' }]} aria-label="Main">
   <Logo />
   <ul class="nav__links">
     {nav.map((l) => <li><a href={l.href} aria-current={l.label === current ? 'page' : undefined}>{l.label === current ? `[${l.label}]` : l.label}</a></li>)}

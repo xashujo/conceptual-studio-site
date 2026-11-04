@@ -50,7 +50,7 @@ const closeText = c.closeText.replaceAll('{reply time}', responseTime);
     </div>
   </Band>
 
-  <div slot="close" class="close__body glass" data-lens>
+  <div slot="close" class="close__body glass glass--ribbed" data-lens><span class="ribs" aria-hidden="true"></span>
     <p class="close__p">{closeText}</p>
     <div class="acts">
       {c.callLink && <a class="btn btn--solid" href={c.callLink}>{c.callButton}</a>}
