@@ -9,7 +9,7 @@ import PlateCaption from './PlateCaption.astro';
 import Ladder from './Ladder.astro';
 import Enquiry from './Enquiry.astro';
 import { serviceById } from '../data/services';
-import { servicesPage as sp, titleCase } from '../lib/pages';
+import { servicesPage as sp, titleCase, keepHyphens } from '../lib/pages';
 import { home, responseTime } from '../lib/site';
 interface Props { service: string; description: string }
 const { service, description } = Astro.props;
@@ -20,7 +20,7 @@ const steps = home.steps.map((st) => ({ title: st.title, text: st.text.replaceAl
 <Studio title={name} description={description} current="/services/" turnstile closeText={sp.closeText}>
   <Band opening labelledby="svc-h">
     <div class="ph__plate glass" data-lens>
-      <h1 class="ph__h sv-h" id="svc-h">{name}</h1>
+      <h1 class="ph__h sv-h" id="svc-h">{keepHyphens(name)}</h1>
       <p class="ph__p">{s.line}</p>
       {s.kinds && <p class="ph__p sv-kinds">{s.kinds}</p>}
       <p class="sv-from">{s.tiers[0].price}{s.tiers[0].time && <span>, {s.tiers[0].time}</span>}</p>
