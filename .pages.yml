@@ -160,21 +160,15 @@ content:
         type: text
         description: "Leave an empty line between paragraphs. Start lines with - to make a bulleted list."
       - name: gallery
-        label: The work (image rows)
+        label: The work (images)
         type: object
         list: true
-        description: "Each row is one line of images on the page, top to bottom."
+        description: "Each chapter's images are laid out as one bento grid, in this order. The first image gets the large tile; each of the others goes to the tile nearest its shape."
         fields:
-          - name: layout
-            label: Layout
-            type: select
-            required: true
-            options:
-              values: [One large, Two side by side, Three in a row, Four in a grid]
           - name: heading
             label: Chapter heading (optional)
             type: string
-            description: "Starts a new chapter of the story at this row, e.g. The Star Note. Shown big above the row. Leave empty to carry on the chapter above."
+            description: "Starts a new chapter of the story at this group, e.g. The Star Note. Shown big above its images. Leave empty to carry on the chapter above."
           - name: text
             label: Chapter text (optional)
             type: text

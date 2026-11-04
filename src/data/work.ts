@@ -20,9 +20,9 @@ const homeFromWork: Partial<Record<string, HomeFilter>> = { 'Brand identity': 'B
 const filterKey: Record<string, Filter> = { 'Brand identity': 'brand', 'Data visualisation': 'data', '3D and motion': 'motion' };
 
 export interface Plate { image: ImageMetadata; alt: string; medium: string; }
-export interface Row { kind: 'full' | 'pair' | 'trio' | 'quad'; plates: Plate[]; }
-/** A run of rows under one optional heading and paragraph (Katseye-style chapters, Josh 4 Nov). */
-export interface Chapter { heading?: string; text: string[]; rows: Row[]; }
+/** A run of images under one optional heading and paragraph (Katseye-style chapters, Josh 4 Nov). The case
+ *  study page lays each chapter's images out as one bento (lib/bento.ts). */
+export interface Chapter { heading?: string; text: string[]; plates: Plate[]; }
 export interface Project {
   slug: string; title: string; client: string; year: number;
   disciplines: string[]; summary: string; tags: Filter[];
@@ -57,7 +57,6 @@ export interface CaseStudy {
   heroVideo?: { video: string; poster: ImageMetadata; alt: string };
 }
 
-const kinds: Record<string, Row['kind']> = { 'One large': 'full', 'Two side by side': 'pair', 'Three in a row': 'trio', 'Four in a grid': 'quad' };
 const paragraphs = (s: string) => s.split(/\n\s*\n/).map((t) => t.trim()).filter(Boolean);
 const plate = (p: { src: ImageMetadata; alt: string; caption: string }): Plate => ({ image: p.src, alt: p.alt, medium: p.caption });
 
@@ -93,11 +92,10 @@ export const caseStudies: CaseStudy[] = entries.filter((e) => e.data.hasPage).ma
   outcome: d.outcome,
   problem: paragraphs(d.problem),
   did: paragraphs(d.whatIDid),
-  // A row with a heading opens a new chapter; rows without one join the chapter above.
+  // A group with a heading opens a new chapter; groups without one join the chapter above.
   chapters: d.gallery.reduce<Chapter[]>((all, r) => {
-    const row = { kind: kinds[r.layout], plates: r.images.map(plate) };
-    if (r.heading || all.length === 0) all.push({ heading: r.heading || undefined, text: paragraphs(r.text ?? ''), rows: [] });
-    all[all.length - 1].rows.push(row);
+    if (r.heading || all.length === 0) all.push({ heading: r.heading || undefined, text: paragraphs(r.text ?? ''), plates: [] });
+    all[all.length - 1].plates.push(...r.images.map(plate));
     return all;
   }, []),
   before: d.before && d.after ? { before: plate(d.before), after: plate(d.after) } : undefined,
