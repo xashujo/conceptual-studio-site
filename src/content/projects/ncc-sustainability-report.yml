@@ -1,0 +1,49 @@
+title: Sustainability report
+slug: ncc-sustainability-report
+client: New City College London
+year: 2026
+disciplines:
+  - Data visualisation
+  - Report design
+filters:
+  - Data visualisation
+order: 12
+summary: Charts and layout for the college's 2025-26 environmental sustainability report.
+cover:
+  src: "@assets/work/ncc-sustainability-report/01.webp"
+  alt: A donut chart of the college carbon footprint beside three labelled scopes, with the numbers blurred
+  caption: Carbon footprint (numbers blurred)
+coverFocus: 0% 20%
+featured: true
+featuredOrder: 8
+homeFilter: Data Visualisation
+hasPage: true
+outcome: "[TBC: result, for example where the report was published]"
+problem: |
+  [TBC: what the college needed from the report]
+whatIDid: |
+  I designed the charts and the report around them. It came out as print files for coated and uncoated paper, a digital PDF, an accessible PDF and an interactive PDF, with every chart also supplied as a PNG and a PDF.
+
+  The numbers in the images on this page are blurred to protect the college's figures.
+gallery:
+  - layout: One large
+    images:
+      - src: "@assets/work/ncc-sustainability-report/01.webp"
+        alt: A donut chart of the college's carbon footprint beside three labelled scopes, with the numbers blurred
+        caption: Carbon footprint (numbers blurred)
+  - layout: Two side by side
+    images:
+      - src: "@assets/work/ncc-sustainability-report/03.webp"
+        alt: Horizontal bars of emissions by category, with the numbers blurred
+        caption: Emissions by category (numbers blurred)
+      - src: "@assets/work/ncc-sustainability-report/04.webp"
+        alt: Arrows showing change in emissions by campus, with the numbers blurred
+        caption: Change by campus (numbers blurred)
+  - layout: One large
+    images:
+      - src: "@assets/work/ncc-sustainability-report/05.webp"
+        alt: Bars of energy use by campus against a good practice line, with the numbers blurred
+        caption: Energy use against good practice (numbers blurred)
+whatHappened: |
+  [TBC: what followed]
+next: src/content/projects/usp-freeport-skills.yml

@@ -1,0 +1,62 @@
+title: DoubleShot Studio
+slug: doubleshot-studio
+client: DoubleShot Studio
+year: 2026
+disciplines:
+  - Visual identity
+  - Branding
+filters:
+  - Brand identity
+order: 15
+summary: A warm, playful identity of linen, terracotta & soot, with two small star characters.
+cover:
+  src: "@assets/work/doubleshot-studio/01.webp"
+  alt: A cream tote bag printed with the DoubleShot wordmark and two red star characters, hanging on a dark wooden chair
+  caption: Visual identity, on a tote bag
+coverFocus: 50% 40%
+featured: true
+featuredOrder: 4
+homeFilter: Branding
+hasPage: true
+outcome: "[TBC: result, for example where the identity is now in use]"
+problem: |
+  [TBC: who DoubleShot Studio is and what they asked for]
+whatIDid: |
+  I designed the whole identity: wordmark, colours, type and the two star characters that sit beside it.
+
+  The palette is three colours used in set amounts: DoubleShot Linen as the main colour, Terracotta as the second and Soot as the accent.
+
+  I then showed it on real things, such as business cards, a tote bag, matches, a box sticker and a street banner, so the studio could see it working before it was printed.
+gallery:
+  - layout: One large
+    images:
+      - src: "@assets/work/doubleshot-studio/04.webp"
+        alt: Red fence banners printed with the DoubleShot Studio wordmark and star characters, beside a tree-lined pavement
+        caption: Street banner
+  - layout: Two side by side
+    images:
+      - src: "@assets/work/doubleshot-studio/03.webp"
+        alt: Business cards in red and cream with the DoubleShot wordmark and star characters
+        caption: Business cards
+      - src: "@assets/work/doubleshot-studio/05.webp"
+        alt: An open matchbox with the DoubleShot wordmark and two star characters on the sleeve
+        caption: Matchbox
+  - layout: Three in a row
+    images:
+      - src: "@assets/work/doubleshot-studio/07.webp"
+        alt: Two cream cards held on a wall with brass clips, one with the wordmark and one with the star characters
+        caption: Cards
+      - src: "@assets/work/doubleshot-studio/06.webp"
+        alt: A sticker with two black star characters and a red DoubleShot label on a cardboard box
+        caption: Box sticker
+      - src: "@assets/work/doubleshot-studio/08.webp"
+        alt: A laptop showing the DoubleShot wordmark on a wooden chair
+        caption: On screen
+  - layout: One large
+    images:
+      - src: "@assets/work/doubleshot-studio/09.webp"
+        alt: Three bands of colour, cream, red and black, with their codes beside them
+        caption: The three colours
+whatHappened: |
+  [TBC: what followed]
+next: src/content/projects/cmd-inc.yml
