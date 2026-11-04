@@ -28,8 +28,6 @@ faqs:
     answer: "Yes. That is what the guidelines and templates are for: your team can make new social posts, letters and presentations in the identity without coming back to me each time."
   - question: Can you handle the printing?
     answer: Yes. On a rollout I handle print through my print partners, so signage and print arrive finished.
-  - question: We already have a logo. Can you work with it?
-    answer: "[TBC: whether a refresh of an existing logo is offered, and how it is priced]"
 homeLink: Brand identity prices
 tiers:
   - name: Campaign look
@@ -37,7 +35,6 @@ tiers:
     price: £1,250
     time: from 2 weeks
     includes: A look for one campaign or event, with a key visual, colours and type, and templates for the posts and posters it needs.
-    note: "[TBC: confirm what the campaign look includes and how long it takes]"
   - name: Logo and essentials
     onHome: true
     price: From £4,900
@@ -47,7 +44,6 @@ tiers:
     price: From £8,750
     time: from 8 weeks
     includes: Everything in Logo and essentials, plus a brand guidelines document and templates your team can use, such as social posts, letterheads and presentations.
-    note: "[TBC: how many templates are included]"
   - name: Identity and rollout
     price: From £14,000
     time: from 12 weeks

@@ -11,13 +11,14 @@ const sections = [
   ] },
   { h: 'When you email me', p: [
     'I get your name, email address and whatever you write. I use it to reply, to prepare a quote and, if we work together, to run the project. My email is hosted by Google.',
-    'I keep enquiries for [TBC: how long enquiries are kept], and project records for as long as the law asks me to keep business records.',
+    'I keep enquiries for 12 months, and project records for as long as the law asks me to keep business records.',
   ] },
   { h: 'The enquiry form', p: [
-    'The form isn\'t on the site yet. When it is, it will collect your name, email, organisation and project details, and send them to my inbox through Web3Forms, which handles the message for me and nothing else. [TBC: Web3Forms storage and location, checked against its terms before launch.]',
+    'The form asks for your name, email, organisation, what you need, your budget and deadline, and a link if you have one. It sends them to my inbox through Web3Forms, which handles the message for me and nothing else.',
+    'Web3Forms doesn\'t store the messages. It passes them straight to my email. Its servers are in the United States, and its server logs, which can include your IP address, are deleted about every two months. From my inbox, the enquiry is kept for 12 months like any other email.',
   ] },
   { h: 'Analytics and cookies', p: [
-    'The site sets no cookies and doesn\'t follow you to other websites. Visits are counted with Cloudflare Web Analytics, which works without cookies and doesn\'t build a profile of you. [TBC: switched on at launch.] You can block it with any content blocker, or email me to object.',
+    'The site sets no cookies and doesn\'t follow you to other websites. Visits are counted with Cloudflare Web Analytics, which works without cookies and doesn\'t build a profile of you. You can block it with any content blocker, or email me to object.',
     'Cloudflare also hosts the site, so like any web host it handles your IP address to send you the pages.',
   ] },
   { h: 'Your rights', p: [
@@ -28,7 +29,7 @@ const sections = [
 <Page title="Privacy" description="What the Conceptual Studio website collects, who handles it, and how to object.">
   <Opening word="Privacy" fit={0.366} art={art} credit={credits.hunt} position="50% 0%" tall={0.18} />
   <div class="wrap">
-    <p class="lead">This site collects as little as it can. Last updated 26 October 2026.</p>
+    <p class="lead">This site collects as little as it can. Last updated 4 November 2026.</p>
   </div>
   {sections.map((s, i) => (
     <section class="wrap sec sec--text" aria-labelledby={`p${i}`}>
