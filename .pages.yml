@@ -556,8 +556,8 @@ content:
         fields:
           - { name: title, label: Title, type: string, required: true }
           - { name: text, label: Text, type: text, required: true }
-      - { name: packButton, label: Supplier pack button, type: string, required: true }
-      - { name: packText, label: Supplier pack text, type: text, required: true }
+      - { name: emailButton, label: Email button, type: string, required: true, description: "The main button at the top of the page. It opens an email to you." }
+      - { name: emailSubject, label: Email subject, type: string, required: true, description: "The subject line the email button fills in." }
       - { name: closeText, label: Start a Project text, type: text, required: true, description: "The words in the glass panel at the end of the page." }
 
   - name: settings

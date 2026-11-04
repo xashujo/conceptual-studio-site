@@ -42,7 +42,7 @@ export const pages = {
   }),
   procurementPage: page('procurement', {
     heading: s, intro: s, orgHeading: s, org: items, detailsHeading: s, details: z.array(z.object({ label: s, value: s })), stepsHeading: s, steps: items,
-    packButton: s, packText: s, closeText: s,
+    emailButton: s, emailSubject: s, closeText: s,
   }),
 };
 
