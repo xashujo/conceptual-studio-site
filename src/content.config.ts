@@ -38,6 +38,7 @@ export const pages = {
   contactPage: page('contact', {
     heading: s, intro: s, hours: text, elsewhereHeading: s, procurementHeading: s, procurementText: s, procurementButton: s,
     enquiryHeading: s, formHeading: s, enquiryIntro: s, enquiryAlt: text, callLink: text, callButton: s, thanksHeading: s, thanksText: s, closeHeading: s, closeText: s,
+    poLabel: s, poLimitLabel: s, poHelp: s,
   }),
   procurementPage: page('procurement', {
     heading: s, intro: s, orgHeading: s, org: items, detailsHeading: s, details: z.array(z.object({ label: s, value: s })), stepsHeading: s, steps: items,

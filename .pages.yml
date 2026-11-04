@@ -511,6 +511,9 @@ content:
       - { name: formHeading, label: Form heading (Contact page), type: string, required: true }
       - { name: enquiryIntro, label: Form intro, type: text, required: true }
       - { name: enquiryAlt, label: Email line under the intro, type: string, description: "{email} becomes the email address. Empty hides it." }
+      - { name: poLabel, label: Purchase order tick box, type: string, required: true, description: "The tick box on the form. Ticking it shows the spending limit field below." }
+      - { name: poLimitLabel, label: Spending limit field, type: string, required: true, description: "Only shows once the purchase order box is ticked." }
+      - { name: poHelp, label: Spending limit help, type: string, required: true, description: "One line under the spending limit field. A link to the Procurement page follows it." }
       - { name: callLink, label: Booking link, type: string, description: "The free 20-minute call, e.g. your Google Calendar booking page. Empty hides the button." }
       - { name: callButton, label: Booking button, type: string, required: true }
       - { name: thanksHeading, label: Thank-you heading, type: string, required: true }

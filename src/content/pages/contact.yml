@@ -9,6 +9,9 @@ enquiryHeading: Start a Project
 formHeading: Tell Me About Your Project
 enquiryIntro: Tell me what you're working on, and I'll be in touch.
 enquiryAlt: Or email your brief to {email}. The form can't take attachments.
+poLabel: We'll pay by purchase order
+poLimitLabel: Is there a spending limit this needs to stay under?
+poHelp: Tell me and I'll scope the work to fit.
 callLink: https://calendar.app.google/xEpiGzbW4rRYmM5k9
 callButton: Book a 20-Minute Call
 thanksHeading: Thanks, I've Got It.

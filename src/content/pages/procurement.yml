@@ -24,6 +24,8 @@ details:
     value: Net 30. Invoices are due 30 days from the invoice date.
   - label: Purchase orders
     value: Send the PO number before work starts and it goes on every invoice.
+  - label: Spending limits
+    value: If your organisation has a limit for single quotes, tell me and I'll scope the work to fit.
   - label: How to pay
     value: Bank transfer, with details on every invoice. No card payments.
   - label: Invoices
