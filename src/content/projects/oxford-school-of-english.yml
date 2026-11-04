@@ -36,6 +36,17 @@ gallery:
   - src: '@assets/work/oxford-school-of-english/10.webp'
     alt: Oxford School of English poster with a photograph of an Oxford college, in a station frame
     caption: Poster in a station
+- layout: Three in a row
+  images:
+  - src: '@assets/work/oxford-school-of-english/01.webp'
+    alt: Lion shield beside the word Oxford and School of English, in black on gold
+    caption: Primary logo
+  - src: '@assets/work/oxford-school-of-english/05.webp'
+    alt: Lion shield beside the letters OSE, in black on gold
+    caption: Short logo
+  - src: '@assets/work/oxford-school-of-english/04.webp'
+    alt: Lion shield above the Oxford wordmark, in black on gold
+    caption: Stacked logo
 - layout: Two side by side
   images:
   - src: '@assets/work/oxford-school-of-english/06.webp'
@@ -44,17 +55,6 @@ gallery:
   - src: '@assets/work/oxford-school-of-english/07.webp'
     alt: The lion shield beside a black football kit with the crest on the chest
     caption: Crest and kit
-- layout: Three in a row
-  images:
-  - src: '@assets/work/oxford-school-of-english/01.webp'
-    alt: Lion shield beside the word Oxford and School of English, in black on gold
-    caption: Primary logo
-  - src: '@assets/work/oxford-school-of-english/04.webp'
-    alt: Lion shield above the Oxford wordmark, in black on gold
-    caption: Stacked logo
-  - src: '@assets/work/oxford-school-of-english/05.webp'
-    alt: Lion shield beside the letters OSE, in black on gold
-    caption: Short logo
 before:
   src: '@assets/work/oxford-school-of-english/02.webp'
   alt: The school's shopfront with its old sign above the door

@@ -80,7 +80,7 @@ export const collections = {
         whatIDid: text,
         whatHappened: text,
         gallery: z.array(z.object({
-          layout: z.enum(['One large', 'Two side by side', 'Three in a row', 'Four in a grid']),
+          layout: z.string().nullish(), // retired: each chapter's images are laid out as one bento
           heading: z.string().nullish(),
           text: z.string().nullish(),
           images: z.array(pic).min(1),
