@@ -9,6 +9,7 @@ filters:
 - Data visualisation
 order: 10
 summary: Infographics for the college's strategic intent briefing, used in its executive merger communications.
+listText: "New City College needed a strategic intent briefing that senior leaders could read quickly, built on complex data: borough forecasts, student numbers & sector growth. I sorted the data first, then gave the whole suite one visual language. The infographics were used in the college's executive merger communications."
 cover:
   src: '@assets/work/new-city-college-strategic-intent/02.webp'
   alt: Black map of east London boroughs showing the colleges that merged to form New City College, with a timeline from 1990 to 2024

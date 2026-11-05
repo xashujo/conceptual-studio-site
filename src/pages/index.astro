@@ -37,7 +37,7 @@ const stats = home.stats.map((s) => ({ n: s.number, after: s.after, label: s.lab
 const SHOWN = 6;
 const cards = featured.map((p) => ({
   title: p.title, year: p.year, href: projectHref(p), image: p.thumb ?? p.image, alt: p.alt,
-  position: p.thumb ? undefined : p.homePosition ?? p.position, filter: p.homeFilter, student: p.student, label: p.label, outcome: p.outcome, brief: p.summary,
+  position: p.thumb ? undefined : p.homePosition ?? p.position, filter: p.homeFilter, student: p.student, label: p.label, outcome: p.outcome, brief: p.listText,
 }));
 // Social media videos (Pages CMS: Home page > Social media videos), after the projects under Social Media.
 const videos = await Promise.all(home.socialVideos.map(async (v) => ({ ...v, poster: (await getImage({ src: v.poster, width: 720, format: 'webp' })).src })));
@@ -641,7 +641,8 @@ const more = services.filter((s) => !lanes.includes(s));
   .services__intro { margin-top: 20px; max-width: 46ch; font-size: 20px; line-height: 1.45; }
   .services__note { margin-top: 8px; font-weight: 600; }
   .acc { position: relative; margin-top: var(--sp-head); padding: 4px var(--sp-card); border-radius: var(--radius); }
-  .acc__row + .acc__row { border-top: 1px solid color-mix(in srgb, var(--ink) 16%, transparent); }
+  /* Lines only between rows that show, so a filtered list never starts with one (Josh, 5 Nov). */
+  .acc__row:not([hidden]) ~ .acc__row:not([hidden]) { border-top: 1px solid color-mix(in srgb, var(--ink) 16%, transparent); }
   .acc__btn { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 24px; padding: 26px 0; border: 0; background: none; color: inherit; font: 600 28px/1.2 var(--text); letter-spacing: -0.02em; text-align: left; cursor: pointer; }
   .acc__btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 8px; }
   .acc__from { margin-left: auto; font-size: 17px; font-weight: 600; letter-spacing: -0.01em; color: var(--ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; transition: opacity 200ms ease-out; } /* starting price, seen before the row opens */
