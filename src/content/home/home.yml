@@ -10,9 +10,9 @@ stats:
   - number: 20000
     after: +
     label: Data Points Visualised
-  - number: 48
-    after: hr
-    label: First-Concept Turnaround
+  - number: 40000
+    after: +
+    label: Student Enrolments Mapped
   - number: 70
     after: "%"
     label: of Clients Return for More Work
