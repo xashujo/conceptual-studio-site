@@ -94,6 +94,10 @@ content:
         type: text
         required: true
         description: "Shown on the project card. Say where the work was used."
+      - name: listText
+        label: List view description
+        type: text
+        description: "Shown when the project's row is opened in the list view. Two or three short sentences: the brief, what you did and how it went. Leave empty to use the one-line description."
       - { name: cover, label: Cover image, component: picture, required: true }
       - name: thumb
         label: Card thumbnail (optional)

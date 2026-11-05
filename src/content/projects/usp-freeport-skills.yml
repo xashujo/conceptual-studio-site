@@ -9,6 +9,7 @@ filters:
   - Data visualisation
 order: 35
 summary: Six visuals for a workforce analysis of the UK Freeport skills network.
+listText: "USP College wanted the skills findings from its Freeport college partnership in a report people could follow. I turned them into six visuals, from a map of the partner colleges to a skills heat map & roadmap. They went into the State of the Nations 2026 report & slides in April 2026."
 cover:
   src: "@assets/work/usp-freeport-skills/03.webp"
   alt: A dark chart called The Skills Heat Map, with four coloured boxes for skills by demand and partner capability

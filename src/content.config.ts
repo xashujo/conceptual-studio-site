@@ -65,6 +65,8 @@ export const collections = {
         label: text,
         order: z.number().nullish(),
         summary: z.string(),
+        // The text in the work list's open row (Josh, 5 Nov): the brief, what I did and how it went. Falls back to the summary.
+        listText: text,
         cover: pic,
         thumb: image().nullish(),
         coverFocus: z.string().nullish(),

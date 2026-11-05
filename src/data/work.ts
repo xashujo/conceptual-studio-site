@@ -26,6 +26,8 @@ export interface Chapter { heading?: string; text: string[]; plates: Plate[]; }
 export interface Project {
   slug: string; title: string; client: string; year: number;
   disciplines: string[]; summary: string; tags: Filter[];
+  /** The open list row's text: brief, what I did, outcome. Falls back to the summary. */
+  listText: string;
   image: ImageMetadata; alt: string; medium: string; position?: string;
   /** Card thumbnail: the whole work on warm black. Falls back to the cover. */
   thumb?: ImageMetadata;
@@ -70,7 +72,7 @@ const entries = (await getCollection('projects'))
 
 export const projects: Project[] = entries.map(({ data: d }) => ({
   slug: d.slug, title: d.title, client: d.client, year: d.year,
-  disciplines: d.disciplines, summary: d.summary,
+  disciplines: d.disciplines, summary: d.summary, listText: d.listText || d.summary,
   tags: d.studentWork ? ['archive'] : d.filters.map((f) => filterKey[f]),
   image: d.cover.src, alt: d.cover.alt, medium: d.cover.caption, position: d.coverFocus ?? undefined, thumb: d.thumb ?? undefined,
   student: d.studentWork || undefined,
