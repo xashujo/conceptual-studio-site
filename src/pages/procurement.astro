@@ -7,13 +7,13 @@ import Studio from '../layouts/Studio.astro';
 import Band from '../components/studio/Band.astro';
 import BentoArt from '../components/BentoArt.astro';
 import { email } from '../lib/site';
-import { procurementPage as p } from '../lib/pages';
+import { procurementPage as p, titleCase } from '../lib/pages';
 const mail = `mailto:${email}?subject=${encodeURIComponent(p.emailSubject)}`;
 ---
 <Studio title="Procurement" description={p.intro} closeText={p.closeText}>
   <Band opening labelledby="proc-h">
     <div class="ph__plate glass" data-lens>
-      <h1 class="ph__h" id="proc-h">{p.heading}</h1>
+      <h1 class="ph__h" id="proc-h">{titleCase(p.heading)}</h1>
       <p class="ph__p">{p.intro}</p>
       <div class="acts">
         <a class="btn btn--solid" href={mail}>{p.emailButton}</a>
@@ -23,20 +23,20 @@ const mail = `mailto:${email}?subject=${encodeURIComponent(p.emailSubject)}`;
   </Band>
 
   <Band night labelledby="org-h">
-    <h2 class="big" id="org-h">{p.orgHeading}</h2>
+    <h2 class="big" id="org-h">{titleCase(p.orgHeading)}</h2>
     <ul class="tiles" style="margin-top: var(--sp-head)">
-      {p.org.map((o, i) => <li class="glass" data-lens data-reveal style={`--i: ${i % 2}`}><BentoArt icon={o.icon} /><h3>{o.title}</h3><p>{o.text}</p></li>)}
+      {p.org.map((o, i) => <li class="glass" data-lens data-reveal style={`--i: ${i % 2}`}><BentoArt icon={o.icon} /><h3>{titleCase(o.title)}</h3><p>{o.text}</p></li>)}
     </ul>
   </Band>
 
   <Band id="details" labelledby="details-h">
-    <h2 class="big" id="details-h">{p.detailsHeading}</h2>
+    <h2 class="big" id="details-h">{titleCase(p.detailsHeading)}</h2>
     <dl class="facts glass" data-lens style="margin-top: var(--sp-head)">
-      {p.details.map((d) => <div><dt>{d.label}</dt><dd>{d.value}</dd></div>)}
+      {p.details.map((d) => <div><dt>{titleCase(d.label)}</dt><dd>{d.value}</dd></div>)}
     </dl>
-    <h2 class="big" id="steps-h" style="margin-top: calc(var(--sp-section) * .6)">{p.stepsHeading}</h2>
+    <h2 class="big" id="steps-h" style="margin-top: calc(var(--sp-section) * .6)">{titleCase(p.stepsHeading)}</h2>
     <ol class="tiles" style="margin-top: var(--sp-head)">
-      {p.steps.map((s, i) => <li class="glass" data-lens data-reveal style={`--i: ${i % 2}`}><BentoArt icon={s.icon} /><h3>{s.title}</h3><p>{s.text}</p></li>)}
+      {p.steps.map((s, i) => <li class="glass" data-lens data-reveal style={`--i: ${i % 2}`}><BentoArt icon={s.icon} /><h3>{titleCase(s.title)}</h3><p>{s.text}</p></li>)}
     </ol>
   </Band>
 </Studio>
