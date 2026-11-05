@@ -115,14 +115,14 @@ a { color: inherit; }
 :root { --g-bend: 1; --g-frost: 1; --g-blur: 1; --g-shine: 1; --g-reach: 1; }
 /* Saturation behind the glass (Josh, 5 Nov, liquid glass trial): enough that the gold behind comes through
    rich instead of milky. One value, so every pane and the default glass move together. */
-:root { --g-sat: 1.6; }
+:root { --g-sat: 1.3; } /* 1.6 turned the hero peach (Josh, 5 Nov); 1.3 is the old value (TASTE 13) */
 /* Layer 1 (brief 7.2), every browser: blur and saturate over a paper tint, a fine rim, a soft lift.
    Based on 2a7589f's phone menu sheet. Also the fallback for Tier A.
    Tint is 48% (Josh, 4 Nov: clearer glass, with the new depth carrying the edge). The painting sits at 25% opacity, so ink text keeps AA over it. */
 /* The glass, defined once as variables so panels (.glass) and buttons (.glass-button) share it exactly. */
 .glass, .glass-button {
   --glass-bg: color-mix(in srgb, var(--paper) min(96%, calc(48% * var(--g-frost))), transparent);
-  --glass-filter: blur(calc(24px * var(--g-blur))) saturate(var(--g-sat)) brightness(1.03); /* 24px diffuses the etching's lines; the slight lift keeps the saturated gold from going muddy */
+  --glass-filter: blur(calc(24px * var(--g-blur))) saturate(var(--g-sat)); /* 24px diffuses the etching's lines */
   /* Depth (Josh, 4 Nov: "glass sat on a page", not flat). The rim reads as a thick slab (5 Nov): a bright
      edge top left and a weaker catch bottom right (both cream, TASTE 4 and 11), a soft glow just inside the
      top and left, a little shade inside the bottom, the gold hairline, then the three stacked lift shadows. */
