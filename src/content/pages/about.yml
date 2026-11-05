@@ -10,9 +10,9 @@ story: |
 
   Nearly all of it comes through past clients, or the people they send my way.
 storyImage:
-  src: "@assets/work/cmd-inc/star-note.webp"
-  alt: The Star Note, CMD Inc.'s icon of six white ovals around a bright centre, on black
-  caption: The Star Note, CMD Inc., 2026
+  src: "@assets/about/joshua.webp"
+  alt: Joshua in a grey top and black cap, by the water on a sunny evening, a red lifting bridge behind him
+  focus: 50% 35%
 valuesHeading: How I Work
 values:
   - title: One Idea, Made Clear
