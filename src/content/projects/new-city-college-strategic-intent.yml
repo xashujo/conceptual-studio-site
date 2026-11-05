@@ -71,9 +71,10 @@ stats:
   - value: "34 years"
     label: Of mergers on one map, 1990 to 2024
     icon: timeline
-    art: '@assets/work/new-city-college-strategic-intent/london-lines.webp'
+    art: '@assets/work/new-city-college-strategic-intent/london-icon.webp'
   - value: "7"
     label: Infographics in the briefing
     icon: chart
+    art: '@assets/work/new-city-college-strategic-intent/growth-icon.webp'
 whatHappened: |
   The infographics went into the Strategic Intent document used by the college's senior leadership, across a college of 10 campuses and more than 18,000 students.
