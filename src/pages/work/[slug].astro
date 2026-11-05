@@ -75,12 +75,12 @@ type Words = { kind: 'headline'; text: string } | { kind: 'stat'; value: string;
 type Piece = { kind: 'image'; plate: Plate & { video?: string }; label: string } | Words;
 // The shape each kind of words would like, and how little a poor fit matters to it.
 const wordShape = { headline: [3.2, 1], stat: [1.8, 0.4], quote: [1.5, 1.2] } as const;
-const layout = async (pieces: Piece[], flip = false) => {
+const layout = async (pieces: Piece[], flip = false, plain = charts ? 0.12 : 0.35) => {
   const looks = await Promise.all(pieces.map((pc) => (pc.kind === 'image' ? edge(pc.plate.image) : undefined)));
   const items = pieces.map((pc, i) => pc.kind === 'image'
     ? { ratio: (pc.plate.image.width * looks[i]!.box.w) / (pc.plate.image.height * looks[i]!.box.h), weight: looks[i]!.photo ? 3 : 1 }
     : { ratio: wordShape[pc.kind][0], weight: wordShape[pc.kind][1] });
-  return bento(items, flip, charts ? 0.12 : 0.35).map((tile) => {
+  return bento(items, flip, plain).map((tile) => {
     const pc = pieces[tile.index], look = looks[tile.index];
     const fit = items[tile.index].ratio / ratioOf(tile);
     // Photos zoom to fill (Josh, 5 Nov: "just zoom the images in"), cropping up to a third; beyond that they sit whole.
@@ -106,14 +106,20 @@ const [beforeLabel, afterLabel] = t.beforeAfterHeading.split('&').map((x) => x.t
 // Without a before/after, the first outcome picture leads (Josh, 5 Nov: the guidelines' own bento pages). It runs the
 // full width above the bento at its own shape, with the same room on every side, so it is never cropped or boxed in.
 const leadShot = !cs.before && cs.outcomeImages.length ? [cs.outcomeImages[0]] : [];
+const quotePieces: Piece[] = cs.quotes.map((q) => ({ kind: 'quote', quote: q.quote, by: [q.name, q.role, q.organisation].filter(Boolean).join(', ') } as const));
+// Two or more quotes each get a big tile: they sit side by side as even halves above the rest (Josh, 5 Nov: Ruth's
+// quote was squeezed into a small tile).
+const quoteRow = quotePieces.length > 1 ? await layout(quotePieces, false, 0) : [];
 const outcomePieces: Piece[] = [
-  ...cs.quotes.map((q) => ({ kind: 'quote', quote: q.quote, by: [q.name, q.role, q.organisation].filter(Boolean).join(', ') } as const)),
+  ...(quoteRow.length ? [] : quotePieces),
   ...(cs.stats.length ? [] : cs.outcome ? [{ kind: 'headline', text: cs.outcome } as const] : []),
   ...cs.stats.map((x) => ({ kind: 'stat', ...x } as const)),
   ...(cs.before ? [{ kind: 'image', plate: cs.before.before, label: pair(beforeLabel, cs.before.before.medium) } as const, { kind: 'image', plate: cs.before.after, label: pair(afterLabel, cs.before.after.medium) } as const] : []),
   ...cs.outcomeImages.slice(leadShot.length).map((pl) => ({ kind: 'image', plate: pl, label: pl.medium } as const)),
 ];
-const outcomes = await layout(outcomePieces, cs.chapters.length % 2 === 1);
+const rest = await layout(outcomePieces, cs.chapters.length % 2 === 1);
+const quoteRows = Math.max(0, ...quoteRow.map((t) => t.row + t.h - 1));
+const outcomes = [...quoteRow, ...rest.map((t) => ({ ...t, row: t.row + quoteRows }))];
 // A figure with a unit ("34 years") sets the unit smaller, and the number is sized by its length so it never
 // runs out of its tile (Josh, 5 Nov: "34 years" broke out of the top).
 const figure = (v: string) => { const m = v.match(/^([^A-Za-z]*?\d[^A-Za-z]*?)\s+([A-Za-z].*)$/); return m ? { num: m[1], unit: m[2] } : { num: v, unit: '' }; };
@@ -225,6 +231,7 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
             <div class:list={['tile', 'glass', 'tile--words', `tile--${pc.kind}`]} style={`${area}; --hr: ${((h * 135 + (h - 1) * 12) / (w * 180 + (w - 1) * 12)).toFixed(4)}${quoteSize(pc, w, h)}`}>
               {outcomeArt[k] && <img class="tile__lines" src={outcomeArt[k]!.src} alt="" loading="lazy" decoding="async" />}
               {pc.kind === 'headline' && <p class="tile__headline">{pc.text}</p>}
+              {pc.kind === 'stat' && pc.icon && !outcomeArt[k] && <StatIcon name={pc.icon} drawing />}
               {pc.kind === 'stat' && pc.icon && <StatIcon name={pc.icon} />}
               {pc.kind === 'stat' && (() => { const f = figure(pc.value); return <p class="tile__stat" style={`--n: ${Math.max(f.num.length, 1.6)}`}><b>{f.num}{f.unit && <small> {f.unit}</small>}</b><span>{pc.label}</span></p>; })()}
               {pc.kind === 'quote' && <span class="tile__mark" aria-hidden="true">&ldquo;</span>}
@@ -322,7 +329,9 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
   .tile--words :global(.stat-icon), .tile__mark { margin-bottom: auto; }
   /* A one-colour line drawing (the map behind "14 local authorities") reads as if etched into the glass. */
   .tile__lines { position: absolute; inset: 8% 6% 8% 34%; width: 60%; height: 84%; object-fit: contain; object-position: right center; opacity: 0.16; mix-blend-mode: screen; pointer-events: none; }
-  .tile--words > :not(.tile__lines) { position: relative; }
+  /* In a narrow tile the drawing sits under the words, so it steps further back. */
+  @container (max-width: 420px) { .tile__lines { opacity: 0.1; } }
+  .tile--words > :not(.tile__lines, :global(.stat-drawing)) { position: relative; }
   .tile--words p, .tile__quote { margin: 0; }
   .tile--headline { justify-content: center; }
   .tile__headline { font-family: var(--display); font-size: clamp(30px, min(30cqw * var(--hr, 1), 7cqw), 92px); line-height: 1.02; letter-spacing: -0.01em; max-width: 22ch; }

@@ -55,6 +55,7 @@ stats:
   - value: "8"
     label: Charts redrawn for the report
     icon: chart
+    art: '@assets/work/ncc-sustainability-report/bars-lines.webp'
   - value: "16"
     label: A4 pages laid out
     icon: pages

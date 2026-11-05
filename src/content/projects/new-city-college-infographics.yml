@@ -57,6 +57,7 @@ stats:
   - value: "8"
     label: Maps & charts in the consultation
     icon: map
+    art: '@assets/work/new-city-college-infographics/boroughs-lines.webp'
   - value: "2022/23"
     label: The student year the maps cover
     icon: calendar
