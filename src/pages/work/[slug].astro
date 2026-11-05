@@ -28,6 +28,9 @@ const cap = (pl: Plate) => ({ title: p.client.startsWith(p.title) ? `${p.title},
 // Charts and screens (the data projects) are never cropped (Josh, 4 Nov): they always sit padded.
 const charts = p.tags.includes('data');
 const edge = async (img: ImageMetadata) => {
+  // A cut-out (transparent corners, like the guidelines' bento pages) sits straight on the glass: no colour field.
+  const { data: al, info: ai } = await sharp((img as ImageMetadata & { fsPath: string }).fsPath).ensureAlpha().extractChannel(3).raw().toBuffer({ resolveWithObject: true });
+  if (al[0] === 0 && al[ai.width - 1] === 0 && al[al.length - 1] === 0) return { bg: 'transparent', photo: false, cut: true, box: { x: 0, y: 0, w: 1, h: 1 } };
   const { data, info } = await sharp((img as ImageMetadata & { fsPath: string }).fsPath).resize(48, 48, { fit: 'fill' }).removeAlpha().raw().toBuffer({ resolveWithObject: true });
   const ring: number[][] = [[], [], []];
   for (let y = 0; y < info.height; y++) for (let x = 0; x < info.width; x++) {
@@ -57,7 +60,7 @@ const edge = async (img: ImageMetadata) => {
     }
     if (x1 >= x0 && y1 >= y0) box = { x: x0 / W, y: y0 / H, w: (x1 - x0 + 1) / W, h: (y1 - y0 + 1) / H };
   }
-  return { bg: `rgb(${bg.join(' ')})`, photo, box };
+  return { bg: `rgb(${bg.join(' ')})`, photo, cut: false, box };
 };
 // A tile is a picture (with an optional silent loop) or words: the outcome, a figure, a quote, a paragraph.
 type Words = { kind: 'headline'; text: string } | { kind: 'stat'; value: string; label: string } | { kind: 'quote'; quote: string; by: string };
@@ -78,7 +81,7 @@ const layout = async (pieces: Piece[], flip = false) => {
     const art = pc.kind === 'image' && !fill
       ? `--bg: ${look!.bg}; --r: ${items[tile.index].ratio.toFixed(4)}; --R: ${(pc.plate.image.width / pc.plate.image.height).toFixed(4)}; --bx: ${b.x.toFixed(4)}; --by: ${b.y.toFixed(4)}; --bw: ${b.w.toFixed(4)}; --bh: ${b.h.toFixed(4)}`
       : `--bg: ${look?.bg ?? 'transparent'}`;
-    return { ...tile, pc, art, fill, whole: !fill && (!!look?.photo || (pc.kind === 'image' && !!pc.keep)), bg: look?.bg };
+    return { ...tile, pc, art, fill, whole: !fill && (!!look?.photo || (pc.kind === 'image' && !!pc.keep)), cut: !!look?.cut, bg: look?.bg };
   });
 };
 const shots = (plates: Plate[]): Piece[] => plates.map((pl) => ({ kind: 'image', plate: pl, label: pl.medium }));
@@ -159,8 +162,8 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
         )}
         <Carousel label={`${ch.heading ?? t.workHeading}: gallery`}>
           <div class="bento">
-            {ch.tiles.map(({ pc, bg, art, fill, whole, col, row, w, h }) => pc.kind === 'image' && (
-              <figure class:list={['tile', 'glass', { 'tile--fill': fill, 'tile--whole': whole }]} style={`grid-area: ${row} / ${col} / span ${h} / span ${w}; --tile: ${bg}; ${art}`}>
+            {ch.tiles.map(({ pc, bg, art, fill, whole, cut, col, row, w, h }) => pc.kind === 'image' && (
+              <figure class:list={['tile', 'glass', { 'tile--fill': fill, 'tile--whole': whole, 'tile--cut': cut }]} style={`grid-area: ${row} / ${col} / span ${h} / span ${w}; --tile: ${bg}; ${art}`}>
                 <div class="tile__art"><Image src={pc.plate.image} alt={pc.plate.alt} widths={[600, 1000, 1600, 2200]} sizes={`(min-width: 760px) ${Math.round((w / 6) * 1140)}px, 100vw`} /></div>
                 <PlateCaption {...cap(pc.plate)} />
               </figure>
@@ -178,10 +181,10 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
         {happened.length > 0 && <div class="flow cs-text" data-reveal>{happened.map((x) => (x.startsWith('- ') ? <ul class="cs-list">{x.split('\n').map((l) => <li>{l.replace(/^-\s*/, '')}</li>)}</ul> : <p>{x}</p>))}</div>}
       </div>
       <div class="bento-wrap"><div class="bento bento--outcomes">
-        {outcomes.map(({ pc, bg, art, fill, whole, col, row, w, h }) => {
+        {outcomes.map(({ pc, bg, art, fill, whole, cut, col, row, w, h }) => {
           const area = `grid-area: ${row} / ${col} / span ${h} / span ${w}`;
           if (pc.kind === 'image') return (
-            <figure class:list={['tile', 'glass', { 'tile--fill': fill, 'tile--whole': whole }]} style={`${area}; --tile: ${bg}; ${art}`}>
+            <figure class:list={['tile', 'glass', { 'tile--fill': fill, 'tile--whole': whole, 'tile--cut': cut }]} style={`${area}; --tile: ${bg}; ${art}`}>
               <div class="tile__art">
                 {pc.plate.video
                   ? <video data-loop muted loop playsinline preload="none" poster={pc.plate.image.src} aria-label={pc.plate.alt}><source src={pc.plate.video} type="video/mp4" /></video>
@@ -266,6 +269,7 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
   .tile__art :is(img, video) { position: absolute; display: block; max-width: none; width: calc(var(--cw) / var(--bw)); height: calc(var(--cw) / var(--bw) / var(--R)); left: calc(50% - var(--cw) / var(--bw) * (var(--bx) + var(--bw) / 2)); top: calc(50% - var(--lift) - var(--cw) / var(--bw) / var(--R) * (var(--by) + var(--bh) / 2)); }
   /* A photo or collage that would crop too much: shown whole and large, on its own edge colour. */
   .tile--whole .tile__art { --cw: min(100cqw - 32px, (100cqh - 32px) * var(--r)); }
+  .tile--cut .tile__art { --cw: min(100cqw - 8px, (100cqh - 8px) * var(--r)); overflow: visible; }
   .tile--fill .tile__art :is(img, video) { inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .tile__art { position: absolute; inset: var(--in) var(--in) var(--cap); overflow: hidden; border-radius: calc(24px - var(--in)); background: var(--tile); container-type: size; }
   /* The label sits on the glass under the art, like a caption on a mount (Josh, 5 Nov: pills looked out of place). */
