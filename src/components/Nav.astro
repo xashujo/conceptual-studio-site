@@ -1,31 +1,31 @@
 ---
 // The glass nav from home prototype A (Josh's choice): lens glass over the page's opening art,
-// the current page in brackets (TASTE 23). On phones, Menu opens a glass sheet (2a7589f).
+// the current page as the lifted glass pill, like every other page. On phones, Menu opens a glass sheet (2a7589f).
 import { nav, availability } from '../lib/site';
 import Logo from './Logo.astro';
 interface Props { current?: string; art: string; tone?: 'light' | 'dark'; }
 const { current, art, tone = 'light' } = Astro.props;
+// The same links as every other page: Home first, and the contact link is the Start a Project button (Josh, 5 Nov).
+const links = [{ label: 'Home', href: '/' }, ...nav.map((l) => l.href === '/contact/' ? { label: 'Start a Project', href: l.href, cta: true } : l)];
 ---
 <nav class:list={['nav glass glass--nav', { 'is-dark': tone === 'dark' }]} aria-label="Main">
   <Logo />
   <ul class="nav__links">
-    {nav.map((l) => <li><a href={l.href} aria-current={l.label === current ? 'page' : undefined}>{l.href === '/contact/' && availability.on && <span class="avail__dot nav__dot" aria-hidden="true" />}{l.label === current ? `[${l.label}]` : l.label}{l.href === '/contact/' && availability.on && <span class="sr">, {availability.text.toLowerCase()}</span>}</a></li>)}
+    {links.map((l) => <li><a class={l.cta ? 'btn nav__cta' : 'glass-pill'} href={l.href} aria-current={l.label === current ? 'page' : undefined}>{l.cta && availability.on && <span class="avail__dot nav__dot" aria-hidden="true" />}{l.label}{l.cta && availability.on && <span class="sr">, {availability.text.toLowerCase()}</span>}</a></li>)}
   </ul>
   <button class="nav__menu" type="button" popovertarget="menu">Menu</button>
 </nav>
 <div class="sheet glass" id="menu" popover data-lens data-liquid={art}>
   <ul>
-    {nav.map((l) => <li><a href={l.href} aria-current={l.label === current ? 'page' : undefined}>{l.href === '/contact/' && availability.on && <span class="avail__dot nav__dot" aria-hidden="true" />}{l.label}</a></li>)}
+    {links.map((l) => <li><a class:list={[{ 'btn btn--solid menu__cta': l.cta }]} href={l.href} aria-current={l.label === current ? 'page' : undefined}>{l.cta && availability.on && <span class="avail__dot nav__dot" aria-hidden="true" />}{l.label}</a></li>)}
   </ul>
   <button class="sheet__close" type="button" popovertarget="menu" popovertargetaction="hide">Close</button>
 </div>
 
 <style>
-  .nav { position: absolute; z-index: 10; top: 14px; left: var(--margin); right: var(--margin); height: 60px; border-radius: var(--radius); display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 12px 0 24px; color: var(--ink); }
+  .nav { position: absolute; z-index: 10; top: 14px; left: var(--margin); right: var(--margin); height: 60px; border-radius: var(--radius); display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 8px 0 24px; color: var(--ink); }
   .nav__mark { font-family: var(--display); font-size: 24px; letter-spacing: -0.01em; text-decoration: none; }
-  .nav__links { list-style: none; display: flex; gap: 4px; margin: 0; padding: 0; }
-  .nav__links a { display: block; padding: 10px 14px; font-size: 17px; font-weight: 500; text-decoration: none; border-radius: var(--pill); transition: background-color 200ms ease-out; }
-  .nav__links a:hover { background: color-mix(in srgb, var(--ink) 8%, transparent); }
+  .nav__links { list-style: none; display: flex; align-items: center; gap: 2px; margin: 0; padding: 0; }
   .nav__menu, .sheet__close { padding: 9px 16px; border: 0; border-radius: var(--pill); background: color-mix(in srgb, var(--ink) 7%, transparent); color: inherit; font: 500 16px/1.2 var(--text); cursor: pointer; }
   .nav__menu { display: none; }
   .nav a:focus-visible, .nav button:focus-visible, .sheet a:focus-visible, .sheet button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
@@ -33,8 +33,8 @@ const { current, art, tone = 'light' } = Astro.props;
   /* The sheet opens just under the bar, over the same art (glass only where something sits behind it). */
   .sheet { position: absolute; inset: 82px 10px auto; width: auto; margin: 0; padding: 20px 22px 18px; border: 0; border-radius: var(--radius); color: var(--ink); }
   .sheet ul { list-style: none; margin: 0; padding: 0; }
-  .sheet a { display: block; padding: 6px 0; font-family: var(--display); font-size: 40px; line-height: 1.1; letter-spacing: -0.01em; text-decoration: none; }
-  .sheet a[aria-current] { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 8px; }
+  .sheet a:not(.menu__cta) { display: block; padding: 6px 0; font-family: var(--display); font-size: 40px; line-height: 1.1; letter-spacing: -0.01em; text-decoration: none; }
+  .sheet a:not(.menu__cta)[aria-current] { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 8px; }
   .sheet__close { margin-top: 14px; }
   .sheet:popover-open { animation: sheet-in 400ms var(--ease-out); }
   @keyframes sheet-in { from { opacity: 0; transform: translateY(-8px) scale(0.98); } }

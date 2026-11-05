@@ -103,7 +103,7 @@ a { color: inherit; }
   .avail:hover .swap > :last-child { transform: none; opacity: 1; }
 }
 /* Fades all the way out and back in, smoothly (Josh, 26 Oct): replaces Framer's three-step blink. */
-/* The availability dot sits in the nav's contact pill (Josh, 5 Nov), not in the hero. */
+/* The availability dot sits in the nav's Start a Project button (Josh, 5 Nov), not in the hero. */
 .nav__dot { display: inline-block; margin-right: 8px; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
@@ -198,14 +198,13 @@ a { color: inherit; }
 @media (hover: hover) { .btn:hover { color: var(--paper); } }
 .btn:is(.is-hover, :active, .is-pressed) { color: var(--paper); }
 /* The current page in the nav and the chosen filter (Josh, 28 Oct; replaces TASTE 23's brackets).
-   Plain text at rest, a faint tint on hover. The current one is a lifted piece of the same glass, lighter
+   Plain text at rest, the buttons' ink fill on hover (below). The current one is a lifted piece of the same glass, lighter
    than the bar, lit from the top left (pass 2: the old darker, outlined pill read as pressed-in and greyish). */
 .glass-pill {
   display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: 0; border-radius: var(--pill);
   background: transparent; color: inherit; font: 500 17px/1 var(--text); letter-spacing: -0.01em; text-decoration: none; white-space: nowrap; cursor: pointer;
-  transition: background-color 200ms ease-out, box-shadow 200ms ease-out, color 300ms ease-out;
+  transition: background-color 300ms ease-out, box-shadow 300ms ease-out, color 300ms ease-out, transform 160ms var(--ease-out);
 }
-@media (hover: hover) { .glass-pill:hover { background: color-mix(in srgb, var(--ink) 6%, transparent); } }
 .glass-pill:is([aria-current], [aria-pressed='true']) {
   background: color-mix(in srgb, #FFFAF0 62%, transparent);
   box-shadow: inset 1px 1px 0 rgb(255 250 240 / calc(0.9 * var(--g-shine))), inset 0 -1px 0 rgb(110 80 36 / 0.10), 0 0 0 0.5px rgb(110 80 36 / 0.14), var(--lift-sm);
@@ -215,6 +214,23 @@ a { color: inherit; }
   box-shadow: inset 1px 1px 0 rgb(237 220 180 / calc(0.35 * var(--g-shine))), inset 0 -1px 0 rgb(0 0 0 / 0.35), 0 1px 2px rgb(0 0 0 / 0.5), 0 6px 14px -6px rgb(0 0 0 / 0.6);
 }
 .glass-pill:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+/* Hover is the buttons' hover (Josh, 5 Nov: the nav's faint 6% tint read much weaker than every other button):
+   an ink fill with paper text, so black on day glass and cream on the dark nav and night bands. After the
+   current-pill rules above so it wins over them. */
+@media (hover: hover) {
+  .glass-pill:hover, :is(.night, .is-dark) .glass-pill:hover { background: var(--ink); color: var(--paper); box-shadow: var(--lift-sm); }
+}
+.glass-pill:active { transform: scale(0.97); }
+
+/* Start a Project in the nav (Josh, 5 Nov): the contact link on every page, as a real button that sits on the
+   glass with the buttons' depth, and fills with ink on hover like every other button. The availability dot is
+   inside it with the gap matching the label's optical edge, so the left side doesn't look padded. */
+.btn.nav__cta { min-height: 44px; margin-left: 8px; padding: 0 18px 0 16px; gap: 9px; font-size: 17px; }
+.nav__cta .nav__dot, .menu__cta .nav__dot { margin: 0; }
+@media (hover: hover) { .nav__cta:hover .avail__dot { background: var(--live-on-ink); } }
+/* In the phone menu it is the one solid button, set apart from the page links. */
+.btn.menu__cta { width: 100%; min-height: 52px; margin-top: 8px; justify-content: center; gap: 10px; font-size: 20px; }
+.menu__cta .avail__dot { background: var(--live-on-ink); }
 /* A small tag such as "Most Popular": the chosen dark-nav pill (gold lift on the nav's warm black, cream text), so it reads as the same system on any ground. */
 .badge {
   display: inline-block; padding: 7px 13px; border-radius: var(--pill); font: 600 14px/1 var(--text); letter-spacing: 0; color: #F1DFC8;
