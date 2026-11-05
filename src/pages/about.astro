@@ -21,8 +21,8 @@ import { aboutPage as a, paras, titleCase } from '../lib/pages';
       <h2 class="big" id="story-h">{a.storyHeading}</h2>
       <div class="pane glass flow" data-lens data-reveal>{paras(a.story).map((p) => <p>{p}</p>)}</div>
       {a.storyImage && (
-        <figure class="ab-pic" data-reveal>
-          <Image src={a.storyImage.src} alt={a.storyImage.alt} widths={[400, 700, 1000]} sizes="(min-width: 1100px) 30vw, calc(100vw - 32px)" style={a.storyImage.focus ? `object-position: ${a.storyImage.focus}` : undefined} />
+        <figure class="ab-pic glass" data-lens data-reveal>
+          <Image src={a.storyImage.src} alt={a.storyImage.alt} widths={[400, 700, 1000]} sizes="(min-width: 1100px) 30vw, (min-width: 760px) 420px, calc(100vw - 32px)" style={a.storyImage.focus ? `object-position: ${a.storyImage.focus}` : undefined} />
           {a.storyImage.caption && <figcaption>{a.storyImage.caption}</figcaption>}
         </figure>
       )}
@@ -64,10 +64,11 @@ import { aboutPage as a, paras, titleCase } from '../lib/pages';
   .ab-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-gap); margin-top: var(--sp-head); }
   .ab-groups__h { font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--ink-2); }
   .ab-groups__list { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 6px; font-family: var(--display); font-size: clamp(28px, 2.6vw, 38px); line-height: 1.15; letter-spacing: -0.01em; }
-  /* The story's one picture sits square in the four columns beside the pane, kept small (Josh dislikes art shown too large). */
-  .ab-pic { grid-column: 9 / -1; align-self: start; margin: var(--sp-head) 0 0; display: flex; flex-direction: column; gap: 10px; }
-  .ab-pic img { width: 100%; aspect-ratio: 1; height: auto; object-fit: cover; border-radius: var(--radius); display: block; }
-  .ab-pic figcaption { font-size: 14px; color: var(--ink-2); }
-  @media (max-width: 1099.98px) { .ab-story .pane { grid-column: 1 / -1; } .ab-pic { grid-column: 1 / -1; } .ab-pic { max-width: 420px; } }
+  /* Josh's photo sits in a glass frame in the four columns beside the story, portrait 4:5 and filling the frame
+     edge to edge inside an even rim (Josh, 5 Nov). Kept small: he dislikes pictures shown too large. Swap it in Pages CMS > About > Story picture. */
+  .ab-pic { grid-column: 9 / -1; align-self: start; margin: var(--sp-head) 0 0; padding: 10px; border-radius: var(--radius); display: flex; flex-direction: column; gap: 10px; }
+  .ab-pic img { width: 100%; aspect-ratio: 4 / 5; height: auto; object-fit: cover; border-radius: var(--radius-inner); display: block; }
+  .ab-pic figcaption { font-size: 14px; color: var(--ink-2); padding: 0 6px 4px; }
+  @media (max-width: 1099.98px) { .ab-story .pane { grid-column: 1 / -1; } .ab-pic { grid-column: 1 / -1; } .ab-pic { max-width: 420px; width: 100%; } }
   @media (max-width: 759.98px) { .ab-groups { grid-template-columns: 1fr; } .ab-groups__list { font-size: 26px; } }
 </style>
