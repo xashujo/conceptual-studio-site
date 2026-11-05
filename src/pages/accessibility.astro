@@ -5,20 +5,20 @@ import Opening from '../components/Opening.astro';
 import art from '../assets/art/engraved/hunt-sky-gold.jpg';
 import { art as credits, email, replyTime } from '../lib/site';
 const sections = [
-  { h: 'The target', p: [
+  { h: 'The Target', p: [
     'I aim for this site to meet the Web Content Accessibility Guidelines (WCAG) 2.2 at level AA.',
   ] },
-  { h: 'What I\'ve done', p: [
+  { h: 'What I\'ve Done', p: [
     'Every page can be used with a keyboard, with a visible focus ring. Text meets AA contrast against its background, including the text on glass. Every image of my work has a description, and the art behind the pages is marked as decoration so screen readers skip it.',
     'The site follows your device settings. With reduce motion on, nothing slides or blinks. With reduce transparency or increase contrast on, the glass turns solid. Copying my email address is announced to screen readers.',
   ] },
-  { h: 'Known issues', p: [
+  { h: 'Known Issues', p: [
     'Automated tests can\'t measure the contrast of text laid over the art and the glass, so I measured it pixel by pixel from screenshots instead. Everything is now at least 4.5:1. The menu text dips below that for a moment, about a third of a second, while it changes colour between light and dark sections.',
     'The four social media videos have sound but no captions yet.',
     'On the Work page, the project list skips a heading level, going from the page title straight to the project names.',
     'On 4 November 2026 every page was checked against WCAG 2.2 AA with axe at desktop and phone sizes, tabbed through with a keyboard, and checked for target sizes, heading order, alt text and contrast. Everything it found has been fixed apart from the issues above. The site hasn\'t yet been tested by disabled people or with a range of screen readers.',
   ] },
-  { h: 'Tell me about a problem', p: [
+  { h: 'Tell Me About a Problem', p: [
     `If something on the site doesn't work for you, email ${email} and say which page and what went wrong. ${replyTime} I'll send you the information in a form that works for you while I fix it.`,
   ] },
 ];

@@ -22,11 +22,12 @@ export const procurementPage = await load('procurementPage', 'procurement');
 /** Paragraphs from a CMS text field: an empty line between them. */
 export const paras = (s: string) => s.split(/\n\s*\n/).map((t) => t.trim()).filter(Boolean);
 
-// Title Case for headings, buttons and labels (Josh, 28 Oct), as on the home page: every word capitalised
-// except the small ones, never the first or last; "and" becomes "&". Capitals already there are kept.
-const small = new Set(['a', 'an', 'the', 'of', 'to', 'in', 'on', 'for', 'at', 'by', 'or', 'but', 'with', 'as']);
+// Title Case for headings, buttons and labels (Josh, 28 Oct; 5 Nov): every word capitalised except short
+// prepositions and conjunctions, never the first or last; "The" is always capitalised ("Out in The World");
+// "and" becomes "&". Capitals already there are kept. Both halves of a hyphenated word are capitalised.
+const small = new Set(['a', 'an', 'of', 'to', 'in', 'on', 'for', 'at', 'by', 'or', 'but', 'with', 'as', 'from']);
 export const titleCase = (s: string) => s.replace(/\band\b/gi, '&').split(' ')
-  .map((w, i, all) => (i > 0 && i < all.length - 1 && small.has(w.toLowerCase()) ? w.toLowerCase() : w.charAt(0).toUpperCase() + w.slice(1)))
+  .map((w, i, all) => (i > 0 && i < all.length - 1 && small.has(w.toLowerCase()) ? w.toLowerCase() : w.split('-').map((p) => p.charAt(0).toUpperCase() + p.slice(1)).join('-')))
   .join(' ');
 // Large headings: a word joiner after a hyphen stops "In-House" breaking as "In- / House" (Josh, 4 Nov). It's invisible and zero-width.
 export const keepHyphens = (s: string) => s.replace(/(\p{L})-(?=\p{L})/gu, '$1-\u2060');

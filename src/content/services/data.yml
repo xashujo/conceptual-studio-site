@@ -1,4 +1,4 @@
-name: Data visualisation and reports
+name: Data Visualisation & Reports
 order: 1
 lane: Data
 page: /services/data-visualisation/
@@ -32,17 +32,17 @@ faqs:
     answer: "Yes. That's the top rung: the report is built as a template, so next year starts from your new figures."
 homeLink: Data visualisation prices
 tiers:
-  - name: Charts and infographics
+  - name: Charts & Infographics
     onHome: true
     price: From £700
     time: from 1 week
     includes: The charts your document needs, from your own figures, as PNG and PDF ready for your layout.
-  - name: Charts and full report
+  - name: Charts & Full Report
     price: From £1,400
     time: from 2 weeks
     includes: The charts and the whole report around them, such as an annual, strategy or sustainability report. Print-ready PDFs for coated and uncoated paper, an accessible PDF and PNGs.
     note: Priced for a report of around 16 pages; longer reports are quoted.
-  - name: Maps and recurring reports
+  - name: Maps & Recurring Reports
     price: From £2,800
     time: from 4 weeks
     includes: Custom data maps, like the London borough heat maps, or a report designed as a template you can reuse each year.

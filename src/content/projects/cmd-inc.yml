@@ -55,7 +55,7 @@ gallery:
         alt: The CMD Inc. Star Note in white on black
         caption: The Star Note
   - layout: Two side by side
-    heading: Black, white & one grey
+    heading: Black, White & One Grey
     text: |
       The colours stay close to the client's reference site: black, an off-white and one cool grey. Headings are SF Pro Semibold and body text is SF Pro Regular.
     images:
@@ -71,7 +71,7 @@ gallery:
         alt: The Star Note and CMD Inc. wordmark in white on black
         caption: Icon & wordmark
   - layout: Two side by side
-    heading: Sound you can see
+    heading: Sound You Can See
     text: |
       Halftone points & lines spread out from the centre of the mark to echo how sound moves. I also drew a topographic version and six alternative styles for the app icon, from liquid glass to a cosmic gradient.
     images:
@@ -87,7 +87,7 @@ gallery:
         alt: A row of six alternative Star Note app icon styles on a dark desktop
         caption: App icon styles
   - layout: Two side by side
-    heading: Built for the website
+    heading: Built for The Website
     text: |
       The developer got a logo reveal, an icon & wordmark animation, favicons in three colours, app icons from 16 to 256 pixels and 3D models of the Star Note, meteorites & social icons, all as web-ready files.
     images:
@@ -106,7 +106,7 @@ gallery:
         alt: 3D Instagram, X, TikTok and LinkedIn icons in grey
         caption: 3D social icons
   - layout: One large
-    heading: Out in the world
+    heading: Out in The World
     text: |
       Mockups to check the mark holds up off screen, from business cards to a billboard.
     images:
