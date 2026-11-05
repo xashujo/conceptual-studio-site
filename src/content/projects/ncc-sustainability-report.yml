@@ -55,15 +55,17 @@ stats:
   - value: "8"
     label: Charts redrawn for the report
     icon: chart
-    art: '@assets/work/ncc-sustainability-report/bars-lines.webp'
+    art: '@assets/work/ncc-sustainability-report/charts-icon.webp'
   - value: "16"
     label: A4 pages laid out
     icon: pages
+    art: '@assets/work/ncc-sustainability-report/pages-icon.webp'
   - value: "5"
     label: Formats, from print to accessible PDF
     icon: formats
   - value: "10"
     label: Campuses compared
     icon: buildings
+    art: '@assets/work/ncc-sustainability-report/campuses-icon.webp'
 whatHappened: |
   The report was finished and reviewed by RV Ed Consulting, who found the charts improved the report's narrative.

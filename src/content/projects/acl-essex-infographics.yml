@@ -40,7 +40,7 @@ stats:
   - value: "14"
     label: Local authorities mapped
     icon: map
-    art: '@assets/work/acl-essex-infographics/essex-lines.webp'
+    art: '@assets/work/acl-essex-infographics/essex-icon.webp'
   - value: "2024"
     label: A full year of learner data
     icon: calendar

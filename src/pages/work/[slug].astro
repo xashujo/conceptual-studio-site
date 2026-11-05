@@ -7,7 +7,7 @@ import { Image, getImage } from 'astro:assets';
 import Studio from '../../layouts/Studio.astro';
 import Band from '../../components/studio/Band.astro';
 import PlateCaption from '../../components/PlateCaption.astro';
-import StatIcon from '../../components/StatIcon.astro';
+import BentoArt from '../../components/BentoArt.astro';
 import Carousel from '../../components/Carousel.astro';
 import { caseStudies, bySlug, type Plate } from '../../data/work';
 import { caseStudyPage as t, titleCase, headline } from '../../lib/pages';
@@ -131,7 +131,6 @@ const quoteSize = (pc: Piece, w: number, h: number) => {
   const em = Math.min(44, Math.sqrt(((W - 96) * (H - 190)) / (pc.quote.length * 0.5 * 1.25)));
   return `; --qf: ${(em / W).toFixed(4)}`;
 };
-const outcomeArt = await Promise.all(outcomes.map(({ pc }) => (pc.kind === 'stat' && pc.art ? getImage({ src: pc.art, width: 900, format: 'webp' }) : undefined)));
 // What Happened sits beside the heading, like a chapter's words, unless it only repeats the outcome line.
 const happened = cs.happened.filter((x) => !same(x, cs.outcome));
 const credits = [[t.clientLabel, p.client], [t.disciplinesLabel, p.disciplines.join(', ')]].filter(([, v]) => v);
@@ -229,10 +228,8 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
           );
           return (
             <div class:list={['tile', 'glass', 'tile--words', `tile--${pc.kind}`]} style={`${area}; --hr: ${((h * 135 + (h - 1) * 12) / (w * 180 + (w - 1) * 12)).toFixed(4)}${quoteSize(pc, w, h)}`}>
-              {outcomeArt[k] && <img class="tile__lines" src={outcomeArt[k]!.src} alt="" loading="lazy" decoding="async" />}
               {pc.kind === 'headline' && <p class="tile__headline">{headline(pc.text)}</p>}
-              {pc.kind === 'stat' && pc.icon && !outcomeArt[k] && <StatIcon name={pc.icon} drawing />}
-              {pc.kind === 'stat' && pc.icon && <StatIcon name={pc.icon} />}
+              {pc.kind === 'stat' && <BentoArt icon={pc.icon} art={pc.art} />}
               {pc.kind === 'stat' && (() => { const f = figure(pc.value); return <p class="tile__stat" style={`--n: ${Math.max(f.num.length, 1.6)}`}><b>{f.num}{f.unit && <small> {f.unit}</small>}</b><span>{pc.label}</span></p>; })()}
               {pc.kind === 'quote' && <span class="tile__mark" aria-hidden="true">&ldquo;</span>}
               {pc.kind === 'quote' && <blockquote class="tile__quote"><p>{pc.quote}</p><footer>{pc.by}</footer></blockquote>}
@@ -325,13 +322,7 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
   /* Words tiles: the outcome, a figure, a quote, a paragraph. Type scales with the tile. */
   /* Words tiles are plain glass (Josh, 4 Nov: no pictures behind words). */
   .tile--words { justify-content: flex-end; gap: 16px; padding: clamp(28px, 4cqi, 48px); container-type: inline-size; overflow: hidden; }
-  /* The icon sits at the top of the tile, the figure at the bottom. */
-  .tile--words :global(.stat-icon), .tile__mark { margin-bottom: auto; }
-  /* A one-colour line drawing (the map behind "14 local authorities") reads as if etched into the glass. */
-  .tile__lines { position: absolute; inset: 8% 6% 8% 34%; width: 60%; height: 84%; object-fit: contain; object-position: right center; opacity: 0.16; mix-blend-mode: screen; pointer-events: none; }
-  /* In a narrow tile the drawing sits under the words, so it steps further back. */
-  @container (max-width: 420px) { .tile__lines { opacity: 0.1; } }
-  .tile--words > :not(.tile__lines, :global(.stat-drawing)) { position: relative; }
+  .tile__mark { margin-bottom: auto; }
   .tile--words p, .tile__quote { margin: 0; }
   .tile--headline { justify-content: center; }
   .tile__headline { font-family: var(--display); font-size: clamp(30px, min(30cqw * var(--hr, 1), 7cqw), 92px); line-height: 1.02; letter-spacing: -0.01em; max-width: 22ch; }

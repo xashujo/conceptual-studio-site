@@ -5,6 +5,7 @@
 // so the night close follows a day band. No supplier pack: there isn't one (Josh, 4 Nov). Words: Pages CMS > Procurement page.
 import Studio from '../layouts/Studio.astro';
 import Band from '../components/studio/Band.astro';
+import BentoArt from '../components/BentoArt.astro';
 import { email } from '../lib/site';
 import { procurementPage as p, titleCase } from '../lib/pages';
 const mail = `mailto:${email}?subject=${encodeURIComponent(p.emailSubject)}`;
@@ -24,7 +25,7 @@ const mail = `mailto:${email}?subject=${encodeURIComponent(p.emailSubject)}`;
   <Band night labelledby="org-h">
     <h2 class="big" id="org-h">{titleCase(p.orgHeading)}</h2>
     <ul class="tiles" style="margin-top: var(--sp-head)">
-      {p.org.map((o, i) => <li class="glass" data-lens data-reveal style={`--i: ${i % 2}`}><h3>{titleCase(o.title)}</h3><p>{o.text}</p></li>)}
+      {p.org.map((o, i) => <li class="glass" data-lens data-reveal style={`--i: ${i % 2}`}><BentoArt icon={o.icon} /><h3>{titleCase(o.title)}</h3><p>{o.text}</p></li>)}
     </ul>
   </Band>
 
@@ -35,7 +36,7 @@ const mail = `mailto:${email}?subject=${encodeURIComponent(p.emailSubject)}`;
     </dl>
     <h2 class="big" id="steps-h" style="margin-top: calc(var(--sp-section) * .6)">{titleCase(p.stepsHeading)}</h2>
     <ol class="tiles" style="margin-top: var(--sp-head)">
-      {p.steps.map((s, i) => <li class="glass" data-lens data-reveal style={`--i: ${i % 2}`}><h3>{titleCase(s.title)}</h3><p>{s.text}</p></li>)}
+      {p.steps.map((s, i) => <li class="glass" data-lens data-reveal style={`--i: ${i % 2}`}><BentoArt icon={s.icon} /><h3>{titleCase(s.title)}</h3><p>{s.text}</p></li>)}
     </ol>
   </Band>
 </Studio>

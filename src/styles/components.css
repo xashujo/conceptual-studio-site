@@ -416,3 +416,22 @@ a.card.glass :is(.card__y, .card__out, .tag) { transition: color 300ms ease-out,
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 1ms !important; animation: none !important; }
 }
+
+/* Bento art (components/BentoArt.astro): a grey icon cut from the work, set into the glass and cropped by the
+   tile's right edge, so about two thirds of it shows. It takes the text colour, faint, and the words sit above it. */
+.bento-art { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; pointer-events: none; filter: drop-shadow(1px 1px 0 rgb(255 248 236 / 0.08)); } /* a lit lower edge: cut into the glass */
+.bento-art > * { position: absolute; top: 50%; right: 0; height: min(84%, 260px); width: auto; aspect-ratio: var(--ar, 1); translate: 30% -50%; }
+/* Line icons are hairlines at any size (Josh, 5 Nov: the thick strokes looked "cheap and childish"): 1.25px,
+   a little smaller and further into the corner, like an engraved mark on the glass. */
+.bento-art > .bento-art__icon { height: min(62%, 168px); translate: 34% -50%; opacity: 0.16; }
+.bento-art__lines { opacity: 0.14; background: currentColor; -webkit-mask: var(--src) center / contain no-repeat; mask: var(--src) center / contain no-repeat; }
+:where(:has(> .bento-art)) > :not(.bento-art) { position: relative; }
+/* The home figures: the icon a little smaller, so the number keeps clear glass. */
+.stat > .bento-art > * { height: 104%; translate: 34% -50%; }
+/* Icon size, per figure (Pages CMS: Stats > Icon size). Smaller icons sit further into the glass. */
+.stat--art-small > .bento-art > * { height: 70%; translate: 22% -50%; }
+.stat--art-large > .bento-art > * { height: 130%; translate: 40% -50%; }
+/* A wide chart never runs under the words: capped to the tile's right side. On the home page's wide figures it sits
+   along the bottom edge instead, its bars rising from the tile's floor. */
+.bento-art > .bento-art__lines--wide { max-width: 64%; top: 32%; }
+.stat--wide > .bento-art > .bento-art__lines--wide { top: auto; bottom: -2%; height: 78%; max-width: none; translate: 14% 0; }
