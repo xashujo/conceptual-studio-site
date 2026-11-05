@@ -226,8 +226,21 @@ a { color: inherit; }
    glass with the buttons' depth, and fills with ink on hover like every other button. The availability dot is
    inside it with the gap matching the label's optical edge, so the left side doesn't look padded. */
 .btn.nav__cta { min-height: 44px; margin-left: 8px; padding: 0 18px 0 16px; gap: 9px; font-size: 17px; }
+/* The same lifted glass as the current page's pill (Josh, 5 Nov: "should just match the selected button"), a touch
+   lighter at rest so it doesn't read as the current page, filling in to the selected pill's exact colour on hover.
+   Its text keeps its colour on hover, as the selected pill's does. */
+.btn.nav__cta {
+  --fill: color-mix(in srgb, #FFFAF0 40%, transparent);
+  --fill-hover: color-mix(in srgb, #FFFAF0 62%, transparent);
+  --depth: inset 1px 1px 0 rgb(255 250 240 / calc(0.9 * var(--g-shine))), inset 0 -1px 0 rgb(110 80 36 / 0.10), 0 0 0 0.5px rgb(110 80 36 / 0.14), var(--lift-sm);
+}
+:is(.night, .is-dark) .btn.nav__cta {
+  --fill: color-mix(in srgb, #D9BE91 13%, transparent);
+  --fill-hover: color-mix(in srgb, #D9BE91 22%, transparent);
+  --depth: inset 1px 1px 0 rgb(237 220 180 / calc(0.35 * var(--g-shine))), inset 0 -1px 0 rgb(0 0 0 / 0.35), 0 1px 2px rgb(0 0 0 / 0.5), 0 6px 14px -6px rgb(0 0 0 / 0.6);
+}
+@media (hover: hover) { .btn.nav__cta:hover { color: var(--ink); } }
 .nav__cta .nav__dot, .menu__cta .nav__dot { margin: 0; }
-@media (hover: hover) { .nav__cta:hover .avail__dot { background: var(--live-on-ink); } }
 /* In the phone menu it is the one solid button, set apart from the page links. */
 .btn.menu__cta { width: 100%; min-height: 52px; margin-top: 8px; justify-content: center; gap: 10px; font-size: 20px; }
 .menu__cta .avail__dot { background: var(--live-on-ink); }
