@@ -68,6 +68,8 @@ export const collections = {
         made: text,
         order: z.number().nullish(),
         summary: z.string(),
+        // My part in the job, on the home page's case study cards (Josh, 5 Nov: builds credibility), e.g. Sole designer: logo, type & colour.
+        role: text,
         // The text in the work list's open row (Josh, 5 Nov): the brief, what I did and how it went. Falls back to the summary.
         listText: text,
         cover: pic,

@@ -44,7 +44,7 @@ const cards = featured.map((p) => ({
 const videos = await Promise.all(home.socialVideos.map(async (v) => ({ ...v, poster: (await getImage({ src: v.poster, width: 720, format: 'webp' })).src })));
 // Why clients choose us (pass 2): the two case studies' own summaries from the CMS, beside the quote.
 const results = home.results.map(bySlug) // Pages CMS: Home page > Why Clients Choose Us
-  .map((p) => ({ client: p.client, title: p.title, line: p.summary, href: projectHref(p) }));
+  .map((p) => ({ client: p.client, title: p.title, line: p.summary, role: p.role, href: projectHref(p) }));
 // The lanes are the services with a page of their own; the rest (monthly plans, video) sit in a short row under them.
 // Each lane's first example sits beside it in a glass frame (Josh, 5 Nov: one strong image, not a bento).
 // Charts sit whole on their own edge colour, never cropped; photographs fill the frame.
@@ -308,6 +308,7 @@ const more = services.filter((s) => !lanes.includes(s));
               <a class="result glass" href={r.href} data-lens>
                 <span class="result__who">{r.client}</span>
                 <span class="result__line">{r.line}</span>
+                {r.role && <span class="result__role"><span>My role</span>{r.role}</span>}
                 <span class="result__go">Read the Case Study <span class="arrow" aria-hidden="true">→</span></span>
               </a>
             ))}
@@ -743,6 +744,8 @@ const more = services.filter((s) => !lanes.includes(s));
   .result { position: relative; display: flex; flex-direction: column; gap: 14px; padding: var(--sp-card); border-radius: var(--radius); text-decoration: none; transition: background-color 300ms ease-out, color 300ms ease-out; }
   .result__who { font-size: 17px; color: var(--ink-2); }
   .result__line { font-size: 21px; line-height: 1.38; font-weight: 500; letter-spacing: -0.015em; text-wrap: balance; hyphens: none; }
+  .result__role { display: flex; flex-direction: column; gap: 4px; padding-top: 14px; border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent); font-size: 16px; line-height: 1.4; text-wrap: balance; }
+  .result__role span { font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2); }
   .result__go { margin-top: auto; padding-top: 8px; font-size: 18px; font-weight: 500; }
   /* Hover like the Selected Work cards: no lift (moving blurred glass left seams on phones), the card turns to day glass. */
   @media (hover: hover) { .band .result.glass:hover { color-scheme: light; background: color-mix(in srgb, var(--paper) 90%, transparent); } .result:hover .arrow { --turn: -45deg; } }

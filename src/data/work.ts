@@ -28,6 +28,8 @@ export interface Project {
   /** What the Work page card says I made, e.g. Sustainability report. */
   made: string;
   disciplines: string[]; summary: string; tags: Filter[];
+  /** My part in the job, on the home page's case study cards. Empty hides it. */
+  role: string;
   /** The open list row's text: brief, what I did, outcome. Falls back to the summary. */
   listText: string;
   image: ImageMetadata; alt: string; medium: string; position?: string;
@@ -74,7 +76,7 @@ const entries = (await getCollection('projects'))
 
 export const projects: Project[] = entries.map(({ data: d }) => ({
   slug: d.slug, title: d.title, client: d.client, year: d.year, made: d.made || d.disciplines[0],
-  disciplines: d.disciplines, summary: d.summary, listText: d.listText || d.summary,
+  disciplines: d.disciplines, summary: d.summary, role: d.role, listText: d.listText || d.summary,
   tags: d.studentWork ? ['archive'] : d.filters.map((f) => filterKey[f]),
   image: d.cover.src, alt: d.cover.alt, medium: d.cover.caption, position: d.coverFocus ?? undefined, thumb: d.thumb ?? undefined,
   student: d.studentWork || undefined,

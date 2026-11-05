@@ -10,6 +10,7 @@ filters:
 - Data visualisation
 order: 10
 summary: Board-level infographics for the college's Strategic Intent document, used by its senior leadership.
+role: "Sorted the data & designed all 7 infographics"
 listText: "New City College needed board-level infographics for its Strategic Intent document, built on complex data: borough forecasts, student numbers & sector growth. I sorted the data first, then gave the whole suite one visual language. Senior leadership use them across the college's 10 campuses & 18,000+ students."
 cover:
   src: '@assets/work/new-city-college-strategic-intent/02.webp'
