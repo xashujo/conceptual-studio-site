@@ -17,10 +17,13 @@ valuesHeading: How I Work
 values:
   - title: One Idea, Made Clear
     text: Every project starts from one idea. The test is whether people get it on first read.
+    icon: idea
   - title: Fixed Quotes
     text: A fixed quote for the agreed scope, before anything starts. The price doesn't move.
+    icon: quote
   - title: Accessible Reports
     text: Tagged PDFs with alt text and a set reading order, the way public bodies have to publish.
+    icon: accessible
 clientsHeading: Who I've Worked With
 wantHeading: The Work I Want
 want: |

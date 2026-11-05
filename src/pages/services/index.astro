@@ -4,6 +4,7 @@
 // plans for clients who want to keep going, how a project runs, and the quote form. Words: Pages CMS > Services page; prices: Services and prices.
 import Studio from '../../layouts/Studio.astro';
 import Band from '../../components/studio/Band.astro';
+import BentoArt from '../../components/BentoArt.astro';
 import { Image } from 'astro:assets';
 import Ladder from '../../components/Ladder.astro';
 import Enquiry from '../../components/Enquiry.astro';
@@ -16,7 +17,7 @@ import { servicesPage as sp, titleCase, keepHyphens } from '../../lib/pages';
 const lanes = services.filter(isLane);
 const extras = services.filter((s) => !s.href && !s.card);
 const retainer = services.find((s) => s.href?.includes('#'));
-const steps = home.steps.map((s) => ({ title: s.title, text: s.text.replaceAll('{reply time}', responseTime) })); // Pages CMS: Home page > How We Work
+const steps = home.steps.map((s) => ({ title: s.title, icon: s.icon, text: s.text.replaceAll('{reply time}', responseTime) })); // Pages CMS: Home page > How We Work
 ---
 <Studio title="Services" description={sp.intro} current="/services/" turnstile closeText={sp.closeText}>
   <Band opening labelledby="svc-h">
@@ -81,7 +82,7 @@ const steps = home.steps.map((s) => ({ title: s.title, text: s.text.replaceAll('
   <Band night labelledby="how-h">
     <h2 class="big" id="how-h">{sp.howHeading}</h2>
     <ol class="tiles" style="margin-top: var(--sp-head)">
-      {steps.map((s, i) => <li class="glass" data-lens data-reveal style={`--i: ${i % 2}`}><h3>{s.title}</h3><p>{s.text}</p></li>)}
+      {steps.map((s, i) => <li class="glass" data-lens data-reveal style={`--i: ${i % 2}`}><BentoArt icon={s.icon} /><h3>{s.title}</h3><p>{s.text}</p></li>)}
     </ol>
     <dl class="terms">
       {sp.terms.map((t) => <div><dt>{t.title}</dt><dd>{t.text}</dd></div>)}

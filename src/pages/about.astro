@@ -4,6 +4,7 @@
 import Studio from '../layouts/Studio.astro';
 import Band from '../components/studio/Band.astro';
 import { Image } from 'astro:assets';
+import BentoArt from '../components/BentoArt.astro';
 import { clientGroups } from '../lib/site';
 import { aboutPage as a, paras, titleCase } from '../lib/pages';
 ---
@@ -32,7 +33,7 @@ import { aboutPage as a, paras, titleCase } from '../lib/pages';
   <Band labelledby="values-h">
     <h2 class="big" id="values-h">{a.valuesHeading}</h2>
     <ul class="tiles tiles--3" style="margin-top: var(--sp-head)">
-      {a.values.map((v, i) => <li class="glass" data-lens data-reveal style={`--i: ${i}`}><h3>{v.title}</h3><p>{v.text}</p></li>)}
+      {a.values.map((v, i) => <li class="glass" data-lens data-reveal style={`--i: ${i}`}><BentoArt icon={v.icon} /><h3>{v.title}</h3><p>{v.text}</p></li>)}
     </ul>
   </Band>
 

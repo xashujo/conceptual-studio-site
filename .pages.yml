@@ -209,8 +209,8 @@ content:
           - name: icon
             label: Icon
             type: select
-            description: "A small line icon at the top of the figure's tile."
-            options: { values: [chart, map, pages, formats, buildings, calendar, timeline, steps, contrast, choice] }
+            description: "A line drawing half off the tile's right edge. Used when there's no Line drawing below."
+            options: { values: [chart, map, pages, papers, formats, buildings, calendar, timeline, steps, contrast, choice, ring, idea, quote, accessible, order, signature, shield, invoice, payment, discovery, direction, development, delivery] }
           - { name: art, label: Line drawing behind (optional), type: image, options: { media: images }, description: "A one-colour drawing, white lines on a transparent background (PNG or WebP), shown faintly behind the figure, e.g. the outline of a map." }
       - name: whatHappened
         label: What happened
@@ -370,6 +370,7 @@ content:
           - { name: after, label: After the number, type: string, description: "e.g. + or % or hr or M+" }
           - { name: label, label: Label, type: string, required: true }
           - { name: wide, label: Wide card, type: boolean, description: "Makes this card twice as wide. Use it to fill out a row: the grid is four across on a computer, two on a phone." }
+          - { name: pictures, label: Pictures of the work (optional), type: image, list: { max: 3 }, options: { media: images }, description: "Up to three pictures of the work this figure counts. They show as cards cropped off the top and right of the tile, the first one in front. Blur any figures in data pictures first." }
       - { name: workHeading, label: Work heading, type: string, required: true, description: "The big heading over the work grid, e.g. Selected Work." }
       - { name: allProjects, label: All projects button, type: string, required: true, description: "The glass button under the work grid. It opens the Work page." }
       - name: socialVideos
@@ -425,6 +426,7 @@ content:
         fields:
           - { name: title, label: Step, type: string, required: true }
           - { name: text, label: Text, type: text, required: true }
+          - { name: icon, label: Drawing (optional), type: select, description: "A line drawing half off the tile's right edge, faint behind the words.", options: { values: [chart, map, pages, papers, formats, buildings, calendar, timeline, steps, contrast, choice, ring, idea, quote, accessible, order, signature, shield, invoice, payment, discovery, direction, development, delivery] } }
 
   - name: workPage
     label: Work page
@@ -526,6 +528,7 @@ content:
         fields:
           - { name: title, label: Title, type: string, required: true }
           - { name: text, label: Text, type: text, required: true }
+          - { name: icon, label: Drawing (optional), type: select, description: "A line drawing half off the tile's right edge, faint behind the words.", options: { values: [chart, map, pages, papers, formats, buildings, calendar, timeline, steps, contrast, choice, ring, idea, quote, accessible, order, signature, shield, invoice, payment, discovery, direction, development, delivery] } }
       - { name: clientsHeading, label: Clients heading, type: string, required: true }
       - { name: wantHeading, label: The work I want heading, type: string, required: true }
       - { name: want, label: The work I want, type: text, required: true, description: "Leave an empty line between paragraphs. Start lines with - to make a bulleted list." }
@@ -577,6 +580,7 @@ content:
         fields:
           - { name: title, label: Title, type: string, required: true }
           - { name: text, label: Text, type: text, required: true }
+          - { name: icon, label: Drawing (optional), type: select, description: "A line drawing half off the tile's right edge, faint behind the words.", options: { values: [chart, map, pages, papers, formats, buildings, calendar, timeline, steps, contrast, choice, ring, idea, quote, accessible, order, signature, shield, invoice, payment, discovery, direction, development, delivery] } }
       - { name: detailsHeading, label: Supplier details heading, type: string, required: true }
       - name: details
         label: Supplier details
@@ -594,6 +598,7 @@ content:
         fields:
           - { name: title, label: Title, type: string, required: true }
           - { name: text, label: Text, type: text, required: true }
+          - { name: icon, label: Drawing (optional), type: select, description: "A line drawing half off the tile's right edge, faint behind the words.", options: { values: [chart, map, pages, papers, formats, buildings, calendar, timeline, steps, contrast, choice, ring, idea, quote, accessible, order, signature, shield, invoice, payment, discovery, direction, development, delivery] } }
       - { name: emailButton, label: Email button, type: string, required: true, description: "The main button at the top of the page. It opens an email to you." }
       - { name: emailSubject, label: Email subject, type: string, required: true, description: "The subject line the email button fills in." }
       - { name: closeText, label: Start a Project text, type: text, required: true, description: "The words in the glass panel at the end of the page." }

@@ -7,21 +7,36 @@ stats:
   - number: 20
     after: +
     label: Projects Delivered
+    pictures:
+      - "@assets/work/cmd-inc/thumb.webp"
+      - "@assets/work/doubleshot-studio/thumb.webp"
+      - "@assets/work/oxford-school-of-english/01.webp"
   - number: 2
     label: Years as Lead Designer for a Tokyo Startup
+    pictures:
+      - "@assets/work/fou-answer/thumb.webp"
   - number: 7112
     label: Learner Records Mapped for ACL Essex
+    pictures:
+      - "@assets/work/acl-essex-infographics/heat-map.webp"
   - number: 70
     after: "%"
     label: of Clients Return for More Work
+    pictures:
+      - "@assets/work/new-city-college-strategic-intent/thumb.webp"
+      - "@assets/work/ncc-sustainability-report/thumb.webp"
   - number: 40000
     after: +
     label: Student Enrolments Mapped
     wide: true
+    pictures:
+      - "@assets/work/new-city-college-infographics/hackney-heat.webp"
   - number: 20000
     after: +
     label: Data Points Visualised
     wide: true
+    pictures:
+      - "@assets/work/new-city-college-infographics/totals.webp"
 workHeading: Selected Work
 allProjects: All Projects
 socialVideos:
@@ -65,15 +80,19 @@ steps:
     text: Send a short note and you'll get a reply {reply time}. On a free 20-minute
       call we agree audience, formats and budget. A fixed quote follows, before any
       work begins.
+    icon: discovery
   - title: Direction
     text: Early ideas, before anything is polished. You pick one, and it sets the
       course.
+    icon: direction
   - title: Development
     text: I build the full set and share it as it takes shape, with the feedback rounds
       set out in your quote.
+    icon: development
   - title: Delivery
     text: I check every detail. Once you sign off, you get the files in the formats
       your team needs.
+    icon: delivery
 closeText: Tell me what you're working on, and I'll be in touch.
 backdrop: painting
 canvasImage: "@assets/art/engraved/canvas-texture.jpg"

@@ -19,9 +19,10 @@ const page = (file: string, shape: Shape) => defineCollection({
 // One picture of real work, so a page of words has something to look at (Josh, 4 Nov).
 const picture = (image: () => z.ZodTypeAny) => z.object({ src: image(), alt: s, caption: text, focus: text }).nullish();
 const s = z.string().min(1);
-// The icons an Outcomes figure can show (drawn in components/StatIcon.astro; the same list is in .pages.yml).
-export const STAT_ICONS = ['chart', 'map', 'pages', 'formats', 'buildings', 'calendar', 'timeline', 'steps', 'contrast', 'choice'] as const;
-const items = z.array(z.object({ title: s, text: s }));
+// The drawings a bento tile can show, half off its edge (drawn in components/BentoArt.astro; the same list is in .pages.yml).
+export const ART_ICONS = ['chart', 'map', 'pages', 'papers', 'formats', 'buildings', 'calendar', 'timeline', 'steps', 'contrast', 'choice', 'ring', 'idea', 'quote', 'accessible', 'order', 'signature', 'shield', 'invoice', 'payment', 'discovery', 'direction', 'development', 'delivery'] as const;
+const icon = z.enum(ART_ICONS).nullish();
+const items = z.array(z.object({ title: s, text: s, icon }));
 export const pages = {
   workPage: page('work', { heading: s, intro: s, archiveFilter: s, archiveNote: text, clientsHeading: s, closeText: s }),
   caseStudyPage: page('case-study', {
@@ -97,12 +98,12 @@ export const collections = {
         after: pic.nullish(),
         // Outcomes bento (Josh, 4 Nov): the work out in the world, and short figures. Every figure must be real.
         outcomeImages: z.array(pic.extend({ video: z.string().nullish() })).nullish().transform((v) => v ?? []),
-        // Each figure can carry a small line icon, and a one-colour line drawing faintly behind it (Josh, 5 Nov:
-        // "turn my map into a black and white icon ... as if it's in the glass").
+        // Each figure can carry a drawing pushed half off its tile's edge: a one-colour line drawing traced from the
+        // work (`art`), or one of the drawn icons (Josh, 5 Nov: "put it more into the sides, so only half shows").
         stats: z.array(z.object({
           value: z.string().min(1),
           label: z.string().min(1),
-          icon: z.enum(STAT_ICONS).nullish(),
+          icon,
           art: image().nullish(),
         })).nullish().transform((v) => v ?? []),
         // Optional moving title graphic at the top of the case study (Josh, 4 Nov: the CMD logo reveal).
@@ -177,7 +178,10 @@ export const collections = {
       startButton: z.string().min(1),
       workButton: z.string().min(1),
       trustedByLabel: z.string().min(1),
-      stats: z.array(z.object({ number: z.number(), after: z.string().nullish().transform((s) => s ?? ''), label: z.string().min(1), wide: z.boolean().nullish() })),
+      // Each figure can carry up to three pictures of the work it counts, shown as cards cropped off the tile's
+      // top and right edges (Josh, 5 Nov: "could be far more exciting", after Apple's bento grids).
+      stats: z.array(z.object({ number: z.number(), after: z.string().nullish().transform((s) => s ?? ''), label: z.string().min(1), wide: z.boolean().nullish(),
+        pictures: z.array(image()).max(3).nullish().transform((v) => v ?? []) })),
       workHeading: z.string().min(1),
       allProjects: z.string().min(1),
       // Vertical videos under the Social Media filter; the file path is under public/ (Pages CMS: Short videos).
@@ -191,7 +195,7 @@ export const collections = {
       pageImage: image(),
       aboutLead: z.string().min(1),
       closeText: z.string().min(1),
-      steps: z.array(z.object({ title: z.string().min(1), text: z.string().min(1) })),
+      steps: z.array(z.object({ title: z.string().min(1), text: z.string().min(1), icon })),
     }),
   }),
   settings: defineCollection({
