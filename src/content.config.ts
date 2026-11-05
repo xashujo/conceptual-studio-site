@@ -181,7 +181,7 @@ export const collections = {
       // Each figure can carry an icon cut from the work it counts (the Essex map, the Fou Answer eye), set grey into
       // the glass half off the tile's edge (Josh, 5 Nov: "take the map outline, make it grey, like a standard icon").
       stats: z.array(z.object({ number: z.number(), after: z.string().nullish().transform((s) => s ?? ''), label: z.string().min(1), wide: z.boolean().nullish(),
-        art: image().nullish(), icon })),
+        art: image().nullish(), icon, artSize: z.enum(['small', 'medium', 'large']).default('medium') })),
       workHeading: z.string().min(1),
       allProjects: z.string().min(1),
       // Vertical videos under the Social Media filter; the file path is under public/ (Pages CMS: Short videos).

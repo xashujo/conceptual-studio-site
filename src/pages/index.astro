@@ -32,7 +32,7 @@ const titleCase = (s: string) => s.replace(/\band\b/gi, '&').split(' ')
   .join(' ');
 
 // Pages CMS: Home page > Stats. Figures confirmed by Josh (4 Nov); projects counted from his Client Work folders.
-const stats = home.stats.map((s) => ({ n: s.number, after: s.after, label: s.label, wide: !!s.wide, art: s.art, icon: s.icon }));
+const stats = home.stats.map((s) => ({ n: s.number, after: s.after, label: s.label, wide: !!s.wide, art: s.art, icon: s.icon, size: s.artSize }));
 
 // Featured work and the services come from Pages CMS (Projects and Services).
 // The first six by home page position show (two rows of three); any more wait behind "Show More".
@@ -287,7 +287,7 @@ const more = services.filter((s) => !lanes.includes(s));
           <section class="stats" aria-label="The studio in numbers">
             <ul class="stats__list">
               {stats.map((s, i) => (
-                <li class:list={["stat glass", { 'stat--wide': s.wide }]} data-lens style={`--i: ${i}`}>
+                <li class:list={["stat glass", `stat--art-${s.size}`, { 'stat--wide': s.wide }]} data-lens style={`--i: ${i}`}>
                   <BentoArt art={s.art} icon={s.icon} />
                   <p class="stat__n"><span aria-hidden="true"><span data-count={s.n} data-i={i}>{s.n.toLocaleString('en-GB')}</span><span class={s.after === '+' ? 'stat__plus' : undefined}>{s.after}</span></span><span class="sr-only">{s.n.toLocaleString('en-GB')}{s.after}</span></p>
                   <p class="stat__l">{s.label}</p>

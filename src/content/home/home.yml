@@ -11,9 +11,11 @@ stats:
   - number: 2
     label: Years as Lead Designer for a Tokyo Startup
     art: "@assets/home/eye-icon.webp"
+    artSize: small
   - number: 7112
     label: Learner Records Mapped for ACL Essex
     art: "@assets/home/essex-icon.webp"
+    artSize: small
   - number: 70
     after: "%"
     label: of Clients Return for More Work
