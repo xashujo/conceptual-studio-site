@@ -103,11 +103,11 @@ html { scroll-behavior: smooth; }
 
 /* Close and footer, on warm black: Lemoyne's ceiling to the very bottom. */
 .end { position: relative; isolation: isolate; background: var(--paper); }
-.close { position: relative; display: grid; grid-template-columns: max-content minmax(0, 680px); column-gap: clamp(40px, 5vw, 96px); padding-block: min(560px, 40vw) 96px; align-items: start; }
+.close { position: relative; display: grid; grid-template-columns: max-content fit-content(680px); justify-content: center; column-gap: clamp(40px, 5vw, 96px); padding-block: min(560px, 40vw) 96px; align-items: start; }
 .close__art { position: absolute; inset: 0; z-index: -1; overflow: hidden; }
 .close__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%); mask-image: linear-gradient(to bottom, transparent, #000 14%); } /* taste-skill-ignore: the art fades into the black above it, not into another section */
 .close__h { grid-column: 1; margin-top: -0.18em; } /* cap tops level with the glass panel */
-.close__body { grid-column: 2; width: min(680px, 100%); box-sizing: border-box; display: grid; gap: 24px; padding: var(--sp-card); border-radius: var(--radius); }
+.close__body { grid-column: 2; max-width: 680px; box-sizing: border-box; display: grid; gap: 24px; padding: var(--sp-card); border-radius: var(--radius); }
 .close__p { font-size: 20px; line-height: 1.5; }
 .footer { padding: 0 var(--margin) 40px; text-align: center; font-size: 16px; color: #F1DFC8; }
 
