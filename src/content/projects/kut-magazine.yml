@@ -4,11 +4,14 @@ client: Kingston School of Art
 year: 2023
 disciplines:
 - Visual identity
+- Branding
 - Art direction
 - Photography
+- Interviewing
+- Project management
 studentWork: true
 order: 80
-summary: 'An arts magazine on emerging creatives: identity, interviews, layout and print.'
+summary: "Proposed and Executed a Creative Magazine While Exploring its Potential as a Business Venture."
 cover:
   src: '@assets/work/kut-magazine/pages/01.webp'
   alt: 'KUT Magazine cover: Issue No. 01, December 2022, with a painting by Holly Latif'
