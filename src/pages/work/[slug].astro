@@ -10,7 +10,7 @@ import PlateCaption from '../../components/PlateCaption.astro';
 import StatIcon from '../../components/StatIcon.astro';
 import Carousel from '../../components/Carousel.astro';
 import { caseStudies, bySlug, type Plate } from '../../data/work';
-import { caseStudyPage as t } from '../../lib/pages';
+import { caseStudyPage as t, titleCase, headline } from '../../lib/pages';
 import { bento, ratioOf } from '../../lib/bento';
 import sharp from 'sharp';
 
@@ -20,7 +20,7 @@ export function getStaticPaths() {
 const { cs } = Astro.props;
 const p = bySlug(cs.slug);
 const next = bySlug(cs.next);
-const cap = (pl: Plate) => ({ title: p.client.startsWith(p.title) ? `${p.title}, ${p.year}` : `${p.title}, ${p.client}, ${p.year}`, medium: pl.medium });
+const cap = (pl: Plate) => ({ title: p.client.startsWith(p.title) ? `${p.title}, ${p.year}` : `${p.title}, ${p.client}, ${p.year}`, medium: pl.medium && titleCase(pl.medium) });
 // Credits sit on one line each (Josh, 4 Nov: the four-column row with the outcome felt stuffy). The outcome
 // field still shows on the home page's Selected Work cards.
 // Bento (lib/bento.ts, Josh 4 Nov: Apple-style, and the Oxford School of English way across every case study).
@@ -211,7 +211,7 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
       {leadShot.map((pl) => (
         <figure class="tile glass tile--hero">
           <Image src={pl.image} alt={pl.alt} widths={[800, 1400, 2200]} sizes="(min-width: 760px) 1140px, 100vw" />
-          {pl.medium && <figcaption class="tile__label">{pl.medium}</figcaption>}
+          {pl.medium && <figcaption class="tile__label">{titleCase(pl.medium)}</figcaption>}
         </figure>
       ))}
       <div class="bento-wrap"><div class:list={['bento', 'bento--outcomes', { 'bento--charts': charts }]}>
@@ -224,13 +224,13 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
                   ? <video data-loop muted loop playsinline preload="none" poster={pc.plate.image.src} aria-label={pc.plate.alt}><source src={pc.plate.video} type="video/mp4" /></video>
                   : <Image src={pc.plate.image} alt={pc.plate.alt} widths={[600, 1000, 1600, 2200]} sizes={`(min-width: 760px) ${Math.round((w / 6) * 1140)}px, 100vw`} />}
               </div>
-              {pc.label && <figcaption class="tile__label">{pc.label}</figcaption>}
+              {pc.label && <figcaption class="tile__label">{titleCase(pc.label)}</figcaption>}
             </figure>
           );
           return (
             <div class:list={['tile', 'glass', 'tile--words', `tile--${pc.kind}`]} style={`${area}; --hr: ${((h * 135 + (h - 1) * 12) / (w * 180 + (w - 1) * 12)).toFixed(4)}${quoteSize(pc, w, h)}`}>
               {outcomeArt[k] && <img class="tile__lines" src={outcomeArt[k]!.src} alt="" loading="lazy" decoding="async" />}
-              {pc.kind === 'headline' && <p class="tile__headline">{pc.text}</p>}
+              {pc.kind === 'headline' && <p class="tile__headline">{headline(pc.text)}</p>}
               {pc.kind === 'stat' && pc.icon && !outcomeArt[k] && <StatIcon name={pc.icon} drawing />}
               {pc.kind === 'stat' && pc.icon && <StatIcon name={pc.icon} />}
               {pc.kind === 'stat' && (() => { const f = figure(pc.value); return <p class="tile__stat" style={`--n: ${Math.max(f.num.length, 1.6)}`}><b>{f.num}{f.unit && <small> {f.unit}</small>}</b><span>{pc.label}</span></p>; })()}

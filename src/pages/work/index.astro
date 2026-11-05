@@ -16,7 +16,7 @@ const items = projects.map((p) => ({
   filters: p.tags.filter((t) => t !== 'archive').map((t) => label[t]), archive: p.student, student: p.student, label: p.label,
   outcome: p.outcome, brief: p.listText,
   // "Sustainability report for New City College London"; concept and student work name the project instead.
-  caption: (p.label ? [`${p.made}:`, p.title] : [`${p.made} for`, p.client]) as [string, string],
+  caption: (p.label ? [`${titleCase(p.made)}:`, p.title] : [`${titleCase(p.made)} for`, p.client]) as [string, string],
   category: p.student ? p.label! : p.tags.map((t) => label[t]).join(', '), client: p.client,
 }));
 const videos = await Promise.all(home.socialVideos.map(async (v) => ({ ...v, poster: (await getImage({ src: v.poster, width: 720, format: 'webp' })).src })));

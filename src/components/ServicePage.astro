@@ -38,7 +38,7 @@ const steps = home.steps.map((st) => ({ title: st.title, text: st.text.replaceAl
         {s.examples.map((e, i) => (
           <figure data-reveal style={`--i: ${i}`}>
             <Image src={e.img} alt={e.alt} widths={[600, 900, 1400]} sizes="(min-width: 1200px) 560px, (min-width: 760px) 48vw, 100vw" style={`object-position:${e.pos ?? '50% 50%'}`} />
-            <PlateCaption title={e.title} medium={e.medium} />
+            <PlateCaption title={e.title} medium={titleCase(e.medium)} />
           </figure>
         ))}
       </div>
