@@ -49,5 +49,14 @@ gallery:
       - src: "@assets/work/ncc-sustainability-report/05.webp"
         alt: Bars of energy use by campus against a good practice line, with the numbers blurred
         caption: Energy use against good practice (numbers blurred)
+stats:
+  - value: "8"
+    label: Charts redrawn for the report
+  - value: "16"
+    label: A4 pages laid out
+  - value: "5"
+    label: Formats, from print to accessible PDF
+  - value: "10"
+    label: Campuses compared
 whatHappened: |
   The report was finished and reviewed by RV Ed Consulting, who found the charts improved the report's narrative.

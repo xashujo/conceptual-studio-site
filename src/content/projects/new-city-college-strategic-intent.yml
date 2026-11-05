@@ -65,5 +65,10 @@ gallery:
   - src: '@assets/work/new-city-college-strategic-intent/08.webp'
     alt: Pie chart of 8,900 adult students by level, 2024/25
     caption: Adult students by level, 2024/25
+stats:
+  - value: "7"
+    label: Infographics in the briefing
+  - value: "34 years"
+    label: Of mergers on one map, 1990 to 2024
 whatHappened: |
   The infographics were used in the college's executive merger communications.

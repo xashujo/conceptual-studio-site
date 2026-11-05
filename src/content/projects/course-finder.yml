@@ -32,6 +32,11 @@ whatIDid: |-
   - A London map placed by postcode, with circles that grow with matching courses and one-tap directions.
   - An Excel upload for staff, with every file checked before it goes live.
   - Built to WCAG 2.2 AA, with a text table alongside the map.
+stats:
+  - value: "2"
+    label: Options weighed, Power BI or a custom tool
+  - value: "AA"
+    label: WCAG 2.2 contrast on every colour pairing
 whatHappened: |-
   A working prototype, live online with sample providers, plus a proposal for the build, launch and support. It can be adapted for any college or training provider.
 gallery:
