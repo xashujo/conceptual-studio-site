@@ -286,10 +286,10 @@ a { color: inherit; }
 
 /* The painting behind the bands (Josh, 2 Nov: hard-edged, "like separate paintings"). Each band holds the
    same image at screen size, held on screen while its band scrolls past, so it's never stretched past its
-   pixels (it used to be stretched down the whole page, which zoomed it 2-10x). The art box runs a quarter
-   screen past its band, clipped off, so the painting can drift up a little as you scroll (where the browser
-   supports scroll-linked animation; elsewhere it simply holds). Each band shows a different stretch of it. */
-.band__art { position: absolute; inset: 0 0 -25vh; z-index: -1; clip-path: inset(0 0 25vh); pointer-events: none; view-timeline: --band; }
+   pixels (it used to be stretched down the whole page, which zoomed it 2-10x). It holds still while the
+   band scrolls over it (Josh, 5 Nov: the scroll drift made it feel like it was scrolling). Each band shows a
+   different stretch of it. */
+.band__art { position: absolute; inset: 0 0 -25vh; z-index: -1; clip-path: inset(0 0 25vh); pointer-events: none; }
 .band__art img { position: sticky; top: 0; display: block; width: 100%; height: 125vh; object-fit: cover; object-position: 50% var(--py, 0%); opacity: 0.25; filter: url(#tone-day); }
 .band.night .band__art img { filter: url(#tone-night); }
 .band:nth-of-type(4n + 1) { --py: 25%; }
@@ -297,15 +297,6 @@ a { color: inherit; }
 .band:nth-of-type(4n + 3) { --py: 75%; }
 .band:nth-of-type(4n + 4) { --py: 100%; }
 .band.ph { --py: 0%; } /* a page opening shows the top of the painting, as the home page's does */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .band__art img { animation: band-drift linear both; }
-    /* A separate rule on purpose: the build's CSS minifier folds a timeline into the animation shorthand,
-       which Chrome and Safari reject, so the drift silently never ran. */
-    .band__art > img { animation-timeline: --band; animation-range: contain; }
-  }
-}
-@keyframes band-drift { to { transform: translateY(-25vh); } }
 /* Browsers without the Popover API: the menu stays hidden until src/scripts/fallbacks.js opens it. */
 @supports not selector(:popover-open) { [popover]:not(.is-open) { display: none; } }
 .band { --ink-2: color-mix(in srgb, var(--ink) 74%, var(--paper)); } /* secondary text 4.5:1 or better over the art's darkest lines */

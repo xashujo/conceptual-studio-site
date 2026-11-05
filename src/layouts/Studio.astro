@@ -91,7 +91,7 @@ const isCurrent = (h: string) => h === current || (h !== '/' && current?.startsW
     <script>
       import { mountLens } from '../scripts/lens.js';
       import { reveal } from '../scripts/reveal.js';
-      import '../scripts/fallbacks.js'; // popover menu and background drift for older browsers
+      import '../scripts/fallbacks.js'; // popover menu for older browsers
 
       // Glass: small chrome may bend (lens.js keeps it to three pieces); big panes are plain blurred glass.
       document.querySelector<HTMLElement>('[data-filters]')?.removeAttribute('hidden'); // shown before the lens counts its height

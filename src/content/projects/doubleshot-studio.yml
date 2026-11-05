@@ -19,7 +19,7 @@ featured: true
 featuredOrder: 6
 homeFilter: Branding
 hasPage: true
-outcome: A full identity in about a week, from logo to 3D characters.
+outcome: Signed off by the studio, and now live on its own website.
 problem: |
   DoubleShot is a small London creative studio started by friends. They wanted an identity that was warm and bold, with a sense of humour, but still serious about the work.
 
@@ -48,13 +48,13 @@ gallery:
     images:
       - src: "@assets/work/doubleshot-studio/07.webp"
         alt: Two cream cards held on a wall with brass clips, one with the wordmark and one with the star characters
-        caption: Cards
+        caption: Wordmark & star cards
       - src: "@assets/work/doubleshot-studio/06.webp"
         alt: A sticker with two black star characters and a red DoubleShot label on a cardboard box
         caption: Box sticker
       - src: "@assets/work/doubleshot-studio/08.webp"
         alt: A laptop showing the DoubleShot wordmark on a wooden chair
-        caption: On screen
+        caption: The wordmark on a laptop
   - layout: One large
     images:
       - src: "@assets/work/doubleshot-studio/09.webp"
@@ -62,11 +62,8 @@ gallery:
         caption: The three colours
 outcomeImages:
   - src: "@assets/work/doubleshot-studio/duo-3d.webp"
-    alt: One of The Duo, DoubleShot's red star mascots, rendered in 3D mid-stride on black
+    alt: One of The Duo, DoubleShot's red star mascots, rendered in 3D mid-stride on the brand's Soot
     caption: The Duo in 3D
-  - src: "@assets/work/doubleshot-studio/duo-travel.webp"
-    alt: The Duo on holiday, one in a striped swim ring and sunglasses, the other with sunglasses and a suitcase
-    caption: The Duo on holiday
 whatHappened: |
   Everything went into a brand guidelines deck: the wordmark in full and short form, the colour pairings, the type, app icons, a favicon, social profile pictures and 3D renders of The Duo.
 
