@@ -63,6 +63,9 @@ export const collections = {
         studentWork: z.boolean().nullish().transform((v) => !!v),
         // A small label on the card, e.g. Concept (Josh, 4 Nov). Student work is always labelled Student Work.
         label: text,
+        // What the card says I made, e.g. Sustainability report, shown as "Sustainability report for New City College London"
+        // on the Work page (Josh, 5 Nov, after Arturistic). Falls back to the first discipline.
+        made: text,
         order: z.number().nullish(),
         summary: z.string(),
         // The text in the work list's open row (Josh, 5 Nov): the brief, what I did and how it went. Falls back to the summary.

@@ -2,13 +2,15 @@ title: "ACL Essex Learner Maps"
 slug: acl-essex-infographics
 client: ACL Essex
 year: 2025
+made: "Learner maps"
 disciplines:
 - Data visualisation
 - Graphic design
 filters:
 - Data visualisation
 order: 30
-summary: Infographics and regional maps of learner data across seven delivery centres.
+summary: Infographics and regional maps of learner data across ACL's delivery centres in Essex.
+listText: "ACL Essex had a year of learner data spread across its centres and wanted it in its strategy document. I sorted it by centre & local authority and turned it into a heat map of Essex and a set of charts. Essex County Council were really pleased with them and used them in their strategy papers."
 cover:
   src: '@assets/work/acl-essex-infographics/03.webp'
   alt: Heat map of Essex showing ACL enrolments by local authority in 2024, in five shades of blue
@@ -16,4 +18,28 @@ cover:
 thumb: "@assets/work/acl-essex-infographics/thumb.webp"
 coverFocus: 50% 0%
 featured: false
-hasPage: false
+hasPage: true
+outcome: Used in Essex County Council's strategy papers.
+problem: |
+  ACL Essex runs adult learning from centres across the county. For its strategic intent document it needed to show who its learners were in 2024 and where they came from: their employment status, whether they were on Universal Credit, their ethnicity and the local authority they live in.
+
+  All of it sat in internal spreadsheets, one row per learner, and it had to make sense to council readers who would never open them.
+whatIDid: |
+  I sorted the year's learner records by centre and by local authority first. Then I turned them into infographics and regional maps: a heat map of Essex shaded by enrolments, and a stacked bar chart that shows which centre each local authority's learners go to.
+
+  Figures in these images are blurred for GDPR reasons.
+gallery:
+  - images:
+      - src: '@assets/work/acl-essex-infographics/03.webp'
+        alt: Heat map of Essex showing ACL enrolments by local authority in 2024, in five shades of blue
+        caption: Heat map of enrolments by local authority, 2024
+      - src: '@assets/work/acl-essex-infographics/learners.webp'
+        alt: Stacked bar chart of ACL learners in each Essex local authority in 2024, coloured by the centre they attend
+        caption: Learners by local authority & centre, 2024
+stats:
+  - value: "14"
+    label: Local authorities mapped
+  - value: "2024"
+    label: A full year of learner data
+whatHappened: |
+  I made these for Mark Silverman at Plus Pursuits. He told me afterwards that the client, Essex County Council, was really pleased with the charts and maps, and that they went into its strategy papers.
