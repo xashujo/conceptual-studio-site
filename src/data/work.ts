@@ -25,6 +25,8 @@ export interface Plate { image: ImageMetadata; alt: string; medium: string; }
 export interface Chapter { heading?: string; text: string[]; plates: Plate[]; }
 export interface Project {
   slug: string; title: string; client: string; year: number;
+  /** What the Work page card says I made, e.g. Sustainability report. */
+  made: string;
   disciplines: string[]; summary: string; tags: Filter[];
   /** The open list row's text: brief, what I did, outcome. Falls back to the summary. */
   listText: string;
@@ -71,7 +73,7 @@ const entries = (await getCollection('projects'))
   .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999) || a.data.title.localeCompare(b.data.title));
 
 export const projects: Project[] = entries.map(({ data: d }) => ({
-  slug: d.slug, title: d.title, client: d.client, year: d.year,
+  slug: d.slug, title: d.title, client: d.client, year: d.year, made: d.made || d.disciplines[0],
   disciplines: d.disciplines, summary: d.summary, listText: d.listText || d.summary,
   tags: d.studentWork ? ['archive'] : d.filters.map((f) => filterKey[f]),
   image: d.cover.src, alt: d.cover.alt, medium: d.cover.caption, position: d.coverFocus ?? undefined, thumb: d.thumb ?? undefined,
