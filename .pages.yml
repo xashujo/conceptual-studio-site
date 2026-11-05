@@ -85,6 +85,10 @@ content:
         label: Card label (optional)
         type: string
         description: "A small label on the project card, e.g. Concept. Student work is labelled Student Work automatically."
+      - name: made
+        label: What I made (Work page card)
+        type: string
+        description: "Short, e.g. Sustainability report. The Work page card reads \"Sustainability report for New City College London\". Concept and student work read \"3D artwork: Detached\". Leave empty to use the first discipline."
       - name: order
         label: Position on the Work page
         type: number
