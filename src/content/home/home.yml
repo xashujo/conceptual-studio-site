@@ -44,13 +44,12 @@ approach:
     text: Most of our work is for colleges, adult learning services and a language
       school in Oxford.
   - title: Brand & Data Together
-    text: One studio does both, so your reports and infographics look like the rest
-      of your brand.
-  - title: One Studio, Brief to Files
-    text: The same studio from the first call to the final files.
+    text: I do both, so your reports and charts look like the rest of your brand.
+  - title: One Designer, Brief to Files
+    text: You deal with me from the first call to the final files.
   - title: Works With Your Team
-    text: Your team knows your systems. We add the design, the wording & a fixed price,
-      and your team keeps its time for the core work.
+    text: Your team knows its systems. I add the design and the wording at a fixed
+      price, so your team keeps its time for the core work.
 results:
   - src/content/projects/oxford-school-of-english.yml
   - src/content/projects/new-city-college-strategic-intent.yml
@@ -65,12 +64,12 @@ steps:
     text: Early ideas, before anything is polished. You pick one, and it sets the
       course.
   - title: Development
-    text: We build the full set and share it as it takes shape, with feedback rounds
+    text: I build the full set and share it as it takes shape, with the feedback rounds
       set out in your quote.
   - title: Delivery
-    text: We check every detail. Once you sign off, you get the files in the formats
+    text: I check every detail. Once you sign off, you get the files in the formats
       your team needs.
-closeText: Tell us what you're working on, and we'll be in touch.
+closeText: Tell me what you're working on, and I'll be in touch.
 backdrop: painting
 canvasImage: "@assets/art/engraved/canvas-texture.jpg"
 pageImage: "@assets/art/engraved/apotheosis-strip.jpg"
