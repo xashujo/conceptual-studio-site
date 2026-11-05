@@ -18,22 +18,22 @@ thumb: '@assets/work/course-finder/thumb.webp'
 coverFocus: 50% 0%
 featured: false
 hasPage: true
-outcome: A working prototype, live online with sample providers.
+outcome: A working prototype on a test site, with 16 sample courses.
 problem: |-
   A London college group wanted people to find courses online more easily, then narrowed it to construction courses at colleges and training providers across London.
 
   It had to work on phones for 16 to 18-year-olds, adults changing career and learners with additional needs. Staff with no technical background had to keep it current. The college's first idea was Power BI.
 whatIDid: |-
-  We compared Power BI with a custom tool. Its public reports don't adapt to phones or forgive spelling mistakes, so we built a working prototype: a course finder inside the college's own WordPress site, in its brand.
+  I compared Power BI with a custom tool. Its public reports don't adapt to phones or forgive spelling mistakes, so I built a working prototype instead: a WordPress plugin that sits inside the college's own site, in its brand.
 
   - Search that forgives typos and trade slang: "plumming" finds Plumbing, "sparky" finds Electrical.
   - An "I am…" choice that shows only the courses for each learner, and what they cost.
-  - Filters for trade, provider, level and when courses run.
+  - Filters for trade, provider, borough, level and when courses run.
   - A London map placed by postcode, with circles that grow with matching courses and one-tap directions.
   - An Excel upload for staff, with every file checked before it goes live.
   - Built to WCAG 2.2 AA, with a text table alongside the map.
 whatHappened: |-
-  A working prototype, live online with sample providers, plus a proposal for the build, launch and support. It can be adapted for any college or training provider.
+  A working prototype on a test site, with 16 sample courses, plus a fixed-price proposal for the build, launch and support. It can be adapted for any college or training provider.
 gallery:
   - layout: Two side by side
     images:

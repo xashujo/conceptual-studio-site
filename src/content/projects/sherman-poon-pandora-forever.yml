@@ -1,7 +1,7 @@
 title: "Pandora Forever"
 slug: sherman-poon-pandora-forever
 client: Sherman Poon
-year: 2023
+year: 2022
 disciplines:
   - CGI
   - 3D animation
@@ -9,8 +9,8 @@ filters:
   - 3D and motion
 studentWork: false
 order: 70
-summary: CGI worlds for Sherman Poon's music video, shown on billboards
-  including Times Square in Hong Kong.
+summary: Two CGI rooms for Sherman Poon's music video, which played on the big
+  screens at Times Square, Causeway Bay, in Hong Kong.
 cover:
   src: "@assets/work/sherman-poon-pandora-forever/01.webp"
   alt: The title card from the Pandora Forever video, the Chinese title in white calligraphy over a glowing violet set
@@ -18,6 +18,6 @@ cover:
 thumb: "@assets/work/sherman-poon-pandora-forever/thumb.webp"
 coverFocus: 50% 50%
 featured: false
-outcome: Shown on billboards including Times Square in Hong Kong.
+outcome: Played on the big screens at Times Square, Causeway Bay, Hong Kong.
 homeFilter: Branding
 hasPage: false
