@@ -49,7 +49,7 @@
     --paper: #14110D; --paper-2: #221D17; --ink: #F1DFC8; --live: #3FD37E; --live-on-ink: #1F9D55;
     --ink-2: color-mix(in srgb, var(--ink) 62%, var(--paper));
   }
-  :is(.fw__view, .wb__view, .ct-else a, .mag__btn:not(:disabled), .band .result.glass):hover {
+  :is(.fw__view, .wb__view, .ct-else a, .mag__btn:not(:disabled), .band .result.glass, a.card.glass):hover {
     --paper: #F1DFC8; --paper-2: #E8D3B8; --ink: #000000; --ink-2: color-mix(in srgb, var(--ink) 62%, var(--paper));
   }
 }

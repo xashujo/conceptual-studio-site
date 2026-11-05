@@ -54,7 +54,11 @@ a { color: inherit; }
 .btn:is(:active, .is-pressed) { transform: translateY(1px); box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.18), 0 1px 1px rgb(40 24 8 / 0.12); }
 .btn--solid {
   --fill: var(--ink);
-  color: var(--paper); /* already ink, so its hover is the label swap alone (22) */
+  color: var(--paper);
+  /* Hover softens the ink a step, so a solid button visibly answers the pointer like every other button
+     (Josh, 5 Nov: the footer's cream Email Us didn't change). Press goes a step further. */
+  --fill-hover: color-mix(in srgb, var(--ink) 80%, var(--paper));
+  --fill-pressed: color-mix(in srgb, var(--ink) 70%, var(--paper));
 }
 /* The arrow (Josh, 4 Nov): a rounded, SF Symbols-style arrow.right drawn in the text colour, whatever glyph the
    markup holds (→, ← or ↗ stay in the HTML as the fallback). Hover tips it up to arrow.up.right. */
@@ -341,7 +345,7 @@ a.card.glass :is(.card__y, .card__out, .tag) { transition: color 300ms ease-out,
   a.card.glass.glass.glass:hover {
     color-scheme: light;
     color: var(--ink);
-    background: color-mix(in srgb, var(--paper) 72%, transparent);
+    background: color-mix(in srgb, var(--paper) 90%, transparent);
     -webkit-backdrop-filter: blur(24px) saturate(1.3);
     backdrop-filter: blur(24px) saturate(1.3);
     box-shadow:
@@ -351,6 +355,8 @@ a.card.glass :is(.card__y, .card__out, .tag) { transition: color 300ms ease-out,
       var(--lift-night);
   }
   a.card.glass:hover .tag { background: color-mix(in srgb, var(--ink) 8%, transparent); color: var(--ink); }
+  /* Year and outcome a step darker than --ink-2 on the cream (Josh, 5 Nov: the hover was a little hard to read). */
+  a.card.glass:hover :is(.card__y, .card__out) { color: color-mix(in srgb, var(--ink) 78%, var(--paper)); }
 }
 
 /* Tier A, plate glass: the WebGL canvas replaces the backdrop once it has drawn. */
