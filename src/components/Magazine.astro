@@ -1,4 +1,5 @@
 ---
+import { titleCase } from '../lib/pages';
 // A printed magazine you can turn the pages of (Josh, 4 Nov), opened from its card on the Work page.
 // Spreads on wide screens, one page at a time on phones. Pull a page over, click either side, or use the arrows or arrow keys.
 // Any link to #read-<slug> opens it. Pages and alt text: Pages CMS > Projects > Magazine pages.
@@ -13,7 +14,7 @@ const data = await Promise.all(pages.map(async ({ image, alt }) => {
 ---
 <dialog class="mag night" id={`read-${slug}`} aria-labelledby={`read-${slug}-t`} data-mag={JSON.stringify(data)}>
   <div class="mag__bar">
-    <h2 class="mag__t" id={`read-${slug}-t`}>{title}</h2>
+    <h2 class="mag__t" id={`read-${slug}-t`}>{titleCase(title)}</h2>
     <p class="mag__n" aria-live="polite" data-count></p>
     <form method="dialog"><button class="mag__btn glass-button is-dark" aria-label="Close" title="Close (Esc)">
       <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>

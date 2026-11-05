@@ -32,7 +32,7 @@ const labelled = new Set([0, 1, rows.length - 1]); // start, the low, now
   <div class="dc__head">
     <h2 class="dc__title" id={`${id}-title`}>Adults in Government-Funded Further Education, England</h2>
     <button class="btn dc__toggle" type="button" aria-pressed="false" aria-controls={`${id}-body`} hidden>
-      <span data-label>Show as a chart</span><span class="arrow" aria-hidden="true">→</span>
+      <span data-label>Show as a Chart</span><span class="arrow" aria-hidden="true">→</span>
     </button>
   </div>
   <div class="dc__body" id={`${id}-body`}>
@@ -79,7 +79,7 @@ const labelled = new Set([0, 1, rows.length - 1]); // start, the low, now
       const chart = fig.dataset.view === 'table';
       fig.dataset.view = chart ? 'chart' : 'table';
       btn.setAttribute('aria-pressed', String(chart));
-      label.textContent = chart ? 'Show as a table' : 'Show as a chart';
+      label.textContent = chart ? 'Show as a Table' : 'Show as a Chart';
     });
   });
 </script>

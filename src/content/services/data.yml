@@ -16,9 +16,8 @@ examples:
     title: Sustainability Report, New City College London, 2026
     caption: Charts and layout for the 2025-26 report
 cardImage:
-  src: '@assets/work/usp-freeport-skills/01.webp'
-  alt: Map of the UK Freeport Skills Partnership, with each partner college marked on its Freeport
-  focus: 50% 100%
+  src: '@assets/work/acl-essex-infographics/services.webp'
+  alt: Heat map slide of Essex in shades of blue, showing ACL enrolments by local authority with the figures blurred
 faqs:
   - question: Do the prices include VAT?
     answer: No. Conceptual Studio isn't VAT registered, so the quote is what you pay.
