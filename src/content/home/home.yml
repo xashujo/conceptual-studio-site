@@ -16,6 +16,13 @@ stats:
   - number: 70
     after: "%"
     label: of Clients Return for More Work
+  - number: 40000
+    after: +
+    label: Student Enrolments Mapped
+    wide: true
+  - number: 12
+    label: Months in a Row with One Client
+    wide: true
 workHeading: Selected Work
 allProjects: All Projects
 socialVideos:
