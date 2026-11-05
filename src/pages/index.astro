@@ -30,7 +30,7 @@ const titleCase = (s: string) => s.replace(/\band\b/gi, '&').split(' ')
   .join(' ');
 
 // Pages CMS: Home page > Stats. Figures confirmed by Josh (4 Nov); projects counted from his Client Work folders.
-const stats = home.stats.map((s) => ({ n: s.number, after: s.after, label: s.label }));
+const stats = home.stats.map((s) => ({ n: s.number, after: s.after, label: s.label, wide: !!s.wide }));
 
 // Featured work and the services come from Pages CMS (Projects and Services).
 // The first six by home page position show (two rows of three); any more wait behind "Show More".
@@ -254,15 +254,21 @@ const more = services.filter((s) => !lanes.includes(s));
           {trustedBy.length > 0 && (
             <div class="trusted">
               <p class="trusted__l">{home.trustedByLabel}</p>
-              <ul class="trusted__list">
-                {trustedBy.map((c) => <li>{c.logo ? <img src={c.logo.src} alt={c.name} width={Math.round(c.logoHeight * c.logo.width / c.logo.height)} height={c.logoHeight} style={`--h: ${c.logoHeight}px`} loading="lazy" /> : c.name}{c.logo && c.label && <span aria-hidden="true">{c.label}</span>}</li>)}
-              </ul>
+              <!-- A slow sliding row with soft blurred edges (Josh, 5 Nov, after kenjilambert.com). The list runs twice so
+                   the loop is seamless; the copy is hidden from screen readers. Hover pauses it; reduced motion keeps it still. -->
+              <div class="trusted__marquee">
+                {[0, 1].map((copy) => (
+                  <ul class="trusted__list" aria-hidden={copy ? 'true' : undefined}>
+                    {trustedBy.map((c) => <li>{c.logo ? <img src={c.logo.src} alt={copy ? '' : c.name} width={Math.round(c.logoHeight * c.logo.width / c.logo.height)} height={c.logoHeight} style={`--h: ${c.logoHeight}px`} loading="lazy" /> : c.name}{c.logo && c.label && <span aria-hidden="true">{c.label}</span>}</li>)}
+                  </ul>
+                ))}
+              </div>
             </div>
           )}
           <section class="stats" aria-label="The studio in numbers">
             <ul class="stats__list">
               {stats.map((s, i) => (
-                <li class="stat glass" data-lens style={`--i: ${i}`}>
+                <li class:list={["stat glass", { 'stat--wide': s.wide }]} data-lens style={`--i: ${i}`}>
                   <p class="stat__n"><span aria-hidden="true"><span data-count={s.n} data-i={i}>{s.n.toLocaleString('en-GB')}</span><span class={s.after === '+' ? 'stat__plus' : undefined}>{s.after}</span></span><span class="sr-only">{s.n.toLocaleString('en-GB')}{s.after}</span></p>
                   <p class="stat__l">{s.label}</p>
                 </li>
@@ -541,6 +547,7 @@ const more = services.filter((s) => !lanes.includes(s));
   .stat { position: relative; display: grid; align-content: space-between; gap: 20px; min-height: 160px; padding: 26px 28px 24px; border-radius: var(--radius); }
   .stat__n { font-family: var(--display); font-weight: 500; font-size: clamp(48px, 4.2vw, 62px); line-height: 0.9; letter-spacing: 0.01em; font-variant-numeric: tabular-nums; }
   .stat__plus { margin-left: 0.12em; -webkit-text-stroke: 0.03em currentColor; } /* half a space off the figure, and stroked to the digits' weight: Agatho has no bolder cut (Josh, 28 Oct) */
+  .stat--wide { grid-column: span 2; } /* bento: a wide card fills out a row (Josh, 4 Nov) */
   .stat__l { font-size: 18px; line-height: 1.35; font-weight: 500; text-wrap: balance; }
 
   /* Featured work: heading, the filter bar, then compact landscape cards three to a row (Josh, 28 Oct), all the same shape. */
@@ -672,8 +679,23 @@ const more = services.filter((s) => !lanes.includes(s));
   /* One tidy row (Josh, 4 Nov: two uneven rows looked messy): label on top, logos spread evenly at equal optical weight. */
   .trusted { display: grid; justify-items: center; gap: 20px; margin-top: var(--sp-head); padding-block: 24px 28px; border-block: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); }
   .trusted__l { font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); }
-  .trusted__list { width: 100%; display: flex; flex-wrap: nowrap; justify-content: space-between; align-items: center; gap: 24px; margin: 0; padding: 0 8px; list-style: none; font-size: 15px; color: var(--ink-2); }
-  @media (max-width: 1099.98px) { .trusted__list { flex-wrap: wrap; justify-content: center; gap: 22px 36px; } }
+  /* Marquee: two identical lists slide left by one list's width, so the seam never shows. The edges fade out and blur
+     (a mask plus a masked backdrop blur), like logos passing behind frosted glass. */
+  .trusted__marquee { --gap: 64px; --edge: min(12%, 120px); position: relative; width: 100%; display: flex; overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, #000 var(--edge), #000 calc(100% - var(--edge)), transparent); }
+  .trusted__marquee::before, .trusted__marquee::after { content: ""; position: absolute; inset-block: 0; z-index: 1; width: var(--edge); pointer-events: none; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  .trusted__marquee::before { left: 0; mask-image: linear-gradient(90deg, #000, transparent); }
+  .trusted__marquee::after { right: 0; mask-image: linear-gradient(-90deg, #000, transparent); }
+  .trusted__list { flex: none; display: flex; align-items: center; gap: var(--gap); margin: 0; padding: 4px calc(var(--gap) / 2); list-style: none; font-size: 15px; color: var(--ink-2); white-space: nowrap; animation: trusted-slide 40s linear infinite; }
+  .trusted__marquee:hover .trusted__list { animation-play-state: paused; }
+  @keyframes trusted-slide { to { transform: translateX(-100%); } }
+  @media (max-width: 759.98px) { .trusted__marquee { --gap: 44px; } .trusted__list { animation-duration: 30s; } }
+  /* Reduced motion: no sliding. The logos wrap into a still, centred block and the copy goes. */
+  @media (prefers-reduced-motion: reduce) {
+    .trusted__marquee { mask-image: none; }
+    .trusted__marquee::before, .trusted__marquee::after, .trusted__list[aria-hidden] { display: none; }
+    .trusted__list { flex: 1; flex-wrap: wrap; justify-content: center; gap: 22px 36px; animation: none; white-space: normal; }
+  }
   .trusted__list li { display: flex; align-items: center; gap: 10px; }
   .trusted__list img { display: block; height: var(--h, 28px); width: auto; filter: brightness(0) invert(1) sepia(.35); opacity: .7; } /* any logo to one soft cream */
   .approach { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: var(--sp-gap); margin: 0; margin-top: var(--sp-head); padding: 0; list-style: none; }
@@ -718,13 +740,13 @@ const more = services.filter((s) => !lanes.includes(s));
 
   /* Close and footer, on warm black. */
   .end { position: relative; isolation: isolate; background: var(--paper); }
-  .close { position: relative; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-block: min(560px, 40vw) 96px; align-items: start; } /* heading top level with the glass panel (Josh, 28 Oct) */
+  .close { position: relative; display: grid; grid-template-columns: max-content minmax(0, 680px); column-gap: clamp(40px, 5vw, 96px); padding-block: min(560px, 40vw) 96px; align-items: start; } /* heading top level with the glass panel (Josh, 28 Oct) */
   /* The close's tall top padding is art, not content: land the nav link on the heading, not the empty sky above it. */
   #contact { scroll-margin-top: calc(96px - min(560px, 40vw)); }
   .close__art { position: absolute; inset: 0; z-index: -1; overflow: hidden; }
   .close__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%); mask-image: linear-gradient(to bottom, transparent, #000 14%); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
-  .close__h { grid-column: 1 / span 6; margin-top: -0.18em; } /* cap tops, not the line box, level with the panel */
-  .close__body { grid-column: 7 / -1; justify-self: end; width: min(680px, 100%); box-sizing: border-box; display: grid; gap: 24px; padding: var(--sp-card); border-radius: var(--radius); } /* dark glass so it reads over the Lemoyne (Josh, 28 Oct) */
+  .close__h { grid-column: 1; margin-top: -0.18em; } /* cap tops, not the line box, level with the panel */
+  .close__body { grid-column: 2; width: min(680px, 100%); box-sizing: border-box; display: grid; gap: 24px; padding: var(--sp-card); border-radius: var(--radius); } /* dark glass so it reads over the Lemoyne (Josh, 28 Oct) */
   .close__p { font-size: 20px; line-height: 1.5; }
   .footer { padding: 0 var(--margin) 40px; text-align: center; font-size: 16px; color: #F1DFC8; }
 
@@ -751,6 +773,7 @@ const more = services.filter((s) => !lanes.includes(s));
     .proof__grid--two.proof__grid--r3 { grid-template-columns: 1fr 1fr; }
     .proof__grid--r3:is(.proof__grid--two, .proof__grid--three) .result { grid-column: auto; }
     .proof__grid--r3 .result:last-child { grid-column: 1 / -1; } /* three links on a tablet: two, then one across */
+    .close { grid-template-columns: minmax(0, 1fr); }
     .close__h, .close__body { grid-column: 1 / -1; }
     .close__body { margin-top: var(--sp-head); justify-self: start; }
   }

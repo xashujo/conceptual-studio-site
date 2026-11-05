@@ -8,8 +8,8 @@ disciplines:
 filters:
 - Data visualisation
 order: 10
-summary: Infographics for the college's strategic intent briefing, used in its executive merger communications.
-listText: "New City College needed board-level infographics built on complex data: borough forecasts, student numbers & sector growth. I sorted the data first, then gave the whole suite one visual language. Senior leadership use them across the college's 10 campuses & 18,000+ students."
+summary: Board-level infographics for the college's Strategic Intent document, used by its senior leadership.
+listText: "New City College needed board-level infographics for its Strategic Intent document, built on complex data: borough forecasts, student numbers & sector growth. I sorted the data first, then gave the whole suite one visual language. Senior leadership use them across the college's 10 campuses & 18,000+ students."
 cover:
   src: '@assets/work/new-city-college-strategic-intent/02.webp'
   alt: Black map of east London boroughs showing the colleges that merged to form New City College, with a timeline from 1990 to 2024
@@ -34,7 +34,7 @@ homeCharts:
   title: 16 to 18 students by level, 2024/25
   caption: Pie chart, 10,404 students
 hasPage: true
-outcome: Used in the college's executive merger communications.
+outcome: Used by the college's senior leadership across its 10 campuses.
 problem: |
   New City College needed a strategic intent briefing that senior leaders and stakeholders could read quickly. The material was policy-heavy and the data complex: borough demographic forecasts, student numbers by age, level and support need, and growth by employment sector.
 
@@ -67,4 +67,4 @@ gallery:
     alt: Pie chart of 8,900 adult students by level, 2024/25
     caption: Adult students by level, 2024/25
 whatHappened: |
-  The infographics were used in the college's executive merger communications.
+  The infographics went into the Strategic Intent document used by the college's senior leadership, across a college of 10 campuses and more than 18,000 students.
