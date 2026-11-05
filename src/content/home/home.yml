@@ -7,9 +7,8 @@ stats:
   - number: 20
     after: +
     label: Projects Delivered
-  - number: 20000
-    after: +
-    label: Data Points Visualised
+  - number: 2
+    label: Years as Lead Designer for a Tokyo Startup
   - number: 7112
     label: Learner Records Mapped for ACL Essex
   - number: 70
@@ -19,8 +18,9 @@ stats:
     after: +
     label: Student Enrolments Mapped
     wide: true
-  - number: 2
-    label: Years as Lead Designer for a Tokyo Startup
+  - number: 20000
+    after: +
+    label: Data Points Visualised
     wide: true
 workHeading: Selected Work
 allProjects: All Projects
