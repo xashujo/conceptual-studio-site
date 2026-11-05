@@ -77,14 +77,14 @@ export function splits(n: number): number[][] {
 }
 
 /** The best way to lay `items` (indices start..start+size) into one block, and its cost. */
-function fit(items: Item[], start: number, size: number, flip: boolean, lead: boolean) {
+function fit(items: Item[], start: number, size: number, flip: boolean, lead: boolean, plainCost: number) {
   const idx = Array.from({ length: size }, (_, i) => start + i);
   let best: { cost: number; block: Block; order: number[] } | undefined;
   for (const raw of blocks[size]) {
     const block = flip ? mirror(raw) : raw;
     for (const order of permutations(idx)) {
       if (lead && order[0] !== start) continue; // the opening image takes the feature tile
-      let cost = order.reduce((c, i, k) => c + misfit(items[i], block.slots[k]), raw.plain ? 0.35 * size : 0);
+      let cost = order.reduce((c, i, k) => c + misfit(items[i], block.slots[k]), raw.plain ? plainCost * size : 0);
       // Keep the CMS order where shapes allow (a before reads before its after).
       const seat = (k: number) => block.slots[k].row * COLS + block.slots[k].col;
       for (let a = 0; a < size; a++) for (let b = a + 1; b < size; b++) if ((order[a] - order[b]) * (seat(a) - seat(b)) < 0) cost += 0.1;
@@ -94,15 +94,17 @@ function fit(items: Item[], start: number, size: number, flip: boolean, lead: bo
   return best!;
 }
 
-/** Places items into the bento. Tiles come back in reading order. `flip` starts on the mirrored side. */
-export function bento(items: Item[], flip = false): Tile[] {
+/** Places items into the bento. Tiles come back in reading order. `flip` starts on the mirrored side.
+ *  `plainCost` is how much less an even grid is liked than a feature layout; slides of one shape (the data
+ *  projects) use less, so two charts sit as equal halves instead of one wide strip (Josh, 5 Nov: "so thin"). */
+export function bento(items: Item[], flip = false, plainCost = 0.35): Tile[] {
   if (!items.length) return [];
   let best: { cost: number; tiles: Tile[] } | undefined;
   for (const sizes of splits(items.length)) {
     let start = 0, row = 1, cost = 0.25 * sizes.length; // fewer, bigger blocks read calmer
     const tiles: Tile[] = [];
     sizes.forEach((size, b) => {
-      const f = fit(items, start, size, (b + Number(flip)) % 2 === 1, b === 0);
+      const f = fit(items, start, size, (b + Number(flip)) % 2 === 1, b === 0, plainCost);
       cost += f.cost;
       f.order.forEach((i, k) => { const s = f.block.slots[k]; tiles.push({ index: i, col: s.col, row: row + s.row, w: s.w, h: s.h }); });
       row += f.block.rows;

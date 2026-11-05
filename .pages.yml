@@ -206,6 +206,12 @@ content:
         fields:
           - { name: value, label: Figure, type: string, required: true, description: "e.g. 6, 20,000+, 3 weeks" }
           - { name: label, label: What it counts, type: string, required: true }
+          - name: icon
+            label: Icon
+            type: select
+            description: "A small line icon at the top of the figure's tile."
+            options: { values: [chart, map, pages, formats, buildings, calendar, timeline, steps, contrast, choice] }
+          - { name: art, label: Line drawing behind (optional), type: image, options: { media: images }, description: "A one-colour drawing, white lines on a transparent background (PNG or WebP), shown faintly behind the figure, e.g. the outline of a map." }
       - name: whatHappened
         label: What happened
         type: text

@@ -61,7 +61,7 @@ export interface CaseStudy {
   heroVideo?: { video: string; poster: ImageMetadata; alt: string };
   /** The Outcomes bento: the work out in the world (an optional silent loop), figures and feedback. */
   outcomeImages: (Plate & { video?: string })[];
-  stats: { value: string; label: string }[];
+  stats: { value: string; label: string; icon?: string; art?: ImageMetadata }[];
   quotes: { quote: string; name: string; role?: string; organisation: string }[];
 }
 
@@ -112,7 +112,7 @@ export const caseStudies: CaseStudy[] = entries.filter((e) => e.data.hasPage).ma
   next: chain[d.slug],
   heroVideo: d.heroVideo ?? undefined,
   outcomeImages: d.outcomeImages.map((o) => ({ ...plate(o), video: o.video || undefined })),
-  stats: d.stats,
+  stats: d.stats.map((x) => ({ value: x.value, label: x.label, icon: x.icon ?? undefined, art: x.art ?? undefined })),
   quotes: quotes.filter((q) => q.project === d.slug).map(({ quote, name, role, organisation }) => ({ quote, name, role: role ?? undefined, organisation })),
   demo: d.demoLink ? { href: d.demoLink, label: d.demoButton || 'See the Live Demo' } : undefined,
 }));

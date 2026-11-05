@@ -7,6 +7,7 @@ import { Image, getImage } from 'astro:assets';
 import Studio from '../../layouts/Studio.astro';
 import Band from '../../components/studio/Band.astro';
 import PlateCaption from '../../components/PlateCaption.astro';
+import StatIcon from '../../components/StatIcon.astro';
 import Carousel from '../../components/Carousel.astro';
 import { caseStudies, bySlug, type Plate } from '../../data/work';
 import { caseStudyPage as t } from '../../lib/pages';
@@ -43,10 +44,17 @@ const edge = async (img: ImageMetadata) => {
   const W = fi.width, H = fi.height, step = Math.max(1, Math.floor(W / 400));
   const same = (p: number, q: number) => full[p] === full[q] && full[p + 1] === full[q + 1] && full[p + 2] === full[q + 2];
   let exact = 0, seen = 0;
-  for (const y of [2, H - 3]) for (let x = step; x < W; x += step) { seen++; if (same((y * W + x) * 3, (y * W + x - 1) * 3)) exact++; }
-  for (const x of [2, W - 3]) for (let y = step; y < H; y += step) { seen++; if (same((y * W + x) * 3, ((y - 1) * W + x) * 3)) exact++; }
-  const photo = !charts && exact / seen < 0.9;
+  const tones = new Set<number>();
+  const tone = (o: number) => tones.add((full[o] << 16) | (full[o + 1] << 8) | full[o + 2]);
+  for (const y of [2, H - 3]) for (let x = step; x < W; x += step) { seen++; tone((y * W + x) * 3); if (same((y * W + x) * 3, (y * W + x - 1) * 3)) exact++; }
+  for (const x of [2, W - 3]) for (let y = step; y < H; y += step) { seen++; tone((y * W + x) * 3); if (same((y * W + x) * 3, ((y - 1) * W + x) * 3)) exact++; }
   const bg = ring.map((v) => [...v].sort((a, b) => a - b)[v.length >> 1]);
+  // A render on a soft gradient (CMD's name tags, the iPhone) has smooth edges that pass the exact test, but no
+  // single colour can stand in for its ground: a flat field around it shows a box (Josh, 5 Nov). Its edge colours
+  // spread wide over many tones (a palette slide's flat swatches are only a few), so it is treated as a photo and
+  // zoomed to fill its tile.
+  const spread = ring.map((v) => { const o = [...v].sort((a, b) => a - b); return o[Math.floor(o.length * 0.95)] - o[Math.floor(o.length * 0.05)]; });
+  const photo = !charts && (exact / seen < 0.9 || (Math.max(...spread) > 14 && tones.size > 40));
   // Artwork: find where the art itself sits inside its flat margin (every pixel that differs clearly from the
   // edge colour, ignoring a 1% rim of scan noise), so every piece gets the same breathing room.
   let box = { x: 0, y: 0, w: 1, h: 1 };
@@ -63,19 +71,20 @@ const edge = async (img: ImageMetadata) => {
   return { bg: `rgb(${bg.join(' ')})`, photo, cut: false, box };
 };
 // A tile is a picture (with an optional silent loop) or words: the outcome, a figure, a quote, a paragraph.
-type Words = { kind: 'headline'; text: string } | { kind: 'stat'; value: string; label: string } | { kind: 'quote'; quote: string; by: string };
+type Words = { kind: 'headline'; text: string } | { kind: 'stat'; value: string; label: string; icon?: string; art?: ImageMetadata } | { kind: 'quote'; quote: string; by: string };
 type Piece = { kind: 'image'; plate: Plate & { video?: string }; label: string } | Words;
 // The shape each kind of words would like, and how little a poor fit matters to it.
-const wordShape = { headline: [3.2, 1], stat: [1.8, 0.4], quote: [1.5, 0.5] } as const;
+const wordShape = { headline: [3.2, 1], stat: [1.8, 0.4], quote: [1.5, 1.2] } as const;
 const layout = async (pieces: Piece[], flip = false) => {
   const looks = await Promise.all(pieces.map((pc) => (pc.kind === 'image' ? edge(pc.plate.image) : undefined)));
   const items = pieces.map((pc, i) => pc.kind === 'image'
     ? { ratio: (pc.plate.image.width * looks[i]!.box.w) / (pc.plate.image.height * looks[i]!.box.h), weight: looks[i]!.photo ? 3 : 1 }
     : { ratio: wordShape[pc.kind][0], weight: wordShape[pc.kind][1] });
-  return bento(items, flip).map((tile) => {
+  return bento(items, flip, charts ? 0.12 : 0.35).map((tile) => {
     const pc = pieces[tile.index], look = looks[tile.index];
     const fit = items[tile.index].ratio / ratioOf(tile);
-    const fill = !!look?.photo && Math.min(fit, 1 / fit) > 0.8;
+    // Photos zoom to fill (Josh, 5 Nov: "just zoom the images in"), cropping up to a third; beyond that they sit whole.
+    const fill = !!look?.photo && Math.min(fit, 1 / fit) > 0.66;
     // CSS for the art: its trimmed box, centred and contained in the tile's padded area (see .tile__art).
     const b = look?.box ?? { x: 0, y: 0, w: 1, h: 1 };
     const art = pc.kind === 'image' && !fill
@@ -86,8 +95,9 @@ const layout = async (pieces: Piece[], flip = false) => {
 };
 const shots = (plates: Plate[]): Piece[] => plates.map((pl) => ({ kind: 'image', plate: pl, label: pl.medium }));
 const chapters = await Promise.all(cs.chapters.map(async (ch, i) => ({ ...ch, tiles: await layout(shots(ch.plates), i % 2 === 1) })));
-// Outcomes (Josh, 4 Nov): one bento of what the work did. The figures lead when there are any (the data
-// projects); otherwise the one-line outcome does. Then feedback, before and after, and the work in the world.
+// Outcomes (Josh, 4 Nov): one bento of what the work did. The client's own words lead and take the biggest tile
+// (Josh, 5 Nov: "surely the quote would go in the biggest one?"); then the figures (the data projects), or the
+// one-line outcome when there are none. Then before and after, and the work in the world.
 const bare = (x: string) => x.replace(/\W/g, '').toLowerCase();
 const same = (a: string, b: string) => !!b && (bare(a).includes(bare(b)) || bare(b).includes(bare(a)));
 // "Before: the old logo", not a bare "Before" (Josh, 5 Nov: no generic tags).
@@ -97,13 +107,25 @@ const [beforeLabel, afterLabel] = t.beforeAfterHeading.split('&').map((x) => x.t
 // full width above the bento at its own shape, with the same room on every side, so it is never cropped or boxed in.
 const leadShot = !cs.before && cs.outcomeImages.length ? [cs.outcomeImages[0]] : [];
 const outcomePieces: Piece[] = [
+  ...cs.quotes.map((q) => ({ kind: 'quote', quote: q.quote, by: [q.name, q.role, q.organisation].filter(Boolean).join(', ') } as const)),
   ...(cs.stats.length ? [] : cs.outcome ? [{ kind: 'headline', text: cs.outcome } as const] : []),
   ...cs.stats.map((x) => ({ kind: 'stat', ...x } as const)),
-  ...cs.quotes.map((q) => ({ kind: 'quote', quote: q.quote, by: [q.name, q.role, q.organisation].filter(Boolean).join(', ') } as const)),
   ...(cs.before ? [{ kind: 'image', plate: cs.before.before, label: pair(beforeLabel, cs.before.before.medium) } as const, { kind: 'image', plate: cs.before.after, label: pair(afterLabel, cs.before.after.medium) } as const] : []),
   ...cs.outcomeImages.slice(leadShot.length).map((pl) => ({ kind: 'image', plate: pl, label: pl.medium } as const)),
 ];
 const outcomes = await layout(outcomePieces, cs.chapters.length % 2 === 1);
+// A figure with a unit ("34 years") sets the unit smaller, and the number is sized by its length so it never
+// runs out of its tile (Josh, 5 Nov: "34 years" broke out of the top).
+const figure = (v: string) => { const m = v.match(/^([^A-Za-z]*?\d[^A-Za-z]*?)\s+([A-Za-z].*)$/); return m ? { num: m[1], unit: m[2] } : { num: v, unit: '' }; };
+// A quote's type is sized so the whole quote fits its tile (Josh, 5 Nov: a long quote ran out of the top). At the
+// desktop width the tile is w x h grid units; the size that fills its text area is kept as a share of the tile's width.
+const quoteSize = (pc: Piece, w: number, h: number) => {
+  if (pc.kind !== 'quote') return '';
+  const W = w * 180 + (w - 1) * 12, H = h * 135 + (h - 1) * 12;
+  const em = Math.min(44, Math.sqrt(((W - 96) * (H - 190)) / (pc.quote.length * 0.5 * 1.25)));
+  return `; --qf: ${(em / W).toFixed(4)}`;
+};
+const outcomeArt = await Promise.all(outcomes.map(({ pc }) => (pc.kind === 'stat' && pc.art ? getImage({ src: pc.art, width: 900, format: 'webp' }) : undefined)));
 // What Happened sits beside the heading, like a chapter's words, unless it only repeats the outcome line.
 const happened = cs.happened.filter((x) => !same(x, cs.outcome));
 const credits = [[t.clientLabel, p.client], [t.disciplinesLabel, p.disciplines.join(', ')]].filter(([, v]) => v);
@@ -161,7 +183,7 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
           </div>
         )}
         <Carousel label={`${ch.heading ?? t.workHeading}: gallery`}>
-          <div class="bento">
+          <div class:list={['bento', { 'bento--charts': charts }]}>
             {ch.tiles.map(({ pc, bg, art, fill, whole, cut, col, row, w, h }) => pc.kind === 'image' && (
               <figure class:list={['tile', 'glass', { 'tile--fill': fill, 'tile--whole': whole, 'tile--cut': cut }]} style={`grid-area: ${row} / ${col} / span ${h} / span ${w}; --tile: ${bg}; ${art}`}>
                 <div class="tile__art"><Image src={pc.plate.image} alt={pc.plate.alt} widths={[600, 1000, 1600, 2200]} sizes={`(min-width: 760px) ${Math.round((w / 6) * 1140)}px, 100vw`} /></div>
@@ -186,8 +208,8 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
           {pl.medium && <figcaption class="tile__label">{pl.medium}</figcaption>}
         </figure>
       ))}
-      <div class="bento-wrap"><div class="bento bento--outcomes">
-        {outcomes.map(({ pc, bg, art, fill, whole, cut, col, row, w, h }) => {
+      <div class="bento-wrap"><div class:list={['bento', 'bento--outcomes', { 'bento--charts': charts }]}>
+        {outcomes.map(({ pc, bg, art, fill, whole, cut, col, row, w, h }, k) => {
           const area = `grid-area: ${row} / ${col} / span ${h} / span ${w}`;
           if (pc.kind === 'image') return (
             <figure class:list={['tile', 'glass', { 'tile--fill': fill, 'tile--whole': whole, 'tile--cut': cut }]} style={`${area}; --tile: ${bg}; ${art}`}>
@@ -200,9 +222,12 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
             </figure>
           );
           return (
-            <div class:list={['tile', 'glass', 'tile--words', `tile--${pc.kind}`]} style={area}>
+            <div class:list={['tile', 'glass', 'tile--words', `tile--${pc.kind}`]} style={`${area}; --hr: ${((h * 135 + (h - 1) * 12) / (w * 180 + (w - 1) * 12)).toFixed(4)}${quoteSize(pc, w, h)}`}>
+              {outcomeArt[k] && <img class="tile__lines" src={outcomeArt[k]!.src} alt="" loading="lazy" decoding="async" />}
               {pc.kind === 'headline' && <p class="tile__headline">{pc.text}</p>}
-              {pc.kind === 'stat' && <p class="tile__stat"><b>{pc.value}</b><span>{pc.label}</span></p>}
+              {pc.kind === 'stat' && pc.icon && <StatIcon name={pc.icon} />}
+              {pc.kind === 'stat' && (() => { const f = figure(pc.value); return <p class="tile__stat" style={`--n: ${Math.max(f.num.length, 1.6)}`}><b>{f.num}{f.unit && <small> {f.unit}</small>}</b><span>{pc.label}</span></p>; })()}
+              {pc.kind === 'quote' && <span class="tile__mark" aria-hidden="true">&ldquo;</span>}
               {pc.kind === 'quote' && <blockquote class="tile__quote"><p>{pc.quote}</p><footer>{pc.by}</footer></blockquote>}
             </div>
           );
@@ -264,14 +289,18 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
     .bento-wrap { container-type: inline-size; }
   }
   .bento-wrap { margin-top: var(--sp-head); }
+  /* Words never spill out of a tile: an Outcomes row grows when its words need more room (on a tablet, say). */
+  .bento--outcomes { grid-auto-rows: minmax(calc(0.75 * var(--u)), auto); }
   /* Every tile is a glass panel (Josh, 4 Nov: "The Bento cards should be Glass"). The work sits inside it on
      its own colour, one even step in from the glass edge. */
   .tile { --in: 5px; --cap: 36px; position: relative; display: flex; flex-direction: column; min-width: 0; min-height: 0; margin: 0; border-radius: 24px; }
   /* The Oxford way: flat colour all round the artwork, never touching the tile's edge. */
   /* The art's own box (bx, by, bw, bh: fractions of the image) is scaled to fit the area inside the padding,
      then the whole image is placed so that box sits in the middle. Its margin is the tile's colour anyway. */
-  /* Shown small with generous room (TASTE: never too large): the art takes at most 62% of the width and 64% of the height. */
-  .tile__art { --lift: 0px; --cw: min(62cqw, 64cqh * var(--r)); }
+  /* Even room all round, but the work reads (Josh, 5 Nov: "why is the work so thin, so tiny?"): artwork takes up to
+     76% of the tile, and charts and slides, which carry small type, up to 90%. */
+  .tile__art { --lift: 0px; --cw: min(76cqw, 76cqh * var(--r)); }
+  .bento--charts .tile__art { --cw: min(90cqw, 88cqh * var(--r)); }
   .tile__art :is(img, video) { position: absolute; display: block; max-width: none; width: calc(var(--cw) / var(--bw)); height: calc(var(--cw) / var(--bw) / var(--R)); left: calc(50% - var(--cw) / var(--bw) * (var(--bx) + var(--bw) / 2)); top: calc(50% - var(--lift) - var(--cw) / var(--bw) / var(--R) * (var(--by) + var(--bh) / 2)); }
   /* A photo or collage that would crop too much: shown whole and large, on its own edge colour. */
   .tile--whole .tile__art { --cw: min(100cqw - 32px, (100cqh - 32px) * var(--r)); }
@@ -288,15 +317,23 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
   .tile :global(.plate span::before), .tile :global(.plate span::after) { content: none; }
   /* Words tiles: the outcome, a figure, a quote, a paragraph. Type scales with the tile. */
   /* Words tiles are plain glass (Josh, 4 Nov: no pictures behind words). */
-  .tile--words { justify-content: flex-end; padding: clamp(28px, 7cqmin, 48px); container-type: size; }
+  .tile--words { justify-content: flex-end; gap: 16px; padding: clamp(28px, 4cqi, 48px); container-type: inline-size; overflow: hidden; }
+  /* The icon sits at the top of the tile, the figure at the bottom. */
+  .tile--words :global(.stat-icon), .tile__mark { margin-bottom: auto; }
+  /* A one-colour line drawing (the map behind "14 local authorities") reads as if etched into the glass. */
+  .tile__lines { position: absolute; inset: 8% 6% 8% 34%; width: 60%; height: 84%; object-fit: contain; object-position: right center; opacity: 0.16; mix-blend-mode: screen; pointer-events: none; }
+  .tile--words > :not(.tile__lines) { position: relative; }
   .tile--words p, .tile__quote { margin: 0; }
   .tile--headline { justify-content: center; }
-  .tile__headline { font-family: var(--display); font-size: clamp(30px, min(30cqh, 7cqw), 92px); line-height: 1.02; letter-spacing: -0.01em; max-width: 22ch; }
-  .tile__stat b { display: block; font-family: var(--display); font-weight: 400; font-size: clamp(56px, min(62cqh, 40cqw), 180px); line-height: 0.95; letter-spacing: -0.02em; font-variant-numeric: lining-nums; }
-  .tile__stat span { display: block; margin-top: 10px; font-size: clamp(15px, 5cqmin, 19px); line-height: 1.35; color: var(--ink-2); max-width: 24ch; }
-  .tile--quote { justify-content: space-between; }
-  .tile__quote p { font-family: var(--display); font-size: clamp(19px, 8cqmin, 34px); line-height: 1.25; }
-  .tile__quote p::before { content: '\201C'; } .tile__quote p::after { content: '\201D'; }
+  .tile__headline { font-family: var(--display); font-size: clamp(30px, min(30cqw * var(--hr, 1), 7cqw), 92px); line-height: 1.02; letter-spacing: -0.01em; max-width: 22ch; }
+  /* The number fills the tile without leaving it: capped by the tile's height, and by its width per character. */
+  .tile__stat b { display: block; white-space: nowrap; font-family: var(--display); font-weight: 400; font-size: clamp(48px, min(50cqw * var(--hr, 1), 40cqw, 150cqw / var(--n)), 168px); line-height: 0.95; letter-spacing: -0.02em; font-variant-numeric: lining-nums; }
+  .tile__stat small { font-size: 0.36em; letter-spacing: 0; }
+  .tile__stat span { display: block; margin-top: 10px; font-size: clamp(15px, 5cqi, 19px); line-height: 1.35; color: var(--ink-2); max-width: 24ch; }
+  .tile--quote { justify-content: flex-end; }
+  .tile__mark { display: block; height: 0.5em; font-family: var(--display); font-size: 96px; line-height: 0.9; color: var(--gold); }
+  .tile__quote p { font-family: var(--display); font-size: clamp(16px, calc(var(--qf) * 100cqw), 44px); line-height: 1.25; max-width: 40ch; text-wrap: pretty; }
+  .tile__quote p::after { content: '\201D'; }
   .tile__quote footer { margin-top: 16px; font-size: 14px; font-weight: 600; color: var(--ink-2); }
   .cs-outcomes__head--text { display: grid; grid-template-columns: 5fr 7fr; gap: var(--sp-gap); align-items: end; }
   .cs-outcomes__head--text .big { margin: 0; }

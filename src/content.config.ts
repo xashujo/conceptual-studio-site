@@ -19,6 +19,8 @@ const page = (file: string, shape: Shape) => defineCollection({
 // One picture of real work, so a page of words has something to look at (Josh, 4 Nov).
 const picture = (image: () => z.ZodTypeAny) => z.object({ src: image(), alt: s, caption: text, focus: text }).nullish();
 const s = z.string().min(1);
+// The icons an Outcomes figure can show (drawn in components/StatIcon.astro; the same list is in .pages.yml).
+export const STAT_ICONS = ['chart', 'map', 'pages', 'formats', 'buildings', 'calendar', 'timeline', 'steps', 'contrast', 'choice'] as const;
 const items = z.array(z.object({ title: s, text: s }));
 export const pages = {
   workPage: page('work', { heading: s, intro: s, archiveFilter: s, archiveNote: text, clientsHeading: s, closeText: s }),
@@ -95,7 +97,14 @@ export const collections = {
         after: pic.nullish(),
         // Outcomes bento (Josh, 4 Nov): the work out in the world, and short figures. Every figure must be real.
         outcomeImages: z.array(pic.extend({ video: z.string().nullish() })).nullish().transform((v) => v ?? []),
-        stats: z.array(z.object({ value: z.string().min(1), label: z.string().min(1) })).nullish().transform((v) => v ?? []),
+        // Each figure can carry a small line icon, and a one-colour line drawing faintly behind it (Josh, 5 Nov:
+        // "turn my map into a black and white icon ... as if it's in the glass").
+        stats: z.array(z.object({
+          value: z.string().min(1),
+          label: z.string().min(1),
+          icon: z.enum(STAT_ICONS).nullish(),
+          art: image().nullish(),
+        })).nullish().transform((v) => v ?? []),
         // Optional moving title graphic at the top of the case study (Josh, 4 Nov: the CMD logo reveal).
         heroVideo: z.object({ video: z.string().min(1), poster: image(), alt: z.string().min(1) }).nullish(),
         demoLink: text,

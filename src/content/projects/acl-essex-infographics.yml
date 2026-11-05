@@ -39,7 +39,10 @@ gallery:
 stats:
   - value: "14"
     label: Local authorities mapped
+    icon: map
+    art: '@assets/work/acl-essex-infographics/essex-lines.webp'
   - value: "2024"
     label: A full year of learner data
+    icon: calendar
 whatHappened: |
   I made these for Mark Silverman at Plus Pursuits. He told me afterwards that the client, Essex County Council, was really pleased with the charts and maps, and that they went into its strategy papers.

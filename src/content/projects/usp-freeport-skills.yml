@@ -45,8 +45,10 @@ gallery:
 stats:
   - value: "6"
     label: Visuals for the report and slides
+    icon: chart
   - value: "3"
     label: Next steps the report ends on
+    icon: steps
 whatHappened: |
   The visuals went into the partnership's report and slides in April 2026. The report ends on three next steps for the partnership: a hub-and-spoke model, a shared digital library and a national skills manifesto.
 
