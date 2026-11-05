@@ -9,6 +9,7 @@ import { glassStyle } from '../lib/site';
 import '../styles/tokens.css';
 import '../styles/components.css';
 import { Image, getImage } from 'astro:assets';
+import sharp from 'sharp';
 import { email, startHref, quoteHref, sentence, trustedBy } from '../data/site';
 import { availability, homeQuotes, responseTime, home, ART_SIZES } from '../lib/site';
 import { featured, projectHref, homeFilters, bySlug } from '../data/work';
@@ -45,7 +46,20 @@ const videos = await Promise.all(home.socialVideos.map(async (v) => ({ ...v, pos
 const results = home.results.map(bySlug) // Pages CMS: Home page > Why Clients Choose Us
   .map((p) => ({ client: p.client, title: p.title, line: p.summary, href: projectHref(p) }));
 // The lanes are the services with a page of their own; the rest (monthly plans, video) sit in a short row under them.
-const lanes = services.filter(isLane);
+// Each lane's first example sits beside it in a glass frame (Josh, 5 Nov: one strong image, not a bento).
+// Charts sit whole on their own edge colour, never cropped; photographs fill the frame.
+const edgeColour = async (img: ImageMetadata) => {
+  const { data, info } = await sharp((img as ImageMetadata & { fsPath: string }).fsPath).resize(48, 48, { fit: 'fill' }).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+  const ring: number[][] = [[], [], []];
+  for (let y = 0; y < info.height; y++) for (let x = 0; x < info.width; x++) {
+    if (x > 1 && y > 1 && x < info.width - 2 && y < info.height - 2) continue;
+    for (let c = 0; c < 3; c++) ring[c].push(data[(y * info.width + x) * 3 + c]);
+  }
+  return `rgb(${ring.map((v) => v.sort((a, b) => a - b)[v.length >> 1]).join(' ')})`;
+};
+const lanes = await Promise.all(services.filter(isLane).map(async (s) => ({
+  ...s, ex: s.examples[0] && { ...s.examples[0], bg: await edgeColour(s.examples[0].img) },
+})));
 const more = services.filter((s) => !lanes.includes(s));
 ---
 <!doctype html>
@@ -226,7 +240,11 @@ const more = services.filter((s) => !lanes.includes(s));
                     <span class="svc__line">{s.line}</span>
                     <span class="svc__price">{s.home.price}{s.home.time && <span>, {s.home.time}</span>}</span>
                   </a>
-                  {s.examples[0] && <Image class="svc__ex" src={s.examples[0].img} alt={s.examples[0].alt} widths={[600, 1100]} sizes="(min-width: 960px) 520px, calc(100vw - 32px)" style={`object-position: ${s.examples[0].pos ?? '50% 50%'}`} />}
+                  {s.ex && (
+                    <div class="svc__ex glass" data-charts={s.lane === 'Data' ? '' : undefined}>
+                      <Image class="svc__tile" src={s.ex.img} alt={s.ex.alt} widths={[600, 1100]} sizes="(min-width: 960px) 560px, calc(100vw - 32px)" style={`--bg: ${s.ex.bg}; object-position: ${s.ex.pos ?? '50% 50%'}`} />
+                    </div>
+                  )}
                 </li>
               ))}
             </ul>
@@ -629,7 +647,9 @@ const more = services.filter((s) => !lanes.includes(s));
   .svc__line { font-size: 20px; line-height: 1.45; max-width: 44ch; color: var(--ink); }
   .svc__price { font-size: 18px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
   .svc__price span { font-weight: 400; color: var(--ink-2); }
-  .svc__ex { position: absolute; top: 50%; right: 0; width: 40%; height: auto; aspect-ratio: 4 / 3; translate: 0 -50%; object-fit: cover; border-radius: var(--radius); opacity: 0; transition: opacity 300ms ease-out; pointer-events: none; }
+  .svc__ex { position: absolute; top: 50%; right: 0; width: 40%; aspect-ratio: 4 / 3; translate: 0 -50%; display: grid; padding: 6px; border-radius: var(--radius); opacity: 0; transition: opacity 300ms ease-out; pointer-events: none; }
+  .svc__tile { width: 100%; height: 100%; min-height: 0; object-fit: cover; background: var(--bg); border-radius: calc(var(--radius) - 6px); display: block; }
+  .svc__ex[data-charts] .svc__tile { object-fit: contain; padding: 12px; } /* charts and maps are never cropped (Josh, 4 Nov) */
   .svc__row:is(:hover, :focus-within) .svc__link { color: var(--ink); transform: translateX(8px); }
   .svc:not(:has(.svc__row:is(:hover, :focus-within))) .svc__row:first-child .svc__link { color: var(--ink); }
   .svc__row:is(:hover, :focus-within) .svc__ex,
@@ -642,7 +662,7 @@ const more = services.filter((s) => !lanes.includes(s));
   @media (max-width: 959.98px) {
     .svc__link { width: auto; color: var(--ink); }
     .svc__row:is(:hover, :focus-within) .svc__link { transform: none; }
-    .svc__ex { position: static; translate: none; display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; margin-bottom: 28px; opacity: 1; }
+    .svc__ex { position: static; translate: none; width: 100%; margin-bottom: 28px; opacity: 1; }
   }
   @media (prefers-reduced-motion: reduce) { .svc__link, .svc__ex { transition: none; } .svc__row:is(:hover, :focus-within) .svc__link { transform: none; } }
   .services__intro { margin-top: 20px; max-width: 46ch; font-size: 20px; line-height: 1.45; }

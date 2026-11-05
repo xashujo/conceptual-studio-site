@@ -276,7 +276,7 @@ content:
         label: Recent work (own page)
         type: object
         list: true
-        description: "Real work shown on the service's own page, two side by side."
+        description: "Real work shown on the service's own page, two side by side. The first one also shows beside this service on the home page."
         fields:
           - { name: src, label: Image file, type: image, required: true, options: { media: images } }
           - { name: alt, label: Description (alt text), type: string, required: true }
