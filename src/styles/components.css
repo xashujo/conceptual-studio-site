@@ -103,6 +103,9 @@ a { color: inherit; }
   .avail:hover .swap > :last-child { transform: none; opacity: 1; }
 }
 /* Fades all the way out and back in, smoothly (Josh, 26 Oct): replaces Framer's three-step blink. */
+/* The availability dot sits in the nav's contact pill (Josh, 5 Nov), not in the hero. */
+.nav__dot { display: inline-block; margin-right: 8px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
 /* ---------- Glass ---------- */

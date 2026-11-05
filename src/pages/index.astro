@@ -40,6 +40,10 @@ const cards = featured.map((p) => ({
   title: p.title, year: p.year, href: projectHref(p), image: p.thumb ?? p.image, alt: p.alt,
   position: p.thumb ? undefined : p.homePosition ?? p.position, filter: p.homeFilter, student: p.student, label: p.label, outcome: p.outcome, brief: p.listText,
 }));
+// Work behind the glass (Josh, 5 Nov): the first featured title graphics cross-fade on two tiles the hero plate
+// half covers, so real work shows on the first screen. Order follows Home page position in Pages CMS.
+const heroWorks = cards.filter((c) => c.image && !c.student).slice(0, 6);
+const heroTiles = [heroWorks.filter((_, i) => i % 2 === 0), heroWorks.filter((_, i) => i % 2 === 1)];
 // Social media videos (Pages CMS: Home page > Social media videos), after the projects under Social Media.
 const videos = await Promise.all(home.socialVideos.map(async (v) => ({ ...v, poster: (await getImage({ src: v.poster, width: 720, format: 'webp' })).src })));
 // Why clients choose us (pass 2): the two case studies' own summaries from the CMS, beside the quote.
@@ -79,7 +83,7 @@ const more = services.filter((s) => !lanes.includes(s));
       <Logo />
       <ul class="nav__links">
         <li><a class="glass-pill" href="#top" aria-current="true">Home</a></li>
-        {links.map(([l, h]) => <li><a class="glass-pill" href={h}>{l}</a></li>)}
+        {links.map(([l, h]) => <li><a class="glass-pill" href={h} title={h === '#contact' && availability.on ? titleCase(availability.text) : undefined}>{h === '#contact' && availability.on && <span class="avail__dot nav__dot" aria-hidden="true" />}{l}{h === '#contact' && availability.on && <span class="sr">, {availability.text.toLowerCase()}</span>}</a></li>)}
       </ul>
       <button class="nav__menu glass-pill" type="button" popovertarget="site-menu">Menu</button>
     </nav>
@@ -87,7 +91,7 @@ const more = services.filter((s) => !lanes.includes(s));
     <div class="menu glass" id="site-menu" popover>
       <ul>
         <li><a class="glass-pill" href="#top">Home</a></li>
-        {links.map(([l, h]) => <li><a class="glass-pill" href={h}>{l}</a></li>)}
+        {links.map(([l, h]) => <li><a class="glass-pill" href={h}>{h === '#contact' && availability.on && <span class="avail__dot nav__dot" aria-hidden="true" />}{l}</a></li>)}
       </ul>
     </div>
     <main>
@@ -95,13 +99,22 @@ const more = services.filter((s) => !lanes.includes(s));
       <header class="hero" id="top">
         {painting ? <Image class="hero__art" src={home.pageImage} alt="" widths={[800, 1100, 1600]} quality={55} sizes={ART_SIZES} loading="eager" fetchpriority="high" /> : <div class="hero__art canvas" style={`--canvas: ${canvas}`} aria-hidden="true" />}
         <!-- Landing view (Josh, 2 Nov): one plate that says what clients get, with the big Start a Project. The stats moved to the proof (Josh, 3 Nov). -->
+        <!-- Candlelight (Josh, 5 Nov): the same painting, lit, shown through a soft circle that follows the pointer. -->
+        {painting && <div class="hero__lit" aria-hidden="true" data-candle><Image class="hero__art hero__art--lit" src={home.pageImage} alt="" widths={[800, 1100, 1600]} quality={55} sizes={ART_SIZES} loading="eager" /></div>}
         <div class="hero__bento">
+        <div class="hero__works" aria-hidden="true">
+          {heroTiles.map((set, t) => set.length > 0 && (
+            <div class={`hero__tile hero__tile--${t}`} data-tile style={`--n: ${set.length}`}>
+              {set.map((c, i) => <Image src={c.image} alt="" widths={[360, 720]} sizes="(max-width: 759.98px) 60vw, 340px" loading="eager" class:list={{ 'is-on': i === 0 }} style={c.position ? `object-position: ${c.position}` : undefined} />)}
+            </div>
+          ))}
+        </div>
         <div class="hero__plate glass" data-lens>
           <h1 class="hero__h">{headline}</h1>
           <p class="hero__p">{sentence}</p>
           <div class="acts">
             <a class="btn btn--solid hero__start" href={startHref}><span class="swap"><span>{home.startButton}</span><span aria-hidden="true">Contact Us</span></span></a>
-            {availability.on && <a class="avail" href={`mailto:${email}`}><span class="avail__dot" aria-hidden="true"></span><span class="swap"><span>{titleCase(availability.text)}</span><span aria-hidden="true">Email Us</span></span></a>}
+            {/* Availability moved to the nav's Start a Project pill (Josh, 5 Nov): one less pill in the hero. */}
             <a class="btn hero__work" href="#work">{home.workButton} <span class="arrow hero__down" aria-hidden="true">→</span></a>
           </div>
           <!-- Tags (Design Laboratory, Josh 2 Nov): what the studio does at a glance; each opens the work filtered to it. -->
@@ -364,6 +377,33 @@ const more = services.filter((s) => !lanes.includes(s));
       mountLens(document.querySelector('.hero__plate'), null); // over the running painting, so CSS glass like the panes
       document.querySelectorAll<HTMLElement>('.field [data-lens], .stat, .close__body').forEach((el) => mountLens(el, null));
 
+      // Candlelight: the lit circle eases after the pointer (only with a mouse; touch gets the CSS drift).
+      const candle = document.querySelector<HTMLElement>('[data-candle]');
+      if (candle && !still && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        const hero = candle.parentElement!;
+        let x = 62, y = 30, tx = x, ty = y, raf = 0;
+        const tick = () => {
+          x += (tx - x) * 0.06; y += (ty - y) * 0.06;
+          candle.style.setProperty('--cx', `${x.toFixed(2)}%`); candle.style.setProperty('--cy', `${y.toFixed(2)}%`);
+          raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.05 ? requestAnimationFrame(tick) : 0;
+        };
+        hero.addEventListener('pointermove', (e) => {
+          const r = hero.getBoundingClientRect();
+          tx = ((e.clientX - r.left) / r.width) * 100; ty = ((e.clientY - r.top) / r.height) * 100;
+          if (!raf) raf = requestAnimationFrame(tick);
+        });
+      }
+
+      // Work behind the glass: each tile fades to its next title graphic, the two tiles out of step.
+      if (!still) document.querySelectorAll<HTMLElement>('[data-tile]').forEach((tile, t) => {
+        const imgs = [...tile.querySelectorAll('img')];
+        if (imgs.length < 2) return;
+        let i = 0;
+        setTimeout(() => setInterval(() => {
+          imgs[i].classList.remove('is-on'); i = (i + 1) % imgs.length; imgs[i].classList.add('is-on');
+        }, 6000), t * 3000);
+      });
+
       // Nav: light over the night chapters, dark over paper. Watches a 1px line across the nav's middle.
       const nav = document.querySelector<HTMLElement>('[data-nav]')!;
       const nights = [...document.querySelectorAll('.night')];
@@ -536,8 +576,38 @@ const more = services.filter((s) => !lanes.includes(s));
   /* The opening shows the top of the painting at screen size, toned and quiet like the bands. */
   .hero { overflow: clip; }
   .hero__art { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; opacity: 0.45; filter: url(#tone-day); }
+  /* Candlelight: a lit copy of the painting through a soft circle at --cx --cy (script below), with a warm cast. */
+  @property --cx { syntax: '<percentage>'; inherits: true; initial-value: 62%; }
+  @property --cy { syntax: '<percentage>'; inherits: true; initial-value: 30%; }
+  .hero__lit { position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    -webkit-mask-image: radial-gradient(circle 32vmax at var(--cx) var(--cy), #000 0%, rgb(0 0 0 / 0.55) 38%, transparent 72%);
+    mask-image: radial-gradient(circle 32vmax at var(--cx) var(--cy), #000 0%, rgb(0 0 0 / 0.55) 38%, transparent 72%); }
+  .hero__lit::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle 26vmax at var(--cx) var(--cy), rgb(255 176 88 / 0.5), transparent 70%); mix-blend-mode: soft-light; }
+  .hero__art--lit { opacity: 1; filter: url(#tone-day) contrast(1.15); }
+  /* No mouse: the light drifts slowly on its own, like a candle carried round the room. */
+  @media (hover: none), (pointer: coarse) {
+    .hero__lit { animation: candle 22s ease-in-out infinite alternate; }
+  }
+  @keyframes candle { 0% { --cx: 30%; --cy: 22%; } 35% { --cx: 70%; --cy: 34%; } 70% { --cx: 45%; --cy: 62%; } 100% { --cx: 78%; --cy: 70%; } }
+  @media (prefers-reduced-motion: reduce) { .hero__lit { animation: none; } }
+
+  /* Work behind the glass: two title-graphic tiles the plate half covers, top right and bottom left. */
+  .hero__bento { position: relative; }
+  .hero__works { position: absolute; inset: 0; pointer-events: none; }
+  .hero__tile { position: absolute; width: 340px; aspect-ratio: 16 / 10; border-radius: var(--radius); overflow: hidden; box-shadow: var(--lift); }
+  .hero__tile--0 { top: -160px; right: -48px; } /* tucks 52px under the plate's corner, clear of the headline */
+  .hero__tile--1 { bottom: -156px; left: -48px; }
+  .hero__tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1400ms ease-in-out; }
+  .hero__tile img.is-on { opacity: 1; }
+  @media (max-width: 1299.98px) { .hero__tile { width: 280px; } .hero__tile--0 { top: -124px; right: 0; } .hero__tile--1 { bottom: -128px; left: 0; } }
+  @media (max-width: 759.98px) {
+    .hero__tile { width: 62vw; }
+    .hero__tile--0 { display: none; }
+    .hero__tile--1 { position: relative; bottom: auto; left: auto; display: block; margin: -28px auto 0; }
+    .hero__works { position: static; order: 2; grid-column: 1 / -1; }
+  }
   .hero__bento { align-self: center; justify-self: center; width: min(1140px, 100%); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-gap); }
-  .hero__plate { position: relative; grid-column: 1 / -1; padding: 64px 56px 56px; display: grid; justify-items: center; gap: 26px; border-radius: var(--radius); text-align: center; } /* type and space carry it: one centred statement */
+  .hero__plate { position: relative; z-index: 1; grid-column: 1 / -1; padding: 64px 56px 56px; display: grid; justify-items: center; gap: 26px; border-radius: var(--radius); text-align: center; } /* type and space carry it: one centred statement */
   .hero__h { font-family: var(--display); font-weight: 500; font-size: clamp(44px, 5.2vw, 76px); line-height: 1.06; letter-spacing: -0.01em; text-wrap: balance; }
   .hero__p { max-width: 50ch; font-size: 20px; line-height: 1.5; text-wrap: pretty; }
   .hero__plate .acts { justify-content: center; margin-top: 6px; }

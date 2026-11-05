@@ -1,7 +1,7 @@
 ---
 // The glass nav from home prototype A (Josh's choice): lens glass over the page's opening art,
 // the current page in brackets (TASTE 23). On phones, Menu opens a glass sheet (2a7589f).
-import { nav } from '../lib/site';
+import { nav, availability } from '../lib/site';
 import Logo from './Logo.astro';
 interface Props { current?: string; art: string; tone?: 'light' | 'dark'; }
 const { current, art, tone = 'light' } = Astro.props;
@@ -9,13 +9,13 @@ const { current, art, tone = 'light' } = Astro.props;
 <nav class:list={['nav glass glass--nav', { 'is-dark': tone === 'dark' }]} aria-label="Main">
   <Logo />
   <ul class="nav__links">
-    {nav.map((l) => <li><a href={l.href} aria-current={l.label === current ? 'page' : undefined}>{l.label === current ? `[${l.label}]` : l.label}</a></li>)}
+    {nav.map((l) => <li><a href={l.href} aria-current={l.label === current ? 'page' : undefined}>{l.href === '/contact/' && availability.on && <span class="avail__dot nav__dot" aria-hidden="true" />}{l.label === current ? `[${l.label}]` : l.label}{l.href === '/contact/' && availability.on && <span class="sr">, {availability.text.toLowerCase()}</span>}</a></li>)}
   </ul>
   <button class="nav__menu" type="button" popovertarget="menu">Menu</button>
 </nav>
 <div class="sheet glass" id="menu" popover data-lens data-liquid={art}>
   <ul>
-    {nav.map((l) => <li><a href={l.href} aria-current={l.label === current ? 'page' : undefined}>{l.label}</a></li>)}
+    {nav.map((l) => <li><a href={l.href} aria-current={l.label === current ? 'page' : undefined}>{l.href === '/contact/' && availability.on && <span class="avail__dot nav__dot" aria-hidden="true" />}{l.label}</a></li>)}
   </ul>
   <button class="sheet__close" type="button" popovertarget="menu" popovertargetaction="hide">Close</button>
 </div>

@@ -49,9 +49,8 @@ const steps = home.steps.map((s) => ({ title: s.title, text: s.text.replaceAll('
           <ul class="lane__tiers">
             {s.tiers.slice(1).map((t) => <li><span>{t.name}</span><span>{t.price}</span></li>)}
           </ul>
-          {s.href
-            ? <a class="btn glass-button lane__go" href={s.href}>{titleCase(s.home.link)} <span class="arrow" aria-hidden="true">→</span></a>
-            : <a class="btn glass-button lane__go" href={`?need=${s.id}:${s.tiers[0].id}#enquire`} data-need={`${s.id}:${s.tiers[0].id}`}>{sp.enquiryHeading} <span class="arrow" aria-hidden="true">→</span></a>}
+          {/* One ask per page (Josh, 5 Nov): lanes link to their price pages; the form below is the ask. */}
+          {s.href && <a class="btn glass-button lane__go" href={s.href}>{titleCase(s.home.link)} <span class="arrow" aria-hidden="true">→</span></a>}
         </li>
       ))}
     </ul>
@@ -63,7 +62,6 @@ const steps = home.steps.map((s) => ({ title: s.title, text: s.text.replaceAll('
             <li>
               <p class="extras__n">{titleCase(s.name)} <b>{s.home.price}</b></p>
               <p class="extras__p">{s.line}</p>
-              <a class="btn glass-button" href={`?need=${s.id}:${s.tiers[0].id}#enquire`} data-need={`${s.id}:${s.tiers[0].id}`}>{sp.enquiryHeading} <span class="arrow" aria-hidden="true">→</span></a>
             </li>
           ))}
         </ul>
@@ -119,11 +117,11 @@ const steps = home.steps.map((s) => ({ title: s.title, text: s.text.replaceAll('
   .extras { margin-top: var(--sp-head); }
   .extras__h { font-size: 20px; line-height: 1.3; font-weight: 600; margin-bottom: 8px; }
   .extras ul { list-style: none; margin: 0; padding: 0; }
-  .extras li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto; align-items: center; gap: var(--sp-gap); padding-block: 16px; border-top: 1px solid color-mix(in srgb, var(--ink) 14%, transparent); }
+  .extras li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); align-items: center; gap: var(--sp-gap); padding-block: 16px; border-top: 1px solid color-mix(in srgb, var(--ink) 14%, transparent); }
   .extras__n { font-size: 17px; font-weight: 600; }
   .extras__n b { display: block; font-variant-numeric: tabular-nums; }
   .extras__p { font-size: 16px; line-height: 1.5; color: var(--ink-2); }
-  @media (max-width: 1099.98px) { .extras li { grid-template-columns: 1fr; align-items: start; gap: 8px; } .extras li .btn { justify-self: start; } }
+  @media (max-width: 1099.98px) { .extras li { grid-template-columns: 1fr; align-items: start; gap: 8px; } }
   .terms { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-gap); margin: var(--sp-head) 0 0; padding-top: var(--sp-head); border-top: 1px solid color-mix(in srgb, var(--ink) 22%, transparent); }
   .terms dt { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
   .terms dd { margin: 0; font-size: 17px; line-height: 1.5; color: var(--ink-2); max-width: 36ch; }

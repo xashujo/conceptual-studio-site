@@ -7,7 +7,7 @@ import Logo from '../components/Logo.astro';
 import Favicons from '../components/Favicons.astro';
 import { Image } from 'astro:assets';
 import { turnstileSiteKey } from '../site';
-import { glassStyle, email, startHref, home, company, responseTime } from '../lib/site';
+import { glassStyle, email, startHref, home, company, responseTime, availability } from '../lib/site';
 import '../styles/tokens.css';
 import '../styles/components.css';
 import '../styles/studio.css';
@@ -27,6 +27,8 @@ const { title, description, current, turnstile = false, noindex = false, closeHe
 const closeText = (Astro.props.closeText ?? home.closeText).replaceAll('{reply time}', responseTime);
 const pages: [string, string][] = [['Home', '/'], ['Work', '/work/'], ['Services', '/services/'], ['About', '/about/'], ['Contact', '/contact/']];
 const links = Astro.props.links ?? pages;
+// The availability dot sits on the contact link (Josh, 5 Nov), wherever the nav points to it.
+const live = (h: string) => availability.on && /contact/.test(h);
 const isCurrent = (h: string) => h === current || (h !== '/' && current?.startsWith(h));
 ---
 <!doctype html>
@@ -46,13 +48,13 @@ const isCurrent = (h: string) => h === current || (h !== '/' && current?.startsW
     <nav class="nav glass glass--nav" aria-label="Main" data-nav>
       <Logo />
       <ul class="nav__links">
-        {links.map(([l, h]) => <li><a class="glass-pill" href={h} aria-current={isCurrent(h) ? 'page' : undefined}>{l}</a></li>)}
+        {links.map(([l, h]) => <li><a class="glass-pill" href={h} aria-current={isCurrent(h) ? 'page' : undefined} title={live(h) ? availability.text : undefined}>{live(h) && <span class="avail__dot nav__dot" aria-hidden="true" />}{l}{live(h) && <span class="sr">, {availability.text.toLowerCase()}</span>}</a></li>)}
       </ul>
       <button class="nav__menu glass-pill" type="button" popovertarget="site-menu">Menu</button>
     </nav>
     <!-- Phone menu: a glass sheet under the nav. A native popover, so Escape and tapping outside close it. -->
     <div class="menu glass" id="site-menu" popover>
-      <ul>{links.map(([l, h]) => <li><a class="glass-pill" href={h} aria-current={isCurrent(h) ? 'page' : undefined}>{l}</a></li>)}</ul>
+      <ul>{links.map(([l, h]) => <li><a class="glass-pill" href={h} aria-current={isCurrent(h) ? 'page' : undefined}>{live(h) && <span class="avail__dot nav__dot" aria-hidden="true" />}{l}</a></li>)}</ul>
     </div>
 
     <!-- The site's two duotones, so the painting comes out toned like the rest: gold by day, warm dark by night. -->
