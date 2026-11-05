@@ -388,8 +388,6 @@ a.card.glass :is(.card__y, .card__out, .tag) { transition: color 300ms ease-out,
 .band.night .canvas { opacity: 1; }
 :is(.hero, .band):has(> .canvas) { background: var(--paper); } /* the paper ground the weave blends into */
 
-/* The copyright sits on the brightest part of the ceiling: a soft dark backing keeps it 4.5:1 or better. */
-.end > .footer p { display: inline-block; padding: 4px 14px; border-radius: var(--pill); background: color-mix(in srgb, var(--paper) 70%, transparent); }
 
 /* Fade-ins (Josh, 4 Nov). The page opening rises in on load, in CSS, so it needs no script. Further down,
    src/scripts/reveal.js gives .rv to pieces that start off screen and .is-in as they scroll into view;

@@ -16,7 +16,7 @@ const items = projects.map((p) => ({
   filters: p.tags.filter((t) => t !== 'archive').map((t) => label[t]), archive: p.student, student: p.student, label: p.label,
   outcome: p.outcome, brief: p.listText,
   // "Sustainability report for New City College London"; concept and student work name the project instead.
-  caption: (p.label ? [`${p.made}:`, p.title] : [`${p.made} for`, p.client]) as [string, string],
+  caption: (p.label ? [`${titleCase(p.made)}:`, p.title] : [`${titleCase(p.made)} for`, p.client]) as [string, string],
   category: p.student ? p.label! : p.tags.map((t) => label[t]).join(', '), client: p.client,
 }));
 const videos = await Promise.all(home.socialVideos.map(async (v) => ({ ...v, poster: (await getImage({ src: v.poster, width: 720, format: 'webp' })).src })));
@@ -24,7 +24,7 @@ const videos = await Promise.all(home.socialVideos.map(async (v) => ({ ...v, pos
 <Studio title="Work" description={w.intro} current="/work/" closeText={w.closeText}>
   <Band opening labelledby="work-h">
     <div class="ph__plate glass" data-lens>
-      <h1 class="ph__h" id="work-h">{w.heading}</h1>
+      <h1 class="ph__h" id="work-h">{titleCase(w.heading)}</h1>
       <p class="ph__p">{w.intro}</p>
     </div>
   </Band>
@@ -34,7 +34,7 @@ const videos = await Promise.all(home.socialVideos.map(async (v) => ({ ...v, pos
   </Band>
 
   <Band labelledby="clients-h">
-    <h2 class="big" id="clients-h">{w.clientsHeading}</h2>
+    <h2 class="big" id="clients-h">{titleCase(w.clientsHeading)}</h2>
     <div class="groups">
       {clientGroups.map((g) => (
         <div class="pane glass" data-lens data-reveal>

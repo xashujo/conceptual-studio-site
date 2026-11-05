@@ -9,7 +9,7 @@
 import { services, budgets } from '../data/services';
 import { email, web3formsKey, turnstileSiteKey } from '../site';
 import { nextSteps } from '../lib/site';
-import { contactPage as c } from '../lib/pages';
+import { contactPage as c, titleCase } from '../lib/pages';
 interface Props { service?: string; heading?: string; night?: boolean }
 const { service, heading = c.enquiryHeading, night = false } = Astro.props;
 const preset = service ? `${service}:unsure` : '';
@@ -17,7 +17,7 @@ const [altBefore, altAfter] = (c.enquiryAlt || '').split('{email}');
 ---
 <div class="enq glass" id="enquire" data-lens>
   <div class="enq__side">
-    <h2 class="enq__h mid">{heading}</h2>
+    <h2 class="enq__h mid">{titleCase(heading)}</h2>
     <p class="enq__p">{c.enquiryIntro}</p>
     {c.enquiryAlt && <p class="enq__alt">{altBefore}{altAfter !== undefined && <><a href={`mailto:${email}`}>{email}</a>{altAfter}</>}</p>}
     {c.callLink && <p><a class="link" href={c.callLink}>{c.callButton}<span class="arrow" aria-hidden="true">→</span></a></p>}
@@ -87,14 +87,14 @@ const [altBefore, altAfter] = (c.enquiryAlt || '').split('{email}');
     </div>
     {turnstileSiteKey && <div class="cf-turnstile f--wide" data-sitekey={turnstileSiteKey} data-appearance="interaction-only" data-theme={night ? 'dark' : 'light'}></div>}
     <div class="enq__send f--wide">
-      <button class="btn btn--solid" type="submit"><span data-send>Send enquiry</span><span class="arrow" aria-hidden="true">→</span></button>
+      <button class="btn btn--solid" type="submit"><span data-send>Send Enquiry</span><span class="arrow" aria-hidden="true">→</span></button>
       <p class="enq__status" role="status" aria-live="polite" data-status></p>
     </div>
     {nextSteps && <p class="f__help f--wide">{nextSteps}</p>}
   </form>
 
   <div class="enq__done" tabindex="-1" hidden data-done>
-    <h3 class="enq__done-h mid">{c.thanksHeading}</h3>
+    <h3 class="enq__done-h mid">{titleCase(c.thanksHeading)}</h3>
     <p>{c.thanksText}</p>
     {c.callLink && <p><a class="btn btn--solid" href={c.callLink}>{c.callButton}</a></p>}
   </div>
@@ -169,7 +169,7 @@ const [altBefore, altAfter] = (c.enquiryAlt || '').split('{email}');
         (window as any).turnstile?.reset();
       } finally {
         form.removeAttribute('aria-busy');
-        send.textContent = 'Send enquiry';
+        send.textContent = 'Send Enquiry';
       }
     });
   }

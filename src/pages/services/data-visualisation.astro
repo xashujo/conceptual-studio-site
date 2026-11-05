@@ -1,4 +1,5 @@
 ---
+import { titleCase } from '../../lib/pages';
 import ServicePage from '../../components/ServicePage.astro';
 import DataChart from '../../components/DataChart.astro';
 import { serviceById } from '../../data/services';
@@ -8,7 +9,7 @@ const { demo } = serviceById('data');
   {demo.heading && (
     <div class="live" slot="demo">
       <div class="live__text">
-        <h2 class="mid">{demo.heading}</h2>
+        <h2 class="mid">{titleCase(demo.heading)}</h2>
         <p>{demo.text}</p>
       </div>
       <div class="live__chart glass" data-lens><DataChart id="dv-chart" /></div>

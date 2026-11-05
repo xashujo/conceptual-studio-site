@@ -24,10 +24,14 @@ export const paras = (s: string) => s.split(/\n\s*\n/).map((t) => t.trim()).filt
 
 // Title Case for headings, buttons and labels (Josh, 28 Oct; 5 Nov): every word capitalised except short
 // prepositions and conjunctions, never the first or last; "The" is always capitalised ("Out in The World");
-// "and" becomes "&". Capitals already there are kept. Both halves of a hyphenated word are capitalised.
+// "and" becomes "&". Capitals already there are kept, and a word with a capital inside ("iPhone") is left as it is.
+// Both halves of a hyphenated word are capitalised; a word after a bracket or quote is too ("(Numbers Blurred)").
 const small = new Set(['a', 'an', 'of', 'to', 'in', 'on', 'for', 'at', 'by', 'or', 'but', 'with', 'as', 'from']);
-export const titleCase = (s: string) => s.replace(/\band\b/gi, '&').split(' ')
-  .map((w, i, all) => (i > 0 && i < all.length - 1 && small.has(w.toLowerCase()) ? w.toLowerCase() : w.split('-').map((p) => p.charAt(0).toUpperCase() + p.slice(1)).join('-')))
+const cap = (p: string) => (/\p{Lu}/u.test(p.slice(1)) ? p : p.replace(/^(\P{L}*)(\p{Ll})/u, (_, lead, c) => lead + c.toUpperCase()));
+export const titleCase = (s: string) => s.replace(/,?\s+and\b/gi, ' &').replace(/\band\b/gi, '&').split(' ')
+  .map((w, i, all) => (i > 0 && i < all.length - 1 && small.has(w.toLowerCase()) ? w.toLowerCase() : w.split('-').map(cap).join('-')))
   .join(' ');
+/** A one-line statement set as a heading: Title Case, without the closing full stop ("Inc." keeps its own). */
+export const headline = (s: string) => titleCase(s).replace(/(?<!\b(?:Inc|Ltd|Co))\.$/, '');
 // Large headings: a word joiner after a hyphen stops "In-House" breaking as "In- / House" (Josh, 4 Nov). It's invisible and zero-width.
 export const keepHyphens = (s: string) => s.replace(/(\p{L})-(?=\p{L})/gu, '$1-\u2060');

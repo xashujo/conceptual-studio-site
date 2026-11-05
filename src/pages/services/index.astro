@@ -21,7 +21,7 @@ const steps = home.steps.map((s) => ({ title: s.title, text: s.text.replaceAll('
 <Studio title="Services" description={sp.intro} current="/services/" turnstile closeText={sp.closeText}>
   <Band opening labelledby="svc-h">
     <div class="ph__plate glass" data-lens>
-      <h1 class="ph__h" id="svc-h">{sp.heading}</h1>
+      <h1 class="ph__h" id="svc-h">{titleCase(sp.heading)}</h1>
       <p class="ph__p">{sp.intro}</p>
       <p class="ph__p sv-note">{sp.note}</p>
       {sp.quoteNote && <p class="ph__p sv-note sv-quote">{sp.quoteNote}</p>}
@@ -35,14 +35,14 @@ const steps = home.steps.map((s) => ({ title: s.title, text: s.text.replaceAll('
 
   <Band night labelledby="lanes-h">
     <div class="head">
-      <h2 class="big" id="lanes-h">{sp.listHeading}</h2>
+      <h2 class="big" id="lanes-h">{titleCase(sp.listHeading)}</h2>
       {sp.listNote && <p class="lede">{sp.listNote}</p>}
     </div>
     <ul class="lanes">
       {lanes.map((s, i) => (
         <li class="lane glass" data-lens data-reveal style={`--i: ${i}`}>
           {s.cardImage && <Image class="lane__img" src={s.cardImage.img} alt={s.cardImage.alt} widths={[400, 700, 1000]} sizes="(min-width: 1100px) 45vw, calc(100vw - 32px)" style={s.cardImage.pos ? `object-position: ${s.cardImage.pos}` : undefined} />}
-          <p class="lane__k">{s.lane}</p>
+          <p class="lane__k">{titleCase(s.lane)}</p>
           <h3 class="lane__h">{keepHyphens(titleCase(s.name))}</h3>
           <p class="lane__p">{s.line}</p>
           <p class="lane__first"><span>{sp.firstStepLabel}</span> {s.tiers[0].name}, <b>{s.tiers[0].price}</b></p>
@@ -56,7 +56,7 @@ const steps = home.steps.map((s) => ({ title: s.title, text: s.text.replaceAll('
     </ul>
     {extras.length > 0 && (
       <div class="extras">
-        {sp.extrasHeading && <h3 class="extras__h">{sp.extrasHeading}</h3>}
+        {sp.extrasHeading && <h3 class="extras__h">{titleCase(sp.extrasHeading)}</h3>}
         <ul>
           {extras.map((s) => (
             <li>
@@ -71,7 +71,7 @@ const steps = home.steps.map((s) => ({ title: s.title, text: s.text.replaceAll('
   {retainer && (
     <Band id="retainers" labelledby="ret-h">
       <div class="head">
-        <h2 class="big" id="ret-h">{sp.retainersHeading}</h2>
+        <h2 class="big" id="ret-h">{titleCase(sp.retainersHeading)}</h2>
         {sp.retainersNote && <p class="lede">{sp.retainersNote}</p>}
       </div>
       <Ladder service={retainer.id} custom={false} />
@@ -79,9 +79,9 @@ const steps = home.steps.map((s) => ({ title: s.title, text: s.text.replaceAll('
   )}
 
   <Band night labelledby="how-h">
-    <h2 class="big" id="how-h">{sp.howHeading}</h2>
+    <h2 class="big" id="how-h">{titleCase(sp.howHeading)}</h2>
     <ol class="tiles" style="margin-top: var(--sp-head)">
-      {steps.map((s, i) => <li class="glass" data-lens data-reveal style={`--i: ${i % 2}`}><h3>{s.title}</h3><p>{s.text}</p></li>)}
+      {steps.map((s, i) => <li class="glass" data-lens data-reveal style={`--i: ${i % 2}`}><h3>{titleCase(s.title)}</h3><p>{s.text}</p></li>)}
     </ol>
     <dl class="terms">
       {sp.terms.map((t) => <div><dt>{t.title}</dt><dd>{t.text}</dd></div>)}
@@ -91,7 +91,7 @@ const steps = home.steps.map((s) => ({ title: s.title, text: s.text.replaceAll('
   <Band label={sp.enquiryHeading}>
     <Enquiry heading={sp.enquiryHeading} />
     <div class="quote glass" data-lens data-reveal>
-      <h3 class="mid">{sp.procurementHeading}</h3>
+      <h3 class="mid">{titleCase(sp.procurementHeading)}</h3>
       <p class="quote__p">{sp.procurementText}</p>
       <a class="btn glass-button" href="/procurement/">{sp.procurementButton} <span class="arrow" aria-hidden="true">→</span></a>
     </div>
@@ -103,7 +103,7 @@ const steps = home.steps.map((s) => ({ title: s.title, text: s.text.replaceAll('
   .sv-quote { margin-top: -4px; font-weight: 600; color: var(--ink); }
   .lanes { list-style: none; margin: var(--sp-head) 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-gap); }
   .lane { position: relative; display: flex; flex-direction: column; gap: 12px; padding: var(--sp-card); border-radius: var(--radius); }
-  .lane__img { width: 100%; aspect-ratio: 16 / 10; height: auto; object-fit: cover; border-radius: var(--radius-inner); display: block; margin-bottom: 8px; }
+  .lane__img { width: 100%; aspect-ratio: 4 / 3; /* the Essex heat map slide is 4:3 and is never cropped (Josh, 4 Nov) */ height: auto; object-fit: cover; border-radius: var(--radius-inner); display: block; margin-bottom: 8px; }
   .lane__k { font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--ink-2); }
   .lane__h { font-family: var(--display); font-size: 30px; line-height: 1.08; font-weight: 500; letter-spacing: -0.01em; }
   .lane__p { font-size: 17px; line-height: 1.5; }
