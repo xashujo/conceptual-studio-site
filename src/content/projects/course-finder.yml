@@ -10,7 +10,7 @@ filters:
 label: Concept
 order: 65
 summary: A phone-first finder for construction courses across London, with typo-proof search, a map with directions & an Excel upload for staff.
-listText: "A London college group wanted people to find construction courses across London more easily. Power BI's public reports don't work well on phones or forgive spelling mistakes, so I built a working prototype inside the college's own WordPress site. It's live online with sample providers."
+listText: "A London college group wanted people to find construction courses across London more easily. Power BI's public reports don't work well on phones or forgive spelling mistakes, so I built a working prototype as a WordPress plugin. It runs on a test site with 16 sample courses."
 cover:
   src: '@assets/work/course-finder/desktop.webp'
   alt: A course finder for construction courses in London, with a search box, filters, a list of courses and a map of providers
