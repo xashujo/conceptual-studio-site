@@ -254,9 +254,15 @@ const more = services.filter((s) => !lanes.includes(s));
           {trustedBy.length > 0 && (
             <div class="trusted">
               <p class="trusted__l">{home.trustedByLabel}</p>
-              <ul class="trusted__list">
-                {trustedBy.map((c) => <li>{c.logo ? <img src={c.logo.src} alt={c.name} width={Math.round(c.logoHeight * c.logo.width / c.logo.height)} height={c.logoHeight} style={`--h: ${c.logoHeight}px`} loading="lazy" /> : c.name}{c.logo && c.label && <span aria-hidden="true">{c.label}</span>}</li>)}
-              </ul>
+              <!-- A slow sliding row with soft blurred edges (Josh, 5 Nov, after kenjilambert.com). The list runs twice so
+                   the loop is seamless; the copy is hidden from screen readers. Hover pauses it; reduced motion keeps it still. -->
+              <div class="trusted__marquee">
+                {[0, 1].map((copy) => (
+                  <ul class="trusted__list" aria-hidden={copy ? 'true' : undefined}>
+                    {trustedBy.map((c) => <li>{c.logo ? <img src={c.logo.src} alt={copy ? '' : c.name} width={Math.round(c.logoHeight * c.logo.width / c.logo.height)} height={c.logoHeight} style={`--h: ${c.logoHeight}px`} loading="lazy" /> : c.name}{c.logo && c.label && <span aria-hidden="true">{c.label}</span>}</li>)}
+                  </ul>
+                ))}
+              </div>
             </div>
           )}
           <section class="stats" aria-label="The studio in numbers">
@@ -671,8 +677,23 @@ const more = services.filter((s) => !lanes.includes(s));
   /* One tidy row (Josh, 4 Nov: two uneven rows looked messy): label on top, logos spread evenly at equal optical weight. */
   .trusted { display: grid; justify-items: center; gap: 20px; margin-top: var(--sp-head); padding-block: 24px 28px; border-block: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); }
   .trusted__l { font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); }
-  .trusted__list { width: 100%; display: flex; flex-wrap: nowrap; justify-content: space-between; align-items: center; gap: 24px; margin: 0; padding: 0 8px; list-style: none; font-size: 15px; color: var(--ink-2); }
-  @media (max-width: 1099.98px) { .trusted__list { flex-wrap: wrap; justify-content: center; gap: 22px 36px; } }
+  /* Marquee: two identical lists slide left by one list's width, so the seam never shows. The edges fade out and blur
+     (a mask plus a masked backdrop blur), like logos passing behind frosted glass. */
+  .trusted__marquee { --gap: 64px; --edge: min(12%, 120px); position: relative; width: 100%; display: flex; overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, #000 var(--edge), #000 calc(100% - var(--edge)), transparent); }
+  .trusted__marquee::before, .trusted__marquee::after { content: ""; position: absolute; inset-block: 0; z-index: 1; width: var(--edge); pointer-events: none; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  .trusted__marquee::before { left: 0; mask-image: linear-gradient(90deg, #000, transparent); }
+  .trusted__marquee::after { right: 0; mask-image: linear-gradient(-90deg, #000, transparent); }
+  .trusted__list { flex: none; display: flex; align-items: center; gap: var(--gap); margin: 0; padding: 4px calc(var(--gap) / 2); list-style: none; font-size: 15px; color: var(--ink-2); white-space: nowrap; animation: trusted-slide 40s linear infinite; }
+  .trusted__marquee:hover .trusted__list { animation-play-state: paused; }
+  @keyframes trusted-slide { to { transform: translateX(-100%); } }
+  @media (max-width: 759.98px) { .trusted__marquee { --gap: 44px; } .trusted__list { animation-duration: 30s; } }
+  /* Reduced motion: no sliding. The logos wrap into a still, centred block and the copy goes. */
+  @media (prefers-reduced-motion: reduce) {
+    .trusted__marquee { mask-image: none; }
+    .trusted__marquee::before, .trusted__marquee::after, .trusted__list[aria-hidden] { display: none; }
+    .trusted__list { flex: 1; flex-wrap: wrap; justify-content: center; gap: 22px 36px; animation: none; white-space: normal; }
+  }
   .trusted__list li { display: flex; align-items: center; gap: 10px; }
   .trusted__list img { display: block; height: var(--h, 28px); width: auto; filter: brightness(0) invert(1) sepia(.35); opacity: .7; } /* any logo to one soft cream */
   .approach { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: var(--sp-gap); margin: 0; margin-top: var(--sp-head); padding: 0; list-style: none; }
