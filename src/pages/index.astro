@@ -79,7 +79,7 @@ const more = services.filter((s) => !lanes.includes(s));
       <Logo />
       <ul class="nav__links">
         <li><a class="glass-pill" href="#top" aria-current="true">Home</a></li>
-        {links.map(([l, h]) => <li><a class="glass-pill" href={h} title={h === '#contact' && availability.on ? titleCase(availability.text) : undefined}>{h === '#contact' && availability.on && <span class="avail__dot nav__dot" aria-hidden="true" />}{l}{h === '#contact' && availability.on && <span class="sr">, {availability.text.toLowerCase()}</span>}</a></li>)}
+        {links.map(([l, h]) => <li><a class={h === '#contact' ? 'btn nav__cta' : 'glass-pill'} href={h} title={h === '#contact' && availability.on ? titleCase(availability.text) : undefined}>{h === '#contact' && availability.on && <span class="avail__dot nav__dot" aria-hidden="true" />}{l}{h === '#contact' && availability.on && <span class="sr">, {availability.text.toLowerCase()}</span>}</a></li>)}
       </ul>
       <button class="nav__menu glass-pill" type="button" popovertarget="site-menu">Menu</button>
     </nav>
@@ -87,7 +87,7 @@ const more = services.filter((s) => !lanes.includes(s));
     <div class="menu glass" id="site-menu" popover>
       <ul>
         <li><a class="glass-pill" href="#top">Home</a></li>
-        {links.map(([l, h]) => <li><a class="glass-pill" href={h}>{h === '#contact' && availability.on && <span class="avail__dot nav__dot" aria-hidden="true" />}{l}</a></li>)}
+        {links.map(([l, h]) => <li><a class={h === '#contact' ? 'btn btn--solid menu__cta' : 'glass-pill'} href={h}>{h === '#contact' && availability.on && <span class="avail__dot nav__dot" aria-hidden="true" />}{l}</a></li>)}
       </ul>
     </div>
     <main>
@@ -777,6 +777,7 @@ const more = services.filter((s) => !lanes.includes(s));
     .fw__grid > li { grid-column: span 6; }
     .nav { padding-left: 20px; }
     .nav__links .glass-pill { padding: 0 12px; font-size: 16px; }
+    .nav__links .nav__cta { margin-left: 6px; padding: 0 14px 0 13px; font-size: 16px; }
     .hero__bento { grid-template-columns: 1fr; }
     .hero__plate { grid-column: auto; }
     .about__text { grid-column: 1 / -1; }
