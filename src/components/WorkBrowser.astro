@@ -275,20 +275,26 @@ const byYear = [...items].sort((a, b) => b.year - a.year); // stable, so same-ye
   .card__tags { display: flex; flex-wrap: nowrap; gap: 6px; overflow: hidden; }
   .card__out { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; min-height: 2.8em; margin-top: -8px; padding: 0 8px 2px; font-size: 17px; line-height: 1.4; color: var(--ink-2); }
   /* Hover: no rise; the card turns to its day glass. */
-  /* Hover keeps the card dark (Josh, 4 Nov: the tan fill hurt contrast). Josh, 5 Nov, picked the "stronger lift":
-     a clear cream lift over the card's own pane and a bright cream edge on top of the rim and lift, so depth stays.
-     The type steps up with it (Josh: "washed out"): grey lines go full cream and the tag pills darken.
-     .glass is doubled because the cards are panes, and the global pane rule (.night .glass[data-lens].is-pane)
-     otherwise beats the hover fill. */
+  /* Hover: a soft cream glass with ink text (Josh, 5 Nov), so cards on dark bands flip to light like the buttons
+     do. See-through (72% cream over a 24px blur) rather than solid, with the day glass's lit rim and the night lift.
+     The year, outcome and tag follow the light scheme. .glass is doubled because the cards are panes, and the
+     global pane rule (.night .glass[data-lens].is-pane) otherwise beats the hover fill. */
   .card.glass { transition: background-color 300ms ease-out, color 300ms ease-out, box-shadow 300ms ease-out; }
   .card :is(.card__y, .card__out, .tag) { transition: color 300ms ease-out, background-color 300ms ease-out; }
   @media (hover: hover) {
     .card.glass.glass:hover {
-      background: color-mix(in srgb, var(--ink) 18%, color-mix(in srgb, var(--paper-2) 40%, transparent));
-      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 70%, transparent), var(--glass-shadow);
+      color-scheme: light;
+      color: var(--ink);
+      background: color-mix(in srgb, var(--paper) 72%, transparent);
+      -webkit-backdrop-filter: blur(24px) saturate(1.3);
+      backdrop-filter: blur(24px) saturate(1.3);
+      box-shadow:
+        inset 1px 1px 0 rgb(255 250 240 / .9),
+        inset 0 -1px 0 rgb(110 80 36 / .12),
+        inset 0 0 0 1px rgb(110 80 36 / .16),
+        var(--lift-night);
     }
-    .card:hover :is(.card__y, .card__out) { color: var(--ink); }
-    .card:hover .tag { background: color-mix(in srgb, var(--paper) 55%, transparent); color: var(--ink); }
+    .card:hover .tag { background: color-mix(in srgb, var(--ink) 8%, transparent); color: var(--ink); }
   }
   .card:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 
