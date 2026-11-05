@@ -9,6 +9,7 @@ filters:
 - Data visualisation
 order: 60
 summary: Infographics for the merger of BSix Sixth Form College into New City College.
+listText: "New City College & BSix put out a consultation on merging, and the case rested on where Hackney's students travel from. I made eight maps & charts from the colleges' 2022/23 student data, from heat maps by postcode to the distance between the two sites. They went into the consultation document in March 2024."
 cover:
   src: '@assets/work/new-city-college-infographics/02.webp'
   alt: Map of London boroughs marking the BSix and New City College campuses
@@ -16,4 +17,45 @@ cover:
 thumb: "@assets/work/new-city-college-infographics/thumb.webp"
 coverFocus: 0% 0%
 featured: false
-hasPage: false
+hasPage: true
+outcome: Eight maps & charts for the merger consultation, March 2024.
+problem: |
+  In 2024 New City College and Brooke House Sixth Form College (BSix) proposed merging, and put out a public consultation document: A strong and secure future for post-16 education in Hackney.
+
+  The case for the merger rested on where Hackney's 16 to 18 year olds come from and which campuses they choose. That lived in spreadsheets of postcodes and student numbers, and parents, staff and the local community needed to see it at a glance.
+whatIDid: |
+  I worked through the 2022/23 student data for both colleges and made eight maps & charts. Heat maps show which postcodes each college draws from, pie charts break that down by borough, and a map follows Hackney's students out to the other NCC campuses.
+
+  I kept the colour coding the same across every chart and matched it to NCC's brand, so the set reads as one piece. The set went through a round of edits before the document went out.
+
+  Figures in these images are blurred for GDPR reasons.
+gallery:
+  - images:
+      - src: '@assets/work/new-city-college-infographics/bsix-heat.webp'
+        alt: Heat map of London postcodes in shades of blue, showing where students aged 16 to 19 travelled from to BSix in 2022/23
+        caption: Where BSix students travel from, 2022/23
+      - src: '@assets/work/new-city-college-infographics/hackney-heat.webp'
+        alt: Heat map of London postcodes in shades of blue, showing where students aged 16 to 18 travelled from to NCC's Hackney campus
+        caption: Where NCC Hackney students travel from, 2022/23
+      - src: '@assets/work/new-city-college-infographics/bsix-pie.webp'
+        alt: Pie chart of BSix students aged 16 to 18 by home borough, with Hackney the largest slice
+        caption: BSix students by borough
+      - src: '@assets/work/new-city-college-infographics/hackney-pie.webp'
+        alt: Pie chart of NCC Hackney students aged 16 to 18 by home borough, with Hackney the largest slice
+        caption: NCC Hackney students by borough
+      - src: '@assets/work/new-city-college-infographics/hackney-campuses.webp'
+        alt: Black map of east London with coloured dotted lines running from Hackney out to each New City College campus
+        caption: Which NCC campuses Hackney's students attend
+      - src: '@assets/work/new-city-college-infographics/totals.webp'
+        alt: Bar chart comparing students aged 16 to 18 and 19 plus at BSix and each New City College campus, 2022/23
+        caption: Students at each campus, 2022/23
+      - src: '@assets/work/new-city-college-infographics/distance.webp'
+        alt: Black map of Hackney with a street map inset and a dotted line between NCC's Hackney campus and BSix
+        caption: The route between NCC Hackney & BSix
+stats:
+  - value: "8"
+    label: Maps & charts in the consultation
+  - value: "2022/23"
+    label: The student year the maps cover
+whatHappened: |
+  The maps & charts went into the merger consultation document, published in March 2024. I worked for Mark Silverman at Plus Pursuits, and NCC's Group Executive Director of Communications wrote to thank me for them too.
