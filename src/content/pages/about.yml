@@ -12,7 +12,7 @@ story: |
 storyImage:
   src: "@assets/about/joshua.webp"
   alt: Joshua in a grey top and black cap, by the water on a sunny evening, a red lifting bridge behind him
-  focus: 50% 35%
+  focus: 50% 70%
 valuesHeading: How I Work
 values:
   - title: One Idea, Made Clear
