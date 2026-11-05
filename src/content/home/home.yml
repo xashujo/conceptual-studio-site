@@ -19,8 +19,8 @@ stats:
     after: +
     label: Student Enrolments Mapped
     wide: true
-  - number: 12
-    label: Months in a Row with One Client
+  - number: 2
+    label: Years as Lead Designer for a Tokyo Startup
     wide: true
 workHeading: Selected Work
 allProjects: All Projects
@@ -46,8 +46,8 @@ socialVideos:
     poster: "@assets/work/social/font-archive.jpg"
     alt: Goldfish swim over the words my font archive as a design studio, then a run through the typefaces in it.
 approach:
-  - title: Education Specialists
-    text: Most of our work is for colleges and adult learning services.
+  - title: Clear Charts from Messy Data
+    text: I turn big spreadsheets & long reports into charts people can follow.
   - title: Brand & Data Together
     text: I do both, so your reports and charts look like the rest of your brand.
   - title: One Designer, Brief to Files
