@@ -64,24 +64,24 @@ const edge = async (img: ImageMetadata) => {
 };
 // A tile is a picture (with an optional silent loop) or words: the outcome, a figure, a quote, a paragraph.
 type Words = { kind: 'headline'; text: string } | { kind: 'stat'; value: string; label: string } | { kind: 'quote'; quote: string; by: string };
-type Piece = { kind: 'image'; plate: Plate & { video?: string }; label: string; keep?: boolean } | Words;
+type Piece = { kind: 'image'; plate: Plate & { video?: string }; label: string } | Words;
 // The shape each kind of words would like, and how little a poor fit matters to it.
 const wordShape = { headline: [3.2, 1], stat: [1.8, 0.4], quote: [1.5, 0.5] } as const;
 const layout = async (pieces: Piece[], flip = false) => {
   const looks = await Promise.all(pieces.map((pc) => (pc.kind === 'image' ? edge(pc.plate.image) : undefined)));
   const items = pieces.map((pc, i) => pc.kind === 'image'
-    ? { ratio: (pc.plate.image.width * looks[i]!.box.w) / (pc.plate.image.height * looks[i]!.box.h), weight: looks[i]!.photo || pc.keep ? 3 : 1 }
+    ? { ratio: (pc.plate.image.width * looks[i]!.box.w) / (pc.plate.image.height * looks[i]!.box.h), weight: looks[i]!.photo ? 3 : 1 }
     : { ratio: wordShape[pc.kind][0], weight: wordShape[pc.kind][1] });
   return bento(items, flip).map((tile) => {
     const pc = pieces[tile.index], look = looks[tile.index];
     const fit = items[tile.index].ratio / ratioOf(tile);
-    const fill = !!look?.photo && Math.min(fit, 1 / fit) > 0.8 && !(pc.kind === 'image' && pc.keep);
+    const fill = !!look?.photo && Math.min(fit, 1 / fit) > 0.8;
     // CSS for the art: its trimmed box, centred and contained in the tile's padded area (see .tile__art).
     const b = look?.box ?? { x: 0, y: 0, w: 1, h: 1 };
     const art = pc.kind === 'image' && !fill
       ? `--bg: ${look!.bg}; --r: ${items[tile.index].ratio.toFixed(4)}; --R: ${(pc.plate.image.width / pc.plate.image.height).toFixed(4)}; --bx: ${b.x.toFixed(4)}; --by: ${b.y.toFixed(4)}; --bw: ${b.w.toFixed(4)}; --bh: ${b.h.toFixed(4)}`
       : `--bg: ${look?.bg ?? 'transparent'}`;
-    return { ...tile, pc, art, fill, whole: !fill && (!!look?.photo || (pc.kind === 'image' && !!pc.keep)), cut: !!look?.cut, bg: look?.bg };
+    return { ...tile, pc, art, fill, whole: !!look?.photo && !fill, cut: !!look?.cut, bg: look?.bg };
   });
 };
 const shots = (plates: Plate[]): Piece[] => plates.map((pl) => ({ kind: 'image', plate: pl, label: pl.medium }));
@@ -93,10 +93,10 @@ const same = (a: string, b: string) => !!b && (bare(a).includes(bare(b)) || bare
 // "Before: the old logo", not a bare "Before" (Josh, 5 Nov: no generic tags).
 const pair = (tag: string | undefined, caption: string) => (tag && caption ? `${tag}: ${/^[A-Z][a-z]/.test(caption) ? caption[0].toLowerCase() + caption.slice(1) : caption}` : tag || caption);
 const [beforeLabel, afterLabel] = t.beforeAfterHeading.split('&').map((x) => x.trim());
-// Without a before/after, the first outcome picture leads (Josh, 5 Nov: the guidelines' own bento pages).
+// Without a before/after, the first outcome picture leads (Josh, 5 Nov: the guidelines' own bento pages). It runs the
+// full width above the bento at its own shape, with the same room on every side, so it is never cropped or boxed in.
 const leadShot = !cs.before && cs.outcomeImages.length ? [cs.outcomeImages[0]] : [];
 const outcomePieces: Piece[] = [
-  ...leadShot.map((pl) => ({ kind: 'image', plate: pl, label: pl.medium, keep: true } as const)), // shown whole, never cropped
   ...(cs.stats.length ? [] : cs.outcome ? [{ kind: 'headline', text: cs.outcome } as const] : []),
   ...cs.stats.map((x) => ({ kind: 'stat', ...x } as const)),
   ...cs.quotes.map((q) => ({ kind: 'quote', quote: q.quote, by: [q.name, q.role, q.organisation].filter(Boolean).join(', ') } as const)),
@@ -180,6 +180,12 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
         <h2 class="big" id="outcomes">{t.happenedHeading}</h2>
         {happened.length > 0 && <div class="flow cs-text" data-reveal>{happened.map((x) => (x.startsWith('- ') ? <ul class="cs-list">{x.split('\n').map((l) => <li>{l.replace(/^-\s*/, '')}</li>)}</ul> : <p>{x}</p>))}</div>}
       </div>
+      {leadShot.map((pl) => (
+        <figure class="tile glass tile--hero">
+          <Image src={pl.image} alt={pl.alt} widths={[800, 1400, 2200]} sizes="(min-width: 760px) 1140px, 100vw" />
+          {pl.medium && <figcaption class="tile__label">{pl.medium}</figcaption>}
+        </figure>
+      ))}
       <div class="bento-wrap"><div class="bento bento--outcomes">
         {outcomes.map(({ pc, bg, art, fill, whole, cut, col, row, w, h }) => {
           const area = `grid-area: ${row} / ${col} / span ${h} / span ${w}`;
@@ -270,6 +276,9 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
   /* A photo or collage that would crop too much: shown whole and large, on its own edge colour. */
   .tile--whole .tile__art { --cw: min(100cqw - 32px, (100cqh - 32px) * var(--r)); }
   .tile--cut .tile__art { --cw: min(100cqw - 8px, (100cqh - 8px) * var(--r)); overflow: visible; }
+  .tile--hero { margin: 0 0 12px; padding: 20px 20px var(--cap); }
+  .tile--hero .tile__label { left: 20px; }
+  .tile--hero img { display: block; width: 100%; height: auto; }
   .tile--fill .tile__art :is(img, video) { inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .tile__art { position: absolute; inset: var(--in) var(--in) var(--cap); overflow: hidden; border-radius: calc(24px - var(--in)); background: var(--tile); container-type: size; }
   /* The label sits on the glass under the art, like a caption on a mount (Josh, 5 Nov: pills looked out of place). */
