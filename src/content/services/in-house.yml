@@ -4,7 +4,7 @@ lane: In-House
 card: true
 summary: Your team builds the dashboard, Power BI report or web tool. We design alongside them, so it looks & works like a finished product.
 tiers:
-  - name: Design support
+  - name: Design Support
     onHome: true
     price: From £1,750
     time: from 1 week

@@ -1,4 +1,4 @@
-name: Brand identity
+name: Brand Identity
 order: 2
 lane: Brand
 page: /services/brand-identity/
@@ -34,21 +34,21 @@ faqs:
     answer: Yes. On a rollout I handle print through my partners, so everything arrives finished.
 homeLink: Brand identity prices
 tiers:
-  - name: Campaign look
+  - name: Campaign Look
     onHome: true
     price: £1,250
     time: from 2 weeks
     includes: A key visual, colours and type for one campaign or event, plus templates for its posts and posters.
-  - name: Logo and essentials
+  - name: Logo & Essentials
     onHome: true
     price: From £4,900
     time: from 4 weeks
     includes: A logo, colours and typefaces, a one-page guide to using them, and mockups of the identity in use.
-  - name: Full identity
+  - name: Full Identity
     price: From £8,750
     time: from 8 weeks
     includes: Everything in Logo and essentials, plus brand guidelines and templates for social posts, letterheads and presentations.
-  - name: Identity and rollout
+  - name: Identity & Rollout
     price: From £14,000
     time: from 12 weeks
     includes: A full identity on everything people see, from signage to prospectuses and campaigns, with print through my partners.

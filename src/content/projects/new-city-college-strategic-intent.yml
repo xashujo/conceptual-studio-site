@@ -24,15 +24,15 @@ homeFocus: 50% 8%
 homeCharts:
 - src: '@assets/work/new-city-college-strategic-intent/03.webp'
   alt: Bar chart forecasting 16 to 18 population growth by borough, 2024 to 2030
-  title: Demographic forecast, 2024 to 2030
+  title: Demographic Forecast, 2024 to 2030
   caption: Bar chart, 16 to 18 population by borough
 - src: '@assets/work/new-city-college-strategic-intent/04.webp'
   alt: Bar chart of minimum growth rates across key employment sectors
-  title: Key employment growth
+  title: Key Employment Growth
   caption: Bar chart, minimum growth rate by sector
 - src: '@assets/work/new-city-college-strategic-intent/05.webp'
   alt: Pie chart of 16 to 18 students by level in 2024/25
-  title: 16 to 18 students by level, 2024/25
+  title: 16 to 18 Students by Level, 2024/25
   caption: Pie chart, 10,404 students
 hasPage: true
 outcome: Used by the college's senior leadership across its 10 campuses.
