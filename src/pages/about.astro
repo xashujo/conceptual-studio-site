@@ -17,7 +17,7 @@ import { aboutPage as a, paras, titleCase } from '../lib/pages';
       </div>
       {a.storyImage && (
         <figure class="ab-pic glass" data-lens>
-          <Image src={a.storyImage.src} alt={a.storyImage.alt} widths={[400, 700, 1000]} sizes="(min-width: 1100px) 440px, (min-width: 760px) 40vw, calc(100vw - 32px)" loading="eager" style={a.storyImage.focus ? `object-position: ${a.storyImage.focus}` : undefined} />
+          <Image src={a.storyImage.src} alt={a.storyImage.alt} widths={[400, 700, 1000].filter((w) => w <= a.storyImage.src.width)} sizes="(min-width: 1100px) 440px, (min-width: 760px) 40vw, calc(100vw - 32px)" loading="eager" style={a.storyImage.focus ? `object-position: ${a.storyImage.focus}` : undefined} />
           {a.storyImage.caption && <figcaption>{a.storyImage.caption}</figcaption>}
         </figure>
       )}
@@ -73,7 +73,7 @@ import { aboutPage as a, paras, titleCase } from '../lib/pages';
   .ab-open--pic .ph__plate { justify-items: start; text-align: left; align-content: center; }
   .ab-open--pic .ph__plate .acts { justify-content: start; }
   .ab-pic { margin: 0; padding: 10px; border-radius: var(--radius); display: flex; flex-direction: column; gap: 10px; min-height: 0; }
-  .ab-pic img { flex: 1; width: 100%; height: 100%; min-height: 0; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--radius-inner); display: block; }
+  .ab-pic img { flex: 1; width: 100%; height: 100%; min-height: 0; aspect-ratio: 1; object-fit: cover; border-radius: var(--radius-inner); display: block; }
   .ab-pic figcaption { font-size: 14px; color: var(--ink-2); padding: 0 6px 4px; }
   @media (max-width: 1099.98px) { .ab-story .pane { columns: 1; } }
   @media (max-width: 759.98px) { .ab-open--pic { grid-template-columns: 1fr; } .ab-pic img { flex: none; height: auto; aspect-ratio: 1; } .ab-groups { grid-template-columns: 1fr; } .ab-groups__list { font-size: 26px; } }
