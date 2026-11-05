@@ -7,6 +7,7 @@
 // name without "Limited".
 import { Image } from 'astro:assets';
 import land from '../assets/art/engraved/garden.webp';
+import logo from '../assets/brand/logo-cream-large.webp'; // Josh's logo, gold flow through cream type (5 Nov)
 import { nav, social, email, company, footerText } from '../lib/site';
 // night: the dark version that closes the Studio pages, on the Lemoyne under Start a Project (Josh, 5 Nov).
 // The close panel above already has the line and Copy Email, and the ceiling is the art, so night drops them.
@@ -41,7 +42,9 @@ const words = company.name.replace(/\s+(limited|ltd\.?)$/i, '').split(/\s+/);
     </div>
   </div>
   <a class="wrap foot__mark" href="/" aria-label={`${words.join(' ')}, home`}>
-    <span class="foot__word" aria-hidden="true">{words.map((w) => <span>{w}</span>)}</span>
+    {night
+      ? <Image class="foot__logo" src={logo} alt="" widths={[720, 1261, 2522]} sizes="(min-width: 1440px) 1261px, calc(100vw - 2 * var(--margin))" />
+      : <span class="foot__word" aria-hidden="true">{words.map((w) => <span>{w}</span>)}</span>}
   </a>
   {!night && <div class="foot__land" aria-hidden="true"><Image src={land} alt="" widths={[900, 1600, 2400]} sizes="100vw" /></div>}
 </footer>
@@ -74,6 +77,9 @@ const words = company.name.replace(/\s+(limited|ltd\.?)$/i, '').split(/\s+/);
   /* Night: cream ink straight on the ceiling, which shows through; no paper, no engraving strip. */
   .foot--night { --foot-ink: #F1DFC8; background: none; padding: 0 0 clamp(20px, 2.5vw, 36px); }
   .foot--night .foot__legal { margin-top: 0; }
+  /* The logo is 2522px wide, so it stops at 1261px: sharp on a 2x screen, never stretched. */
+  .foot--night .foot__mark { margin-top: clamp(40px, 5vw, 72px); }
+  .foot__logo { display: block; width: 100%; max-width: 1261px; height: auto; margin-inline: auto; }
 
   @media (max-width: 759.98px) {
     .foot { padding-top: 56px; }
