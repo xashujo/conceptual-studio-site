@@ -46,6 +46,7 @@ stats:
   - value: "6"
     label: Visuals for the report and slides
     icon: chart
+    art: '@assets/work/usp-freeport-skills/uk-lines.webp'
   - value: "3"
     label: Next steps the report ends on
     icon: steps
