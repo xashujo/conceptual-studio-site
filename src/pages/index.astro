@@ -79,7 +79,7 @@ const more = services.filter((s) => !lanes.includes(s));
       <Logo />
       <ul class="nav__links">
         <li><a class="glass-pill" href="#top" aria-current="true">Home</a></li>
-        {links.map(([l, h]) => <li><a class="glass-pill" href={h}>{l}</a></li>)}
+        {links.map(([l, h]) => <li><a class="glass-pill" href={h} title={h === '#contact' && availability.on ? titleCase(availability.text) : undefined}>{h === '#contact' && availability.on && <span class="avail__dot nav__dot" aria-hidden="true" />}{l}{h === '#contact' && availability.on && <span class="sr">, {availability.text.toLowerCase()}</span>}</a></li>)}
       </ul>
       <button class="nav__menu glass-pill" type="button" popovertarget="site-menu">Menu</button>
     </nav>
@@ -87,7 +87,7 @@ const more = services.filter((s) => !lanes.includes(s));
     <div class="menu glass" id="site-menu" popover>
       <ul>
         <li><a class="glass-pill" href="#top">Home</a></li>
-        {links.map(([l, h]) => <li><a class="glass-pill" href={h}>{l}</a></li>)}
+        {links.map(([l, h]) => <li><a class="glass-pill" href={h}>{h === '#contact' && availability.on && <span class="avail__dot nav__dot" aria-hidden="true" />}{l}</a></li>)}
       </ul>
     </div>
     <main>
@@ -101,7 +101,7 @@ const more = services.filter((s) => !lanes.includes(s));
           <p class="hero__p">{sentence}</p>
           <div class="acts">
             <a class="btn btn--solid hero__start" href={startHref}><span class="swap"><span>{home.startButton}</span><span aria-hidden="true">Contact Us</span></span></a>
-            {availability.on && <a class="avail" href={`mailto:${email}`}><span class="avail__dot" aria-hidden="true"></span><span class="swap"><span>{titleCase(availability.text)}</span><span aria-hidden="true">Email Us</span></span></a>}
+            {/* Availability moved to the nav's Start a Project pill (Josh, 5 Nov): one less pill in the hero. */}
             <a class="btn hero__work" href="#work">{home.workButton} <span class="arrow hero__down" aria-hidden="true">→</span></a>
           </div>
           <!-- Tags (Design Laboratory, Josh 2 Nov): what the studio does at a glance; each opens the work filtered to it. -->
