@@ -604,9 +604,7 @@ const more = services.filter((s) => !lanes.includes(s));
   .card__row .card__tags { flex-wrap: nowrap; overflow: hidden; }
   .card > .card__out { min-height: 2.8em; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
   .tag { padding: 5px 11px; border-radius: var(--pill); background: color-mix(in srgb, var(--ink) 7%, transparent); font-size: 14px; font-weight: 500; line-height: 1.2; }
-  /* Hover (Josh, 28 Oct): no rise; the card turns to its day glass, like the buttons in the night bands. */
-  /* Hover keeps the card dark (Josh, 4 Nov: the tan fill hurt contrast); the edge brightens instead. */
-  @media (hover: hover) { .fw .card.glass:hover  { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 40%, transparent); background: color-mix(in srgb, var(--ink) 7%, transparent); } } /* beats the night pane glass */
+  /* Hover: the site-wide work card hover in components.css. */
   .card:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
   .fw__empty { margin-top: 32px; font-size: 20px; }
   .fw__foot [hidden] { display: none; }
