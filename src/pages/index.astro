@@ -95,8 +95,6 @@ const more = services.filter((s) => !lanes.includes(s));
       <header class="hero" id="top">
         {painting ? <Image class="hero__art" src={home.pageImage} alt="" widths={[800, 1100, 1600]} quality={55} sizes={ART_SIZES} loading="eager" fetchpriority="high" /> : <div class="hero__art canvas" style={`--canvas: ${canvas}`} aria-hidden="true" />}
         <!-- Landing view (Josh, 2 Nov): one plate that says what clients get, with the big Start a Project. The stats moved to the proof (Josh, 3 Nov). -->
-        <!-- Candlelight (Josh, 5 Nov): the same painting, lit, shown through a soft circle that follows the pointer. -->
-        {painting && <div class="hero__lit" aria-hidden="true" data-candle><Image class="hero__art hero__art--lit" src={home.pageImage} alt="" widths={[800, 1100, 1600]} quality={55} sizes={ART_SIZES} loading="eager" /></div>}
         <div class="hero__bento">
         <div class="hero__plate glass" data-lens>
           <h1 class="hero__h">{headline}</h1>
@@ -366,23 +364,6 @@ const more = services.filter((s) => !lanes.includes(s));
       mountLens(document.querySelector('.hero__plate'), null); // over the running painting, so CSS glass like the panes
       document.querySelectorAll<HTMLElement>('.field [data-lens], .stat, .close__body').forEach((el) => mountLens(el, null));
 
-      // Candlelight: the lit circle eases after the pointer (only with a mouse; touch gets the CSS drift).
-      const candle = document.querySelector<HTMLElement>('[data-candle]');
-      if (candle && !still && matchMedia('(hover: hover) and (pointer: fine)').matches) {
-        const hero = candle.parentElement!;
-        let x = 62, y = 30, tx = x, ty = y, raf = 0;
-        const tick = () => {
-          x += (tx - x) * 0.06; y += (ty - y) * 0.06;
-          candle.style.setProperty('--cx', `${x.toFixed(2)}%`); candle.style.setProperty('--cy', `${y.toFixed(2)}%`);
-          raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.05 ? requestAnimationFrame(tick) : 0;
-        };
-        hero.addEventListener('pointermove', (e) => {
-          const r = hero.getBoundingClientRect();
-          tx = ((e.clientX - r.left) / r.width) * 100; ty = ((e.clientY - r.top) / r.height) * 100;
-          if (!raf) raf = requestAnimationFrame(tick);
-        });
-      }
-
       // Nav: light over the night chapters, dark over paper. Watches a 1px line across the nav's middle.
       const nav = document.querySelector<HTMLElement>('[data-nav]')!;
       const nights = [...document.querySelectorAll('.night')];
@@ -555,21 +536,6 @@ const more = services.filter((s) => !lanes.includes(s));
   /* The opening shows the top of the painting at screen size, toned and quiet like the bands. */
   .hero { overflow: clip; }
   .hero__art { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; opacity: 0.45; filter: url(#tone-day); }
-  /* Candlelight: a lit copy of the painting through a soft circle at --cx --cy (script below), with a warm cast. */
-  @property --cx { syntax: '<percentage>'; inherits: true; initial-value: 62%; }
-  @property --cy { syntax: '<percentage>'; inherits: true; initial-value: 30%; }
-  .hero__lit { position: absolute; inset: 0; z-index: -1; pointer-events: none;
-    -webkit-mask-image: radial-gradient(circle 32vmax at var(--cx) var(--cy), #000 0%, rgb(0 0 0 / 0.55) 38%, transparent 72%);
-    mask-image: radial-gradient(circle 32vmax at var(--cx) var(--cy), #000 0%, rgb(0 0 0 / 0.55) 38%, transparent 72%); }
-  .hero__lit::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle 26vmax at var(--cx) var(--cy), rgb(255 176 88 / 0.5), transparent 70%); mix-blend-mode: soft-light; }
-  .hero__art--lit { opacity: 1; filter: url(#tone-day) contrast(1.15); }
-  /* No mouse: the light drifts slowly on its own, like a candle carried round the room. */
-  @media (hover: none), (pointer: coarse) {
-    .hero__lit { animation: candle 22s ease-in-out infinite alternate; }
-  }
-  @keyframes candle { 0% { --cx: 30%; --cy: 22%; } 35% { --cx: 70%; --cy: 34%; } 70% { --cx: 45%; --cy: 62%; } 100% { --cx: 78%; --cy: 70%; } }
-  @media (prefers-reduced-motion: reduce) { .hero__lit { animation: none; } }
-
   .hero__bento { align-self: center; justify-self: center; width: min(1140px, 100%); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-gap); }
   .hero__plate { position: relative; grid-column: 1 / -1; padding: 64px 56px 56px; display: grid; justify-items: center; gap: 26px; border-radius: var(--radius); text-align: center; } /* type and space carry it: one centred statement */
   .hero__h { font-family: var(--display); font-weight: 500; font-size: clamp(44px, 5.2vw, 76px); line-height: 1.06; letter-spacing: -0.01em; text-wrap: balance; }
