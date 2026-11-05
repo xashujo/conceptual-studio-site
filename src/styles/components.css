@@ -402,11 +402,15 @@ a.card.glass :is(.card__y, .card__out, .tag) { transition: color 300ms ease-out,
 
 /* Bento art (components/BentoArt.astro): a drawing pushed off the tile's right edge so about half shows, cropped
    by the tile's own corners. It takes the text colour, faint, and the words sit above it. */
-.bento-art { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; pointer-events: none; }
+.bento-art { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; pointer-events: none; filter: drop-shadow(1px 1px 0 rgb(255 248 236 / 0.08)); } /* a lit lower edge: cut into the glass */
 .bento-art > * { position: absolute; top: 56%; right: 0; height: 128%; width: auto; aspect-ratio: var(--ar, 1); translate: 42% -50%; }
 /* Etched into the glass: a dark cut with a lit edge just below it, like the glass rims. */
 .bento-art__icon { opacity: 0.2; }
 .bento-art__lit { stroke: rgb(255 248 236 / 0.9); }
 .night .bento-art__lit, .is-dark .bento-art__lit { stroke: rgb(0 0 0 / 0.6); }
-.bento-art__lines { opacity: 0.13; background: currentColor; -webkit-mask: var(--src) center / contain no-repeat; mask: var(--src) center / contain no-repeat; }
+.bento-art__lines { opacity: 0.14; background: currentColor; -webkit-mask: var(--src) center / contain no-repeat; mask: var(--src) center / contain no-repeat; }
 :where(:has(> .bento-art)) > :not(.bento-art) { position: relative; }
+/* The home figures: the icon a little smaller, so the number keeps clear glass. */
+.stat > .bento-art > * { height: 104%; translate: 34% -50%; }
+/* A wide chart sits along the bottom edge instead, its bars rising from the tile's floor. */
+.bento-art > .bento-art__lines--wide { top: auto; bottom: -2%; height: 78%; translate: 14% 0; }

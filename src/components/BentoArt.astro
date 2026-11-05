@@ -40,7 +40,7 @@ const extra = icon === 'ring' ? 'ring' : icon === 'contrast' ? 'contrast' : '';
 const img = art ? await getImage({ src: art, width: 900, format: 'webp' }) : undefined;
 ---
 {img && (
-  <span class="bento-art" aria-hidden="true"><span class="bento-art__lines" style={`--ar: ${(art!.width / art!.height).toFixed(3)}; --src: url('${img.src}')`}></span></span>
+  <span class="bento-art" aria-hidden="true"><span class:list={["bento-art__lines", { "bento-art__lines--wide": art!.width / art!.height > 1.6 }]} style={`--ar: ${(art!.width / art!.height).toFixed(3)}; --src: url('${img.src}')`}></span></span>
 )}
 {!img && d && (
   <span class="bento-art" aria-hidden="true">

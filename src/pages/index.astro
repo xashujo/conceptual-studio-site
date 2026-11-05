@@ -4,6 +4,7 @@
 // all in the shared glass, over the etching carried down behind them.
 import Tune from '../components/Tune.astro';
 import Logo from '../components/Logo.astro';
+import BentoArt from '../components/BentoArt.astro';
 import Favicons from '../components/Favicons.astro';
 import { glassStyle } from '../lib/site';
 import '../styles/tokens.css';
@@ -31,9 +32,7 @@ const titleCase = (s: string) => s.replace(/\band\b/gi, '&').split(' ')
   .join(' ');
 
 // Pages CMS: Home page > Stats. Figures confirmed by Josh (4 Nov); projects counted from his Client Work folders.
-const stats = await Promise.all(home.stats.map(async (s) => ({ n: s.number, after: s.after, label: s.label, wide: !!s.wide,
-  // The work behind each figure, as cards cropped off the tile's top and right (Josh, 5 Nov, after Apple's bento grids).
-  pics: await Promise.all(s.pictures.map(async (p) => ({ src: (await getImage({ src: p, width: 720, format: 'webp' })).src, ar: p.width / p.height }))) })));
+const stats = home.stats.map((s) => ({ n: s.number, after: s.after, label: s.label, wide: !!s.wide, art: s.art, icon: s.icon }));
 
 // Featured work and the services come from Pages CMS (Projects and Services).
 // The first six by home page position show (two rows of three); any more wait behind "Show More".
@@ -288,12 +287,8 @@ const more = services.filter((s) => !lanes.includes(s));
           <section class="stats" aria-label="The studio in numbers">
             <ul class="stats__list">
               {stats.map((s, i) => (
-                <li class:list={["stat glass", { 'stat--wide': s.wide, 'stat--pics': s.pics.length }]} data-lens style={`--i: ${i}`}>
-                  {s.pics.length > 0 && (
-                    <span class="stat__pics" aria-hidden="true">
-                      {s.pics.map((p, j) => <img src={p.src} alt="" loading="lazy" decoding="async" style={`--k: ${j}; --ar: ${p.ar.toFixed(3)}; z-index: ${3 - j}`} />)}
-                    </span>
-                  )}
+                <li class:list={["stat glass", { 'stat--wide': s.wide }]} data-lens style={`--i: ${i}`}>
+                  <BentoArt art={s.art} icon={s.icon} />
                   <p class="stat__n"><span aria-hidden="true"><span data-count={s.n} data-i={i}>{s.n.toLocaleString('en-GB')}</span><span class={s.after === '+' ? 'stat__plus' : undefined}>{s.after}</span></span><span class="sr-only">{s.n.toLocaleString('en-GB')}{s.after}</span></p>
                   <p class="stat__l">{s.label}</p>
                 </li>
@@ -574,20 +569,6 @@ const more = services.filter((s) => !lanes.includes(s));
   .stat__plus { margin-left: 0.12em; -webkit-text-stroke: 0.03em currentColor; } /* half a space off the figure, and stroked to the digits' weight: Agatho has no bolder cut (Josh, 28 Oct) */
   .stat--wide { grid-column: span 2; } /* bento: a wide card fills out a row (Josh, 4 Nov) */
   .stat__l { font-size: 18px; line-height: 1.35; font-weight: 500; text-wrap: balance; }
-  /* The work behind the figure (Josh, 5 Nov: "far more exciting", after Apple's bento grids): real pieces as
-     small framed prints, fanned and cropped off the tile's top and right edges, never under the words. The figure
-     and its label sit together at the bottom. */
-  .stat--pics { overflow: hidden; min-height: 290px; align-content: end; gap: 10px; }
-  .stat__pics { position: absolute; top: 0; right: 0; width: 100%; height: 50%; pointer-events: none; }
-  /* Each print is sized by the room above the words (so a tall map never reaches the figure) and capped by the tile's width. */
-  .stat__pics img { position: absolute; right: -14%; top: -16%; height: 112%; width: auto; max-width: 84%; aspect-ratio: var(--ar); object-fit: cover; object-position: 50% 0; border-radius: 10px;
-    transform-origin: 100% 0; rotate: calc(-6deg + var(--k) * 7deg); translate: calc(var(--k) * -15%) calc(var(--k) * 5%);
-    box-shadow: 0 0 0 1px rgb(241 223 200 / 0.16), 0 22px 40px -16px rgb(0 0 0 / 0.7); }
-  .stat--pics > :not(.stat__pics) { position: relative; }
-  /* A wide tile gives the picture its right half: one print, bleeding off the right and bottom edges. */
-  .stat--wide .stat__pics { inset: 0 0 0 auto; width: 56%; height: 100%; }
-  .stat--wide .stat__pics img { top: 14%; right: -14%; height: auto; width: 100%; max-width: none; rotate: -3deg; translate: none; transform-origin: 50% 50%; }
-  .stat--wide.stat--pics { min-height: 230px; }
 
   /* Featured work: heading, the filter bar, then compact landscape cards three to a row (Josh, 28 Oct), all the same shape. */
   .fw { padding-top: var(--sp-section); }
@@ -832,13 +813,6 @@ const more = services.filter((s) => !lanes.includes(s));
     .stat { min-height: 128px; padding: 18px 18px; gap: 16px; border-radius: var(--radius); }
     .stat__n { font-size: 9.6vw; } /* 20,000+ fits a phone-width card */
     .stat__l { font-size: 15px; }
-    .stat--pics, .stat--wide.stat--pics { min-height: 260px; }
-    .stat__pics, .stat--wide .stat__pics { inset: 0 0 auto auto; width: 100%; height: 40%; }
-    .stat__pics img { max-width: 96%; rotate: calc(-3deg + var(--k) * 6deg); }
-    /* On a phone a wide tile stacks like the others: the print above, the words below. */
-    .stat--wide.stat--pics { min-height: 300px; }
-    .stat--wide .stat__pics { height: 58%; }
-    .stat--wide .stat__pics img { top: -12%; right: -8%; height: 112%; width: auto; max-width: 88%; rotate: -3deg; }
     .filterbar { gap: 0; padding: 4px; }
     .filterbar .glass-pill { flex: none; min-height: 44px; padding: 0 14px; font-size: 15px; letter-spacing: -0.01em; } /* pills never shrink (Josh, 2 Nov: All was squashed); the row scrolls */
     .fw__view { width: 52px; height: 52px; }

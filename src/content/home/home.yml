@@ -7,37 +7,27 @@ stats:
   - number: 20
     after: +
     label: Projects Delivered
-    pictures:
-      - "@assets/work/cmd-inc/thumb.webp"
-      - "@assets/work/doubleshot-studio/thumb.webp"
-      - "@assets/work/oxford-school-of-english/01.webp"
+    art: "@assets/home/papers-icon.webp"
   - number: 2
     label: Years as Lead Designer for a Tokyo Startup
-    pictures:
-      - "@assets/work/fou-answer/thumb.webp"
-      - "@assets/work/fou-answer/01.webp"
+    art: "@assets/home/eye-icon.webp"
   - number: 7112
     label: Learner Records Mapped for ACL Essex
-    pictures:
-      - "@assets/work/acl-essex-infographics/heat-map.webp"
+    art: "@assets/home/essex-icon.webp"
   - number: 70
     after: "%"
     label: of Clients Return for More Work
-    pictures:
-      - "@assets/work/new-city-college-strategic-intent/thumb.webp"
-      - "@assets/work/ncc-sustainability-report/thumb.webp"
+    art: "@assets/home/ring-icon.webp"
   - number: 40000
     after: +
     label: Student Enrolments Mapped
     wide: true
-    pictures:
-      - "@assets/work/new-city-college-infographics/hackney-heat.webp"
+    art: "@assets/home/london-icon.webp"
   - number: 20000
     after: +
     label: Data Points Visualised
     wide: true
-    pictures:
-      - "@assets/work/new-city-college-infographics/totals.webp"
+    art: "@assets/home/bars-icon.webp"
 workHeading: Selected Work
 allProjects: All Projects
 socialVideos:
