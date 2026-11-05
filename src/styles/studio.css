@@ -109,7 +109,6 @@ html { scroll-behavior: smooth; }
 .close__h { grid-column: 1; margin-top: -0.18em; } /* cap tops level with the glass panel */
 .close__body { grid-column: 2; max-width: 680px; box-sizing: border-box; display: grid; gap: 24px; padding: var(--sp-card); border-radius: var(--radius); }
 .close__p { font-size: 20px; line-height: 1.5; }
-.footer { padding: 0 var(--margin) 40px; text-align: center; font-size: 16px; color: #F1DFC8; }
 
 @media (max-width: 1099.98px) {
   .nav { padding-left: 20px; }
@@ -148,7 +147,6 @@ html { scroll-behavior: smooth; }
   .quote__p, .close__p { font-size: 16px; }
   .close { padding-block: 300px 80px; }
   .close__art img { object-position: 42% 30%; }
-  .footer { font-size: 14px; padding-bottom: 28px; }
 }
 @media (min-width: 760px) { .menu { display: none; } }
 

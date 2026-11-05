@@ -5,6 +5,7 @@
 import Tune from '../components/Tune.astro';
 import Logo from '../components/Logo.astro';
 import Favicons from '../components/Favicons.astro';
+import Footer from '../components/Footer.astro';
 import { Image } from 'astro:assets';
 import { turnstileSiteKey } from '../site';
 import { glassStyle, email, startHref, home, company, responseTime, availability } from '../lib/site';
@@ -86,7 +87,7 @@ const isCurrent = (h: string) => h === current || (h !== '/' && current?.startsW
           </div>
         )}
       </section>
-      <footer class="footer"><p>© {new Date().getFullYear()} {company.name}</p></footer>
+      <Footer night />
     </div>
     <p class="sr-only" aria-live="polite" data-copy-status></p>
 

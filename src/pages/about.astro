@@ -9,10 +9,18 @@ import { aboutPage as a, paras, titleCase } from '../lib/pages';
 ---
 <Studio title="About" description={a.intro} current="/about/" closeText={a.closeText}>
   <Band opening labelledby="about-h">
-    <div class="ph__plate glass" data-lens>
-      <h1 class="ph__h" id="about-h">{a.heading}</h1>
-      <p class="ph__p">{a.intro}</p>
-      <div class="acts"><a class="btn" href="/work/">See the Work <span class="arrow" aria-hidden="true">→</span></a></div>
+    <div class:list={['ab-open', { 'ab-open--pic': a.storyImage }]}>
+      <div class="ph__plate glass" data-lens>
+        <h1 class="ph__h" id="about-h">{a.heading}</h1>
+        <p class="ph__p">{a.intro}</p>
+        <div class="acts"><a class="btn" href="/work/">See the Work <span class="arrow" aria-hidden="true">→</span></a></div>
+      </div>
+      {a.storyImage && (
+        <figure class="ab-pic glass" data-lens>
+          <Image src={a.storyImage.src} alt={a.storyImage.alt} widths={[400, 700, 1000].filter((w) => w <= a.storyImage.src.width)} sizes="(min-width: 1100px) 440px, (min-width: 760px) 40vw, calc(100vw - 32px)" loading="eager" style={a.storyImage.focus ? `object-position: ${a.storyImage.focus}` : undefined} />
+          {a.storyImage.caption && <figcaption>{a.storyImage.caption}</figcaption>}
+        </figure>
+      )}
     </div>
   </Band>
 
@@ -20,12 +28,6 @@ import { aboutPage as a, paras, titleCase } from '../lib/pages';
     <div class="ab-story">
       <h2 class="big" id="story-h">{a.storyHeading}</h2>
       <div class="pane glass flow" data-lens data-reveal>{paras(a.story).map((p) => <p>{p}</p>)}</div>
-      {a.storyImage && (
-        <figure class="ab-pic" data-reveal>
-          <Image src={a.storyImage.src} alt={a.storyImage.alt} widths={[400, 700, 1000]} sizes="(min-width: 1100px) 30vw, calc(100vw - 32px)" style={a.storyImage.focus ? `object-position: ${a.storyImage.focus}` : undefined} />
-          {a.storyImage.caption && <figcaption>{a.storyImage.caption}</figcaption>}
-        </figure>
-      )}
     </div>
   </Band>
 
@@ -60,14 +62,19 @@ import { aboutPage as a, paras, titleCase } from '../lib/pages';
   /* Heading over the pane, as in every other band (Josh, 4 Nov: side by side, the offset read as a mistake). */
   .ab-story { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--sp-gap); }
   .ab-story .big { grid-column: 1 / -1; }
-  .ab-story .pane { grid-column: 1 / span 8; margin-top: var(--sp-head); }
+  /* Story and The Work I Want read in two columns across the full width, so neither is a tall wall of text (Josh, 5 Nov). */
+  .ab-story .pane { grid-column: 1 / -1; margin-top: var(--sp-head); columns: 2; column-gap: 56px; }
   .ab-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-gap); margin-top: var(--sp-head); }
   .ab-groups__h { font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--ink-2); }
   .ab-groups__list { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 6px; font-family: var(--display); font-size: clamp(28px, 2.6vw, 38px); line-height: 1.15; letter-spacing: -0.01em; }
-  /* The story's one picture sits square in the four columns beside the pane, kept small (Josh dislikes art shown too large). */
-  .ab-pic { grid-column: 9 / -1; align-self: start; margin: var(--sp-head) 0 0; display: flex; flex-direction: column; gap: 10px; }
-  .ab-pic img { width: 100%; aspect-ratio: 1; height: auto; object-fit: cover; border-radius: var(--radius); display: block; }
-  .ab-pic figcaption { font-size: 14px; color: var(--ink-2); }
-  @media (max-width: 1099.98px) { .ab-story .pane { grid-column: 1 / -1; } .ab-pic { grid-column: 1 / -1; } .ab-pic { max-width: 420px; } }
-  @media (max-width: 759.98px) { .ab-groups { grid-template-columns: 1fr; } .ab-groups__list { font-size: 26px; } }
+  /* The opening: Josh's photo beside the About plate, the two the same height (Josh, 5 Nov: the picture is of him,
+     not a piece of work). The photo fills its glass frame edge to edge inside an even rim. Pages CMS > About > Your photo. */
+  .ab-open--pic { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--sp-gap); align-items: stretch; }
+  .ab-open--pic .ph__plate { justify-items: start; text-align: left; align-content: center; }
+  .ab-open--pic .ph__plate .acts { justify-content: start; }
+  .ab-pic { margin: 0; padding: 10px; border-radius: var(--radius); display: flex; flex-direction: column; gap: 10px; min-height: 0; }
+  .ab-pic img { flex: 1; width: 100%; height: 100%; min-height: 0; aspect-ratio: 1; object-fit: cover; border-radius: var(--radius-inner); display: block; }
+  .ab-pic figcaption { font-size: 14px; color: var(--ink-2); padding: 0 6px 4px; }
+  @media (max-width: 1099.98px) { .ab-story .pane { columns: 1; } }
+  @media (max-width: 759.98px) { .ab-open--pic { grid-template-columns: 1fr; } .ab-pic img { flex: none; height: auto; aspect-ratio: 1; } .ab-groups { grid-template-columns: 1fr; } .ab-groups__list { font-size: 26px; } }
 </style>
