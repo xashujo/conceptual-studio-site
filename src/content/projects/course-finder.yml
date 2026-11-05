@@ -37,8 +37,10 @@ whatIDid: |-
 stats:
   - value: "2"
     label: Options weighed, Power BI or a custom tool
+    icon: choice
   - value: "AA"
     label: WCAG 2.2 contrast on every colour pairing
+    icon: contrast
 whatHappened: |-
   A working prototype on a test site, with 16 sample courses, plus a fixed-price proposal for the build, launch and support. It can be adapted for any college or training provider.
 gallery:

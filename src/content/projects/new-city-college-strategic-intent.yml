@@ -70,7 +70,9 @@ gallery:
 stats:
   - value: "7"
     label: Infographics in the briefing
+    icon: chart
   - value: "34 years"
     label: Of mergers on one map, 1990 to 2024
+    icon: timeline
 whatHappened: |
   The infographics went into the Strategic Intent document used by the college's senior leadership, across a college of 10 campuses and more than 18,000 students.

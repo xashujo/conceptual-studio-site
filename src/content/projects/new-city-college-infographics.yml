@@ -56,7 +56,9 @@ gallery:
 stats:
   - value: "8"
     label: Maps & charts in the consultation
+    icon: map
   - value: "2022/23"
     label: The student year the maps cover
+    icon: calendar
 whatHappened: |
   The maps & charts went into the merger consultation document, published in March 2024. I worked for Mark Silverman at Plus Pursuits, and NCC's Group Executive Director of Communications wrote to thank me for them too.

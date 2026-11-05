@@ -54,11 +54,15 @@ gallery:
 stats:
   - value: "8"
     label: Charts redrawn for the report
+    icon: chart
   - value: "16"
     label: A4 pages laid out
+    icon: pages
   - value: "5"
     label: Formats, from print to accessible PDF
+    icon: formats
   - value: "10"
     label: Campuses compared
+    icon: buildings
 whatHappened: |
   The report was finished and reviewed by RV Ed Consulting, who found the charts improved the report's narrative.
