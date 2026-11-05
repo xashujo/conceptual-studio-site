@@ -9,3 +9,6 @@ tiers:
     price: From £1,750
     time: from 1 week
     includes: Layouts for phone & desktop, charts & maps in your brand, and clear wording for the people using it, handed over as files your team builds from.
+cardImage:
+  src: '@assets/work/new-york-general-group/thumb.webp'
+  alt: NYGG lettering in white on a black starfield, the title frame of a briefing animation for New York General Group
