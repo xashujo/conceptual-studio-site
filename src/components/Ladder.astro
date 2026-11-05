@@ -5,7 +5,7 @@
 // email already written for that plan (Services page > "Plan email" in Pages CMS), one quiet button per rung.
 import { serviceById, custom } from '../data/services';
 import { email } from '../lib/site';
-import { servicesPage as sp } from '../lib/pages';
+import { servicesPage as sp, titleCase } from '../lib/pages';
 interface Props { service: string; custom?: boolean }
 const { service, custom: withCustom = true } = Astro.props;
 const s = serviceById(service);
@@ -20,7 +20,7 @@ const mailto = (t: (typeof rungs)[number]) =>
   {rungs.map((t) => (
     <div class:list={['rung glass', { 'rung--custom': t.id === 'custom' }]} role="listitem" aria-labelledby={`rung-${t.value.replace(':', '-')}`}>
       {t.badge && <p class="rung__badge badge">{t.badge}</p>}
-      <h3 class="rung__name" id={`rung-${t.value.replace(':', '-')}`}>{t.name}</h3>
+      <h3 class="rung__name" id={`rung-${t.value.replace(':', '-')}`}>{titleCase(t.name)}</h3>
       {t.lead && <p class="rung__lead">{t.lead}</p>}
       <p class="rung__price">{t.price}</p>
       {t.time && <p class="rung__time">{t.time}</p>}
@@ -28,7 +28,7 @@ const mailto = (t: (typeof rungs)[number]) =>
         ? <ul class="rung__inc">{t.included.split('\n').filter(Boolean).map((i) => <li>{i}</li>)}</ul>
         : <p class="rung__inc">{t.included}</p>}
       {t.note && <p class="rung__note">{t.note}</p>}
-      <a class="btn rung__btn" href={mailto(t)}>{t.button || (t.id === 'custom' ? 'Ask for a quote' : 'Ask about this')}<span class="arrow" aria-hidden="true">→</span></a>
+      <a class="btn rung__btn" href={mailto(t)}>{titleCase(t.button || (t.id === 'custom' ? 'Ask for a Quote' : 'Ask About This'))}<span class="arrow" aria-hidden="true">→</span></a>
     </div>
   ))}
 </div>

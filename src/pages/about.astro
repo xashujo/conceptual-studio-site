@@ -11,9 +11,9 @@ import { aboutPage as a, paras, titleCase } from '../lib/pages';
   <Band opening labelledby="about-h">
     <div class:list={['ab-open', { 'ab-open--pic': a.storyImage }]}>
       <div class="ph__plate glass" data-lens>
-        <h1 class="ph__h" id="about-h">{a.heading}</h1>
+        <h1 class="ph__h" id="about-h">{titleCase(a.heading)}</h1>
         <p class="ph__p">{a.intro}</p>
-        <div class="acts"><a class="btn" href="/work/">See the Work <span class="arrow" aria-hidden="true">→</span></a></div>
+        <div class="acts"><a class="btn" href="/work/">See The Work <span class="arrow" aria-hidden="true">→</span></a></div>
       </div>
       {a.storyImage && (
         <figure class="ab-pic glass" data-lens>
@@ -26,20 +26,20 @@ import { aboutPage as a, paras, titleCase } from '../lib/pages';
 
   <Band night labelledby="story-h">
     <div class="ab-story">
-      <h2 class="big" id="story-h">{a.storyHeading}</h2>
+      <h2 class="big" id="story-h">{titleCase(a.storyHeading)}</h2>
       <div class="pane glass flow" data-lens data-reveal>{paras(a.story).map((p) => <p>{p}</p>)}</div>
     </div>
   </Band>
 
   <Band labelledby="values-h">
-    <h2 class="big" id="values-h">{a.valuesHeading}</h2>
+    <h2 class="big" id="values-h">{titleCase(a.valuesHeading)}</h2>
     <ul class="tiles tiles--3" style="margin-top: var(--sp-head)">
-      {a.values.map((v, i) => <li class="glass" data-lens data-reveal style={`--i: ${i}`}><h3>{v.title}</h3><p>{v.text}</p></li>)}
+      {a.values.map((v, i) => <li class="glass" data-lens data-reveal style={`--i: ${i}`}><h3>{titleCase(v.title)}</h3><p>{v.text}</p></li>)}
     </ul>
   </Band>
 
   <Band night labelledby="clients-h">
-    <h2 class="big" id="clients-h">{a.clientsHeading}</h2>
+    <h2 class="big" id="clients-h">{titleCase(a.clientsHeading)}</h2>
     <div class="ab-groups">
       {clientGroups.map((g, i) => (
         <div class="pane glass" data-lens data-reveal style={`--i: ${i}`}>
@@ -52,7 +52,7 @@ import { aboutPage as a, paras, titleCase } from '../lib/pages';
 
   <Band labelledby="want-h">
     <div class="ab-story">
-      <h2 class="big" id="want-h">{a.wantHeading}</h2>
+      <h2 class="big" id="want-h">{titleCase(a.wantHeading)}</h2>
       <div class="pane glass flow" data-lens data-reveal>{paras(a.want).map((p) => <p>{p}</p>)}</div>
     </div>
   </Band>

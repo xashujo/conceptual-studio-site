@@ -24,7 +24,7 @@ const videos = await Promise.all(home.socialVideos.map(async (v) => ({ ...v, pos
 <Studio title="Work" description={w.intro} current="/work/" closeText={w.closeText}>
   <Band opening labelledby="work-h">
     <div class="ph__plate glass" data-lens>
-      <h1 class="ph__h" id="work-h">{w.heading}</h1>
+      <h1 class="ph__h" id="work-h">{titleCase(w.heading)}</h1>
       <p class="ph__p">{w.intro}</p>
     </div>
   </Band>
@@ -34,7 +34,7 @@ const videos = await Promise.all(home.socialVideos.map(async (v) => ({ ...v, pos
   </Band>
 
   <Band labelledby="clients-h">
-    <h2 class="big" id="clients-h">{w.clientsHeading}</h2>
+    <h2 class="big" id="clients-h">{titleCase(w.clientsHeading)}</h2>
     <div class="groups">
       {clientGroups.map((g) => (
         <div class="pane glass" data-lens data-reveal>

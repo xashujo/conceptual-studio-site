@@ -15,7 +15,7 @@ import { email, startHref, quoteHref, sentence, trustedBy } from '../data/site';
 import { availability, homeQuotes, responseTime, home, ART_SIZES } from '../lib/site';
 import { featured, projectHref, homeFilters, bySlug } from '../data/work';
 import { services, isLane } from '../data/services';
-import { servicesPage, keepHyphens } from '../lib/pages';
+import { servicesPage, keepHyphens, titleCase } from '../lib/pages';
 import closeArt from '../assets/art/engraved/lemoyne-night.jpg';
 // Behind the sections: plain canvas, or the running painting (CMS "Background", Josh 2 Nov).
 const painting = home.backdrop === 'painting';
@@ -24,12 +24,7 @@ const canvas = `url(${(await getImage({ src: home.canvasImage, format: 'webp' })
 const headline = home.headline; // Pages CMS: Home page (option 3, Josh, 26 Oct)
 const links = [['Work', '#work'], ['Services', '#services'], ['About', '#about'], ['Start a Project', '#contact']];
 
-// Title Case for headings, buttons and labels (Josh, 28 Oct): every word capitalised except the small
-// ones, never the first or last; "and" becomes "&". Capitals already there (KUT) are kept.
-const small = new Set(['a', 'an', 'the', 'of', 'to', 'in', 'on', 'for', 'at', 'by', 'or', 'but', 'with', 'as']);
-const titleCase = (s: string) => s.replace(/\band\b/gi, '&').split(' ')
-  .map((w, i, all) => (i > 0 && i < all.length - 1 && small.has(w.toLowerCase()) ? w.toLowerCase() : w.charAt(0).toUpperCase() + w.slice(1)))
-  .join(' ');
+// Title Case: the shared titleCase from lib/pages (one rule site-wide).
 
 // Pages CMS: Home page > Stats. Figures confirmed by Josh (4 Nov); projects counted from his Client Work folders.
 const stats = home.stats.map((s) => ({ n: s.number, after: s.after, label: s.label, wide: !!s.wide }));
@@ -100,7 +95,7 @@ const more = services.filter((s) => !isLane(s)); // lanes holds copies, so match
         <!-- Landing view (Josh, 2 Nov): one plate that says what clients get, with the big Start a Project. The stats moved to the proof (Josh, 3 Nov). -->
         <div class="hero__bento">
         <div class="hero__plate glass" data-lens>
-          <h1 class="hero__h">{headline}</h1>
+          <h1 class="hero__h">{titleCase(headline)}</h1>
           <p class="hero__p">{sentence}</p>
           <div class="acts">
             <a class="btn btn--solid hero__start" href={startHref}><span class="swap"><span>{home.startButton}</span><span aria-hidden="true">Contact Us</span></span></a>
@@ -134,7 +129,7 @@ const more = services.filter((s) => !isLane(s)); // lanes holds copies, so match
         <div class:list={["band__art", { canvas: !painting }]} style={painting ? undefined : `--canvas: ${canvas}`} aria-hidden="true">{painting && <Image src={home.pageImage} alt="" widths={[800, 1100, 1600]} quality={55} sizes={ART_SIZES} />}</div>
 
         <section class="fw wrap" id="work" aria-labelledby="fw-h">
-          <h2 class="fw__h big" id="fw-h">{home.workHeading}</h2>
+          <h2 class="fw__h big" id="fw-h">{titleCase(home.workHeading)}</h2>
           <div class="fw__tools">
           <div class="filterbar glass" role="group" aria-label={`Filter ${home.workHeading.toLowerCase()}`} data-lens data-filters hidden>
             <button class="glass-pill" type="button" data-filter="all" aria-pressed="true">All</button>
@@ -297,7 +292,7 @@ const more = services.filter((s) => !isLane(s)); // lanes holds copies, so match
             </ul>
           </section>
           <ul class="approach" style={`--n: ${home.approach.length}`}>
-            {home.approach.map((a) => <li><h3 class="approach__t">{a.title}</h3><p>{a.text}</p></li>)}
+            {home.approach.map((a) => <li><h3 class="approach__t">{titleCase(a.title)}</h3><p>{a.text}</p></li>)}
           </ul>
           <!-- One quote: the large pane beside the two results. Two or three quotes: a row of quotes over a row of results. -->
           <div class:list={["proof__grid", { 'proof__grid--two': homeQuotes.length === 2, 'proof__grid--three': homeQuotes.length > 2, 'proof__grid--r3': results.length === 3 }]} style={`--r: ${Math.max(results.length, 1)}`}>
@@ -325,7 +320,7 @@ const more = services.filter((s) => !isLane(s)); // lanes holds copies, so match
           <h2 class="big about__h" id="about-h">About</h2>
           <div class="about__text">
             <p class="about__lead">{home.aboutLead}</p>
-            <a class="btn glass-button" href="/about/">More About the Studio <span class="arrow" aria-hidden="true">→</span></a>
+            <a class="btn glass-button" href="/about/">More About The Studio <span class="arrow" aria-hidden="true">→</span></a>
           </div>
         </section>
         </div>

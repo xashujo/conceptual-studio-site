@@ -147,7 +147,7 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
   <Band opening class="cs-open" labelledby="cs-h">
     <div class="ph__plate glass cs-plate" data-lens>
       <a class="btn cs-back" href="/work/"><span class="arrow arrow--back" aria-hidden="true">←</span> {t.backLabel}</a>
-      <h1 class="ph__h cs-h" id="cs-h">{p.title}</h1>
+      <h1 class="ph__h cs-h" id="cs-h">{titleCase(p.title)}</h1>
       <p class="ph__p">{p.summary}</p>
       <dl class="cs-credits">
         {credits.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
@@ -170,21 +170,21 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
   {(cs.problem.length > 0 || cs.did.length > 0) && (
     <Band night label={`${t.problemHeading}, ${t.didHeading}`}>
       <div class="cs-two">
-        {cs.problem.length > 0 && <div class="pane glass" data-lens data-reveal><h2 class="mid">{t.problemHeading}</h2><div class="flow cs-text">{cs.problem.map((x) => (x.startsWith('- ') ? <ul class="cs-list">{x.split('\n').map((l) => <li>{l.replace(/^-\s*/, '')}</li>)}</ul> : <p>{x}</p>))}</div></div>}
-        {cs.did.length > 0 && <div class="pane glass" data-lens data-reveal style="--i: 1"><h2 class="mid">{t.didHeading}</h2><div class="flow cs-text">{cs.did.map((x) => (x.startsWith('- ') ? <ul class="cs-list">{x.split('\n').map((l) => <li>{l.replace(/^-\s*/, '')}</li>)}</ul> : <p>{x}</p>))}</div></div>}
+        {cs.problem.length > 0 && <div class="pane glass" data-lens data-reveal><h2 class="mid">{titleCase(t.problemHeading)}</h2><div class="flow cs-text">{cs.problem.map((x) => (x.startsWith('- ') ? <ul class="cs-list">{x.split('\n').map((l) => <li>{l.replace(/^-\s*/, '')}</li>)}</ul> : <p>{x}</p>))}</div></div>}
+        {cs.did.length > 0 && <div class="pane glass" data-lens data-reveal style="--i: 1"><h2 class="mid">{titleCase(t.didHeading)}</h2><div class="flow cs-text">{cs.did.map((x) => (x.startsWith('- ') ? <ul class="cs-list">{x.split('\n').map((l) => <li>{l.replace(/^-\s*/, '')}</li>)}</ul> : <p>{x}</p>))}</div></div>}
       </div>
     </Band>
   )}
 
   <Band labelledby="the-work">
-    <h2 class="big" id="the-work">{t.workHeading}</h2>
+    <h2 class="big" id="the-work">{titleCase(t.workHeading)}</h2>
     <!-- Chapters (Katseye-style, Josh 4 Nov): a short heading and paragraph, then that chapter's images.
          On a phone each chapter's images become one swipeable gallery (Carousel.astro); from 760px up, a bento. -->
     {chapters.map((ch, i) => (
       <section class:list={['cs-chapter', { 'cs-chapter--titled': ch.heading }]} aria-label={ch.heading ?? undefined}>
         {ch.heading && (
           <div class="cs-chapter__head" data-reveal>
-            <h3 class="mid">{ch.heading}</h3>
+            <h3 class="mid">{titleCase(ch.heading)}</h3>
             {ch.text.length > 0 && <div class="flow cs-text">{ch.text.map((x) => <p>{x}</p>)}</div>}
           </div>
         )}
@@ -205,7 +205,7 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
   {outcomes.length > 0 && (
     <Band night labelledby="outcomes">
       <div class:list={['cs-outcomes__head', { 'cs-outcomes__head--text': happened.length }]}>
-        <h2 class="big" id="outcomes">{t.happenedHeading}</h2>
+        <h2 class="big" id="outcomes">{titleCase(t.happenedHeading)}</h2>
         {happened.length > 0 && <div class="flow cs-text" data-reveal>{happened.map((x) => (x.startsWith('- ') ? <ul class="cs-list">{x.split('\n').map((l) => <li>{l.replace(/^-\s*/, '')}</li>)}</ul> : <p>{x}</p>))}</div>}
       </div>
       {leadShot.map((pl) => (
@@ -247,7 +247,7 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
     <a class="next glass" href={`/work/${next.slug}/`} data-lens data-reveal>
       <Image class="next__img" src={next.thumb ?? next.image} alt="" widths={[400, 700]} sizes="(min-width: 760px) 360px, calc(100vw - 76px)" style={!next.thumb && next.position ? `object-position: ${next.position}` : undefined} />
       <span class="next__text">
-        <span class="next__label">{t.nextLabel}</span>
+        <span class="next__label">{titleCase(t.nextLabel)}</span>
         <span class="next__title">{next.title}</span>
         <span class="next__line">{next.summary}</span>
       </span>

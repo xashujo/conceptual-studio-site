@@ -26,14 +26,14 @@ const steps = home.steps.map((st) => ({ title: st.title, text: st.text.replaceAl
       <p class="sv-from">{s.tiers[0].price}{s.tiers[0].time && <span>, {s.tiers[0].time}</span>}</p>
       <div class="acts">
         <a class="btn btn--solid" href="#enquire">{sp.enquiryHeading}</a>
-        <a class="btn" href="#prices">See the {sp.pricesHeading}</a>
+        <a class="btn" href="#prices">See The {titleCase(sp.pricesHeading)}</a>
       </div>
     </div>
   </Band>
 
   {s.examples.length > 0 && (
     <Band night labelledby="work-h">
-      <h2 class="big" id="work-h">{sp.workHeading}</h2>
+      <h2 class="big" id="work-h">{titleCase(sp.workHeading)}</h2>
       <div class="sv-ex">
         {s.examples.map((e, i) => (
           <figure data-reveal style={`--i: ${i}`}>
@@ -48,20 +48,20 @@ const steps = home.steps.map((st) => ({ title: st.title, text: st.text.replaceAl
   <Band id="prices" labelledby="prices-h">
     {Astro.slots.has('demo') && <div class="sv-demo"><slot name="demo" /></div>}
     <div class="head">
-      <h2 class="big" id="prices-h">{sp.pricesHeading}</h2>
+      <h2 class="big" id="prices-h">{titleCase(sp.pricesHeading)}</h2>
       {sp.pricesNote && <p class="lede">{sp.pricesNote}</p>}
     </div>
     <Ladder service={service} />
     <!-- How a project runs, moved here from the home page (Josh, 3 Nov). Steps: Pages CMS > Home page > How We Work. -->
-    <h2 class="big sv-how" id="how-h">{sp.howHeading}</h2>
+    <h2 class="big sv-how" id="how-h">{titleCase(sp.howHeading)}</h2>
     <ol class="tiles" style="margin-top: var(--sp-head)">
-      {steps.map((st, i) => <li class="glass" data-lens data-reveal style={`--i: ${i % 2}`}><h3>{st.title}</h3><p>{st.text}</p></li>)}
+      {steps.map((st, i) => <li class="glass" data-lens data-reveal style={`--i: ${i % 2}`}><h3>{titleCase(st.title)}</h3><p>{st.text}</p></li>)}
     </ol>
   </Band>
 
   {s.faqs.length > 0 && (
     <Band night labelledby="faq-h">
-      <h2 class="big" id="faq-h">{sp.faqHeading}</h2>
+      <h2 class="big" id="faq-h">{titleCase(sp.faqHeading)}</h2>
       <div class="acc acc--q glass" data-lens data-acc>
         {s.faqs.map((f) => (
           <div class="acc__row">
