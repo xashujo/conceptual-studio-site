@@ -7,8 +7,8 @@ kinds: Charts for a document you're laying out yourself, a whole annual, strateg
 demoHeading: A Table Becomes a Chart
 demoText: Real Department for Education figures, as you'd get them in a spreadsheet. Press the button to see what I do with them.
 examples:
-  - src: '@assets/work/acl-essex-infographics/heat-map.webp'
-    alt: Heat map of Essex in five shades of blue, showing ACL enrolments by local authority, with the figures left out
+  - src: '@assets/work/acl-essex-infographics/services.webp'
+    alt: Heat map slide of Essex in shades of blue, showing ACL enrolments by local authority with the figures blurred
     title: ACL Essex Learner Maps, 2025
     caption: Enrolments by local authority, mapped from learner records
   - src: '@assets/work/ncc-sustainability-report/thumb.webp'

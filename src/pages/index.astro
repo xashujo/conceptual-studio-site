@@ -649,7 +649,7 @@ const more = services.filter((s) => !lanes.includes(s));
   .svc__price span { font-weight: 400; color: var(--ink-2); }
   .svc__ex { position: absolute; top: 50%; right: 0; width: 40%; aspect-ratio: 4 / 3; translate: 0 -50%; display: grid; padding: 6px; border-radius: var(--radius); opacity: 0; transition: opacity 300ms ease-out; pointer-events: none; }
   .svc__tile { width: 100%; height: 100%; min-height: 0; object-fit: cover; background: var(--bg); border-radius: calc(var(--radius) - 6px); display: block; }
-  .svc__ex[data-charts] .svc__tile { object-fit: contain; padding: 12px; } /* charts and maps are never cropped (Josh, 4 Nov) */
+  .svc__ex[data-charts] .svc__tile { object-fit: contain; } /* charts and maps are never cropped (Josh, 4 Nov) */
   .svc__row:is(:hover, :focus-within) .svc__link { color: var(--ink); transform: translateX(8px); }
   .svc:not(:has(.svc__row:is(:hover, :focus-within))) .svc__row:first-child .svc__link { color: var(--ink); }
   .svc__row:is(:hover, :focus-within) .svc__ex,
