@@ -1,7 +1,7 @@
 title: Oxford School of English
 slug: oxford-school-of-english
 client: Oxford School of English
-year: 2023
+year: 2022
 disciplines:
 - Visual identity
 - Branding
@@ -9,6 +9,7 @@ filters:
 - Brand identity
 order: 20
 summary: A new identity for a private English school in Oxford, now a UK-registered trademark.
+listText: "The Oxford School of English wanted more students from abroad, but its old logo looked too much like the Oxford reference books and said little to them. I redesigned the logo, type & colour on my own, with an English lion inside a shield."
 cover:
   src: '@assets/work/oxford-school-of-english/bus-shelter.webp'
   alt: Oxford School of English poster in a bus shelter on an Oxford street, beside a red double-decker bus
@@ -21,7 +22,7 @@ homeFilter: Branding
 hasPage: true
 outcome: Now a UK-registered trademark.
 problem: |
-  The Oxford School of English teaches students from abroad and wanted to win more of them. Its old logo had no clear structure, said little to an international market and copied the Oxford Dictionary logo.
+  The Oxford School of English had just been bought by New City College. It teaches English to students from abroad, 120 of them from 29 countries when I started, and wanted more. Its old logo was dated, looked too much like the Oxford reference books and used Oxford Blue, a colour registered to Oxford University, so it couldn't be trademarked.
 
   The school wanted to look modern and prestigious without losing its historic roots.
 whatIDid: |

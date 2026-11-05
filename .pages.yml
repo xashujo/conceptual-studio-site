@@ -94,6 +94,10 @@ content:
         type: text
         required: true
         description: "Shown on the project card. Say where the work was used."
+      - name: listText
+        label: List view description
+        type: text
+        description: "Shown when the project's row is opened in the list view. Two or three short sentences: the brief, what you did and how it went. Leave empty to use the one-line description."
       - { name: cover, label: Cover image, component: picture, required: true }
       - name: thumb
         label: Card thumbnail (optional)
@@ -355,6 +359,7 @@ content:
           - { name: number, label: Number, type: number, required: true, description: "Counts up to this. Type the number without commas, e.g. 20000: the site adds them (20,000)." }
           - { name: after, label: After the number, type: string, description: "e.g. + or % or hr or M+" }
           - { name: label, label: Label, type: string, required: true }
+          - { name: wide, label: Wide card, type: boolean, description: "Makes this card twice as wide. Use it to fill out a row: the grid is four across on a computer, two on a phone." }
       - { name: workHeading, label: Work heading, type: string, required: true, description: "The big heading over the work grid, e.g. Selected Work." }
       - { name: allProjects, label: All projects button, type: string, required: true, description: "The glass button under the work grid. It opens the Work page." }
       - name: socialVideos

@@ -4,10 +4,11 @@ client: Kingston School of Art
 year: 2022
 disciplines:
 - 3D modelling
+- Composition
 - Art direction
 studentWork: true
 order: 110
-summary: A glass hand reaching for a star.
+summary: "Experimental 3D Artwork on Identity, Hope, and Transformation."
 cover:
   src: '@assets/work/rebirth/01.webp'
   alt: A translucent glass hand reaching up towards a bright star in purple haze

@@ -65,6 +65,8 @@ export const collections = {
         label: text,
         order: z.number().nullish(),
         summary: z.string(),
+        // The text in the work list's open row (Josh, 5 Nov): the brief, what I did and how it went. Falls back to the summary.
+        listText: text,
         cover: pic,
         thumb: image().nullish(),
         coverFocus: z.string().nullish(),
@@ -163,7 +165,7 @@ export const collections = {
       startButton: z.string().min(1),
       workButton: z.string().min(1),
       trustedByLabel: z.string().min(1),
-      stats: z.array(z.object({ number: z.number(), after: z.string().nullish().transform((s) => s ?? ''), label: z.string().min(1) })),
+      stats: z.array(z.object({ number: z.number(), after: z.string().nullish().transform((s) => s ?? ''), label: z.string().min(1), wide: z.boolean().nullish() })),
       workHeading: z.string().min(1),
       allProjects: z.string().min(1),
       // Vertical videos under the Social Media filter; the file path is under public/ (Pages CMS: Short videos).
