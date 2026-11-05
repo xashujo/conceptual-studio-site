@@ -61,6 +61,9 @@ gallery:
         alt: Three bands of colour, cream, red and black, with their codes beside them
         caption: The three colours
 outcomeImages:
+  - src: "@assets/work/doubleshot-studio/applications.webp"
+    alt: A grid of DoubleShot mockups from the brand guidelines, from tote bag and laptop to banners, stickers, business cards and matches
+    caption: The identity at work, from the brand guidelines
   - src: "@assets/work/doubleshot-studio/duo-3d.webp"
     alt: One of The Duo, DoubleShot's red star mascots, rendered in 3D mid-stride on the brand's Soot
     caption: The Duo in 3D

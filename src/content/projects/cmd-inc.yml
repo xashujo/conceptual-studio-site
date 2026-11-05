@@ -127,5 +127,9 @@ gallery:
       - src: "@assets/work/cmd-inc/iphone.webp"
         alt: Mockup of an iPhone home screen with the CMD Inc. app icon
         caption: App icon on iPhone
+outcomeImages:
+  - src: "@assets/work/cmd-inc/applications.webp"
+    alt: A grid of CMD Inc. mockups from the brand guidelines, including business cards, an iPhone app icon, a keyring, name tags, a billboard and an Instagram profile
+    caption: The identity at work, from the brand guidelines
 whatHappened: |
   I handed everything over in March 2026. A separate developer is building the website.

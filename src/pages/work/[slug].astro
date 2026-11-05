@@ -24,7 +24,7 @@ const cap = (pl: Plate) => ({ title: p.client.startsWith(p.title) ? `${p.title},
 // field still shows on the home page's Selected Work cards.
 // Bento (lib/bento.ts, Josh 4 Nov: Apple-style, and the Oxford School of English way across every case study).
 // Artwork sits whole on a flat field of its own edge colour with room around it, never cropped to the tile.
-// A photograph (busy edges) fills its tile instead when that trims less than 45%.
+// A photograph (busy edges) fills its tile instead when that trims less than 20% (Josh, 5 Nov: "why so cropped?").
 // Charts and screens (the data projects) are never cropped (Josh, 4 Nov): they always sit padded.
 const charts = p.tags.includes('data');
 const edge = async (img: ImageMetadata) => {
@@ -61,24 +61,24 @@ const edge = async (img: ImageMetadata) => {
 };
 // A tile is a picture (with an optional silent loop) or words: the outcome, a figure, a quote, a paragraph.
 type Words = { kind: 'headline'; text: string } | { kind: 'stat'; value: string; label: string } | { kind: 'quote'; quote: string; by: string };
-type Piece = { kind: 'image'; plate: Plate & { video?: string }; label: string } | Words;
+type Piece = { kind: 'image'; plate: Plate & { video?: string }; label: string; keep?: boolean } | Words;
 // The shape each kind of words would like, and how little a poor fit matters to it.
 const wordShape = { headline: [3.2, 1], stat: [1.8, 0.4], quote: [1.5, 0.5] } as const;
 const layout = async (pieces: Piece[], flip = false) => {
   const looks = await Promise.all(pieces.map((pc) => (pc.kind === 'image' ? edge(pc.plate.image) : undefined)));
   const items = pieces.map((pc, i) => pc.kind === 'image'
-    ? { ratio: (pc.plate.image.width * looks[i]!.box.w) / (pc.plate.image.height * looks[i]!.box.h), weight: looks[i]!.photo ? 3 : 1 }
+    ? { ratio: (pc.plate.image.width * looks[i]!.box.w) / (pc.plate.image.height * looks[i]!.box.h), weight: looks[i]!.photo || pc.keep ? 3 : 1 }
     : { ratio: wordShape[pc.kind][0], weight: wordShape[pc.kind][1] });
   return bento(items, flip).map((tile) => {
     const pc = pieces[tile.index], look = looks[tile.index];
     const fit = items[tile.index].ratio / ratioOf(tile);
-    const fill = !!look?.photo && Math.min(fit, 1 / fit) > 0.55;
+    const fill = !!look?.photo && Math.min(fit, 1 / fit) > 0.8 && !(pc.kind === 'image' && pc.keep);
     // CSS for the art: its trimmed box, centred and contained in the tile's padded area (see .tile__art).
     const b = look?.box ?? { x: 0, y: 0, w: 1, h: 1 };
     const art = pc.kind === 'image' && !fill
       ? `--bg: ${look!.bg}; --r: ${items[tile.index].ratio.toFixed(4)}; --R: ${(pc.plate.image.width / pc.plate.image.height).toFixed(4)}; --bx: ${b.x.toFixed(4)}; --by: ${b.y.toFixed(4)}; --bw: ${b.w.toFixed(4)}; --bh: ${b.h.toFixed(4)}`
       : `--bg: ${look?.bg ?? 'transparent'}`;
-    return { ...tile, pc, art, fill, bg: look?.bg };
+    return { ...tile, pc, art, fill, whole: !fill && (!!look?.photo || (pc.kind === 'image' && !!pc.keep)), bg: look?.bg };
   });
 };
 const shots = (plates: Plate[]): Piece[] => plates.map((pl) => ({ kind: 'image', plate: pl, label: pl.medium }));
@@ -90,12 +90,15 @@ const same = (a: string, b: string) => !!b && (bare(a).includes(bare(b)) || bare
 // "Before: the old logo", not a bare "Before" (Josh, 5 Nov: no generic tags).
 const pair = (tag: string | undefined, caption: string) => (tag && caption ? `${tag}: ${/^[A-Z][a-z]/.test(caption) ? caption[0].toLowerCase() + caption.slice(1) : caption}` : tag || caption);
 const [beforeLabel, afterLabel] = t.beforeAfterHeading.split('&').map((x) => x.trim());
+// Without a before/after, the first outcome picture leads (Josh, 5 Nov: the guidelines' own bento pages).
+const leadShot = !cs.before && cs.outcomeImages.length ? [cs.outcomeImages[0]] : [];
 const outcomePieces: Piece[] = [
+  ...leadShot.map((pl) => ({ kind: 'image', plate: pl, label: pl.medium, keep: true } as const)), // shown whole, never cropped
   ...(cs.stats.length ? [] : cs.outcome ? [{ kind: 'headline', text: cs.outcome } as const] : []),
   ...cs.stats.map((x) => ({ kind: 'stat', ...x } as const)),
   ...cs.quotes.map((q) => ({ kind: 'quote', quote: q.quote, by: [q.name, q.role, q.organisation].filter(Boolean).join(', ') } as const)),
   ...(cs.before ? [{ kind: 'image', plate: cs.before.before, label: pair(beforeLabel, cs.before.before.medium) } as const, { kind: 'image', plate: cs.before.after, label: pair(afterLabel, cs.before.after.medium) } as const] : []),
-  ...cs.outcomeImages.map((pl) => ({ kind: 'image', plate: pl, label: pl.medium } as const)),
+  ...cs.outcomeImages.slice(leadShot.length).map((pl) => ({ kind: 'image', plate: pl, label: pl.medium } as const)),
 ];
 const outcomes = await layout(outcomePieces, cs.chapters.length % 2 === 1);
 // What Happened sits beside the heading, like a chapter's words, unless it only repeats the outcome line.
@@ -156,8 +159,8 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
         )}
         <Carousel label={`${ch.heading ?? t.workHeading}: gallery`}>
           <div class="bento">
-            {ch.tiles.map(({ pc, bg, art, fill, col, row, w, h }) => pc.kind === 'image' && (
-              <figure class:list={['tile', 'glass', { 'tile--fill': fill }]} style={`grid-area: ${row} / ${col} / span ${h} / span ${w}; --tile: ${bg}; ${art}`}>
+            {ch.tiles.map(({ pc, bg, art, fill, whole, col, row, w, h }) => pc.kind === 'image' && (
+              <figure class:list={['tile', 'glass', { 'tile--fill': fill, 'tile--whole': whole }]} style={`grid-area: ${row} / ${col} / span ${h} / span ${w}; --tile: ${bg}; ${art}`}>
                 <div class="tile__art"><Image src={pc.plate.image} alt={pc.plate.alt} widths={[600, 1000, 1600, 2200]} sizes={`(min-width: 760px) ${Math.round((w / 6) * 1140)}px, 100vw`} /></div>
                 <PlateCaption {...cap(pc.plate)} />
               </figure>
@@ -175,10 +178,10 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
         {happened.length > 0 && <div class="flow cs-text" data-reveal>{happened.map((x) => (x.startsWith('- ') ? <ul class="cs-list">{x.split('\n').map((l) => <li>{l.replace(/^-\s*/, '')}</li>)}</ul> : <p>{x}</p>))}</div>}
       </div>
       <div class="bento-wrap"><div class="bento bento--outcomes">
-        {outcomes.map(({ pc, bg, art, fill, col, row, w, h }) => {
+        {outcomes.map(({ pc, bg, art, fill, whole, col, row, w, h }) => {
           const area = `grid-area: ${row} / ${col} / span ${h} / span ${w}`;
           if (pc.kind === 'image') return (
-            <figure class:list={['tile', 'glass', { 'tile--fill': fill }]} style={`${area}; --tile: ${bg}; ${art}`}>
+            <figure class:list={['tile', 'glass', { 'tile--fill': fill, 'tile--whole': whole }]} style={`${area}; --tile: ${bg}; ${art}`}>
               <div class="tile__art">
                 {pc.plate.video
                   ? <video data-loop muted loop playsinline preload="none" poster={pc.plate.image.src} aria-label={pc.plate.alt}><source src={pc.plate.video} type="video/mp4" /></video>
@@ -261,6 +264,8 @@ const heroPoster = cs.heroVideo ? (await getImage({ src: cs.heroVideo.poster, wi
   /* Shown small with generous room (TASTE: never too large): the art takes at most 62% of the width and 64% of the height. */
   .tile__art { --lift: 0px; --cw: min(62cqw, 64cqh * var(--r)); }
   .tile__art :is(img, video) { position: absolute; display: block; max-width: none; width: calc(var(--cw) / var(--bw)); height: calc(var(--cw) / var(--bw) / var(--R)); left: calc(50% - var(--cw) / var(--bw) * (var(--bx) + var(--bw) / 2)); top: calc(50% - var(--lift) - var(--cw) / var(--bw) / var(--R) * (var(--by) + var(--bh) / 2)); }
+  /* A photo or collage that would crop too much: shown whole and large, on its own edge colour. */
+  .tile--whole .tile__art { --cw: min(100cqw - 32px, (100cqh - 32px) * var(--r)); }
   .tile--fill .tile__art :is(img, video) { inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .tile__art { position: absolute; inset: var(--in) var(--in) var(--cap); overflow: hidden; border-radius: calc(24px - var(--in)); background: var(--tile); container-type: size; }
   /* The label sits on the glass under the art, like a caption on a mount (Josh, 5 Nov: pills looked out of place). */
