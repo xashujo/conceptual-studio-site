@@ -57,9 +57,11 @@ const edgeColour = async (img: ImageMetadata) => {
   }
   return `rgb(${ring.map((v) => v.sort((a, b) => a - b)[v.length >> 1]).join(' ')})`;
 };
-const lanes = await Promise.all(services.filter(isLane).map(async (s) => ({
-  ...s, ex: s.examples[0] && { ...s.examples[0], bg: await edgeColour(s.examples[0].img) },
-})));
+// A lane with no examples (Design Support for In-House Teams) shows its Services page picture instead.
+const lanes = await Promise.all(services.filter(isLane).map(async (s) => {
+  const ex = s.examples[0] ?? s.cardImage;
+  return { ...s, ex: ex && { ...ex, bg: await edgeColour(ex.img) } };
+}));
 const more = services.filter((s) => !lanes.includes(s));
 ---
 <!doctype html>
