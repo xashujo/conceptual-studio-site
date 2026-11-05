@@ -4,7 +4,7 @@
 import { nav, availability } from '../lib/site';
 import Logo from './Logo.astro';
 interface Props { current?: string; art: string; tone?: 'light' | 'dark'; }
-const { current, art, tone = 'light' } = Astro.props;
+const { current, tone = 'light' } = Astro.props;
 // The same links as every other page: Home first, and the contact link is the Start a Project button (Josh, 5 Nov).
 const links = [{ label: 'Home', href: '/' }, ...nav.map((l) => l.href === '/contact/' ? { label: 'Start a Project', href: l.href, cta: true } : l)];
 ---
@@ -15,27 +15,25 @@ const links = [{ label: 'Home', href: '/' }, ...nav.map((l) => l.href === '/cont
   </ul>
   <button class="nav__menu" type="button" popovertarget="menu">Menu</button>
 </nav>
-<div class="sheet glass" id="menu" popover data-lens data-liquid={art}>
+<div class="sheet glass" id="menu" popover>
   <ul>
-    {links.map((l) => <li><a class:list={[{ 'btn btn--solid menu__cta': l.cta }]} href={l.href} aria-current={l.label === current ? 'page' : undefined}>{l.cta && availability.on && <span class="avail__dot nav__dot" aria-hidden="true" />}{l.label}</a></li>)}
+    {links.map((l) => <li><a class={l.cta ? 'btn btn--solid menu__cta' : 'glass-pill'} href={l.href} aria-current={l.label === current ? 'page' : undefined}>{l.cta && availability.on && <span class="avail__dot nav__dot" aria-hidden="true" />}{l.label}</a></li>)}
   </ul>
-  <button class="sheet__close" type="button" popovertarget="menu" popovertargetaction="hide">Close</button>
 </div>
 
 <style>
   .nav { position: absolute; z-index: 10; top: 14px; left: var(--margin); right: var(--margin); height: 60px; border-radius: var(--radius); display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 8px 0 24px; color: var(--ink); }
   .nav__mark { font-family: var(--display); font-size: 24px; letter-spacing: -0.01em; text-decoration: none; }
   .nav__links { list-style: none; display: flex; align-items: center; gap: 2px; margin: 0; padding: 0; }
-  .nav__menu, .sheet__close { padding: 9px 16px; border: 0; border-radius: var(--pill); background: color-mix(in srgb, var(--ink) 7%, transparent); color: inherit; font: 500 16px/1.2 var(--text); cursor: pointer; }
+  .nav__menu { padding: 9px 16px; border: 0; border-radius: var(--pill); background: color-mix(in srgb, var(--ink) 7%, transparent); color: inherit; font: 500 16px/1.2 var(--text); cursor: pointer; }
   .nav__menu { display: none; }
-  .nav a:focus-visible, .nav button:focus-visible, .sheet a:focus-visible, .sheet button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .nav a:focus-visible, .nav button:focus-visible, .sheet a:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 
-  /* The sheet opens just under the bar, over the same art (glass only where something sits behind it). */
-  .sheet { position: absolute; inset: 82px 10px auto; width: auto; margin: 0; padding: 20px 22px 18px; border: 0; border-radius: var(--radius); color: var(--ink); }
-  .sheet ul { list-style: none; margin: 0; padding: 0; }
-  .sheet a:not(.menu__cta) { display: block; padding: 6px 0; font-family: var(--display); font-size: 40px; line-height: 1.1; letter-spacing: -0.01em; text-decoration: none; }
-  .sheet a:not(.menu__cta)[aria-current] { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 8px; }
-  .sheet__close { margin-top: 14px; }
+  /* The phone menu: the same frosted glass sheet as every other page (Josh, 5 Nov: the clear lens let the
+     page heading show through the links). Escape or tapping outside closes it, as elsewhere. */
+  .sheet { position: absolute; inset: 74px 10px auto; width: auto; margin: 0; padding: 8px; border: 0; border-radius: var(--radius); color: var(--ink); }
+  .sheet ul { list-style: none; margin: 0; padding: 0; display: grid; }
+  .sheet .glass-pill { width: 100%; min-height: 52px; padding: 0 18px; font-size: 20px; }
   .sheet:popover-open { animation: sheet-in 400ms var(--ease-out); }
   @keyframes sheet-in { from { opacity: 0; transform: translateY(-8px) scale(0.98); } }
 
