@@ -62,7 +62,7 @@ const lanes = await Promise.all(services.filter(isLane).map(async (s) => {
   const ex = s.examples[0] ?? s.cardImage;
   return { ...s, ex: ex && { ...ex, bg: await edgeColour(ex.img) } };
 }));
-const more = services.filter((s) => !lanes.includes(s));
+const more = services.filter((s) => !isLane(s)); // lanes holds copies, so match by isLane, not identity
 ---
 <!doctype html>
 <html lang="en-GB" style={glassStyle}>
