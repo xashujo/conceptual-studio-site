@@ -98,10 +98,6 @@ content:
         type: text
         required: true
         description: "Shown on the project card. Say where the work was used."
-      - name: role
-        label: My role
-        type: string
-        description: "Your part in the job, shown under My Role on the home page's case study cards, e.g. Sole designer: logo, type & colour. Keep it to one short line. Leave empty to hide it."
       - name: listText
         label: List view description
         type: text
