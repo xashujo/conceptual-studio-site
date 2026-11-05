@@ -113,19 +113,25 @@ a { color: inherit; }
    --g-frost scales the paper tint, --g-blur the blur, --g-shine the rim highlights, --g-bend the lens
    bend and --g-reach how far in from the edge it travels (both read by refraction.js and liquid-glass.js). The accessibility fallbacks below ignore them. */
 :root { --g-bend: 1; --g-frost: 1; --g-blur: 1; --g-shine: 1; --g-reach: 1; }
+/* Saturation behind the glass (Josh, 5 Nov, liquid glass trial): enough that the gold behind comes through
+   rich instead of milky. One value, so every pane and the default glass move together. */
+:root { --g-sat: 1.6; }
 /* Layer 1 (brief 7.2), every browser: blur and saturate over a paper tint, a fine rim, a soft lift.
    Based on 2a7589f's phone menu sheet. Also the fallback for Tier A.
    Tint is 48% (Josh, 4 Nov: clearer glass, with the new depth carrying the edge). The painting sits at 25% opacity, so ink text keeps AA over it. */
 /* The glass, defined once as variables so panels (.glass) and buttons (.glass-button) share it exactly. */
 .glass, .glass-button {
   --glass-bg: color-mix(in srgb, var(--paper) min(96%, calc(48% * var(--g-frost))), transparent);
-  --glass-filter: blur(calc(24px * var(--g-blur))) saturate(1.3); /* 24px diffuses the etching's lines; above 1.3 saturate the paper turns peach (TASTE 13) */
-  /* Depth (Josh, 4 Nov: "glass sat on a page", not flat): a lit top rim, a faint shaded lower edge, then three
-     stacked shadows, a tight contact one where it touches the page and two soft ones for the lift. */
+  --glass-filter: blur(calc(24px * var(--g-blur))) saturate(var(--g-sat)) brightness(1.03); /* 24px diffuses the etching's lines; the slight lift keeps the saturated gold from going muddy */
+  /* Depth (Josh, 4 Nov: "glass sat on a page", not flat). The rim reads as a thick slab (5 Nov): a bright
+     edge top left and a weaker catch bottom right (both cream, TASTE 4 and 11), a soft glow just inside the
+     top and left, a little shade inside the bottom, the gold hairline, then the three stacked lift shadows. */
   --glass-shadow:
-    inset 1px 1px 0 rgb(255 250 240 / calc(0.9 * var(--g-shine))), /* fine rim, brightest top left (TASTE 4), warm not white (TASTE 11) */
-    inset 0 -1px 0 rgb(110 80 36 / 0.12), /* the lower edge turns away from the light */
-    inset 0 0 0 1px rgb(110 80 36 / 0.16), /* iOS 27's darkened edge, in gold so the edge catches on cream */
+    inset 1.5px 1.5px 1px -1px rgb(255 250 240 / calc(0.95 * var(--g-shine))),
+    inset -1.5px -1.5px 1px -1px rgb(255 250 240 / calc(0.55 * var(--g-shine))),
+    inset 6px 8px 14px -12px rgb(255 252 246 / calc(0.7 * var(--g-shine))),
+    inset 0 -8px 14px -12px rgb(110 80 36 / 0.22),
+    inset 0 0 0 0.5px rgb(110 80 36 / 0.2), /* iOS 27's darkened edge, in gold so the edge catches on cream */
     var(--lift);
   background: var(--glass-bg);
   -webkit-backdrop-filter: var(--glass-filter);
@@ -139,12 +145,26 @@ a { color: inherit; }
   color-scheme: dark;
   color: var(--ink);
   --glass-bg: color-mix(in srgb, var(--paper-2) min(96%, calc(52% * var(--g-frost))), transparent); /* one step above the ground, so it has a body over plain black */
+  /* The same slab rim at about a third of the day strength, with a darker outline (5 Nov). */
   --glass-shadow:
-    inset 1px 1px 0 rgb(237 220 180 / calc(0.45 * var(--g-shine))), /* cream-gold rim (TASTE 11) */
-    inset 0 -1px 0 rgb(0 0 0 / 0.35),
-    inset 0 0 0 1px rgb(241 223 200 / 0.08),
+    inset 1.5px 1.5px 1px -1px rgb(237 220 180 / calc(0.5 * var(--g-shine))), /* cream-gold rim (TASTE 11) */
+    inset -1.5px -1.5px 1px -1px rgb(237 220 180 / calc(0.2 * var(--g-shine))),
+    inset 6px 8px 14px -12px rgb(237 220 180 / calc(0.22 * var(--g-shine))),
+    inset 0 -8px 14px -12px rgb(0 0 0 / 0.45),
+    inset 0 0 0 0.5px rgb(241 223 200 / 0.1),
     var(--lift-night);
 }
+/* Inner light (5 Nov): a soft highlight from the top left on a layer inside the glass, under the text.
+   Backdrop filter makes each piece its own stacking context, so z-index -1 sits above the tint. The lens
+   pieces keep their own ::after. Hovering a card brightens it, as the card's fill lifts. */
+:where(.glass:not([popover])) { position: relative; }
+.glass:not(.is-lens)::after {
+  content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(120% 90% at 0 0, rgb(255 252 246 / calc(0.3 * var(--g-shine))), transparent 55%);
+  transition: opacity 300ms ease-out;
+}
+.night .glass:not(.is-lens)::after, .glass.is-dark:not(.is-lens)::after { opacity: 0.33; }
+@media (hover: hover) { a.card.glass:hover::after { opacity: 1; } .night a.card.glass:hover::after { opacity: 0.6; } }
 /* The nav's glass (Josh, 2 Nov): one look in every browser and at every scroll position, CSS only (no SVG
    filter, no WebGL). Blur and saturate over a light tint, a lit rim, and a faint red and blue fringe at the
    ends standing in for the lens's colour split. The tint stays light enough to see the page move behind it. */
@@ -266,15 +286,15 @@ a { color: inherit; }
    a slight blur and a whisper of tint, with the lens rims. */
 .glass[data-lens]:not(.is-lens):not(.has-liquid) {
   background: color-mix(in srgb, var(--paper) min(96%, calc(12% * var(--g-frost) + 15% * var(--up-frost))), transparent);
-  -webkit-backdrop-filter: blur(calc(5px * var(--g-blur) + 24px * var(--up-blur))) saturate(1.3);
-  backdrop-filter: blur(calc(5px * var(--g-blur) + 24px * var(--up-blur))) saturate(1.3);
+  -webkit-backdrop-filter: blur(calc(5px * var(--g-blur) + 24px * var(--up-blur))) saturate(var(--g-sat));
+  backdrop-filter: blur(calc(5px * var(--g-blur) + 24px * var(--up-blur))) saturate(var(--g-sat));
 }
 /* A pane (big glass, or past the page's three bends): no bend, more blur, so it reads as soft glass
    and costs only one CSS backdrop blur (Josh, 28 Oct: lighter to render). Follows the blur and frost dials. */
 .glass[data-lens].is-pane {
   background: color-mix(in srgb, var(--paper) min(96%, calc(14% * var(--g-frost) + 15% * var(--up-frost))), transparent);
-  -webkit-backdrop-filter: blur(calc(16px * var(--g-blur) + 24px * var(--up-blur))) saturate(1.3);
-  backdrop-filter: blur(calc(16px * var(--g-blur) + 24px * var(--up-blur))) saturate(1.3);
+  -webkit-backdrop-filter: blur(calc(16px * var(--g-blur) + 24px * var(--up-blur))) saturate(var(--g-sat));
+  backdrop-filter: blur(calc(16px * var(--g-blur) + 24px * var(--up-blur))) saturate(var(--g-sat));
 }
 .night .glass[data-lens].is-pane, .glass[data-lens].is-pane.is-dark { background: color-mix(in srgb, var(--paper-2) min(96%, calc(24% * var(--g-frost))), transparent); }
 .glass[data-lens].has-liquid { box-shadow: inset 0 0 0 1px rgb(110 80 36 / 0.14), var(--lift); } /* the shader draws its own rim */
@@ -331,6 +351,7 @@ a { color: inherit; }
 
 @media (prefers-reduced-transparency: reduce) {
   .glass, .glass-button, .plate-glass:not(.has-liquid) { background: var(--paper); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .glass::after { content: none; }
 }
 /* Increase contrast: near-opaque, with an ink outline (brief 7.2, TASTE glass spec). */
 @media (prefers-contrast: more) {

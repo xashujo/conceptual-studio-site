@@ -43,6 +43,7 @@ const mailto = (t: (typeof rungs)[number]) =>
   /* At rest every rung is plain paper between hairlines; hovered (or tabbed into), it lifts into the glass the
      badged rung used to wear all the time. The hairlines either side step aside for it. */
   .rung.glass:not(:hover, :focus-within) { background: transparent; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .rung.glass:not(:hover, :focus-within)::after { content: none; } /* no inner light on plain paper */
   .rung:is(:hover, :focus-within)::before, .rung:is(:hover, :focus-within) + .rung::before { opacity: 0; }
   @media (hover: hover) and (prefers-reduced-motion: no-preference) { .rung:hover { transform: translateY(-4px); } }
   /* Custom is a tone step, not another box, with Framer's 25px corner. */
@@ -74,6 +75,7 @@ const mailto = (t: (typeof rungs)[number]) =>
     /* No hover on touch: the rungs stay plain, so a tap never leaves one stuck in glass. */
     .rung.glass:not(.rung--custom) { background: transparent; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
     .rung--custom.glass { background: var(--paper-2); box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+    .rung.glass::after { content: none; }
   }
   @media (max-width: 759.98px) {
     .rung { padding: 20px 16px 24px; }
