@@ -1,5 +1,6 @@
 name: Design Support for In-House Teams
 order: 5
+icon: team
 lane: In-House
 card: true
 summary: Your team builds the dashboard, Power BI report or web tool. We design alongside them, so it looks & works like a finished product.

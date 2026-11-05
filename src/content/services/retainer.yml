@@ -1,5 +1,6 @@
 name: Monthly design retainers
 order: 3
+icon: calendar
 lane: Monthly
 page: /services/#retainers
 summary: Set design time every month, for teams with a steady flow of work, from one designer who already knows your brand.
