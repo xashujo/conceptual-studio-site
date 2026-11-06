@@ -450,6 +450,7 @@ a.card.glass :is(.card__y, .card__out, .tag) { transition: color 300ms ease-out,
 .stat--wide > .bento-art > .bento-art__lines--wide { top: auto; bottom: -2%; height: 78%; max-width: none; translate: 14% 0; }
 
 /* Gold flow logo (logo-flow.js): the video shows only while it plays, the still logo the rest of the time. */
-.flow { visibility: hidden; }
-.is-flowing > .flow { visibility: visible; }
+/* video.flow, not .flow: .flow is also the text-stack utility (studio.css), and hiding it blanked the case-study text. */
+video.flow { visibility: hidden; }
+.is-flowing > video.flow { visibility: visible; }
 .is-flowing > img { visibility: hidden; }

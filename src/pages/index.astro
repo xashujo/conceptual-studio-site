@@ -668,7 +668,7 @@ const more = services.filter((s) => !isLane(s)); // lanes holds copies, so match
   .acc { position: relative; margin-top: var(--sp-head); padding: 4px var(--sp-card); border-radius: var(--radius); }
   /* Lines only between rows that show, so a filtered list never starts with one (Josh, 5 Nov). */
   .acc__row:not([hidden]) ~ .acc__row:not([hidden]) { border-top: 1px solid color-mix(in srgb, var(--ink) 16%, transparent); }
-  .acc__btn { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 24px; padding: 26px 0; border: 0; background: none; color: inherit; font: 600 28px/1.2 var(--text); letter-spacing: -0.02em; text-align: left; cursor: pointer; }
+  .acc__btn { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 24px; padding: 26px 0; border: 0; background: none; color: inherit; font: 500 30px/1.15 var(--display); letter-spacing: -0.01em; text-align: left; cursor: pointer; }
   .acc__btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 8px; }
   .acc__from { margin-left: auto; font-size: 17px; font-weight: 600; letter-spacing: -0.01em; color: var(--ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; transition: opacity 200ms ease-out; } /* starting price, seen before the row opens */
   [aria-expanded='true'] > .acc__from { opacity: 0; } /* the large price inside takes over */

@@ -50,7 +50,7 @@ const videos = await Promise.all(home.socialVideos.map(async (v) => ({ ...v, pos
 
 <style>
   .groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-gap); margin-top: var(--sp-head); }
-  .groups__h { font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--ink-2); }
+  .groups__h { font-family: var(--display); font-size: 24px; line-height: 1.2; font-weight: 500; letter-spacing: -0.01em; color: var(--ink-2); } /* Agatho, like the footer headings (Josh, 6 Nov) */
   .groups__list { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 6px; font-family: var(--display); font-size: clamp(28px, 2.6vw, 38px); line-height: 1.15; letter-spacing: -0.01em; }
   @media (max-width: 759.98px) { .groups { grid-template-columns: 1fr; } .groups__list { font-size: 26px; } }
 </style>

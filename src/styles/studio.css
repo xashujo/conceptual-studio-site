@@ -77,7 +77,7 @@ html { scroll-behavior: smooth; }
 .acc { position: relative; margin-top: var(--sp-head); padding: 4px var(--sp-card); border-radius: var(--radius); }
 /* Lines only between rows that show, so a filtered list never starts with one (Josh, 5 Nov). */
 .acc__row:not([hidden]) ~ .acc__row:not([hidden]) { border-top: 1px solid color-mix(in srgb, var(--ink) 16%, transparent); }
-.acc__btn { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 24px; padding: 26px 0; border: 0; background: none; color: inherit; font: 600 28px/1.2 var(--text); letter-spacing: -0.02em; text-align: left; cursor: pointer; }
+.acc__btn { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 24px; padding: 26px 0; border: 0; background: none; color: inherit; font: 500 30px/1.15 var(--display); letter-spacing: -0.01em; text-align: left; cursor: pointer; }
 .acc__btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 8px; }
 .acc__from { margin-left: auto; font-size: 17px; font-weight: 600; letter-spacing: -0.01em; color: var(--ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; transition: opacity 200ms ease-out; }
 [aria-expanded='true'] > .acc__from { opacity: 0; } /* the large price inside takes over */
@@ -94,7 +94,7 @@ html { scroll-behavior: smooth; }
 .acc__price span { display: block; font-size: 17px; font-weight: 400; letter-spacing: 0; color: var(--ink-2); }
 .acc__badge { margin-left: 12px; vertical-align: 0.2em; }
 .acc__go { justify-self: end; }
-.acc--q .acc__btn { font-size: 22px; }
+.acc--q .acc__btn { font-size: 24px; }
 .acc--q .acc__body { grid-template-columns: 1fr; }
 
 /* A centred call-out, set like the hero plate (Need Something Else?). */
@@ -137,7 +137,7 @@ html { scroll-behavior: smooth; }
   .facts dd { font-size: 17px; }
   .acc { padding: 2px var(--sp-card); }
   .acc__btn { font-size: 21px; padding: 20px 0; gap: 14px; }
-  .acc--q .acc__btn { font-size: 18px; }
+  .acc--q .acc__btn { font-size: 20px; }
   .acc__from { font-size: 14px; }
   .acc__body { grid-template-columns: 1fr; gap: 14px; padding-bottom: 24px; }
   .acc__text { grid-row: auto; font-size: 17px; }
