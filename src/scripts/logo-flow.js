@@ -3,7 +3,7 @@
 // ends on the finished logo and stays there.
 // Transparent video: VP9 WebM for Chrome, Firefox and Edge; HEVC with alpha (.mov, exported by Josh) for Safari.
 // Reduced motion keeps the still logo.
-const HEVC = true;
+const HEVC = false; // off: the .mov alpha showed as a black box in iOS Safari (6 Nov)
 const V = '?v=6'; // bump when the videos change, so browsers don't keep the old ones
 const webkit = /Apple/.test(navigator.vendor);
 const ext = webkit ? '.mov' : '.webm';
