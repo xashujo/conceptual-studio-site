@@ -82,6 +82,7 @@ const words = company.name.replace(/\s+(limited|ltd\.?)$/i, '').split(/\s+/);
   .foot--night { --foot-ink: #F1DFC8; background: none; padding: 0 0 clamp(20px, 2.5vw, 36px); }
   /* The links sit on a full-width glass panel so they read over the busy ceiling (Josh, 6 Nov); the name and © stay on the art. */
   .foot--night .foot__top { grid-template-columns: 1fr; margin-inline: var(--margin); padding: clamp(24px, 2.5vw, 36px) clamp(24px, 3vw, 44px) clamp(20px, 2vw, 28px); border-radius: var(--radius); }
+  .foot--night .foot__top { --glass-bg: color-mix(in srgb, var(--paper-2) 22%, transparent); } /* lighter tint, like the work cards (Josh, 6 Nov: "why so dark?"); the blur keeps the links readable */
   .foot--night .foot__brand { display: none; }
   .foot--night .foot__legal { margin-top: clamp(16px, 2vw, 28px); padding-bottom: 0; }
   /* The logo is 2522px wide, so it stops at 1261px: sharp on a 2x screen, never stretched. */
