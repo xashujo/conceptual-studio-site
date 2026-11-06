@@ -4,7 +4,7 @@
 // Transparent video: VP9 WebM for Chrome, Firefox and Edge. Safari needs HEVC with alpha (.mov), so it
 // keeps the still logo until those files exist; then set HEVC to true. Reduced motion keeps the still too.
 const HEVC = false;
-const V = '?v=4'; // bump when the videos change, so browsers don't keep the old ones
+const V = '?v=5'; // bump when the videos change, so browsers don't keep the old ones
 const webkit = /Apple/.test(navigator.vendor);
 const ext = webkit ? '.mov' : '.webm';
 
