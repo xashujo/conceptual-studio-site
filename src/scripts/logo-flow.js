@@ -18,14 +18,14 @@ function run() {
     }
   }, { threshold: 0.6 });
   for (const box of document.querySelectorAll('[data-flow]')) {
-    for (const v of box.querySelectorAll('video.flow')) v.poster = v.dataset.src + '-start.webp' + V;
+    for (const v of box.querySelectorAll('video.gold-flow')) v.poster = v.dataset.src + '-start.webp' + V;
     box.classList.add('is-flowing'); // the plain type until it plays
     io.observe(box);
   }
 }
 
 function play(box) {
-  const vids = [...box.querySelectorAll('video.flow')];
+  const vids = [...box.querySelectorAll('video.gold-flow')];
   // The nav has an ink and a cream version: play the one showing.
   const v = vids.find((x) => getComputedStyle(x).opacity !== '0') || vids[0];
   let started = false;
