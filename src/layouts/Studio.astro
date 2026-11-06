@@ -6,13 +6,12 @@ import Tune from '../components/Tune.astro';
 import Logo from '../components/Logo.astro';
 import Favicons from '../components/Favicons.astro';
 import Footer from '../components/Footer.astro';
-import { Image } from 'astro:assets';
 import { turnstileSiteKey } from '../site';
 import { glassStyle, email, startHref, home, company, responseTime, availability } from '../lib/site';
 import '../styles/tokens.css';
 import '../styles/components.css';
 import '../styles/studio.css';
-import closeArt from '../assets/art/engraved/lemoyne-night.jpg';
+import CloseArt from '../components/CloseArt.astro';
 
 interface Props {
   /** The page name; the tab reads "Conceptual Studio | {title}" (Josh, 4 Nov). */
@@ -74,7 +73,7 @@ const isCurrent = (h: string) => h === current || (h !== '/' && current?.startsW
 
     <!-- Close and footer: one night chapter to the end of the page. -->
     <div class="night end">
-      <div class="close__art" aria-hidden="true"><Image src={closeArt} alt="" widths={[800, 1400, 1900]} sizes="100vw" /></div>
+      <CloseArt />
       <section class="close wrap" id={links === pages ? 'start' : 'contact'} aria-labelledby="close-h">
         <h2 class="close__h big" id="close-h">{closeHeading}</h2>
         {Astro.slots.has('close') ? <slot name="close" /> : (
@@ -94,29 +93,15 @@ const isCurrent = (h: string) => h === current || (h !== '/' && current?.startsW
     <script>
       import { mountLens } from '../scripts/lens.js';
       import { reveal } from '../scripts/reveal.js';
+      import { navTone } from '../scripts/nav-tone.js';
       import '../scripts/fallbacks.js'; // popover menu for older browsers
 
       // Glass: small chrome may bend (lens.js keeps it to three pieces); big panes are plain blurred glass.
       document.querySelector<HTMLElement>('[data-filters]')?.removeAttribute('hidden'); // shown before the lens counts its height
       document.querySelectorAll<HTMLElement>('[data-lens]').forEach((el) => mountLens(el, null));
 
-      // Nav: light over the night chapters, dark over day. Watches a 1px line across the nav's middle.
-      const nav = document.querySelector<HTMLElement>('[data-nav]')!;
-      const nights = [...document.querySelectorAll('.night')];
-      const under = new Set<Element>();
-      let watch: IntersectionObserver | undefined;
-      const watchNav = () => {
-        watch?.disconnect(); under.clear();
-        const r = nav.getBoundingClientRect();
-        const y = Math.round(r.top + r.height / 2);
-        watch = new IntersectionObserver((entries) => {
-          entries.forEach((e) => (e.isIntersecting ? under.add(e.target) : under.delete(e.target)));
-          nav.classList.toggle('is-dark', under.size > 0);
-        }, { rootMargin: `-${y}px 0px -${Math.max(0, innerHeight - y - 1)}px 0px` });
-        nights.forEach((n) => watch!.observe(n));
-      };
-      watchNav();
-      addEventListener('resize', watchNav);
+      // Nav: light over the night chapters, dark over day (src/scripts/nav-tone.js).
+      navTone(document.querySelector<HTMLElement>('[data-nav]'));
 
       // Phone menu: a link closes the sheet as it jumps.
       const menu = document.querySelector<HTMLElement>('#site-menu')!;
