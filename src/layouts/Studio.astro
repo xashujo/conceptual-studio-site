@@ -25,7 +25,7 @@ interface Props {
 }
 const { title, description, current, turnstile = false, noindex = false, closeHeading = 'Start a Project' } = Astro.props;
 const closeText = (Astro.props.closeText ?? home.closeText).replaceAll('{reply time}', responseTime);
-const pages: [string, string][] = [['Home', '/'], ['Work', '/work/'], ['Services', '/services/'], ['About', '/about/'], ['Start a Project', '/contact/']]; // the contact link reads the same on every page (Josh, 5 Nov)
+const pages: [string, string][] = [['Home', '/'], ['Work', '/work/'], ['Services', '/services/'], ['About', '/about/'], ['Procurement', '/procurement/'], ['Start a Project', '/contact/']]; // the contact link reads the same on every page (Josh, 5 Nov)
 const links = Astro.props.links ?? pages;
 // The availability dot sits on the contact link (Josh, 5 Nov), wherever the nav points to it.
 const live = (h: string) => availability.on && /contact/.test(h);
