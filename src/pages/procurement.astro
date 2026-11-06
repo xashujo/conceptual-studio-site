@@ -10,7 +10,7 @@ import { email } from '../lib/site';
 import { procurementPage as p, titleCase } from '../lib/pages';
 const mail = `mailto:${email}?subject=${encodeURIComponent(p.emailSubject)}`;
 ---
-<Studio title="Procurement" description={p.intro} closeText={p.closeText}>
+<Studio title="Procurement" current="/procurement/" description={p.intro} closeText={p.closeText}>
   <Band opening labelledby="proc-h">
     <div class="ph__plate glass" data-lens>
       <h1 class="ph__h" id="proc-h">{titleCase(p.heading)}</h1>

@@ -256,6 +256,14 @@ a { color: inherit; }
 }
 @media (hover: hover) { .btn.nav__cta:hover { color: var(--ink); } }
 .nav__cta .nav__dot, .menu__cta .nav__dot { margin: 0; }
+/* Small tablets (760-900px): Procurement joined the nav (Josh, 6 Nov), so the Home pill steps out (the logo goes
+   home) and the pills tighten, keeping every link on one line. Phones use the menu, which keeps Home. */
+@media (min-width: 760px) and (max-width: 899.98px) {
+  .nav.glass.glass--nav { gap: 12px; }
+  .nav__links > li:first-child { display: none; }
+  .nav__links .glass-pill { padding: 0 8px; }
+  .nav__links .btn.nav__cta { margin-left: 4px; }
+}
 /* In the phone menu it is the one solid button, set apart from the page links. */
 .btn.menu__cta { width: 100%; min-height: 52px; margin-top: 8px; justify-content: center; gap: 10px; font-size: 20px; }
 .menu__cta .avail__dot { background: var(--live-on-ink); }

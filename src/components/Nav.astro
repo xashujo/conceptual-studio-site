@@ -6,7 +6,8 @@ import Logo from './Logo.astro';
 interface Props { current?: string; art: string; tone?: 'light' | 'dark'; }
 const { current, tone = 'light' } = Astro.props;
 // The same links as every other page: Home first, and the contact link is the Start a Project button (Josh, 5 Nov).
-const links = [{ label: 'Home', href: '/' }, ...nav.map((l) => l.href === '/contact/' ? { label: 'Start a Project', href: l.href, cta: true } : l)];
+// Procurement sits before Start a Project so finance teams find it without the footer (Josh, 6 Nov).
+const links = [{ label: 'Home', href: '/' }, ...nav.flatMap((l) => l.href === '/contact/' ? [{ label: 'Procurement', href: '/procurement/' }, { label: 'Start a Project', href: l.href, cta: true }] : [l])];
 ---
 <nav class:list={['nav glass glass--nav', { 'is-dark': tone === 'dark' }]} aria-label="Main">
   <Logo />
