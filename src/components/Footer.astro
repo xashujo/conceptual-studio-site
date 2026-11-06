@@ -21,7 +21,7 @@ const words = company.name.replace(/\s+(limited|ltd\.?)$/i, '').split(/\s+/);
       {!night && <p class="foot__line">{footerText}</p>}
       {!night && <button class="btn foot__copy" type="button" data-copy={email}><span data-copy-label>Copy Email</span></button>}
     </div>
-    <div class="foot__cols">
+    <div class:list={['foot__cols', { glass: night }]}>
       <div>
         <h2 class="foot__h">Studio</h2>
         <ul>{nav.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
@@ -80,6 +80,8 @@ const words = company.name.replace(/\s+(limited|ltd\.?)$/i, '').split(/\s+/);
 
   /* Night: cream ink straight on the ceiling, which shows through; no paper, no engraving strip. */
   .foot--night { --foot-ink: #F1DFC8; background: none; padding: 0 0 clamp(20px, 2.5vw, 36px); }
+  /* The links sit on a glass panel so they read over the busy ceiling (Josh, 6 Nov); the name and © stay on the art. */
+  .foot--night .foot__cols { padding: clamp(24px, 2.5vw, 36px) clamp(24px, 3vw, 44px) clamp(20px, 2vw, 28px); border-radius: var(--radius); }
   .foot--night .foot__legal { margin-top: clamp(16px, 2vw, 28px); padding-bottom: 0; }
   /* The logo is 2522px wide, so it stops at 1261px: sharp on a 2x screen, never stretched. */
   .foot--night .foot__mark { margin-top: clamp(40px, 5vw, 72px); }
