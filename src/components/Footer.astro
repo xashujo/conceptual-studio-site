@@ -20,7 +20,6 @@ const words = company.name.replace(/\s+(limited|ltd\.?)$/i, '').split(/\s+/);
     <div class="foot__brand">
       {!night && <p class="foot__line">{footerText}</p>}
       {!night && <button class="btn foot__copy" type="button" data-copy={email}><span data-copy-label>Copy Email</span></button>}
-      <p class="foot__legal">© {year} {company.name}</p>
     </div>
     <div class="foot__cols">
       <div>
@@ -45,11 +44,12 @@ const words = company.name.replace(/\s+(limited|ltd\.?)$/i, '').split(/\s+/);
     {night
       ? <span class="foot__flow" data-flow>
           <Image class="foot__logo" src={logo} alt="" widths={[720, 1261, 2522]} sizes="(min-width: 1440px) 1261px, calc(100vw - 2 * var(--margin))" />
-          <video class="flow" muted playsinline preload="none" aria-hidden="true" width="2522" height="490" data-src="/media/flow/logo-cream-large" />
+          <video class="gold-flow" muted playsinline preload="none" aria-hidden="true" width="2522" height="490" data-src="/media/flow/logo-cream-large" />
         </span>
       : <span class="foot__word" aria-hidden="true">{words.map((w) => <span>{w}</span>)}</span>}
   </a>
   {!night && <div class="foot__land" aria-hidden="true"><Image src={land} alt="" widths={[900, 1600, 2400]} sizes="100vw" /></div>}
+  <p class="wrap foot__legal">© {year} {company.name}</p>
 </footer>
 
 <style>
@@ -61,11 +61,12 @@ const words = company.name.replace(/\s+(limited|ltd\.?)$/i, '').split(/\s+/);
   .foot__cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
   .foot__h { font-family: var(--display); font-size: 24px; line-height: 1.2; font-weight: 500; letter-spacing: -0.01em; margin-bottom: 12px; } /* Agatho, like the links (Josh, 6 Nov) */
   .foot ul { list-style: none; margin: 0; padding: 0; }
-  .foot li a { display: inline-block; padding-block: 4px; font-family: var(--display); font-size: 20px; line-height: 1.2; letter-spacing: -0.01em; text-decoration: none; }
+  .foot li a { display: inline-block; padding-block: 4px; font-family: var(--text); font-size: 17px; line-height: 1.4; text-decoration: none; } /* links in Inter, headings stay Agatho (Josh, 6 Nov) */
   .foot li a { background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size 300ms var(--ease-out); }
   .foot li a:hover { background-size: 100% 1px; }
   .foot a:focus-visible { outline: 2px solid var(--foot-ink); outline-offset: 3px; border-radius: 2px; }
-  .foot__legal { margin-top: 24px; font-size: 14px; line-height: 1.5; }
+  /* The copyright closes the footer, centred under the name (Josh, 6 Nov). */
+  .foot__legal { position: relative; z-index: 1; margin-top: 20px; padding-bottom: 24px; font-size: 14px; line-height: 1.5; text-align: center; }
   /* The studio's name, set margin to margin. 100cqi is the space inside the margins, so the fit is exact
      at any width. 6.32 is "Conceptual Studio" in ems of Agatho Medium at this tracking (3.90 + 0.25 gap
      + 2.17, measured in Chromium, 4 Nov); re-measure if the company name changes. */
@@ -79,7 +80,7 @@ const words = company.name.replace(/\s+(limited|ltd\.?)$/i, '').split(/\s+/);
 
   /* Night: cream ink straight on the ceiling, which shows through; no paper, no engraving strip. */
   .foot--night { --foot-ink: #F1DFC8; background: none; padding: 0 0 clamp(20px, 2.5vw, 36px); }
-  .foot--night .foot__legal { margin-top: 0; }
+  .foot--night .foot__legal { margin-top: clamp(16px, 2vw, 28px); padding-bottom: 0; }
   /* The logo is 2522px wide, so it stops at 1261px: sharp on a 2x screen, never stretched. */
   .foot--night .foot__mark { margin-top: clamp(40px, 5vw, 72px); }
   .foot__logo { display: block; width: 100%; max-width: 1261px; height: auto; margin-inline: auto; }
@@ -92,12 +93,12 @@ const words = company.name.replace(/\s+(limited|ltd\.?)$/i, '').split(/\s+/);
     .foot__top { grid-template-columns: 1fr; gap: 32px; }
     .foot__line { font-size: 17px; }
 
+    .foot__brand:empty { display: none; } /* night has nothing on the left; on desktop the empty cell keeps the columns right */
     .foot__cols { grid-template-columns: 1fr 1fr; row-gap: 32px; }
-    .foot li a { font-size: 19px; }
+    .foot li a { font-size: 17px; }
     .foot__mark { margin-top: 36px; }
     /* On a phone, crop to the reclining figure and the flowers. */
     .foot__land { height: 120px; margin-top: -16px; }
-    .foot--night .foot__brand { order: 1; } /* the copyright under the links, not alone above them */
     .foot__land img { object-position: 22% 88%; }
   }
 </style>

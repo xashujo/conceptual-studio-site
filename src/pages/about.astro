@@ -66,7 +66,7 @@ import { aboutPage as a, paras, titleCase } from '../lib/pages';
   /* Story and The Work I Want read in two columns across the full width, so neither is a tall wall of text (Josh, 5 Nov). */
   .ab-story .pane { grid-column: 1 / -1; margin-top: var(--sp-head); columns: 2; column-gap: 56px; }
   .ab-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-gap); margin-top: var(--sp-head); }
-  .ab-groups__h { font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: var(--ink-2); }
+  .ab-groups__h { font-family: var(--display); font-size: 24px; line-height: 1.2; font-weight: 500; letter-spacing: -0.01em; color: var(--ink-2); } /* Agatho, like the footer headings (Josh, 6 Nov) */
   .ab-groups__list { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 6px; font-family: var(--display); font-size: clamp(28px, 2.6vw, 38px); line-height: 1.15; letter-spacing: -0.01em; }
   /* The opening: Josh's photo beside the About plate, the two the same height (Josh, 5 Nov: the picture is of him,
      not a piece of work). The photo fills its glass frame edge to edge inside an even rim. Pages CMS > About > Your photo. */

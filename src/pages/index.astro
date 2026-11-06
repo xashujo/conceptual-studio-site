@@ -17,7 +17,7 @@ import { availability, homeQuotes, responseTime, home, ART_SIZES } from '../lib/
 import { featured, projectHref, homeFilters, bySlug } from '../data/work';
 import { services, isLane } from '../data/services';
 import { servicesPage, keepHyphens, titleCase } from '../lib/pages';
-import closeArt from '../assets/art/engraved/lemoyne-night.jpg';
+import CloseArt from '../components/CloseArt.astro';
 // Behind the sections: plain canvas, or the running painting (CMS "Background", Josh 2 Nov).
 const painting = home.backdrop === 'painting';
 const canvas = `url(${(await getImage({ src: home.canvasImage, format: 'webp' })).src})`;
@@ -333,7 +333,7 @@ const more = services.filter((s) => !isLane(s)); // lanes holds copies, so match
     <div class="night end">
       <!-- Lemoyne's ceiling, toned gold on warm black. It now fills the close and footer to the very bottom,
            with the copyright on it (Josh's mockup, 28 Oct). -->
-      <div class="close__art" aria-hidden="true"><Image src={closeArt} alt="" widths={[800, 1400, 1900]} sizes="100vw" /></div>
+      <CloseArt />
       <section class="close wrap" id="contact" aria-labelledby="close-h">
         <h2 class="close__h big" id="close-h">Start a Project</h2>
         <div class="close__body glass" data-lens>
@@ -351,6 +351,7 @@ const more = services.filter((s) => !isLane(s)); // lanes holds copies, so match
         <script>
       import { mountLens } from '../scripts/lens.js';
       import { reveal } from '../scripts/reveal.js';
+      import { navTone } from '../scripts/nav-tone.js';
       import '../scripts/fallbacks.js'; // popover menu and background drift for older browsers
       const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -364,23 +365,8 @@ const more = services.filter((s) => !isLane(s)); // lanes holds copies, so match
       mountLens(document.querySelector('.hero__plate'), null); // over the running painting, so CSS glass like the panes
       document.querySelectorAll<HTMLElement>('.field [data-lens], .stat, .close__body').forEach((el) => mountLens(el, null));
 
-      // Nav: light over the night chapters, dark over paper. Watches a 1px line across the nav's middle.
-      const nav = document.querySelector<HTMLElement>('[data-nav]')!;
-      const nights = [...document.querySelectorAll('.night')];
-      const under = new Set<Element>();
-      let watch: IntersectionObserver | undefined;
-      const watchNav = () => {
-        watch?.disconnect(); under.clear();
-        const r = nav.getBoundingClientRect();
-        const y = Math.round(r.top + r.height / 2);
-        watch = new IntersectionObserver((entries) => {
-          entries.forEach((e) => (e.isIntersecting ? under.add(e.target) : under.delete(e.target)));
-          nav.classList.toggle('is-dark', under.size > 0);
-        }, { rootMargin: `-${y}px 0px -${Math.max(0, innerHeight - y - 1)}px 0px` });
-        nights.forEach((n) => watch!.observe(n));
-      };
-      watchNav();
-      addEventListener('resize', watchNav);
+      // Nav: light over the night chapters, dark over day (src/scripts/nav-tone.js).
+      navTone(document.querySelector<HTMLElement>('[data-nav]'));
 
       // Stats count up once, when they come into view, each starting as its card rises in (90ms apart, as .rv in the CSS).
       // The final figure is in the page for screen readers.
@@ -602,7 +588,7 @@ const more = services.filter((s) => !isLane(s)); // lanes holds copies, so match
   .card__head .card__t { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
   .card__head + .card__row { margin-top: -6px; flex-wrap: nowrap; }
   .card__row .card__tags { flex-wrap: nowrap; overflow: hidden; }
-  .card > .card__out { min-height: 2.8em; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+  .card > .card__out { height: 2.8em; box-sizing: content-box; overflow: hidden; } /* two lines by height: iOS Safari drew -webkit-line-clamp text blank in the glass cards (6 Nov) */
   .tag { padding: 5px 11px; border-radius: var(--pill); background: color-mix(in srgb, var(--ink) 7%, transparent); font-size: 14px; font-weight: 500; line-height: 1.2; }
   /* Hover: the site-wide work card hover in components.css. */
   .card:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
@@ -631,7 +617,7 @@ const more = services.filter((s) => !isLane(s)); // lanes holds copies, so match
 
   /* Services: the same heading as Featured Work, then full-width rows that open one at a time. */
   .services { padding-top: var(--sp-section); }
-  .tags { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .tags { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; } /* a wrapped row stays centred under the centred words */
   .tag-btn { --fill: color-mix(in srgb, var(--paper) 55%, transparent); } /* frosted like the hero buttons, dark on hover like every .btn (Josh, 4 Nov) */
   /* Services as a ruled list in large type (WECOMEET): the row in hand turns full ink and its example shows to the
      right; with none in hand the first shows. Plain CSS, so it works without script. */
@@ -668,7 +654,7 @@ const more = services.filter((s) => !isLane(s)); // lanes holds copies, so match
   .acc { position: relative; margin-top: var(--sp-head); padding: 4px var(--sp-card); border-radius: var(--radius); }
   /* Lines only between rows that show, so a filtered list never starts with one (Josh, 5 Nov). */
   .acc__row:not([hidden]) ~ .acc__row:not([hidden]) { border-top: 1px solid color-mix(in srgb, var(--ink) 16%, transparent); }
-  .acc__btn { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 24px; padding: 26px 0; border: 0; background: none; color: inherit; font: 600 28px/1.2 var(--text); letter-spacing: -0.02em; text-align: left; cursor: pointer; }
+  .acc__btn { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 24px; padding: 26px 0; border: 0; background: none; color: inherit; font: 500 30px/1.15 var(--display); letter-spacing: -0.01em; text-align: left; cursor: pointer; }
   .acc__btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 8px; }
   .acc__from { margin-left: auto; font-size: 17px; font-weight: 600; letter-spacing: -0.01em; color: var(--ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; transition: opacity 200ms ease-out; } /* starting price, seen before the row opens */
   [aria-expanded='true'] > .acc__from { opacity: 0; } /* the large price inside takes over */
@@ -761,8 +747,6 @@ const more = services.filter((s) => !isLane(s)); // lanes holds copies, so match
   .close { position: relative; display: grid; grid-template-columns: max-content fit-content(680px); justify-content: center; column-gap: clamp(40px, 5vw, 96px); padding-block: min(560px, 40vw) 96px; align-items: start; } /* heading top level with the glass panel (Josh, 28 Oct) */
   /* The close's tall top padding is art, not content: land the nav link on the heading, not the empty sky above it. */
   #contact { scroll-margin-top: calc(96px - min(560px, 40vw)); }
-  .close__art { position: absolute; inset: 0; z-index: -1; overflow: hidden; }
-  .close__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%); mask-image: linear-gradient(to bottom, transparent, #000 14%); } /* taste-skill-ignore: art fade into the page (DECISIONS) */
   .close__h { grid-column: 1; margin-top: -0.18em; } /* cap tops, not the line box, level with the panel */
   .close__body { grid-column: 2; max-width: 680px; box-sizing: border-box; display: grid; gap: 24px; padding: var(--sp-card); border-radius: var(--radius); } /* dark glass so it reads over the Lemoyne (Josh, 28 Oct) */
   .close__p { font-size: 20px; line-height: 1.5; }
@@ -793,6 +777,7 @@ const more = services.filter((s) => !isLane(s)); // lanes holds copies, so match
     .proof__grid--r3 .result:last-child { grid-column: 1 / -1; } /* three links on a tablet: two, then one across */
     .close { grid-template-columns: minmax(0, 1fr); }
     .close__h, .close__body { grid-column: 1 / -1; }
+    .close__h { font-size: min(calc((100vw - 2 * var(--margin)) / 5.3), 120px); } /* margin to margin, as on the Studio pages (studio.css) */
     .close__body { margin-top: var(--sp-head); justify-self: start; }
   }
   @media (max-width: 759.98px) {
@@ -806,6 +791,9 @@ const more = services.filter((s) => !isLane(s)); // lanes holds copies, so match
     .hero__plate { padding: 24px 22px 22px; gap: 16px; border-radius: var(--radius); }
     .hero__h { font-size: 36px; }
     .hero__p { font-size: 16px; line-height: 1.45; }
+    /* Phone (Josh, 6 Nov): the two buttons stack at one shared width instead of each hugging its own words. */
+    .hero__plate .acts { display: grid; grid-auto-columns: minmax(0, 1fr); gap: 10px; width: min(100%, 300px); }
+    .hero__plate .acts .btn { justify-content: center; }
     .band { padding-bottom: 120px; }
     .stat { min-height: 128px; padding: 18px 18px; gap: 16px; border-radius: var(--radius); }
     .stat__n { font-size: 9.6vw; } /* 20,000+ fits a phone-width card */
@@ -855,7 +843,6 @@ const more = services.filter((s) => !isLane(s)); // lanes holds copies, so match
     .about__text .about__lead { font-size: 22px; }
     .close { padding-block: 300px 80px; }
     #contact { scroll-margin-top: -220px; } /* 80px nav clearance minus the 300px art padding */
-    .close__art img { object-position: 42% 30%; }
   }
   @media (min-width: 760px) { .menu { display: none; } }
 </style>

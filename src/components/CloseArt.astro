@@ -1,0 +1,31 @@
+---
+// Lemoyne's ceiling behind Start a Project and the footer, toned warm dark. The close and footer are about
+// 1,200px tall at every width, so on a phone or tablet the landscape crop was zoomed 3-5x to cover them and
+// came out pixelated (Josh, 6 Nov). Below 1200px wide the browser takes a taller crop of the same painting
+// instead (scripts/night-portrait.py), so the art is never stretched past its pixels.
+import { getImage } from 'astro:assets';
+import wide from '../assets/art/engraved/lemoyne-night.jpg';
+import tall from '../assets/art/engraved/lemoyne-night-tall.jpg';
+
+const set = async (src: ImageMetadata, widths: number[]) => {
+  const out = await Promise.all(widths.map((width) => getImage({ src, width, format: 'webp' })));
+  return { src: out.at(-1)!.src, srcset: out.map((o, i) => `${o.src} ${widths[i]}w`).join(', ') };
+};
+const w = await set(wide, [800, 1400, 1900]);
+const t = await set(tall, [900, 1300, 1800]);
+---
+<div class="close__art" aria-hidden="true">
+  <picture>
+    <!-- The tall crop covers the close by its height on a phone (about 720px wide), by the screen's width above that. -->
+    <source media="(max-width: 1199.98px)" srcset={t.srcset} sizes="(max-width: 719.98px) 720px, 100vw" type="image/webp" />
+    <img src={w.src} srcset={w.srcset} sizes="100vw" alt="" loading="lazy" decoding="async" width={wide.width} height={wide.height} />
+  </picture>
+</div>
+
+<style>
+  .close__art { position: absolute; inset: 0; z-index: -1; overflow: hidden; }
+  .close__art picture { display: contents; }
+  /* taste-skill-ignore: the art fades into the black above it, not into another section */
+  .close__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%); mask-image: linear-gradient(to bottom, transparent, #000 14%); }
+  @media (max-width: 759.98px) { .close__art img { object-position: 42% 30%; } }
+</style>

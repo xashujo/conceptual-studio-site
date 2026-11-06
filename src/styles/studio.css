@@ -77,7 +77,7 @@ html { scroll-behavior: smooth; }
 .acc { position: relative; margin-top: var(--sp-head); padding: 4px var(--sp-card); border-radius: var(--radius); }
 /* Lines only between rows that show, so a filtered list never starts with one (Josh, 5 Nov). */
 .acc__row:not([hidden]) ~ .acc__row:not([hidden]) { border-top: 1px solid color-mix(in srgb, var(--ink) 16%, transparent); }
-.acc__btn { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 24px; padding: 26px 0; border: 0; background: none; color: inherit; font: 600 28px/1.2 var(--text); letter-spacing: -0.02em; text-align: left; cursor: pointer; }
+.acc__btn { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 24px; padding: 26px 0; border: 0; background: none; color: inherit; font: 500 30px/1.15 var(--display); letter-spacing: -0.01em; text-align: left; cursor: pointer; }
 .acc__btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 8px; }
 .acc__from { margin-left: auto; font-size: 17px; font-weight: 600; letter-spacing: -0.01em; color: var(--ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; transition: opacity 200ms ease-out; }
 [aria-expanded='true'] > .acc__from { opacity: 0; } /* the large price inside takes over */
@@ -94,7 +94,7 @@ html { scroll-behavior: smooth; }
 .acc__price span { display: block; font-size: 17px; font-weight: 400; letter-spacing: 0; color: var(--ink-2); }
 .acc__badge { margin-left: 12px; vertical-align: 0.2em; }
 .acc__go { justify-self: end; }
-.acc--q .acc__btn { font-size: 22px; }
+.acc--q .acc__btn { font-size: 24px; }
 .acc--q .acc__body { grid-template-columns: 1fr; }
 
 /* A centred call-out, set like the hero plate (Need Something Else?). */
@@ -104,8 +104,6 @@ html { scroll-behavior: smooth; }
 /* Close and footer, on warm black: Lemoyne's ceiling to the very bottom. */
 .end { position: relative; isolation: isolate; background: var(--paper); }
 .close { position: relative; display: grid; grid-template-columns: max-content fit-content(680px); justify-content: center; column-gap: clamp(40px, 5vw, 96px); padding-block: min(560px, 40vw) 96px; align-items: start; }
-.close__art { position: absolute; inset: 0; z-index: -1; overflow: hidden; }
-.close__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 14%); mask-image: linear-gradient(to bottom, transparent, #000 14%); } /* taste-skill-ignore: the art fades into the black above it, not into another section */
 .close__h { grid-column: 1; margin-top: -0.18em; } /* cap tops level with the glass panel */
 .close__body { grid-column: 2; max-width: 680px; box-sizing: border-box; display: grid; gap: 24px; padding: var(--sp-card); border-radius: var(--radius); }
 .close__p { font-size: 20px; line-height: 1.5; }
@@ -117,6 +115,9 @@ html { scroll-behavior: smooth; }
   .tiles--3 { grid-template-columns: 1fr; }
   .close { grid-template-columns: minmax(0, 1fr); }
   .close__h, .close__body { grid-column: 1 / -1; }
+  /* Stacked, Start a Project runs margin to margin up to the desktop size (Josh, 6 Nov: "really small" on a
+     phone). 5.3em is the heading's width in Agatho Medium, measured in Chromium. */
+  .close__h { font-size: min(calc((100vw - 2 * var(--margin)) / 5.3), 120px); }
   .close__body { margin-top: var(--sp-head); justify-self: start; }
 }
 @media (max-width: 759.98px) {
@@ -137,16 +138,16 @@ html { scroll-behavior: smooth; }
   .facts dd { font-size: 17px; }
   .acc { padding: 2px var(--sp-card); }
   .acc__btn { font-size: 21px; padding: 20px 0; gap: 14px; }
-  .acc--q .acc__btn { font-size: 18px; }
+  .acc--q .acc__btn { font-size: 20px; }
   .acc__from { font-size: 14px; }
   .acc__body { grid-template-columns: 1fr; gap: 14px; padding-bottom: 24px; }
   .acc__text { grid-row: auto; font-size: 17px; }
   .acc__price { text-align: left; font-size: 21px; }
   .acc__go { justify-self: start; }
   .quote { margin-top: 40px; padding: 28px 22px; }
-  .quote__p, .close__p { font-size: 16px; }
+  .quote__p { font-size: 16px; }
+  .close__p { font-size: 17px; }
   .close { padding-block: 300px 80px; }
-  .close__art img { object-position: 42% 30%; }
 }
 @media (min-width: 760px) { .menu { display: none; } }
 
