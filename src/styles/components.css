@@ -60,6 +60,17 @@ a { color: inherit; }
   --fill-hover: color-mix(in srgb, var(--ink) 80%, var(--paper));
   --fill-pressed: color-mix(in srgb, var(--ink) 70%, var(--paper));
 }
+/* On night bands the solid button is cream, and mixing it toward the warm black read as muddy grey (Josh, 6 Nov).
+   There it brightens instead: a lighter, warmer cream on hover and a deeper parchment on press. */
+:is(.night, .is-dark) .btn--solid {
+  --fill-hover: color-mix(in srgb, #F1DFC8 45%, #FFFAF0);
+  --fill-pressed: #E8D3B8;
+}
+/* Every solid button lifts a pixel on hover, its shadow growing to match, so the hover reads as raised, not dimmed. */
+@media (hover: hover) {
+  .btn--solid:hover:not(:active) { transform: translateY(-1px); box-shadow: var(--depth), 0 14px 24px -12px rgb(40 24 8 / 0.5); }
+  :is(.night, .is-dark) .btn--solid:hover:not(:active) { box-shadow: var(--depth), 0 0 0 0.5px rgb(255 250 240 / 0.5), 0 14px 26px -12px rgb(0 0 0 / 0.8); }
+}
 /* The arrow (Josh, 4 Nov): a rounded, SF Symbols-style arrow.right drawn in the text colour, whatever glyph the
    markup holds (→, ← or ↗ stay in the HTML as the fallback). Hover tips it up to arrow.up.right. */
 .arrow {
