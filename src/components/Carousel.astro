@@ -15,7 +15,7 @@ const { label } = Astro.props;
     <button class="carousel__play" type="button" aria-label="Pause">
       <svg class="i-pause" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><rect x="5" y="4" width="3.4" height="12" rx="1.2" /><rect x="11.6" y="4" width="3.4" height="12" rx="1.2" /></svg>
       <svg class="i-play" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><path d="M6.5 4.6v10.8a.9.9 0 0 0 1.37.77l8.6-5.4a.9.9 0 0 0 0-1.54l-8.6-5.4a.9.9 0 0 0-1.37.77Z" /></svg>
-      <svg class="i-replay" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><path d="M10 4.2a5.8 5.8 0 1 1-5.6 4.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /><path d="M3.2 4.4 4.4 8.6l4.1-1.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      <svg class="i-replay" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 1 0 2.5-6L3.5 8.5" /><path d="M3.5 3.5v5h5" /></svg>
     </button>
   </div>
 </div>
@@ -161,7 +161,7 @@ const { label } = Astro.props;
     .carousel__track:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; border-radius: var(--radius-inner); } /* the row scrolls with the arrow keys (WCAG 2.1.1) */
 
     .carousel__play { display: grid; place-items: center; width: 56px; height: 56px; padding: 0; border: 0; color: var(--ink); cursor: pointer; }
-    .carousel__play svg { fill: currentColor; }
+    .carousel__play svg:not(.i-replay) { fill: currentColor; }
     .carousel__play :is(.i-play, .i-replay), [data-state='paused'] .i-pause, [data-state='ended'] .i-pause { display: none; }
     [data-state='paused'] .i-play, [data-state='ended'] .i-replay { display: block; }
     .carousel__play:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
