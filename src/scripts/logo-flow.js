@@ -1,10 +1,10 @@
 // Josh's gold flow plays once through the logo when it comes into view (nav on load, footer on scroll),
 // like the "Conceptual" video on his old site (6 Nov). The video starts on the plain type (its poster) and
 // ends on the finished logo and stays there.
-// Transparent video: VP9 WebM for Chrome, Firefox and Edge. Safari needs HEVC with alpha (.mov), so it
-// keeps the still logo until those files exist; then set HEVC to true. Reduced motion keeps the still too.
-const HEVC = false;
-const V = '?v=4'; // bump when the videos change, so browsers don't keep the old ones
+// Transparent video: VP9 WebM for Chrome, Firefox and Edge; HEVC with alpha (.mov, exported by Josh) for Safari.
+// Reduced motion keeps the still logo.
+const HEVC = true;
+const V = '?v=6'; // bump when the videos change, so browsers don't keep the old ones
 const webkit = /Apple/.test(navigator.vendor);
 const ext = webkit ? '.mov' : '.webm';
 
