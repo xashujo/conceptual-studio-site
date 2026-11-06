@@ -1,0 +1,71 @@
+---
+// Privacy and Accessibility in the site's design language (Josh, 6 Nov: they still looked like the old site,
+// with bold sans headings). Day opening plate, a night band holding the sections as one ruled glass panel
+// (Agatho heading beside its text), then a day band with an email box, so the night close follows a day band.
+// Words: Pages CMS > Privacy page / Accessibility page.
+import Studio from '../../layouts/Studio.astro';
+import Band from './Band.astro';
+import { email, company } from '../../lib/site';
+import { paras, titleCase } from '../../lib/pages';
+
+interface Props {
+  title: string; description: string;
+  p: { heading: string; intro: string; updated: string; sectionsHeading: string; sections: { title: string; text: string }[];
+    askHeading: string; askText: string; emailButton: string; emailSubject: string; closeText: string };
+}
+const { title, description, p } = Astro.props;
+// Site settings dropped into the words, so a change of address or email needs one edit.
+const fill = (t: string) => t.replaceAll('{email}', email).replaceAll('{company}', company.name)
+  .replaceAll('{company number}', company.number).replaceAll('{registered office}', company.office);
+const mail = `mailto:${email}?subject=${encodeURIComponent(p.emailSubject)}`;
+const id = title.toLowerCase();
+---
+<Studio title={title} description={description} closeText={p.closeText}>
+  <Band opening>
+    <div class="ph__plate glass" data-lens>
+      <h1 class="ph__h">{titleCase(p.heading)}</h1>
+      <p class="ph__p">{fill(p.intro)}</p>
+      {p.updated && <p class="lg-date">{p.updated}</p>}
+      <div class="acts"><a class="btn" href={mail}>{p.emailButton}</a></div>
+    </div>
+  </Band>
+
+  <Band night labelledby={`${id}-h`}>
+    <h2 class="big" id={`${id}-h`}>{titleCase(p.sectionsHeading)}</h2>
+    <div class="lg glass" data-lens data-reveal>
+      {p.sections.map((s) => (
+        <section class="lg__row">
+          <h3 class="lg__h">{titleCase(s.title)}</h3>
+          <div class="lg__text">{paras(fill(s.text)).map((t) => <p>{t}</p>)}</div>
+        </section>
+      ))}
+    </div>
+  </Band>
+
+  <Band labelledby={`${id}-ask`}>
+    <div class="quote glass lg-ask" data-lens data-reveal>
+      <h2 class="mid" id={`${id}-ask`}>{titleCase(p.askHeading)}</h2>
+      <p class="quote__p">{fill(p.askText)}</p>
+      <a class="btn glass-button" href={mail}>{p.emailButton} <span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+  </Band>
+</Studio>
+
+<style>
+  .lg-date { font-size: 15px; color: var(--ink-2); margin-top: -8px; }
+  /* One ruled panel: the heading in Agatho on the left, its text on the right, a hairline between sections
+     (the same rule as the procurement details). */
+  .lg { margin-top: var(--sp-head); padding: 8px var(--sp-card); border-radius: var(--radius); }
+  .lg__row { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 24px 56px; padding-block: 36px; }
+  .lg__row + .lg__row { border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent); }
+  .lg__h { font-family: var(--display); font-weight: 500; font-size: clamp(30px, 2.8vw, 40px); line-height: 1.06; letter-spacing: -0.01em; text-wrap: balance; }
+  .lg__text p { font-size: 19px; line-height: 1.55; max-width: 62ch; text-wrap: pretty; }
+  .lg__text p + p { margin-top: 1em; }
+  .lg-ask { margin-top: 0; }
+  @media (max-width: 759.98px) {
+    .lg { padding-block: 0; }
+    .lg__row { grid-template-columns: 1fr; gap: 14px; padding-block: 26px; }
+    .lg__h { font-size: 28px; }
+    .lg__text p { font-size: 17px; }
+  }
+</style>

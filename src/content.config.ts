@@ -23,6 +23,11 @@ const s = z.string().min(1);
 export const ART_ICONS = ['chart', 'map', 'pages', 'papers', 'formats', 'buildings', 'calendar', 'timeline', 'steps', 'contrast', 'choice', 'ring', 'idea', 'quote', 'accessible', 'order', 'signature', 'shield', 'invoice', 'payment', 'discovery', 'direction', 'development', 'delivery'] as const;
 const icon = z.enum(ART_ICONS).nullish();
 const items = z.array(z.object({ title: s, text: s, icon }));
+// A legal page: the opening plate, the sections as one ruled glass panel, then a box with an email button.
+const legal = {
+  heading: s, intro: s, updated: text, sectionsHeading: s, sections: z.array(z.object({ title: s, text: s })).min(1),
+  askHeading: s, askText: s, emailButton: s, emailSubject: s, closeText: s,
+};
 export const pages = {
   workPage: page('work', { heading: s, intro: s, archiveFilter: s, archiveNote: text, clientsHeading: s, closeText: s }),
   caseStudyPage: page('case-study', {
@@ -47,6 +52,9 @@ export const pages = {
     heading: s, intro: s, orgHeading: s, org: items, detailsHeading: s, details: z.array(z.object({ label: s, value: s })), stepsHeading: s, steps: items,
     emailButton: s, emailSubject: s, closeText: s,
   }),
+  // Privacy and Accessibility (Josh, 6 Nov): the same shape, so both read as the rest of the site.
+  privacyPage: page('privacy', legal),
+  accessibilityPage: page('accessibility', legal),
 };
 
 export const collections = {

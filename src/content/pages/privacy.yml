@@ -1,0 +1,30 @@
+heading: Privacy
+intro: This site collects as little as it can. Here's what it does collect, who handles it, and how to object.
+updated: Last updated 4 November 2026.
+sectionsHeading: What Happens to Your Information
+sections:
+  - title: Who Is Responsible
+    text: |-
+      {company} is responsible for the personal information this site and I collect. Registered in England and Wales, company number {company number}. Registered office: {registered office}.
+
+      Email me about anything on this page at {email}.
+  - title: When You Email Me
+    text: |-
+      I get your name, email address and whatever you write. I use it to reply, to prepare a quote and, if we work together, to run the project. My email is hosted by Google.
+
+      I keep enquiries for 12 months, and project records for as long as the law asks me to keep business records.
+  - title: The Enquiry Form
+    text: |-
+      The form asks for your name, email, organisation, what you need, your budget and deadline, and a link if you have one. It sends them to my inbox through Web3Forms, which handles the message for me and nothing else.
+
+      Web3Forms doesn't store the messages. It passes them straight to my email. Its servers are in the United States, and its server logs, which can include your IP address, are deleted about every two months. From my inbox, the enquiry is kept for 12 months like any other email.
+  - title: Analytics & Cookies
+    text: |-
+      The site sets no cookies and doesn't follow you to other websites. Visits are counted with Cloudflare Web Analytics, which works without cookies and doesn't build a profile of you. You can block it with any content blocker, or email me to object.
+
+      Cloudflare also hosts the site, so like any web host it handles your IP address to send you the pages.
+askHeading: Your Rights
+askText: You can ask me what I hold about you, and ask me to correct it, delete it or stop using it. Email me and I'll answer within one month. If you're unhappy with how I've handled your information, you can complain to the Information Commissioner's Office at ico.org.uk.
+emailButton: Email Me
+emailSubject: My information
+closeText: Have a project in mind? Email me and I'll reply {reply time}.

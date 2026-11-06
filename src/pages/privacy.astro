@@ -1,40 +1,6 @@
 ---
-// Privacy (brief 6.7): what the form collects and who processes it, analytics, how to object.
-import Page from '../layouts/Page.astro';
-import Opening from '../components/Opening.astro';
-import art from '../assets/art/engraved/hunt-sky-gold.jpg';
-import { art as credits, company, email } from '../lib/site';
-const sections = [
-  { h: 'Who Is Responsible', p: [
-    `${company.name} is responsible for the personal information this site and I collect. Registered in ${company.registeredIn}, company number ${company.number}. Registered office: ${company.office}.`,
-    `Email me about anything on this page at ${email}.`,
-  ] },
-  { h: 'When You Email Me', p: [
-    'I get your name, email address and whatever you write. I use it to reply, to prepare a quote and, if we work together, to run the project. My email is hosted by Google.',
-    'I keep enquiries for 12 months, and project records for as long as the law asks me to keep business records.',
-  ] },
-  { h: 'The Enquiry Form', p: [
-    'The form asks for your name, email, organisation, what you need, your budget and deadline, and a link if you have one. It sends them to my inbox through Web3Forms, which handles the message for me and nothing else.',
-    'Web3Forms doesn\'t store the messages. It passes them straight to my email. Its servers are in the United States, and its server logs, which can include your IP address, are deleted about every two months. From my inbox, the enquiry is kept for 12 months like any other email.',
-  ] },
-  { h: 'Analytics & Cookies', p: [
-    'The site sets no cookies and doesn\'t follow you to other websites. Visits are counted with Cloudflare Web Analytics, which works without cookies and doesn\'t build a profile of you. You can block it with any content blocker, or email me to object.',
-    'Cloudflare also hosts the site, so like any web host it handles your IP address to send you the pages.',
-  ] },
-  { h: 'Your Rights', p: [
-    'You can ask me what I hold about you, and ask me to correct it, delete it or stop using it. Email me and I\'ll answer within one month. If you\'re unhappy with how I\'ve handled your information, you can complain to the Information Commissioner\'s Office at ico.org.uk.',
-  ] },
-];
+// Privacy (brief 6.7): what the form collects and who processes it, analytics, how to object. Words: Pages CMS > Privacy page.
+import LegalPage from '../components/studio/LegalPage.astro';
+import { privacyPage } from '../lib/pages';
 ---
-<Page title="Privacy" description="What the Conceptual Studio website collects, who handles it, and how to object.">
-  <Opening word="Privacy" fit={0.366} art={art} credit={credits.hunt} position="50% 0%" tall={0.18} />
-  <div class="wrap">
-    <p class="lead">This site collects as little as it can. Last updated 4 November 2026.</p>
-  </div>
-  {sections.map((s, i) => (
-    <section class="wrap sec sec--text" aria-labelledby={`p${i}`}>
-      <h2 class="sec__h" id={`p${i}`}>{s.h}</h2>
-      <div class="prose">{s.p.map((t) => <p>{t}</p>)}</div>
-    </section>
-  ))}
-</Page>
+<LegalPage title="Privacy" description="What the Conceptual Studio website collects, who handles it, and how to object." p={privacyPage} />
