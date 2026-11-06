@@ -631,7 +631,7 @@ const more = services.filter((s) => !isLane(s)); // lanes holds copies, so match
 
   /* Services: the same heading as Featured Work, then full-width rows that open one at a time. */
   .services { padding-top: var(--sp-section); }
-  .tags { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .tags { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; } /* a wrapped row stays centred under the centred words */
   .tag-btn { --fill: color-mix(in srgb, var(--paper) 55%, transparent); } /* frosted like the hero buttons, dark on hover like every .btn (Josh, 4 Nov) */
   /* Services as a ruled list in large type (WECOMEET): the row in hand turns full ink and its example shows to the
      right; with none in hand the first shows. Plain CSS, so it works without script. */
@@ -806,6 +806,9 @@ const more = services.filter((s) => !isLane(s)); // lanes holds copies, so match
     .hero__plate { padding: 24px 22px 22px; gap: 16px; border-radius: var(--radius); }
     .hero__h { font-size: 36px; }
     .hero__p { font-size: 16px; line-height: 1.45; }
+    /* Phone (Josh, 6 Nov): the two buttons stack at one shared width instead of each hugging its own words. */
+    .hero__plate .acts { display: grid; grid-auto-columns: minmax(0, 1fr); gap: 10px; width: min(100%, 300px); }
+    .hero__plate .acts .btn { justify-content: center; }
     .band { padding-bottom: 120px; }
     .stat { min-height: 128px; padding: 18px 18px; gap: 16px; border-radius: var(--radius); }
     .stat__n { font-size: 9.6vw; } /* 20,000+ fits a phone-width card */
