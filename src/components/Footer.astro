@@ -15,7 +15,7 @@ const { night = false } = Astro.props;
 const year = new Date().getFullYear();
 const words = company.name.replace(/\s+(limited|ltd\.?)$/i, '').split(/\s+/);
 ---
-<footer class:list={['foot', { 'foot--night': night }]}>
+<footer class:list={['foot', { 'foot--night glass': night }]}>
   <div class="wrap foot__top">
     <div class="foot__brand">
       {!night && <p class="foot__line">{footerText}</p>}
@@ -78,8 +78,13 @@ const words = company.name.replace(/\s+(limited|ltd\.?)$/i, '').split(/\s+/);
   .foot__land { position: relative; z-index: -1; margin-top: -3vw; height: clamp(120px, 13vw, 200px); pointer-events: none; }
   .foot__land img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 78%; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 55%); mask-image: linear-gradient(to bottom, transparent, #000 55%); }
 
-  /* Night: cream ink straight on the ceiling, which shows through; no paper, no engraving strip. */
-  .foot--night { --foot-ink: #F1DFC8; background: none; padding: 0 0 clamp(20px, 2.5vw, 36px); }
+  /* Night: one glass panel holds the whole footer, links, logo and ©, so the links read over the busy ceiling
+     (Josh, 6 Nov). The lighter tint the work cards use, so the painting's gold still comes through. */
+  .foot--night { --foot-ink: #F1DFC8; --glass-bg: color-mix(in srgb, var(--paper-2) 16%, transparent); --g-blur: 0.33; --g-shine: 0.5; background: var(--glass-bg); margin: 0 var(--margin); padding: clamp(28px, 3vw, 44px) 0 clamp(20px, 2.5vw, 32px); border-radius: var(--radius) var(--radius) 0 0; }
+  /* Thinner glass than elsewhere (Josh, 6 Nov: "less thick"): a third of the blur, half the rim, a lighter tint. It runs into the bottom of the page, so only the top corners are rounded. */
+  .foot--night .wrap { padding-inline: clamp(24px, 3vw, 44px); }
+  .foot--night .foot__top { grid-template-columns: 1fr; }
+  .foot--night .foot__brand { display: none; }
   .foot--night .foot__legal { margin-top: clamp(16px, 2vw, 28px); padding-bottom: 0; }
   /* The logo is 2522px wide, so it stops at 1261px: sharp on a 2x screen, never stretched. */
   .foot--night .foot__mark { margin-top: clamp(40px, 5vw, 72px); }
