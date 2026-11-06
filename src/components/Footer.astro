@@ -43,7 +43,10 @@ const words = company.name.replace(/\s+(limited|ltd\.?)$/i, '').split(/\s+/);
   </div>
   <a class="wrap foot__mark" href="/" aria-label={`${words.join(' ')}, home`}>
     {night
-      ? <Image class="foot__logo" src={logo} alt="" widths={[720, 1261, 2522]} sizes="(min-width: 1440px) 1261px, calc(100vw - 2 * var(--margin))" />
+      ? <span class="foot__flow" data-flow>
+          <Image class="foot__logo" src={logo} alt="" widths={[720, 1261, 2522]} sizes="(min-width: 1440px) 1261px, calc(100vw - 2 * var(--margin))" />
+          <video class="flow" muted playsinline preload="none" aria-hidden="true" width="1600" height="310" data-src="/media/flow/logo-cream-large" />
+        </span>
       : <span class="foot__word" aria-hidden="true">{words.map((w) => <span>{w}</span>)}</span>}
   </a>
   {!night && <div class="foot__land" aria-hidden="true"><Image src={land} alt="" widths={[900, 1600, 2400]} sizes="100vw" /></div>}
@@ -80,6 +83,9 @@ const words = company.name.replace(/\s+(limited|ltd\.?)$/i, '').split(/\s+/);
   /* The logo is 2522px wide, so it stops at 1261px: sharp on a 2x screen, never stretched. */
   .foot--night .foot__mark { margin-top: clamp(40px, 5vw, 72px); }
   .foot__logo { display: block; width: 100%; max-width: 1261px; height: auto; margin-inline: auto; }
+  /* The gold flow plays once through the logo when it comes into view (logo-flow.js), then the sharp image is back. */
+  .foot__flow { display: grid; max-width: 1261px; margin-inline: auto; }
+  .foot__flow > * { grid-area: 1 / 1; width: 100%; height: auto; aspect-ratio: 2522 / 490; }
 
   @media (max-width: 759.98px) {
     .foot { padding-top: 56px; }
@@ -95,3 +101,5 @@ const words = company.name.replace(/\s+(limited|ltd\.?)$/i, '').split(/\s+/);
     .foot__land img { object-position: 22% 88%; }
   }
 </style>
+
+<script>import '../scripts/logo-flow.js';</script>

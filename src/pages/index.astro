@@ -73,21 +73,6 @@ const more = services.filter((s) => !isLane(s)); // lanes holds copies, so match
     <link rel="preload" href="/fonts/inter-4-variable.woff2" as="font" type="font/woff2" crossorigin />
   </head>
   <body>
-    <!-- Load intro (Josh, 5 Nov): his gold flow render grows through "Conceptual Studio" once per visit, then settles
-         into the nav logo (its last frame is the logo, same crop). Transparent video: VP9 WebM for Chrome, Firefox and
-         Edge, HEVC for Safari once that file exists. Anything else, reduced motion or a repeat visit gets no intro. -->
-    <script is:inline>
-      (function () {
-        var hevc = false; // set true once /media/video/gold-flow.mov (HEVC with alpha) is in the repo
-        var apple = /Apple/.test(navigator.vendor);
-        var seen = false;
-        try { seen = sessionStorage.getItem('intro') === '1'; } catch (e) {}
-        if (seen || matchMedia('(prefers-reduced-motion: reduce)').matches || (apple && !hevc)) return;
-        document.documentElement.classList.add('intro-on');
-        document.documentElement.dataset.introSrc = apple ? '/media/video/gold-flow.mov' : '/media/video/gold-flow.webm';
-      })();
-    </script>
-    <div class="intro" data-intro aria-hidden="true"><video class="intro__v" muted playsinline preload="auto" width="1600" height="310"></video></div>
     <!-- Sticky glass nav. It turns light over the night chapters (script below). -->
     <nav class="nav glass glass--nav" aria-label="Main" data-nav>
       <Logo />
@@ -369,33 +354,6 @@ const more = services.filter((s) => !isLane(s)); // lanes holds copies, so match
       import '../scripts/fallbacks.js'; // popover menu and background drift for older browsers
       const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      // Load intro: play once, then move the last frame (the logo) onto the nav logo and hand over.
-      const root = document.documentElement;
-      if (root.classList.contains('intro-on')) {
-        const box = document.querySelector<HTMLElement>('[data-intro]')!;
-        const v = box.querySelector('video')!;
-        const logo = document.querySelector<HTMLElement>('.nav .logo')!;
-        let done = false;
-        const end = () => { root.classList.remove('intro-on'); box.remove(); };
-        const finish = (fly: boolean) => {
-          if (done) return;
-          done = true;
-          try { sessionStorage.setItem('intro', '1'); } catch (e) { /* private mode: it just plays again */ }
-          if (!fly) { box.classList.add('is-gone'); setTimeout(end, 300); return; }
-          const a = v.getBoundingClientRect();
-          const b = logo.getBoundingClientRect();
-          v.style.transform = `translate(${b.left - a.left}px, ${b.top - a.top}px) scale(${b.width / a.width})`;
-          box.classList.add('is-landing');
-          v.addEventListener('transitionend', end, { once: true });
-          setTimeout(end, 1200); // in case transitionend never fires
-        };
-        v.addEventListener('ended', () => finish(true));
-        v.addEventListener('error', () => finish(false));
-        ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach((t) => addEventListener(t, () => finish(false), { once: true, passive: true }));
-        v.src = root.dataset.introSrc!;
-        v.play().catch(() => finish(false)); // autoplay blocked (e.g. Low Power Mode): straight to the page
-        setTimeout(() => { if (v.currentTime === 0) finish(false); }, 2500); // never started: don't hold the page
-      }
       const ease = 'cubic-bezier(0.16, 1, 0.3, 1)';
 
       // Lens glass. The hero plate can use the WebGL glass over its painting in Firefox and Safari;
@@ -572,15 +530,6 @@ const more = services.filter((s) => !isLane(s)); // lanes holds copies, so match
   .nav__mark { font-family: var(--display); font-size: 24px; letter-spacing: -0.01em; text-decoration: none; }
   .nav__links { list-style: none; display: flex; gap: 2px; margin: 0; padding: 0; }
   .nav__menu { display: none; }
-
-  /* Load intro: paper over everything while the gold flow plays, then the logo flies to the nav. */
-  .intro { display: none; }
-  :global(html.intro-on) .intro { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: var(--paper); transition: background-color 700ms var(--ease-out), opacity 300ms ease-out; }
-  :global(html.intro-on) { overflow: hidden; }
-  :global(html.intro-on .nav .logo) { opacity: 0; }
-  .intro__v { width: min(84vw, 960px); height: auto; transform-origin: 0 0; transition: transform 800ms cubic-bezier(0.65, 0, 0.35, 1); }
-  :global(html.intro-on) .intro.is-landing { background-color: transparent; }
-  :global(html.intro-on) .intro.is-gone { opacity: 0; }
 
   /* Opening: the quiet etching fills the screen, the plate centred over the trees and sky. */
   .hero { position: relative; isolation: isolate; min-height: 100svh; padding: 116px var(--margin) 40px; display: grid; align-content: center; } /* the bento as one centred block */
