@@ -3,13 +3,27 @@
 // ends on the finished logo and stays there.
 // Transparent video: VP9 WebM for Chrome, Firefox and Edge; HEVC with alpha (.mov, exported by Josh) for Safari.
 // Reduced motion keeps the still logo.
-const HEVC = false; // off: the .mov alpha showed as a black box in iOS Safari (6 Nov)
+// Which file to play follows the code from Josh's old Framer site, which worked everywhere including in-app
+// browsers: Safari (iPhone, iPad, Mac) and Instagram on iPhone get the .mov as a <source type="video/quicktime">;
+// everything else gets the WebM. Other in-app browsers on iPhone (Facebook, TikTok...) keep the still.
 const V = '?v=6'; // bump when the videos change, so browsers don't keep the old ones
-const webkit = /Apple/.test(navigator.vendor);
-const ext = webkit ? '.mov' : '.webm';
+const ua = navigator.userAgent.toLowerCase();
+const ios = /iphone|ipad|ipod/.test(ua) || (/macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+const macSafari = /^((?!chrome|android).)*safari/.test(ua);
+const embedded = /instagram|fbav|fban|tiktok|line|pinterest/.test(ua);
+const mov = (ios || macSafari) && (!embedded || (ios && /instagram/.test(ua)));
+const skip = ios && !mov;
+
+function load(v) {
+  const s = document.createElement('source');
+  s.src = v.dataset.src + (mov ? '.mov' : '.webm') + V;
+  s.type = mov ? 'video/quicktime' : 'video/webm';
+  v.replaceChildren(s);
+  v.load();
+}
 
 function run() {
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches || (webkit && !HEVC)) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || skip) return;
   const io = new IntersectionObserver((entries) => {
     for (const e of entries) {
       if (!e.isIntersecting) continue;
@@ -38,10 +52,10 @@ function play(box) {
     for (const o of vids) if (o !== v) {
       o.preload = 'auto';
       o.addEventListener('loadedmetadata', () => { o.currentTime = Number.isFinite(o.duration) ? o.duration : 4.2; }, { once: true });
-      o.src = o.dataset.src + ext + V;
+      load(o);
     }
   }, { once: true });
-  v.src = v.dataset.src + ext + V;
+  load(v);
   v.play().catch(still); // autoplay blocked (e.g. Low Power Mode)
   setTimeout(() => { if (v.currentTime === 0) still(); }, 3000); // never started
 }
