@@ -12,6 +12,12 @@ media:
     output: "@assets"
     categories: [image]
     rename: safe
+  - name: flow
+    label: Logo animation
+    input: public/media/flow
+    output: /media/flow
+    extensions: [mov, webm]
+    rename: safe
   - name: videos
     label: Short videos
     input: public/media/video
@@ -684,6 +690,32 @@ content:
         description: "The little icon in the browser tab and on phone home screens. Upload a square-ish PNG or SVG, at least 512px, on a transparent background. Empty edges are trimmed so the mark fills the tab. The site makes every size from it."
         options:
           media: images
+      - name: logoFlow
+        label: Logo animation
+        type: object
+        description: "The gold flow that plays once through the logo. Each logo needs two versions of the same video with a transparent background: a .mov for Safari (iPhone, iPad, Mac) and a .webm for every other browser. Same size and length for both. The video should end on the finished logo, as it stays on its last frame."
+        fields:
+          - name: nav
+            label: Nav logo, dark ink
+            type: object
+            description: "The small logo at the top on light pages. 720 x 140."
+            fields:
+              - { name: safari, label: Safari video (.mov), type: file, required: true, description: "HEVC with transparency, e.g. from Finder: Encode Selected Video Files, HEVC, Preserve Transparency ticked.", options: { media: flow, extensions: [mov] } }
+              - { name: other, label: Video for other browsers (.webm), type: file, required: true, description: "VP9 with transparency, for Chrome, Firefox, Edge and Android.", options: { media: flow, extensions: [webm] } }
+          - name: navNight
+            label: Nav logo, cream
+            type: object
+            description: "The same logo over the dark night sections. 720 x 140."
+            fields:
+              - { name: safari, label: Safari video (.mov), type: file, required: true, description: "HEVC with transparency, e.g. from Finder: Encode Selected Video Files, HEVC, Preserve Transparency ticked.", options: { media: flow, extensions: [mov] } }
+              - { name: other, label: Video for other browsers (.webm), type: file, required: true, description: "VP9 with transparency, for Chrome, Firefox, Edge and Android.", options: { media: flow, extensions: [webm] } }
+          - name: footer
+            label: Footer logo, cream
+            type: object
+            description: "The big logo at the bottom of the page. 2522 x 490."
+            fields:
+              - { name: safari, label: Safari video (.mov), type: file, required: true, description: "HEVC with transparency, e.g. from Finder: Encode Selected Video Files, HEVC, Preserve Transparency ticked.", options: { media: flow, extensions: [mov] } }
+              - { name: other, label: Video for other browsers (.webm), type: file, required: true, description: "VP9 with transparency, for Chrome, Firefox, Edge and Android.", options: { media: flow, extensions: [webm] } }
       - name: glass
         label: Glass
         type: object

@@ -6,7 +6,6 @@
 // Which file to play follows the code from Josh's old Framer site, which worked everywhere including in-app
 // browsers: Safari (iPhone, iPad, Mac) and Instagram on iPhone get the .mov as a <source type="video/quicktime">;
 // everything else gets the WebM. Other in-app browsers on iPhone (Facebook, TikTok...) keep the still.
-const V = '?v=6'; // bump when the videos change, so browsers don't keep the old ones
 const ua = navigator.userAgent.toLowerCase();
 const ios = /iphone|ipad|ipod/.test(ua) || (/macintosh/.test(ua) && navigator.maxTouchPoints > 1);
 const macSafari = /^((?!chrome|android).)*safari/.test(ua);
@@ -16,7 +15,7 @@ const skip = ios && !mov;
 
 function load(v) {
   const s = document.createElement('source');
-  s.src = v.dataset.src + (mov ? '.mov' : '.webm') + V;
+  s.src = mov ? v.dataset.mov : v.dataset.webm; // from Site settings > Logo animation
   s.type = mov ? 'video/quicktime' : 'video/webm';
   v.replaceChildren(s);
   v.load();
@@ -32,7 +31,7 @@ function run() {
     }
   }, { threshold: 0.6 });
   for (const box of document.querySelectorAll('[data-flow]')) {
-    for (const v of box.querySelectorAll('video.gold-flow')) v.poster = v.dataset.src + '-start.webp' + V;
+    for (const v of box.querySelectorAll('video.gold-flow')) if (v.dataset.poster) v.poster = v.dataset.poster;
     box.classList.add('is-flowing'); // the plain type until it plays
     io.observe(box);
   }

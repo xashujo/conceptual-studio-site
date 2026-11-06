@@ -22,3 +22,13 @@ glass:
   blur: 67
   shine: 65
   reach: 50
+logoFlow:
+  nav:
+    safari: /media/flow/logo-ink.mov
+    other: /media/flow/logo-ink.webm
+  navNight:
+    safari: /media/flow/logo-cream.mov
+    other: /media/flow/logo-cream.webm
+  footer:
+    safari: /media/flow/logo-cream-large.mov
+    other: /media/flow/logo-cream-large.webm

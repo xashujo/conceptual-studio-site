@@ -2,6 +2,8 @@
 // Email, reply time, social links, company details and the client list are edited in Pages CMS
 // (Site settings and Clients); they're read here so every page uses the same values.
 import { getCollection, getEntry } from 'astro:content';
+import { createHash } from 'node:crypto';
+import { existsSync, readFileSync } from 'node:fs';
 
 const settings = (await getEntry('settings', 'site'))!.data;
 /** The home page's own words, from Pages CMS (Home page). "{reply time}" in a value becomes the Reply time setting. */
@@ -19,6 +21,19 @@ export const availability = { on: settings.availability, text: settings.availabi
 // The glass dials, as CSS variables for <html> (1 = as designed). Read by components.css and the glass scripts.
 const g = settings.glass;
 export const glassStyle = `--g-bend:${g.bend / 100};--g-frost:${g.frost / 100};--g-blur:${g.blur / 100};--g-shine:${g.shine / 100};--g-reach:${g.reach / 100}`;
+
+// The gold flow logo videos from Site settings > Logo animation. Each URL carries a short hash of the file, so a
+// re-uploaded video under the same name isn't served from the week-long cache. A poster (its first frame) is used
+// when a matching "-start.webp" sits next to the video; otherwise the logo stays empty until the video plays.
+const flowFile = (url: string) => {
+  const f = `public${url}`;
+  return existsSync(f) ? `${url}?v=${createHash('md5').update(readFileSync(f)).digest('hex').slice(0, 8)}` : url;
+};
+const flowPair = (p: { safari: string; other: string }) => {
+  const poster = p.other.replace(/\.webm$/i, '-start.webp');
+  return { mov: flowFile(p.safari), webm: flowFile(p.other), poster: existsSync(`public${poster}`) ? flowFile(poster) : undefined };
+};
+export const logoFlow = { nav: flowPair(settings.logoFlow.nav), navNight: flowPair(settings.logoFlow.navNight), footer: flowPair(settings.logoFlow.footer) };
 
 export const social = settings.socialLinks.map((l) => ({ label: l.label, href: l.url }));
 
