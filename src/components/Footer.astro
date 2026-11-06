@@ -83,7 +83,7 @@ const words = company.name.replace(/\s+(limited|ltd\.?)$/i, '').split(/\s+/);
   /* The logo is 2522px wide, so it stops at 1261px: sharp on a 2x screen, never stretched. */
   .foot--night .foot__mark { margin-top: clamp(40px, 5vw, 72px); }
   .foot__logo { display: block; width: 100%; max-width: 1261px; height: auto; margin-inline: auto; }
-  /* The gold flow plays once through the logo when it comes into view (logo-flow.js), then the sharp image is back. */
+  /* The gold flow plays once through the logo when it comes into view (logo-flow.js) and stays on its last frame. */
   .foot__flow { display: grid; max-width: 1261px; margin-inline: auto; }
   .foot__flow > * { grid-area: 1 / 1; width: 100%; height: auto; aspect-ratio: 2522 / 490; }
 

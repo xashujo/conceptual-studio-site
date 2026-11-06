@@ -1,6 +1,6 @@
 // Josh's gold flow plays once through the logo when it comes into view (nav on load, footer on scroll),
 // like the "Conceptual" video on his old site (6 Nov). The video starts on the plain type (its poster) and
-// ends on the finished logo, so the still image takes back over without a jump.
+// ends on the finished logo and stays there.
 // Transparent video: VP9 WebM for Chrome, Firefox and Edge. Safari needs HEVC with alpha (.mov), so it
 // keeps the still logo until those files exist; then set HEVC to true. Reduced motion keeps the still too.
 const HEVC = false;
@@ -27,13 +27,22 @@ function play(box) {
   const vids = [...box.querySelectorAll('video.flow')];
   // The nav has an ink and a cream version: play the one showing.
   const v = vids.find((x) => getComputedStyle(x).opacity !== '0') || vids[0];
-  let done = false;
-  const end = () => { if (!done) { done = true; box.classList.remove('is-flowing'); } };
-  v.addEventListener('ended', end, { once: true });
-  v.addEventListener('error', end, { once: true });
+  let started = false;
+  const still = () => { if (!started) box.classList.remove('is-flowing'); }; // never played: the still logo
+  v.addEventListener('playing', () => { started = true; }, { once: true });
+  v.addEventListener('error', still, { once: true });
+  // Josh (6 Nov): it ends and stays on its last frame, with no swap to the still image. The nav's other
+  // tone loads straight to its last frame too, so the logo can still change tone over the night chapters.
+  v.addEventListener('ended', () => {
+    for (const o of vids) if (o !== v) {
+      o.preload = 'auto';
+      o.addEventListener('loadedmetadata', () => { o.currentTime = Number.isFinite(o.duration) ? o.duration : 4.2; }, { once: true });
+      o.src = o.dataset.src + ext;
+    }
+  }, { once: true });
   v.src = v.dataset.src + ext;
-  v.play().catch(end); // autoplay blocked (e.g. Low Power Mode): the still logo
-  setTimeout(() => { if (v.currentTime === 0) end(); }, 3000); // never started
+  v.play().catch(still); // autoplay blocked (e.g. Low Power Mode)
+  setTimeout(() => { if (v.currentTime === 0) still(); }, 3000); // never started
 }
 
 run();
