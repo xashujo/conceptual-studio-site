@@ -4,6 +4,7 @@
 // Transparent video: VP9 WebM for Chrome, Firefox and Edge. Safari needs HEVC with alpha (.mov), so it
 // keeps the still logo until those files exist; then set HEVC to true. Reduced motion keeps the still too.
 const HEVC = false;
+const V = '?v=4'; // bump when the videos change, so browsers don't keep the old ones
 const webkit = /Apple/.test(navigator.vendor);
 const ext = webkit ? '.mov' : '.webm';
 
@@ -17,7 +18,7 @@ function run() {
     }
   }, { threshold: 0.6 });
   for (const box of document.querySelectorAll('[data-flow]')) {
-    for (const v of box.querySelectorAll('video.flow')) v.poster = v.dataset.src + '-start.webp';
+    for (const v of box.querySelectorAll('video.flow')) v.poster = v.dataset.src + '-start.webp' + V;
     box.classList.add('is-flowing'); // the plain type until it plays
     io.observe(box);
   }
@@ -37,10 +38,10 @@ function play(box) {
     for (const o of vids) if (o !== v) {
       o.preload = 'auto';
       o.addEventListener('loadedmetadata', () => { o.currentTime = Number.isFinite(o.duration) ? o.duration : 4.2; }, { once: true });
-      o.src = o.dataset.src + ext;
+      o.src = o.dataset.src + ext + V;
     }
   }, { once: true });
-  v.src = v.dataset.src + ext;
+  v.src = v.dataset.src + ext + V;
   v.play().catch(still); // autoplay blocked (e.g. Low Power Mode)
   setTimeout(() => { if (v.currentTime === 0) still(); }, 3000); // never started
 }
