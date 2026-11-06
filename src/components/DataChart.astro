@@ -88,7 +88,7 @@ const labelled = new Set([0, 1, rows.length - 1]); // start, the low, now
   /* A tone step, not a box (paper 2), with the image-corner radius. */
   .dc { background: var(--paper-2); border-radius: var(--radius); padding: 28px 28px 22px; display: grid; gap: 18px; }
   .dc__head { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
-  .dc__title { font-size: 20px; line-height: 1.3; font-weight: 600; letter-spacing: -0.01em; max-width: 26ch; }
+  .dc__title { font-family: var(--display); font-weight: 500; letter-spacing: -0.01em; font-size: 26px; line-height: 1.15; max-width: 26ch; }
   .dc__toggle[hidden] { display: none; }
   .dc__toggle { --fill: var(--paper); flex: none; font-size: 16px; min-height: 44px; }
   /* No script: table, then the finished chart. With script: one view at a time, so the card is
@@ -131,7 +131,7 @@ const labelled = new Set([0, 1, rows.length - 1]); // start, the low, now
   @media (max-width: 759.98px) {
     .dc { padding: 20px 16px 18px; border-radius: var(--radius); }
     .dc__head { flex-direction: column; align-items: flex-start; }
-    .dc__title { font-size: 18px; }
+    .dc__title { font-size: 22px; }
     .dc__table { font-size: 16px; }
     /* Phones: no cross-fade cell, the hidden view simply goes, so there's no empty band. */
     .dc__chart { font-size: 27px; }
