@@ -45,7 +45,7 @@ const words = company.name.replace(/\s+(limited|ltd\.?)$/i, '').split(/\s+/);
     {night
       ? <span class="foot__flow" data-flow>
           <Image class="foot__logo" src={logo} alt="" widths={[720, 1261, 2522]} sizes="(min-width: 1440px) 1261px, calc(100vw - 2 * var(--margin))" />
-          <video class="flow" muted playsinline preload="none" aria-hidden="true" width="1600" height="310" data-src="/media/flow/logo-cream-large" />
+          <video class="flow" muted playsinline preload="none" aria-hidden="true" width="2522" height="490" data-src="/media/flow/logo-cream-large" />
         </span>
       : <span class="foot__word" aria-hidden="true">{words.map((w) => <span>{w}</span>)}</span>}
   </a>
