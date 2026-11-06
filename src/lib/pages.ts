@@ -9,7 +9,7 @@ const fill = <T>(v: T): T => {
   if (v && typeof v === 'object') return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, fill(x)])) as T;
   return v;
 };
-const load = async <C extends 'workPage' | 'caseStudyPage' | 'servicesPage' | 'aboutPage' | 'contactPage' | 'procurementPage'>(c: C, id: string) =>
+const load = async <C extends 'workPage' | 'caseStudyPage' | 'servicesPage' | 'aboutPage' | 'contactPage' | 'procurementPage' | 'privacyPage' | 'accessibilityPage'>(c: C, id: string) =>
   fill((await getEntry(c, id))!.data);
 
 export const workPage = await load('workPage', 'work');
@@ -18,6 +18,8 @@ export const servicesPage = await load('servicesPage', 'services');
 export const aboutPage = await load('aboutPage', 'about');
 export const contactPage = await load('contactPage', 'contact');
 export const procurementPage = await load('procurementPage', 'procurement');
+export const privacyPage = await load('privacyPage', 'privacy');
+export const accessibilityPage = await load('accessibilityPage', 'accessibility');
 
 /** Paragraphs from a CMS text field: an empty line between them. */
 export const paras = (s: string) => s.split(/\n\s*\n/).map((t) => t.trim()).filter(Boolean);
