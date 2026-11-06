@@ -353,6 +353,7 @@ const more = services.filter((s) => !isLane(s)); // lanes holds copies, so match
       import { reveal } from '../scripts/reveal.js';
       import '../scripts/fallbacks.js'; // popover menu and background drift for older browsers
       const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
       const ease = 'cubic-bezier(0.16, 1, 0.3, 1)';
 
       // Lens glass. The hero plate can use the WebGL glass over its painting in Firefox and Safari;
