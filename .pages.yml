@@ -604,6 +604,56 @@ content:
       - { name: emailSubject, label: Email subject, type: string, required: true, description: "The subject line the email button fills in." }
       - { name: closeText, label: Start a Project text, type: text, required: true, description: "The words in the glass panel at the end of the page." }
 
+  - name: privacyPage
+    label: Privacy page
+    type: file
+    path: src/content/pages/privacy.yml
+    format: yaml
+    description: "What the site collects and who handles it. Write {reply time}, {email}, {company}, {company number} or {registered office} to drop in those details from Site settings."
+    fields:
+      - { name: heading, label: Heading, type: string, required: true }
+      - { name: intro, label: Intro, type: text, required: true }
+      - { name: updated, label: Date line, type: string, description: "A small line under the intro, e.g. Last updated 4 November 2026. Empty hides it." }
+      - { name: sectionsHeading, label: Sections heading, type: string, required: true }
+      - name: sections
+        label: Sections
+        type: object
+        list: true
+        description: "Each one is a heading beside its text, in one glass panel."
+        fields:
+          - { name: title, label: Heading, type: string, required: true }
+          - { name: text, label: Text, type: text, required: true, description: "Leave an empty line between paragraphs." }
+      - { name: askHeading, label: Email box heading, type: string, required: true }
+      - { name: askText, label: Email box text, type: text, required: true }
+      - { name: emailButton, label: Email button, type: string, required: true }
+      - { name: emailSubject, label: Email subject, type: string, required: true, description: "The subject line the email buttons fill in." }
+      - { name: closeText, label: Start a Project text, type: text, required: true, description: "The words in the glass panel at the end of the page." }
+
+  - name: accessibilityPage
+    label: Accessibility page
+    type: file
+    path: src/content/pages/accessibility.yml
+    format: yaml
+    description: "The accessibility statement. Write {reply time}, {email}, {company}, {company number} or {registered office} to drop in those details from Site settings."
+    fields:
+      - { name: heading, label: Heading, type: string, required: true }
+      - { name: intro, label: Intro, type: text, required: true }
+      - { name: updated, label: Date line, type: string, description: "A small line under the intro, e.g. Last updated 4 November 2026. Empty hides it." }
+      - { name: sectionsHeading, label: Sections heading, type: string, required: true }
+      - name: sections
+        label: Sections
+        type: object
+        list: true
+        description: "Each one is a heading beside its text, in one glass panel."
+        fields:
+          - { name: title, label: Heading, type: string, required: true }
+          - { name: text, label: Text, type: text, required: true, description: "Leave an empty line between paragraphs." }
+      - { name: askHeading, label: Email box heading, type: string, required: true }
+      - { name: askText, label: Email box text, type: text, required: true }
+      - { name: emailButton, label: Email button, type: string, required: true }
+      - { name: emailSubject, label: Email subject, type: string, required: true, description: "The subject line the email buttons fill in." }
+      - { name: closeText, label: Start a Project text, type: text, required: true, description: "The words in the glass panel at the end of the page." }
+
   - name: settings
     label: Site settings
     type: file
