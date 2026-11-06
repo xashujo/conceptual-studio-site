@@ -80,8 +80,8 @@ const words = company.name.replace(/\s+(limited|ltd\.?)$/i, '').split(/\s+/);
 
   /* Night: one glass panel holds the whole footer, links, logo and ©, so the links read over the busy ceiling
      (Josh, 6 Nov). The lighter tint the work cards use, so the painting's gold still comes through. */
-  .foot--night { --foot-ink: #F1DFC8; --glass-bg: color-mix(in srgb, var(--paper-2) 16%, transparent); --g-blur: 0.5; --g-shine: 0.5; background: var(--glass-bg); margin: 0 var(--margin); padding: clamp(28px, 3vw, 44px) 0 clamp(20px, 2.5vw, 32px); border-radius: var(--radius) var(--radius) 0 0; }
-  /* Thinner glass than elsewhere (Josh, 6 Nov: "less thick"): half the blur and rim, a lighter tint. It runs into the bottom of the page, so only the top corners are rounded. */
+  .foot--night { --foot-ink: #F1DFC8; --glass-bg: color-mix(in srgb, var(--paper-2) 16%, transparent); --g-blur: 0.33; --g-shine: 0.5; background: var(--glass-bg); margin: 0 var(--margin); padding: clamp(28px, 3vw, 44px) 0 clamp(20px, 2.5vw, 32px); border-radius: var(--radius) var(--radius) 0 0; }
+  /* Thinner glass than elsewhere (Josh, 6 Nov: "less thick"): a third of the blur, half the rim, a lighter tint. It runs into the bottom of the page, so only the top corners are rounded. */
   .foot--night .wrap { padding-inline: clamp(24px, 3vw, 44px); }
   .foot--night .foot__top { grid-template-columns: 1fr; }
   .foot--night .foot__brand { display: none; }
