@@ -461,3 +461,10 @@ a.card.glass :is(.card__y, .card__out, .tag) { transition: color 300ms ease-out,
 .gold-flow { visibility: hidden; } /* not .flow: that is the text-spacing class (studio.css) */
 .is-flowing > .gold-flow { visibility: visible; }
 .is-flowing > img { visibility: hidden; }
+/* Josh's gold flow videos (7 Nov) are the full 3.75:1 render frame with room around the logo. The box shows only
+   the logo (the stills are cropped the same way): x 54 to 1843 and y 69 to 428 of 1920 x 512. */
+[data-flow] { position: relative; overflow: hidden; }
+[data-flow] > video.gold-flow {
+  position: absolute; top: 0; left: 0; max-width: none; height: auto; aspect-ratio: auto;
+  width: calc(100% * 1920 / 1789); margin: calc(-100% * 69 / 1789) 0 0 calc(-100% * 54 / 1789);
+}

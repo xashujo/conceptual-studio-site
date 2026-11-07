@@ -2,22 +2,26 @@
 // The nav wordmark: Josh's "Conceptual Studio" with the gold flow through both words (28 Oct; replaces the video).
 // Ink text over paper, cream (#F1DFC8) over the night chapters. Cropped to the artwork, so the width is the logo's.
 // The gold flow plays once through it on load (logo-flow.js), like the "Conceptual" video on Josh's old site (6 Nov).
+// The videos are set in Pages CMS > Site settings > Logo animation.
+import { logoFlow } from '../lib/site';
+const { nav, navNight } = logoFlow;
 ---
 <a class="logo nav__mark" href="/" aria-label="Conceptual Studio" data-flow>
-  <img class="logo__ink" src="/brand/logo-ink.webp?v=5" alt="" width="720" height="140" />
-  <img class="logo__cream" src="/brand/logo-cream.webp?v=5" alt="" width="720" height="140" />
-  <video class="gold-flow logo__ink" muted playsinline preload="none" aria-hidden="true" width="720" height="140" data-src="/media/flow/logo-ink" />
-  <video class="gold-flow logo__cream" muted playsinline preload="none" aria-hidden="true" width="720" height="140" data-src="/media/flow/logo-cream" />
+  <img class="logo__ink" src="/brand/logo-ink.webp?v=7" alt="" width="720" height="144" />
+  <img class="logo__cream" src="/brand/logo-cream.webp?v=7" alt="" width="720" height="144" />
+  <video class="gold-flow logo__ink" muted playsinline preload="none" aria-hidden="true" width="1920" height="512" data-mov={nav.mov} data-webm={nav.webm} data-poster={nav.poster} />
+  <video class="gold-flow logo__cream" muted playsinline preload="none" aria-hidden="true" width="1920" height="512" data-mov={navNight.mov} data-webm={navNight.webm} data-poster={navNight.poster} />
 </a>
 
 <style>
   /* 180px wide: the text matches the old 24px text logo (Josh, 28 Oct). */
   .logo { display: grid; text-decoration: none; }
-  .logo > * { grid-area: 1 / 1; width: 180px; height: auto; transition: opacity 300ms ease-out; }
+  .logo > * { transition: opacity 300ms ease-out; }
+  .logo > img { grid-area: 1 / 1; width: 180px; height: auto; } /* the videos are placed in components.css */
   .logo__cream { opacity: 0; }
   :global(.is-dark) .logo .logo__ink { opacity: 0; }
   :global(.is-dark) .logo .logo__cream { opacity: 1; }
-  @media (max-width: 759.98px) { .logo > * { width: 158px; } } /* the old 21px phone size */
+  @media (max-width: 759.98px) { .logo > img { width: 158px; } } /* the old 21px phone size */
 </style>
 
 <script>import '../scripts/logo-flow.js';</script>

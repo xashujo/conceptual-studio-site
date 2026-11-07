@@ -22,3 +22,13 @@ glass:
   blur: 67
   shine: 65
   reach: 50
+logoFlow:
+  nav:
+    safari: /media/flow/gold-black-small.mov
+    other: /media/flow/gold-black-small.webm
+  navNight:
+    safari: /media/flow/gold-white-small.mov
+    other: /media/flow/gold-white-small.webm
+  footer:
+    safari: /media/flow/gold-white-medium.mov
+    other: /media/flow/gold-white-medium.webm

@@ -222,6 +222,16 @@ export const collections = {
       colophon: z.string().min(1),
       // The tab icon; src/pages/[icon].ts makes every favicon size from it.
       favicon: z.string().regex(/^@assets\/.+\.(png|jpe?g|webp|svg)$/i, 'Upload a PNG, JPEG, WebP or SVG').default('@assets/brand/favicon.png'),
+      // The gold flow logo videos (Josh, 6 Nov): Safari gets the .mov (HEVC with transparency), every other
+      // browser the .webm (VP9 with transparency). Paths under public/media/flow.
+      logoFlow: z.object(Object.fromEntries(['nav', 'navNight', 'footer'].map((k) => [k, z.object({
+        safari: z.string().regex(/^\/media\/flow\/.+\.mov$/i, 'Upload a .mov (HEVC with transparency)'),
+        other: z.string().regex(/^\/media\/flow\/.+\.webm$/i, 'Upload a .webm (VP9 with transparency)'),
+      })]))).default({
+        nav: { safari: '/media/flow/logo-ink.mov', other: '/media/flow/logo-ink.webm' },
+        navNight: { safari: '/media/flow/logo-cream.mov', other: '/media/flow/logo-cream.webm' },
+        footer: { safari: '/media/flow/logo-cream-large.mov', other: '/media/flow/logo-cream-large.webm' },
+      }),
       // Glass dials, as percentages of the designed look (100 = as designed).
       glass: z.object({
         bend: z.number().min(0).max(300).default(100),
