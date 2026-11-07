@@ -32,14 +32,16 @@ problem: |
 
   The brief: a look that moves like spatial audio, with a sci-fi feel and an interface that's easy on the eye.
 whatIDid: |
-  I started with the wordmark. The client's first font was pixelated, so my early versions made the type look like stardust moving with the sound. The final wordmark is set in SF Pro Semibold, inside a rounded outline.
+  I started with the wordmark. The client's first font was pixelated, so my early versions made the type look like stardust moving with the sound. I dropped it for two reasons: it wasn't a vector, so it wouldn't scale cleanly, and the brand had to be easy to read for neurodivergent people. The final wordmark is set in SF Pro Semibold, inside a rounded outline.
 
   Then came the icon, the Star Note, and every 3D, motion & web file the developer needed. It all went into a visual identity guide and one shared folder.
 gallery:
   - layout: One large
     heading: The Star Note
     text: |
-      The mark starts with a quarter note. I took it apart: the oval became the building block and the stem became a ray.
+      My first mark was based on an Ambisonic microphone, the kind used to record 3D audio. People I showed it to said it looked like a football, not music, so I went to sheet music instead.
+
+      The mark starts with a quarter note. I took it apart: the oval became the building block and the stem became a ray. I made the shapes bold so they stay easy to read for neurodivergent people.
 
       Six ovals now sit around one bright centre, joined by the rays.
     images:
@@ -89,7 +91,7 @@ gallery:
   - layout: Two side by side
     heading: Built for The Website
     text: |
-      The developer got a logo reveal, an icon & wordmark animation, favicons in three colours, app icons from 16 to 256 pixels and 3D models of the Star Note, meteorites & social icons, all as web-ready files.
+      The developer got a logo reveal, favicons, app icons and 3D models of the Star Note, meteorites & social icons. I kept each social icon to 30,000 faces so the site's particle effect stays clean without being heavy, and exported the animations with transparency as .mov for Safari and .webm for every other browser.
     images:
       - src: "@assets/work/cmd-inc/08.webp"
         alt: Browser tabs in light and dark mode with the CMD Inc. favicon
