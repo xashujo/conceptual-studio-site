@@ -7,21 +7,21 @@ import { logoFlow } from '../lib/site';
 const { nav, navNight } = logoFlow;
 ---
 <a class="logo nav__mark" href="/" aria-label="Conceptual Studio" data-flow>
-  <img class="logo__ink" src="/brand/logo-ink.webp?v=7" alt="" width="720" height="144" />
-  <img class="logo__cream" src="/brand/logo-cream.webp?v=7" alt="" width="720" height="144" />
+  <img class="logo__ink" src="/brand/logo-ink.webp?v=8" alt="" width="720" height="144" />
+  <img class="logo__cream" src="/brand/logo-cream.webp?v=8" alt="" width="720" height="144" />
   <video class="gold-flow logo__ink" muted playsinline preload="none" aria-hidden="true" width="1920" height="512" data-mov={nav.mov} data-webm={nav.webm} data-poster={nav.poster} />
   <video class="gold-flow logo__cream" muted playsinline preload="none" aria-hidden="true" width="1920" height="512" data-mov={navNight.mov} data-webm={navNight.webm} data-poster={navNight.poster} />
 </a>
 
 <style>
-  /* 180px wide: the text matches the old 24px text logo (Josh, 28 Oct). */
+  /* 210px wide (Josh, 7 Nov: 180px was too small to read the gold behind the "o"). */
   .logo { display: grid; text-decoration: none; }
   .logo > * { transition: opacity 300ms ease-out; }
-  .logo > img { grid-area: 1 / 1; width: 180px; height: auto; } /* the videos are placed in components.css */
+  .logo > img { grid-area: 1 / 1; width: 210px; height: auto; } /* the videos are placed in components.css */
   .logo__cream { opacity: 0; }
   :global(.is-dark) .logo .logo__ink { opacity: 0; }
   :global(.is-dark) .logo .logo__cream { opacity: 1; }
-  @media (max-width: 759.98px) { .logo > img { width: 158px; } } /* the old 21px phone size */
+  @media (max-width: 759.98px) { .logo > img { width: 172px; } } /* a touch over the old 21px phone size */
 </style>
 
 <script>import '../scripts/logo-flow.js';</script>
