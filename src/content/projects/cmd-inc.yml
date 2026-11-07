@@ -32,7 +32,7 @@ problem: |
 
   The brief: a look that moves like spatial audio, with a sci-fi feel and an interface that's easy on the eye.
 whatIDid: |
-  I started with the wordmark. The client's first font was pixelated, so my early versions made the type look like stardust moving with the sound. The final wordmark is set in SF Pro Semibold, inside a rounded outline.
+  I started with the wordmark. The client's first font was pixelated, so my early versions made the type look like stardust moving with the sound. I dropped it for two reasons: it wasn't a vector, so it wouldn't scale cleanly, and the brand had to be easy to read for neurodivergent people. The final wordmark is set in SF Pro Semibold, inside a rounded outline.
 
   Then came the icon, the Star Note, and every 3D, motion & web file the developer needed. It all went into a visual identity guide and one shared folder.
 gallery:
