@@ -25,7 +25,7 @@ function run() {
     for (const e of entries) {
       if (!e.isIntersecting) continue;
       io.unobserve(e.target);
-      setTimeout(() => play(e.target), 150); // let the nav pick its tone first
+      play(e.target);
     }
   }, { threshold: 0.6 });
   for (const box of document.querySelectorAll('[data-flow]')) {
@@ -36,25 +36,24 @@ function run() {
 }
 
 function play(box) {
+  // The nav has an ink and a cream version, and the page can switch between them at any moment (loading
+  // or scrolling into a night chapter). Both play together, so whichever one shows is always mid-flow.
   const vids = [...box.querySelectorAll('video.gold-flow')];
-  // The nav has an ink and a cream version: play the one showing.
-  const v = vids.find((x) => getComputedStyle(x).opacity !== '0') || vids[0];
   let started = false;
   const still = () => { if (!started) box.classList.remove('is-flowing'); }; // never played: the still logo
-  v.addEventListener('playing', () => { started = true; }, { once: true });
-  v.addEventListener('error', still, { once: true });
-  // Josh (6 Nov): it ends and stays on its last frame, with no swap to the still image. The nav's other
-  // tone loads straight to its last frame too, so the logo can still change tone over the night chapters.
-  v.addEventListener('ended', () => {
-    for (const o of vids) if (o !== v) {
-      o.preload = 'auto';
-      o.addEventListener('loadedmetadata', () => { o.currentTime = Number.isFinite(o.duration) ? o.duration : 4.2; }, { once: true });
-      load(o);
-    }
-  }, { once: true });
-  load(v);
-  v.play().catch(still); // autoplay blocked (e.g. Low Power Mode)
-  setTimeout(() => { if (v.currentTime === 0) still(); }, 3000); // never started
+  for (const v of vids) {
+    v.addEventListener('playing', () => { started = true; }, { once: true });
+    v.addEventListener('error', still, { once: true });
+    v.preload = 'auto';
+    load(v);
+  }
+  // Start together once every tone can play, so they stay in step.
+  Promise.all(vids.map((v) => (v.readyState >= 3 ? 1 : new Promise((r) => {
+    v.addEventListener('canplay', r, { once: true });
+    v.addEventListener('error', r, { once: true });
+  })))).then(() => { for (const v of vids) v.play().catch(still); }); // autoplay blocked (e.g. Low Power Mode)
+  // Josh (6 Nov): it ends and stays on its last frame, with no swap to the still image.
+  setTimeout(() => { if (!started) still(); }, 3000); // never started
 }
 
 run();
