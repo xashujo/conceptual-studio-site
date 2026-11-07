@@ -87,8 +87,8 @@ const isCurrent = (h: string) => h === current || (h !== '/' && current?.startsW
         )}
       </section>
       <Footer night />
+      <p class="sr-only" aria-live="polite" data-copy-status></p><!-- inside .end, so its 1px can't add a cream line under the page (Josh, 7 Nov) -->
     </div>
-    <p class="sr-only" aria-live="polite" data-copy-status></p>
 
     <script>
       import { mountLens } from '../scripts/lens.js';
