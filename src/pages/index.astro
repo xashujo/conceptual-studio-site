@@ -743,7 +743,7 @@ const more = services.filter((s) => !isLane(s)); // lanes holds copies, so match
   .about__text .about__lead { font-size: 28px; line-height: 1.32; letter-spacing: -0.02em; max-width: 34ch; }
 
   /* Close and footer, on warm black. */
-  .end { position: relative; isolation: isolate; background: var(--paper); }
+  .end { display: flow-root; position: relative; isolation: isolate; background: var(--paper); }
   .close { position: relative; display: grid; grid-template-columns: max-content fit-content(680px); justify-content: center; column-gap: clamp(40px, 5vw, 96px); padding-block: min(560px, 40vw) 96px; align-items: start; } /* heading top level with the glass panel (Josh, 28 Oct) */
   /* The close's tall top padding is art, not content: land the nav link on the heading, not the empty sky above it. */
   #contact { scroll-margin-top: calc(96px - min(560px, 40vw)); }
