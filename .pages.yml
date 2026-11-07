@@ -693,26 +693,26 @@ content:
       - name: logoFlow
         label: Logo animation
         type: object
-        description: "The gold flow that plays once through the logo. Each logo needs two versions of the same video with a transparent background: a .mov for Safari (iPhone, iPad, Mac) and a .webm for every other browser. Same size and length for both. The video should end on the finished logo, as it stays on its last frame."
+        description: "The gold flow that plays once through the logo. Each logo needs two versions of the same video with a transparent background: a .mov for Safari (iPhone, iPad, Mac) and a .webm for every other browser. Same size and length for both. Keep the framing of the 7 Nov render (3.75:1, the type across the middle): the site crops to the logo, so a different framing would sit off. The video should end on the finished logo, as it stays on its last frame."
         fields:
           - name: nav
             label: Nav logo, dark ink
             type: object
-            description: "The small logo at the top on light pages. 720 x 140."
+            description: "The small logo at the top on light pages, black type. The small export (1920 x 512) is plenty."
             fields:
               - { name: safari, label: Safari video (.mov), type: file, required: true, description: "HEVC with transparency, e.g. from Finder: Encode Selected Video Files, HEVC, Preserve Transparency ticked.", options: { media: flow, extensions: [mov] } }
               - { name: other, label: Video for other browsers (.webm), type: file, required: true, description: "VP9 with transparency, for Chrome, Firefox, Edge and Android.", options: { media: flow, extensions: [webm] } }
           - name: navNight
             label: Nav logo, cream
             type: object
-            description: "The same logo over the dark night sections. 720 x 140."
+            description: "The same logo over the dark night sections, white type. The small export (1920 x 512)."
             fields:
               - { name: safari, label: Safari video (.mov), type: file, required: true, description: "HEVC with transparency, e.g. from Finder: Encode Selected Video Files, HEVC, Preserve Transparency ticked.", options: { media: flow, extensions: [mov] } }
               - { name: other, label: Video for other browsers (.webm), type: file, required: true, description: "VP9 with transparency, for Chrome, Firefox, Edge and Android.", options: { media: flow, extensions: [webm] } }
           - name: footer
             label: Footer logo, cream
             type: object
-            description: "The big logo at the bottom of the page. 2522 x 490."
+            description: "The big logo at the bottom of the page, white type. The medium export (2880 x 768)."
             fields:
               - { name: safari, label: Safari video (.mov), type: file, required: true, description: "HEVC with transparency, e.g. from Finder: Encode Selected Video Files, HEVC, Preserve Transparency ticked.", options: { media: flow, extensions: [mov] } }
               - { name: other, label: Video for other browsers (.webm), type: file, required: true, description: "VP9 with transparency, for Chrome, Firefox, Edge and Android.", options: { media: flow, extensions: [webm] } }

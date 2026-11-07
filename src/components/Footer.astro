@@ -44,7 +44,7 @@ const words = company.name.replace(/\s+(limited|ltd\.?)$/i, '').split(/\s+/);
     {night
       ? <span class="foot__flow" data-flow>
           <Image class="foot__logo" src={logo} alt="" widths={[720, 1261, 2522]} sizes="(min-width: 1440px) 1261px, calc(100vw - 2 * var(--margin))" />
-          <video class="gold-flow" muted playsinline preload="none" aria-hidden="true" width="2522" height="490" data-mov={logoFlow.footer.mov} data-webm={logoFlow.footer.webm} data-poster={logoFlow.footer.poster} />
+          <video class="gold-flow" muted playsinline preload="none" aria-hidden="true" width="2880" height="768" data-mov={logoFlow.footer.mov} data-webm={logoFlow.footer.webm} data-poster={logoFlow.footer.poster} />
         </span>
       : <span class="foot__word" aria-hidden="true">{words.map((w) => <span>{w}</span>)}</span>}
   </a>
@@ -91,7 +91,7 @@ const words = company.name.replace(/\s+(limited|ltd\.?)$/i, '').split(/\s+/);
   .foot__logo { display: block; width: 100%; max-width: 1261px; height: auto; margin-inline: auto; }
   /* The gold flow plays once through the logo when it comes into view (logo-flow.js) and stays on its last frame. */
   .foot__flow { display: grid; max-width: 1261px; margin-inline: auto; }
-  .foot__flow > * { grid-area: 1 / 1; width: 100%; height: auto; aspect-ratio: 2522 / 490; }
+  .foot__flow > img { grid-area: 1 / 1; width: 100%; height: auto; aspect-ratio: 2522 / 506; } /* the video is placed in components.css */
 
   @media (max-width: 759.98px) {
     .foot { padding-top: 56px; }
