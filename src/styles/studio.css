@@ -102,7 +102,7 @@ html { scroll-behavior: smooth; }
 .quote__p { max-width: 44ch; font-size: 18px; line-height: 1.5; text-wrap: pretty; }
 
 /* Close and footer, on warm black: Lemoyne's ceiling to the very bottom. */
-.end { position: relative; isolation: isolate; background: var(--paper); }
+.end { display: flow-root; position: relative; isolation: isolate; background: var(--paper); } /* flow-root keeps the footer panel's bottom margin inside the dark band */
 .close { position: relative; display: grid; grid-template-columns: max-content fit-content(680px); justify-content: center; column-gap: clamp(40px, 5vw, 96px); padding-block: min(560px, 40vw) 96px; align-items: start; }
 .close__h { grid-column: 1; margin-top: -0.18em; } /* cap tops level with the glass panel */
 .close__body { grid-column: 2; max-width: 680px; box-sizing: border-box; display: grid; gap: 24px; padding: var(--sp-card); border-radius: var(--radius); }
