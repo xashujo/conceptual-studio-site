@@ -3,26 +3,24 @@
 // ends on the finished logo and stays there.
 // Transparent video: VP9 WebM for Chrome, Firefox and Edge; HEVC with alpha (.mov, exported by Josh) for Safari.
 // Reduced motion keeps the still logo.
-// Which file to play follows the code from Josh's old Framer site, which worked everywhere including in-app
-// browsers: Safari (iPhone, iPad, Mac) and Instagram on iPhone get the .mov as a <source type="video/quicktime">;
-// everything else gets the WebM. Other in-app browsers on iPhone (Facebook, TikTok...) keep the still.
-const ua = navigator.userAgent.toLowerCase();
-const ios = /iphone|ipad|ipod/.test(ua) || (/macintosh/.test(ua) && navigator.maxTouchPoints > 1);
-const macSafari = /^((?!chrome|android).)*safari/.test(ua);
-const embedded = /instagram|fbav|fban|tiktok|line|pinterest/.test(ua);
-const mov = (ios || macSafari) && (!embedded || (ios && /instagram/.test(ua)));
-const skip = ios && !mov;
+// Which file to play: WebKit is the only engine that shows transparent HEVC, and every iPhone/iPad browser,
+// in-app ones included (Instagram, TikTok, Facebook), is WebKit; newer iPads report as Macs. Those get the .mov
+// as a <source type="video/quicktime"> (as on Josh's old Framer site); everything else gets the WebM.
+const ua = navigator.userAgent;
+const mov = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)
+  || (/Safari/.test(ua) && !/Chrome|Chromium|Edg|OPR|Firefox|Android/.test(ua));
 
 function load(v) {
   const s = document.createElement('source');
   s.src = mov ? v.dataset.mov : v.dataset.webm; // from Site settings > Logo animation
   s.type = mov ? 'video/quicktime' : 'video/webm';
+  v.muted = true; // iOS only autoplays when the property is set, not just the attribute
   v.replaceChildren(s);
   v.load();
 }
 
 function run() {
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches || skip) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const io = new IntersectionObserver((entries) => {
     for (const e of entries) {
       if (!e.isIntersecting) continue;
